@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gina · Política de privacidad</title>
+<style>
+  :root { --bg:#f6f7f9; --fg:#1c2233; --muted:#5b6478; --card:#fff; --line:#dde2ea; --accent:#1f2a44; --gold:#b58f12; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#12161f; --fg:#e7eaf0; --muted:#a3abbd; --card:#1a2030; --line:#2c3447; --accent:#c9a227; --gold:#c9a227; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-size:28px; margin:0 0 4px; } h2 { font-size:19px; margin:32px 0 8px; color:var(--accent); }
+  .muted { color:var(--muted); font-size:14px; }
+  .box { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 18px; margin:14px 0; }
+  table { width:100%; border-collapse:collapse; font-size:15px; } td, th { text-align:left; vertical-align:top; padding:8px; border-bottom:1px solid var(--line); }
+  code { font-size:14px; } a { color:var(--accent); }
+  hr { border:0; border-top:1px solid var(--line); margin:40px 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>Gina — Política de privacidad</h1>
+<p class="muted">Extensión «Gina: Know Who Your Money Backs / sabe a quién apoya tu dinero» · Vigente desde el 8 de octubre de 2026 · Versión 3.1</p>
+
+<div class="box"><b>En resumen:</b> Gina funciona dentro de tu navegador. No tenemos servidores que reciban tus datos, no usamos analítica ni publicidad, y no vendemos ni compartimos información. La extensión solo descarga la base pública del proyecto. Solo si tú lo decides, envías una sugerencia (marca, tienda y producto) o activas la IA avanzada con tu propia clave, que envía esos mismos datos al proveedor que elijas.</div>
+
+<h2>1. Qué hace la extensión</h2>
+<p>Gina tiene un único propósito: mostrar qué empresa, familia, fondo de inversión o Estado está detrás de las marcas, tiendas, aerolíneas y plataformas de viaje que ves mientras compras o reservas en línea, junto con el historial público y con fuente de esos dueños, para que decidas a quién apoya tu dinero. Para ello lee, en los sitios de comercio y viajes compatibles, el nombre de la marca del producto o de las aerolíneas que aparecen en la página y lo compara con una base de datos incluida en la extensión.</p>
+
+<h2>2. Qué información lee y dónde se queda</h2>
+<table>
+<tr><th>Dato</th><th>Para qué</th><th>Dónde se guarda</th></tr>
+<tr><td>Contenido de la página de producto o de vuelos (marca, título, nombres de aerolíneas) en los sitios compatibles</td><td>Identificar la marca o aerolínea</td><td>Se procesa en tu navegador; no se guarda, salvo lo indicado abajo</td></tr>
+<tr><td>Marcas no encontradas (marca, título del producto, tienda, número de veces vista)</td><td>Lista de «pendientes» para investigarlas después</td><td>Solo en el almacenamiento local de la extensión</td></tr>
+<tr><td>Respuestas de la IA y resultados de la investigación</td><td>Memoria (caché) para no repetir consultas</td><td>Solo en el almacenamiento local de la extensión</td></tr>
+<tr><td>Conteo de qué empresas ves (solo el identificador de la empresa y un número)</td><td>Priorizar qué historiales investiga la investigación semanal opcional</td><td>Solo en el almacenamiento local de la extensión</td></tr>
+<tr><td>Tus valores (qué temas te importan)</td><td>Calcular qué tan alineada está cada empresa contigo</td><td>Solo en el almacenamiento local de la extensión</td></tr>
+<tr><td>Tus claves de API y preferencias</td><td>Conectar con el proveedor de IA que elijas</td><td>Solo en el almacenamiento local de la extensión; nunca se incluyen en las exportaciones</td></tr>
+</table>
+<p>La extensión no lee tu historial de navegación, contraseñas, datos de pago, formularios, cookies ni tu sesión en las tiendas. No registra las URL que visitas.</p>
+
+<h2>3. Cuándo sale información de tu navegador</h2>
+<p><b>Inteligencia artificial (opcional, desactivada por defecto).</b> Si activas la IA y guardas tu propia clave de API, cuando una marca no está en la base se envían al proveedor elegido (Anthropic, Google Gemini, Groq, xAI u otro servicio compatible con OpenAI que tú configures) únicamente: el nombre de la marca, el título del producto y el nombre de la tienda. La investigación semanal envía esos mismos datos de la lista de pendientes y, para la reputación, solo el nombre de la empresa o del fondo que se investiga. Tus valores y el conteo de empresas que ves nunca se envían. Esa información la trata el proveedor según su propia política de privacidad y los términos de tu cuenta con él. Puedes desactivar la IA o borrar las claves en cualquier momento desde Opciones.</p>
+<p><b>Base del proyecto.</b> Una vez por semana la extensión descarga del repositorio público de Project Gina en GitHub un archivo de datos JSON con información de empresas (o de otra dirección, si tú la configuras). Es una descarga de datos, no de código, y no envía ninguna información tuya. Como en cualquier descarga, el servidor de GitHub ve la dirección IP de la conexión.</p>
+<p><b>Sugerencias (voluntarias).</b> Si pulsas «Sugerir», Gina abre en una pestaña un issue de GitHub o un correo ya redactado con el nombre de la marca, la tienda y el título del producto (o la alternativa que propones). Tú lo revisas y decides si lo envías. Los issues de GitHub son públicos y quedan asociados a tu cuenta de GitHub.</p>
+<p>Fuera de esos casos, la extensión no se comunica con ningún servidor. El proyecto solo recibe lo que tú envías como sugerencia.</p>
+
+<h2>4. Lo que no hacemos</h2>
+<ul>
+<li>No vendemos, alquilamos ni transferimos datos de usuarios a terceros.</li>
+<li>No usamos los datos para publicidad, perfiles de usuario, evaluación de crédito ni ningún fin distinto del propósito único descrito.</li>
+<li>No incluimos analítica, rastreadores ni enlaces de afiliado, y no modificamos los precios ni los enlaces de las tiendas.</li>
+<li>Ninguna persona lee tus datos.</li>
+</ul>
+<p><b>Uso limitado:</b> el uso de la información que recibe la extensión cumple la Política de datos de usuario de Chrome Web Store, incluidos los requisitos de Uso limitado (<i>Limited Use</i>).</p>
+
+<h2>5. Control y borrado</h2>
+<p>Desde Opciones puedes exportar o borrar la memoria y los pendientes, borrar tus claves y desactivar la IA. Al desinstalar la extensión, el navegador elimina todo su almacenamiento local. En Firefox, el permiso para compartir el contenido del sitio con el proveedor de IA es opcional y puedes retirarlo en la página de permisos del complemento.</p>
+
+<h2>6. Sobre la información que muestra</h2>
+<p>Los datos sobre propietarios, accionistas e historial público (multas, juicios, acuerdos, sentencias y lobbying) son orientativos y proceden de informes públicos de las empresas y de prensa; pueden cambiar o contener errores. Cada tarjeta indica su nivel de confianza, la fuente de cada hecho y su estado (por ejemplo, si fue un acuerdo sin admisión de responsabilidad). El índice de reputación se calcula con una fórmula pública solo a partir de esos hechos; no es una opinión sobre ninguna empresa. No es una recomendación de compra ni de inversión. Si una empresa o persona detecta un dato incorrecto, puede escribirnos para corregirlo.</p>
+
+<h2>7. Menores</h2>
+<p>La extensión no está dirigida a menores de 13 años y no recoge datos personales.</p>
+
+<h2>8. Cambios y contacto</h2>
+<p>Si esta política cambia, publicaremos la nueva versión en esta misma página con su fecha. Contacto y correcciones: <a href="mailto:gina.proyecto02@gmail.com">gina.proyecto02@gmail.com</a>.</p>
+
+<hr>
+<h2 lang="en">Privacy policy (English summary)</h2>
+<div lang="en">
+<p>Gina runs entirely in your browser. It reads the product brand, product title and airline names on supported shopping and travel sites to show who owns them and their public, sourced track record, using a database bundled with the extension. Unknown brands, the AI cache, reputation records, your values, a local count of which companies you see, your settings and your API keys are stored only in the extension's local storage. The developer operates no server and receives no data; there is no analytics, advertising, affiliate code or data sale.</p>
+<p>Only if you turn on the optional AI feature with your own API key, the brand name, product title and store name are sent to the AI provider you choose (Anthropic, Google Gemini, Groq, xAI or an OpenAI-compatible service you configure), under that provider's privacy terms. The optional weekly reputation research sends only the company or fund name. Once a week the extension downloads the Project Gina data file (JSON, no code) from its public GitHub repository and sends nothing about you. Suggestions are opened as a pre-filled GitHub issue or e-mail that you review and choose to send; GitHub issues are public.</p>
+<p>The use of information received by this extension adheres to the Chrome Web Store User Data Policy, including the Limited Use requirements. Uninstalling removes all stored data. Contact: <a href="mailto:gina.proyecto02@gmail.com">gina.proyecto02@gmail.com</a>.</p>
+</div>
+</main>
+</body>
+</html>

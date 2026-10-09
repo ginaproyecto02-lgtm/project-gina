@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Gina</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img class="logo" src="../icons/icon48.png" alt="" width="28" height="28">
+    <div><div class="h">Gina</div><div class="sub" id="count">Cargando base…</div></div>
+    <label class="switch" title="Mostrar la tarjeta en las tiendas"><input type="checkbox" id="enabled"><span></span></label>
+  </header>
+
+  <nav>
+    <button data-tab="page" class="on">Esta página</button>
+    <button data-tab="search">Buscar</button>
+    <button data-tab="add">Agregar una marca</button>
+  </nav>
+
+  <section id="page" class="tab on">
+    <div id="pageOut" class="out">Abre un producto en una tienda, o una búsqueda de vuelos u hospedaje.</div>
+    <button id="showCard" class="btn ghost">Mostrar la tarjeta en la página</button>
+    <button id="suggest" class="btn ghost" hidden>💡 Sugerir esta marca al proyecto</button>
+  </section>
+
+  <section id="search" class="tab">
+    <input id="q" type="search" placeholder="Marca, tienda, aerolínea o fondo: Bimbo, Liverpool, BlackRock…" autocomplete="off">
+    <div id="searchOut" class="out"></div>
+  </section>
+
+  <section id="add" class="tab">
+    <div id="altSuggest" hidden>
+      <p class="small"><b>¿Conoces una alternativa local?</b> Una cooperativa, empresa familiar o de sus empleados. Sugiérela al proyecto para que todos la vean (se verifica antes de publicarse).</p>
+      <form id="altForm">
+        <input name="marca" required placeholder="Marca *">
+        <input name="categoria" placeholder="Tipo de producto (leche, café, detergente…)">
+        <input name="pais" placeholder="País">
+        <input name="dueno" placeholder="Quién es el dueño (cooperativa X, familia Y…)">
+        <input name="fuente" placeholder="Enlace donde se confirma (https://…)">
+        <button class="btn" type="submit">Sugerir alternativa</button>
+      </form>
+      <hr>
+    </div>
+    <p class="small">Las marcas que agregues se guardan solo en este navegador y tienen prioridad sobre la base.</p>
+    <form id="addForm">
+      <input name="marca" required placeholder="Marca *">
+      <input name="empresa" required placeholder="Empresa dueña *">
+      <input name="controlador" placeholder="Quién la controla (familia, fondo, Estado…)">
+      <input name="pais" placeholder="País del capital">
+      <select name="tipo">
+        <option value="">Tipo de controlador</option>
+        <option>Familia</option><option>Fundador</option><option>Fondos dispersos</option><option>Corporación</option>
+        <option>Capital privado</option><option>Estatal</option><option>Cooperativa</option><option>Familia + fondos</option><option>Fundador + fondos</option>
+      </select>
+      <input name="fondos" placeholder="Grandes fondos presentes">
+      <input name="fuente" placeholder="Fuente (ej. reporte anual en la BMV)">
+      <input name="url" type="url" placeholder="Enlace de la fuente (https://…)">
+      <button class="btn" type="submit">Guardar marca</button>
+    </form>
+    <div class="k">Tus marcas</div>
+    <ul id="customList"></ul>
+  </section>
+
+  <div class="aibar"><span id="aiInfo"></span><button id="openOptions" class="btn ghost">⚙ Tus valores, IA y memoria</button></div>
+  <footer>Datos orientativos con fuentes públicas. No es una recomendación de compra ni de inversión.</footer>
+  <script src="../src/matcher.js"></script>
+  <script src="../src/reputation.js"></script>
+  <script src="../src/alternativas.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

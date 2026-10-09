@@ -1,0 +1,1319 @@
+{
+ "amazon": {
+  "nombre": "Amazon.com Inc.",
+  "eventos": [
+   {
+    "tema": "consumidor",
+    "titulo": "Acuerdo con la FTC por suscripciones a Prime",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "US$2.500 millones",
+    "resumen": "En septiembre de 2025 Amazon acordó pagar US$1.000 millones de multa civil y US$1.500 millones en reembolsos para cerrar la demanda de la FTC que alegaba inscripciones engañosas en Prime y trabas para cancelar. Amazon y dos directivos no admitieron culpa.",
+    "fuente": "Axios",
+    "url": "https://axios.com/2025/09/25/amazon-prime-ftc-settlement"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Demanda antimonopolio de la FTC contra Amazon",
+    "pais": "EE.UU.",
+    "anio": 2023,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "La FTC demandó a Amazon en 2023 alegando prácticas monopolísticas en su marketplace; el caso sigue pendiente. A la fecha de la fuente (diciembre de 2025), las partes propusieron mover el inicio del juicio del 9 de febrero al 29 de marzo de 2027.",
+    "fuente": "MLex",
+    "url": "https://www.mlex.com/mlex/articles/2420780/us-ftc-amazon-propose-pushing-back-antitrust-trial-to-march-2027"
+   },
+   {
+    "tema": "privacidad",
+    "titulo": "Anulada la multa RGPD de €746 millones en Luxemburgo",
+    "pais": "Luxemburgo",
+    "anio": 2021,
+    "estado": "anulado",
+    "monto": "€746 millones (anulada)",
+    "resumen": "La CNPD multó a Amazon en 2021 por publicidad dirigida. En marzo de 2026 el Tribunal Administrativo de Luxemburgo anuló la multa por defectos en su cálculo y devolvió el caso a la CNPD, aunque mantuvo las conclusiones de que el tratamiento de datos no cumplía el RGPD; la CNPD podría imponer una nueva sanción.",
+    "fuente": "The Record (Recorded Future News)",
+    "url": "https://therecord.media/luxembourg-court-overturns-amazon-gdpr-fine"
+   },
+   {
+    "tema": "privacidad",
+    "titulo": "Acuerdos con la FTC por privacidad en Alexa y Ring",
+    "pais": "EE.UU.",
+    "anio": 2023,
+    "estado": "acuerdo",
+    "monto": "US$25 millones + US$5,8 millones",
+    "resumen": "En mayo de 2023 Amazon aceptó pagar una multa civil de US$25 millones por presuntas infracciones de privacidad infantil con Alexa y US$5,8 millones en reembolsos por Ring. Amazon negó haber infringido la ley.",
+    "fuente": "AP (vía The Christian Science Monitor)",
+    "url": "https://www.csmonitor.com/Business/2023/0601/Amazon-will-pay-25-million-in-FTC-child-data-privacy-fine"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "tipo": "gasto_lobbying",
+    "dato": "US$17,73 millones",
+    "detalle": "Gasto federal en lobbying declarado ante la Cámara y el Senado (aprox.), según la propia empresa",
+    "fuente": "Amazon, 2025 Political Engagement Statement",
+    "url": "https://s2.q4cdn.com/299287126/files/doc_downloads/2026/2025-Political-Engagement-Statement.pdf"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "walmart": {
+  "nombre": "Walmart Inc.",
+  "eventos": [
+   {
+    "tema": "seguridad",
+    "titulo": "Acuerdo de US$3.100 millones por demandas de opioides",
+    "pais": "EE.UU.",
+    "anio": 2022,
+    "estado": "acuerdo",
+    "monto": "US$3.100 millones",
+    "resumen": "En noviembre de 2022 Walmart anunció un marco de acuerdo de US$3.100 millones para resolver demandas estatales y locales sobre opioides. El acuerdo no incluye admisión de responsabilidad y la empresa rechaza las acusaciones.",
+    "fuente": "Walmart (formulario 8-K ante la SEC)",
+    "url": "https://www.sec.gov/Archives/edgar/data/104169/000010416922000077/exhibit993-pressrelease.htm"
+   },
+   {
+    "tema": "seguridad",
+    "titulo": "Acuerdo con el DOJ por dispensación de opioides",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "acuerdo",
+    "monto": "US$50 millones",
+    "resumen": "En agosto de 2026 Walmart acordó pagar US$50 millones para cerrar la demanda federal de 2020 que alegaba que sus farmacias surtieron recetas inválidas de opioides. Según la DEA, son alegaciones sin determinación de responsabilidad; Walmart asumió compromisos de control.",
+    "fuente": "DEA (Departamento de Justicia de EE.UU.)",
+    "url": "https://www.dea.gov/press-releases/2026/08/28/walmart-agrees-pay-50-million-for-illegally-filling-unlawful-opioid"
+   },
+   {
+    "tema": "corrupcion",
+    "titulo": "Acuerdos FCPA con DOJ y SEC por controles anticorrupción",
+    "pais": "EE.UU.",
+    "anio": 2019,
+    "estado": "acuerdo",
+    "monto": "US$282,7 millones",
+    "resumen": "En 2019 Walmart pagó US$282,7 millones para resolver investigaciones de la FCPA sobre controles internos en Brasil, México, India y China, mediante un acuerdo de no enjuiciamiento con el DOJ y una orden de la SEC; una filial brasileña se declaró culpable.",
+    "fuente": "Walmart (comunicado corporativo)",
+    "url": "https://corporate.walmart.com/news/2019/06/20/walmart-reaches-agreements-with-the-doj-and-the-sec-to-resolve-their-fcpa-investigations"
+   },
+   {
+    "tema": "laboral",
+    "titulo": "Acuerdo con la FTC y 11 estados por pagos a conductores Spark",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "acuerdo",
+    "monto": "US$100 millones",
+    "resumen": "En febrero de 2026 Walmart acordó pagar US$100 millones para resolver alegaciones de la FTC y 11 estados de que mostró pagos y propinas inflados a conductores de Spark. No se informó de admisión de culpa.",
+    "fuente": "AP (vía Yahoo Finance)",
+    "url": "https://finance.yahoo.com/news/walmart-pay-100-million-settle-171951917.html"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Acuerdo con la FTC por fraude en transferencias de dinero",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "US$10 millones",
+    "resumen": "En junio de 2025 Walmart aceptó pagar US$10 millones y adoptar medidas antifraude para cerrar la demanda de la FTC de 2022 que alegaba que permitió a estafadores usar sus servicios de transferencias entre 2013 y 2018.",
+    "fuente": "FOX 9 (con base en comunicado de la FTC)",
+    "url": "https://www.fox9.com/news/walmart-pay-10-million-money-transfer-fraud-settlement"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "tipo": "gasto_lobbying",
+    "dato": "US$7,84 millones",
+    "detalle": "Gasto federal en lobbying declarado en los informes trimestrales al Senado y la Cámara, según la propia empresa",
+    "fuente": "Walmart, informe de participación en políticas públicas",
+    "url": "https://corporate.walmart.com/purpose/esgreport/responsible-engagement-in-public-policy"
+   },
+   {
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "tipo": "donaciones",
+    "dato": "PAC: 55,2% republicanos / 44,8% demócratas",
+    "detalle": "Donaciones federales de WALPAC en 2025, según la propia empresa",
+    "fuente": "Walmart, informe de participación en políticas públicas",
+    "url": "https://corporate.walmart.com/purpose/esgreport/responsible-engagement-in-public-policy"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "apple": {
+  "nombre": "Apple Inc.",
+  "eventos": [
+   {
+    "tema": "fiscal",
+    "titulo": "TJUE confirma ayuda estatal ilegal de Irlanda a Apple",
+    "pais": "UE / Irlanda",
+    "anio": 2024,
+    "estado": "condena",
+    "monto": "≈ €13.000 millones",
+    "resumen": "En septiembre de 2024 el Tribunal de Justicia de la UE, en sentencia definitiva, confirmó la decisión de la Comisión de que Irlanda concedió a Apple ayuda estatal ilegal que debe recuperar (más de €13.000 millones). No es una multa sino una recuperación de impuestos; Apple e Irlanda rechazaban la conclusión.",
+    "fuente": "ICIJ",
+    "url": "https://www.icij.org/investigations/paradise-papers/top-eu-court-rules-apple-owes-ireland-over-14b-in-back-taxes/"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Multa de la Comisión Europea por streaming musical",
+    "pais": "UE",
+    "anio": 2024,
+    "estado": "multa",
+    "monto": "€1.800 millones",
+    "resumen": "En marzo de 2024 la Comisión Europea multó a Apple por impedir a apps de música en streaming informar de ofertas más baratas fuera de la App Store. Apple recurrió ante el Tribunal General; a la fecha de la fuente el recurso estaba pendiente.",
+    "fuente": "Bloomberg Law",
+    "url": "https://news.bloomberglaw.com/antitrust/apple-fights-1-8-billion-eu-antitrust-fine-for-curbs-on-spotify"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Multa de €500 millones por la Ley de Mercados Digitales",
+    "pais": "UE",
+    "anio": 2025,
+    "estado": "multa",
+    "monto": "€500 millones",
+    "resumen": "En abril de 2025 la Comisión Europea multó a Apple por restringir que los desarrolladores dirigieran a usuarios a ofertas fuera de la App Store, en infracción de la DMA. Apple recurrió ante el Tribunal General en julio de 2025; a la fecha de la fuente el recurso estaba pendiente.",
+    "fuente": "Verdict (vía Yahoo Finance)",
+    "url": "https://finance.yahoo.com/news/apple-appeals-ec-500m-fine-093731523.html"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Demanda antimonopolio del DOJ sobre el iPhone",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "El Departamento de Justicia y varios estados demandaron a Apple en 2024 por presunta monopolización del mercado de smartphones. En junio de 2025 un juez federal de Nueva Jersey rechazó desestimar el caso; Apple niega las acusaciones y el juicio podría celebrarse en 2027.",
+    "fuente": "AP (vía TribLive)",
+    "url": "https://triblive.com/news/wire-stories/judge-allows-antitrust-lawsuit-against-apple-to-proceed"
+   },
+   {
+    "tema": "privacidad",
+    "titulo": "Acuerdo de US$95 millones por grabaciones de Siri",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "US$95 millones",
+    "resumen": "En 2025 un juez federal de California aprobó definitivamente un acuerdo de US$95 millones en una demanda colectiva que alegaba que Siri se activaba sin intención del usuario y grababa conversaciones privadas.",
+    "fuente": "Bloomberg Law",
+    "url": "https://news.bloomberglaw.com/litigation/apples-95-million-deal-over-siri-recordings-gets-final-nod"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€8.000.000–8.999.999",
+    "detalle": "Registro de transparencia de la UE, ejercicio octubre 2024–septiembre 2025",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/1e43aba7ad7041e08fb16b2bdacd5414/apple-inc"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "microsoft": {
+  "nombre": "Microsoft",
+  "eventos": [],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2026,
+    "tipo": "registro_ue",
+    "dato": "€7.000.000–7.999.999",
+    "detalle": "Registro de transparencia de la UE, ejercicio julio 2025–junio 2026",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/60239386204445e2b0fb38cada46b204/microsoft-corporation"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web",
+  "parcial": true
+ },
+ "nestle": {
+  "nombre": "Nestlé S.A.",
+  "eventos": [
+   {
+    "tema": "consumidor",
+    "titulo": "Nestlé Waters paga 2 M€ para cerrar pesquisas sobre aguas en Francia",
+    "pais": "Francia",
+    "anio": 2024,
+    "estado": "acuerdo",
+    "monto": "€2 millones (+ €1,1 millones en restauración ambiental)",
+    "resumen": "En septiembre de 2024 la filial de aguas de Nestlé (Perrier) aceptó con la fiscalía de Épinal pagar 2 millones de euros y destinar 1,1 millones a proyectos ambientales para cerrar investigaciones preliminares por uso de pozos sin autorización y filtrado ilegal de aguas minerales; la fuente no indica admisión de culpa y la fiscalía no constató consecuencias para la salud pública.",
+    "fuente": "The Local (AFP)",
+    "url": "https://www.thelocal.fr/20240911/nestle-to-pay-e2m-to-shut-down-france-water-probes"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Investigación judicial en París por presunto engaño en aguas minerales",
+    "pais": "Francia",
+    "anio": 2025,
+    "estado": "investigacion",
+    "monto": "",
+    "resumen": "El 13 de febrero de 2025 el polo de salud pública del tribunal de París abrió una investigación por presunta «tromperie» (engaño) contra Nestlé (Perrier, Vittel, Hépar) y el grupo Sources Alma por el supuesto tratamiento ilegal de aguas de manantial y minerales, a raíz de una denuncia de Foodwatch; sin resolución conocida a la fecha de la fuente.",
+    "fuente": "Public Sénat",
+    "url": "https://www.publicsenat.fr/actualites/societe/scandale-des-eaux-en-bouteille-une-information-judiciaire-ouverte-contre-nestle-et-alma-sources-pour-tromperie"
+   },
+   {
+    "tema": "seguridad",
+    "titulo": "Retirada de leche infantil por cereulida y pesquisas por muertes",
+    "pais": "Francia",
+    "anio": 2026,
+    "estado": "investigacion",
+    "monto": "",
+    "resumen": "Tras retiradas voluntarias de lotes de leche infantil (incluida Guigoz) por posible presencia de la toxina cereulida, fiscalías francesas investigaron muertes de bebés; en marzo de 2026 la fiscalía de Burdeos indicó que el caso que examinaba no parece vinculado a la fórmula (no se halló cereulida), mientras otras dos investigaciones (Angers y Blois) seguían abiertas a la fecha de la fuente.",
+    "fuente": "Reuters (vía The Cattle Site)",
+    "url": "https://www.thecattlesite.com/news/french-probe-finds-no-link-between-infant-death-and-nestlé-formula"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Desestimada la demanda del Gobierno indio por los fideos Maggi",
+    "pais": "India",
+    "anio": 2015,
+    "estado": "absuelto",
+    "monto": "₹640 crore reclamados (desestimado)",
+    "resumen": "En 2015 el Gobierno indio demandó a Nestlé India ante la NCDRC por prácticas comerciales desleales tras la prohibición temporal de Maggi por niveles de plomo, reclamando unos ₹640 crore; según la filial, la NCDRC desestimó la demanda a favor de la empresa por orden del 2 de abril de 2024. La fuente no menciona una apelación.",
+    "fuente": "Outlook Business",
+    "url": "https://www.outlookbusiness.com/news/ncdrc-dismisses-govt-petition-seeking-damages-from-nestle-in-maggi-case"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€1.250.000–1.499.999",
+    "detalle": "Gasto declarado en el Registro de transparencia de la UE (ID 15366395387-57), ejercicio enero–diciembre 2025",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/4a88a7470d1d4877a8359a5e5761624b/nestl-s-a"
+   },
+   {
+    "pais": "Alemania",
+    "anio": 2025,
+    "tipo": "otro",
+    "dato": "€260.001–270.000",
+    "detalle": "Nestlé Deutschland AG, gasto anual en representación de intereses declarado en el Lobbyregister del Bundestag (R002156), ejercicio 2025",
+    "fuente": "Lobbyregister del Bundestag",
+    "url": "https://www.lobbyregister.bundestag.de/media/35/03/837286/Lobbyregister-Registereintraege-Detailansicht-R002156-2026-09-01_16-21-41.pdf"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "coca": {
+  "nombre": "The Coca-Cola Company",
+  "eventos": [
+   {
+    "tema": "fiscal",
+    "titulo": "Disputa fiscal con el IRS por precios de transferencia, en apelación",
+    "pais": "EE.UU.",
+    "anio": 2020,
+    "estado": "litigio",
+    "monto": "Hasta ~US$20.000 millones en juego",
+    "resumen": "El Tribunal Fiscal de EE.UU. falló a favor del IRS en 2020 y 2023 sobre la asignación de ingresos de filiales extranjeras; Coca-Cola apeló ante el Tribunal de Apelaciones del Undécimo Circuito, que escuchó los argumentos orales el 25 de junio de 2026. Sin sentencia a la fecha de la fuente.",
+    "fuente": "Bloomberg Tax",
+    "url": "https://news.bgov.com/transfer-pricing/coca-cola-meets-sympathetic-judges-in-transfer-pricing-dispute"
+   },
+   {
+    "tema": "ambiental",
+    "titulo": "Demanda del condado de Los Ángeles por contaminación plástica",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "En 2024 el condado de Los Ángeles demandó a Coca-Cola y PepsiCo alegando contaminación por botellas de plástico y afirmaciones engañosas sobre su reciclabilidad; en 2025 un juez rechazó las objeciones (demurrers) de las empresas y el caso sigue en curso. Las empresas niegan las alegaciones.",
+    "fuente": "Daily Journal",
+    "url": "https://dailyjournal.com/article/387779-judge-rejects-pepsi-and-coke-demurrer-in-plastic-recycling-suit"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€700.000–799.999",
+    "detalle": "Gasto declarado en el Registro de transparencia de la UE (ID 00475641564-03), ejercicio enero–diciembre 2025",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/ee290a85143f4308a1fe4ced21f0dad0/the-coca-cola-company"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "pepsico": {
+  "nombre": "PepsiCo",
+  "eventos": [
+   {
+    "tema": "ambiental",
+    "titulo": "Demanda del condado de Los Ángeles por contaminación plástica",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "En 2024 el condado de Los Ángeles demandó a PepsiCo y Coca-Cola alegando contaminación por botellas de plástico y afirmaciones engañosas sobre su reciclabilidad; en 2025 un juez rechazó las objeciones (demurrers) de las empresas y el caso sigue en curso. Las empresas niegan las alegaciones.",
+    "fuente": "Daily Journal",
+    "url": "https://dailyjournal.com/article/387779-judge-rejects-pepsi-and-coke-demurrer-in-plastic-recycling-suit"
+   },
+   {
+    "tema": "ambiental",
+    "titulo": "Nueva York: demanda por plásticos desestimada y apelada por la fiscal",
+    "pais": "EE.UU.",
+    "anio": 2023,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "La fiscal general de Nueva York demandó en 2023 a PepsiCo y Frito-Lay por contaminación plástica en el río Buffalo; un juez estatal desestimó la demanda en octubre de 2024 y la fiscalía presentó apelación en diciembre de 2024. Sin resolución de la apelación confirmada a la fecha de la fuente.",
+    "fuente": "AFP (vía Kurdistan24)",
+    "url": "https://www.kurdistan24.net/en/story/814729"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "La FTC retira su demanda por precios favorables a Walmart",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "absuelto",
+    "monto": "",
+    "resumen": "En enero de 2025 la FTC demandó a PepsiCo bajo la Ley Robinson-Patman alegando ventajas de precio indebidas a Walmart; el 22 de mayo de 2025 la FTC votó retirar la demanda sin que hubiera sanción. PepsiCo sostiene que ofrece precios justos y no discriminatorios.",
+    "fuente": "Associated Press",
+    "url": "https://www.news4jax.com/business/2025/05/22/ftc-dismisses-lawsuit-against-pepsico-that-was-filed-by-biden-era-ftc/"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€400.000–499.999",
+    "detalle": "Gasto declarado en el Registro de transparencia de la UE (ID 010212710281-97), ejercicio enero–diciembre 2025",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/7eb19469aa7b4a25ba74e25652c8a558/pepsico"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "unilever": {
+  "nombre": "Unilever plc",
+  "eventos": [
+   {
+    "tema": "competencia",
+    "titulo": "Portugal multa a Unilever por fijación de precios con supermercados",
+    "pais": "Portugal",
+    "anio": 2022,
+    "estado": "multa",
+    "monto": "€26,6 millones",
+    "resumen": "En junio de 2022 la Autoridade da Concorrência multó a Unilever con 26,6 millones de euros por su papel como proveedor común en un esquema «hub-and-spoke» de alineación de precios minoristas con cuatro cadenas de supermercados (2007–2017). La decisión era recurrible; el resultado de un eventual recurso no está confirmado a la fecha de la fuente.",
+    "fuente": "ECO (Sapo)",
+    "url": "https://eco.sapo.pt/2022/06/08/autoridade-da-concorrencia-aplica-multa-de-132-milhoes-a-quatro-supermercados-e-a-unilever/"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "Litigio de Ben & Jerry's contra Unilever: juez desestima la mayoría",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "Ben & Jerry's y sus consejeros independientes demandaron a Unilever en un tribunal federal de Manhattan; en agosto de 2026 el juez desestimó siete de diez reclamaciones y parte de otra, y mantuvo las relativas a pagos no realizados bajo un acuerdo de 2022. Magnum, que posee Ben & Jerry's tras su escisión de Unilever, pasó a ser la demandada principal.",
+    "fuente": "Reuters (vía Insurance Journal)",
+    "url": "https://amp.insurancejournal.com/news/east/2026/08/23/882525.htm"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€500.000–599.999",
+    "detalle": "Gasto declarado en el Registro de transparencia de la UE (ID 6200524920-25), ejercicio enero–diciembre 2025",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/b3345ef0984945439de2a24ad8caf00a/unilever"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "pg": {
+  "nombre": "Procter & Gamble",
+  "eventos": [],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€1.000.000–1.249.999",
+    "detalle": "Gasto declarado en el Registro de transparencia de la UE (ID 5519077766-10), ejercicio julio 2024–junio 2025",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/33d0106734344efeb98ec456bedfc5b4/procter-gamble"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web",
+  "parcial": true
+ },
+ "abinbev": {
+  "nombre": "AB InBev",
+  "eventos": [],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2024,
+    "tipo": "registro_ue",
+    "dato": "€300.000–399.999",
+    "detalle": "Gasto declarado en el Registro de transparencia de la UE (ID 161157710612-65), ejercicio enero–diciembre 2024 (último disponible)",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/51b848413ca44cbf82de4c7e2d2ec399/anheuser-busch-inbev-nv-sa"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web",
+  "parcial": true
+ },
+ "airbnb": {
+  "nombre": "Airbnb, Inc.",
+  "eventos": [
+   {
+    "tema": "fiscal",
+    "titulo": "Acuerdo de 576 millones de euros con el fisco italiano",
+    "pais": "Italia",
+    "anio": 2023,
+    "estado": "acuerdo",
+    "monto": "€576 millones",
+    "resumen": "En diciembre de 2023 la filial irlandesa de Airbnb acordó pagar 576 millones de euros para cerrar una reclamación fiscal italiana por los ejercicios 2017–2021, tras una auditoría en la que la policía financiera reclamaba unos 779 millones. Airbnb no reconoció ninguna responsabilidad.",
+    "fuente": "Bloomberg (vía BNN Bloomberg)",
+    "url": "https://www.bnnbloomberg.ca/airbnb-to-pay-576-million-to-settle-italian-tax-claim-1.2011076"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Multa de 64 millones por anunciar pisos turísticos sin licencia",
+    "pais": "España",
+    "anio": 2025,
+    "estado": "multa",
+    "monto": "€64,06 millones",
+    "resumen": "En diciembre de 2025 el Ministerio de Consumo multó a Airbnb con 64.055.311 euros por anunciar viviendas turísticas sin licencia. Airbnb recurrió. En marzo de 2026 el TSJ de Madrid rechazó suspender la multa de forma cautelar mientras se resuelve el recurso. El tribunal no se ha pronunciado sobre el fondo (a la fecha de la fuente).",
+    "fuente": "Ministerio de Derechos Sociales, Consumo y Agenda 2030; The Irish Times",
+    "url": "https://www.dsca.gob.es/es/comunicacion/notas-prensa/justicia-obliga-airbnb-pagar-64-millones-euros-previstos-multa-que-le"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Sanción de A$15 millones por mostrar precios en USD sin indicarlo",
+    "pais": "Australia",
+    "anio": 2023,
+    "estado": "multa",
+    "monto": "A$15 millones (más hasta A$15 millones en compensaciones)",
+    "resumen": "En diciembre de 2023, en un proceso de la ACCC, el Tribunal Federal australiano ordenó a Airbnb Ireland pagar A$15 millones en sanciones. Airbnb admitió que entre 2018 y 2021 mostró a usuarios australianos precios en dólares estadounidenses sin indicar la moneda. Además se comprometió a compensar a unos 63.000 consumidores.",
+    "fuente": "ACCC",
+    "url": "https://www.accc.gov.au/media-release/airbnb-to-pay-15m-in-penalties-and-up-to-15m-compensation-for-misleading-consumers"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "booking": {
+  "nombre": "Booking Holdings",
+  "eventos": [
+   {
+    "tema": "competencia",
+    "titulo": "Multa de la CNMC de 413 millones por abuso de posición de dominio",
+    "pais": "España",
+    "anio": 2024,
+    "estado": "multa",
+    "monto": "€413,24 millones",
+    "resumen": "En julio de 2024 la CNMC multó a Booking.com con 413,24 millones de euros por abusar de su posición de dominio frente a los hoteles. Booking recurrió ante la Audiencia Nacional, que en marzo de 2025 suspendió cautelarmente la multa mientras resuelve el recurso. El recurso seguía pendiente a la fecha de la fuente.",
+    "fuente": "CNMC; Hosteltur",
+    "url": "https://www.cnmc.es/sites/default/files/editor_contenidos/Notas%20de%20prensa/2024/20240731_NP_%20Sancionador_Booking.com.pdf"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Veto UE a la compra de eTraveli, confirmado por el Tribunal General",
+    "pais": "UE",
+    "anio": 2023,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "En 2023 la Comisión Europea prohibió la compra de eTraveli por 1.630 millones de euros. Concluyó que la operación reforzaría la posición dominante de Booking en las agencias de viajes en línea de hoteles. El 9 de septiembre de 2026 el Tribunal General de la UE desestimó el recurso de Booking. La sentencia puede recurrirse ante el Tribunal de Justicia.",
+    "fuente": "Reuters (vía Cyprus Mail)",
+    "url": "https://cyprus-mail.com/2026/09/10/judges-side-with-eu-regulators-in-blocking-bookings-acquisition-of-etraveli"
+   },
+   {
+    "tema": "fiscal",
+    "titulo": "Acuerdo de 153 millones de euros con el fisco francés",
+    "pais": "Francia",
+    "anio": 2023,
+    "estado": "acuerdo",
+    "monto": "€153 millones",
+    "resumen": "En enero de 2023 Booking.com acordó pagar 153 millones de euros a la administración tributaria francesa para cerrar un litigio fiscal sobre los ejercicios 2006–2018. La empresa mantuvo que siempre cumplió la legislación fiscal francesa.",
+    "fuente": "Bloomberg Tax",
+    "url": "https://news.bloombergtax.com/daily-tax-report-international/booking-com-agrees-to-153m-settlement-with-french-tax-authority"
+   },
+   {
+    "tema": "fiscal",
+    "titulo": "Acuerdo de 94 millones de euros por IVA en Italia",
+    "pais": "Italia",
+    "anio": 2023,
+    "estado": "acuerdo",
+    "monto": "€94 millones",
+    "resumen": "En noviembre de 2023 Booking.com acordó pagar unos 94 millones de euros a la Agencia Tributaria italiana. El acuerdo cerró una disputa sobre el IVA de alquileres privados entre 2013 y 2021, investigada por la fiscalía de Génova. La empresa sostiene que cumplió la normativa del IVA. La fuente no aclara si se cerró la vía penal.",
+    "fuente": "Reuters (vía Pretoria News)",
+    "url": "https://pretorianews.co.za/travel/world/europe/2023-11-11-booking-com-settles-italian-tax-dispute-with-94-million-euro-payment"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Acuerdo de US$9,5 millones con Texas por tarifas ocultas",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "US$9,5 millones",
+    "resumen": "En agosto de 2025 la matriz de Booking.com acordó pagar 9,5 millones de dólares para cerrar una demanda de Texas. La demanda alegaba que la empresa omitía cargos obligatorios («junk fees») para atraer a los consumidores con precios artificialmente bajos. La fuente no informa de otras condiciones del acuerdo ni de admisión de culpa.",
+    "fuente": "Reuters (vía CTV News)",
+    "url": "https://www.ctvnews.ca/business/article/bookingcom-parent-in-us95-million-junk-fee-settlement-with-texas/"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "expedia": {
+  "nombre": "Expedia Group",
+  "eventos": [
+   {
+    "tema": "consumidor",
+    "titulo": "Trivago (filial de Expedia) sancionada con A$44,7 millones",
+    "pais": "Australia",
+    "anio": 2022,
+    "estado": "multa",
+    "monto": "A$44,7 millones",
+    "resumen": "En abril de 2022, en un proceso de la ACCC, el Tribunal Federal australiano ordenó a trivago, parte de Expedia Group, pagar A$44,7 millones. Entre 2016 y 2019 su algoritmo priorizaba a los anunciantes que pagaban más por clic y no destacaba las tarifas más baratas, lo que engañaba a los consumidores.",
+    "fuente": "ACCC",
+    "url": "https://accc.gov.au/media-release/trivago-to-pay-447-million-in-penalties-for-misleading-consumers-over-hotel-room-rates"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Compromisos ante la CMA sobre prácticas de venta en reservas de hotel",
+    "pais": "Reino Unido",
+    "anio": 2019,
+    "estado": "acuerdo",
+    "monto": "",
+    "resumen": "En febrero de 2019 Expedia, Hotels.com, ebookers y trivago, junto con otras plataformas, se comprometieron ante la CMA a cambiar sus prácticas. Los cambios afectaban a la venta bajo presión, los descuentos engañosos, los cargos ocultos y la transparencia de los rankings. No hubo multa ni admisión de infracción, y la CMA no dictaminó que se hubiera violado la ley.",
+    "fuente": "Competition and Markets Authority (CMA)",
+    "url": "https://www.gov.uk/government/news/hotel-booking-sites-to-make-major-changes-after-cma-probe"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "ryanair": {
+  "nombre": "Ryanair Holdings",
+  "eventos": [
+   {
+    "tema": "competencia",
+    "titulo": "Multa de 255,8 millones de la AGCM por abuso de posición dominante",
+    "pais": "Italia",
+    "anio": 2025,
+    "estado": "multa",
+    "monto": "€255,76 millones",
+    "resumen": "En diciembre de 2025 la autoridad de competencia italiana (AGCM) multó a Ryanair DAC y Ryanair Holdings con 255.761.692 euros. La sanción se debe a prácticas de 2023–2025 que, según la AGCM, obstaculizaban la venta de sus vuelos a través de agencias de viajes. Ryanair anunció que recurriría y que espera que la decisión se anule.",
+    "fuente": "AGI; Bird & Bird",
+    "url": "https://www.agi.it/economia/news/2025-12-23/multa-ryanair-abuso-posizione-dominante-34767761/"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Multa de 107,8 millones en España por cobrar el equipaje de mano",
+    "pais": "España",
+    "anio": 2024,
+    "estado": "litigio",
+    "monto": "€107,8 millones",
+    "resumen": "En noviembre de 2024 el Ministerio de Consumo multó a Ryanair con 107,8 millones de euros por cobrar el equipaje de mano y otras prácticas que consideró abusivas. En junio de 2025 el TSJ de Madrid suspendió cautelarmente la multa a cambio de un aval. El recurso sobre el fondo seguía pendiente a la fecha de la fuente.",
+    "fuente": "RTVC; Forbes España (Europa Press)",
+    "url": "https://rtvc.es/justicia-suspende-provisional-multa-ryanair-equipaje-mano-26-jun-2025/"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Anulada multa italiana de 4,2 millones por cancelaciones en pandemia",
+    "pais": "Italia",
+    "anio": 2021,
+    "estado": "anulado",
+    "monto": "€4,2 millones",
+    "resumen": "En 2021 la AGCM multó a Ryanair con 4,2 millones de euros por su gestión de vuelos cancelados durante la COVID-19. En mayo de 2026 el Consejo de Estado anuló la sanción. Consideró que la AGCM rechazó los compromisos de Ryanair sin el trato que dio a otras aerolíneas.",
+    "fuente": "Teleborsa",
+    "url": "https://www.teleborsa.it/News/2026/05/13/ryanair-il-consiglio-di-stato-annulla-la-multa-da-4-2-milioni-di-euro-dell-antitrust-39.html"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "lufthansa": {
+  "nombre": "Lufthansa Group",
+  "eventos": [
+   {
+    "tema": "derechos_humanos",
+    "titulo": "Sanción de US$4 millones del DOT por discriminar a pasajeros judíos",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "multa",
+    "monto": "US$4 millones",
+    "resumen": "En octubre de 2024 el Departamento de Transporte de EE.UU. impuso a Lufthansa, mediante una orden de consentimiento, una sanción de 4 millones de dólares, la mayor por derechos civiles contra una aerolínea. En mayo de 2022 la aerolínea impidió embarcar en Fráncfort a 128 pasajeros judíos.",
+    "fuente": "U.S. Department of Transportation",
+    "url": "https://www.transportation.gov/briefing-room/dot-penalizes-lufthansa-4-million-violating-passengers-civil-rights"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Sanción de US$1,1 millones por retrasar reembolsos de la pandemia",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "multa",
+    "monto": "US$1,1 millones (más US$775 millones en reembolsos)",
+    "resumen": "Según el DOT (junio de 2024), Lufthansa devolvió 775 millones de dólares a pasajeros por vuelos cancelados o muy modificados durante la COVID-19. Recibió además una sanción civil de 1,1 millones por retrasos extremos en esos reembolsos.",
+    "fuente": "U.S. Department of Transportation",
+    "url": "https://www.transportation.gov/briefing-room/dot-secures-nearly-1-billion-refunds-airline-passengers-through-new-enforcement"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "american": {
+  "nombre": "American Airlines Group",
+  "eventos": [
+   {
+    "tema": "consumidor",
+    "titulo": "Sanción récord de US$50 millones por trato a pasajeros discapacitados",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "multa",
+    "monto": "US$50 millones",
+    "resumen": "En octubre de 2024 el DOT sancionó a American con 50 millones de dólares por el trato a pasajeros con discapacidad y sus sillas de ruedas entre 2019 y 2023. La mitad era multa y la otra mitad podía compensarse con inversiones en equipos, sistemas y compensaciones a pasajeros.",
+    "fuente": "U.S. Department of Transportation",
+    "url": "https://www.transportation.gov/briefing-room/dot-issues-landmark-50-million-penalty-against-american-airlines-its-treatment"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Tribunales anulan la Alianza del Noreste con JetBlue por antimonopolio",
+    "pais": "EE.UU.",
+    "anio": 2023,
+    "estado": "condena",
+    "monto": "",
+    "resumen": "En mayo de 2023 un tribunal federal de Massachusetts falló, en una demanda del Departamento de Justicia, seis estados y el Distrito de Columbia, que la alianza de American con JetBlue violaba la Sección 1 de la Ley Sherman y la prohibió. El Tribunal de Apelaciones del Primer Circuito confirmó el fallo en noviembre de 2024.",
+    "fuente": "U.S. Department of Justice",
+    "url": "https://www.justice.gov/opa/pr/us-court-appeals-affirms-justice-departments-victory-protecting-airline-competition"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Multa de US$4,1 millones por retrasos prolongados en pista",
+    "pais": "EE.UU.",
+    "anio": 2023,
+    "estado": "multa",
+    "monto": "US$4,1 millones",
+    "resumen": "En agosto de 2023 el DOT multó a American con 4,1 millones de dólares, su mayor multa por esta norma. Se debió a 43 vuelos nacionales entre 2018 y 2021 que retuvieron en pista a 5.821 pasajeros más tiempo del permitido. La aerolínea no admitió la infracción y atribuyó los retrasos a fenómenos meteorológicos.",
+    "fuente": "Axios",
+    "url": "https://www.axios.com/2023/08/29/dot-american-airlines-tarmac-delays-fine"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "aeromexico": {
+  "nombre": "Grupo Aeroméxico",
+  "eventos": [
+   {
+    "tema": "competencia",
+    "titulo": "Multa de COFECE por colusión en tarifas, confirmada por la SCJN",
+    "pais": "México",
+    "anio": 2019,
+    "estado": "multa",
+    "monto": "MXN 88 millones",
+    "resumen": "En 2019 la COFECE multó a Aeroméxico con 88 millones de pesos por coludirse con competidores para manipular precios de boletos. En febrero de 2025 la Segunda Sala de la Suprema Corte confirmó la validez de las facultades de investigación de la COFECE, con lo que concluyó un litigio de más de cinco años y quedó firme la sanción.",
+    "fuente": "Concurrences; El CEO",
+    "url": "https://www.concurrences.com/en/bulletin/news-issues/february-2025/the-mexican-supreme-court-of-justice-upholds-the-competition-authority-s"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Anulada la orden del DOT que ponía fin a la alianza con Delta",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "anulado",
+    "monto": "",
+    "resumen": "En septiembre de 2025 el Departamento de Transporte de EE.UU. revocó la inmunidad antimonopolio de la empresa conjunta de Delta y Aeroméxico. Alegó que les daba una ventaja injusta entre EE.UU. y México. El 20 de agosto de 2026 el Tribunal de Apelaciones del 11.º Circuito anuló esa orden, y la alianza puede seguir operando.",
+    "fuente": "Bloomberg Government",
+    "url": "https://news.bgov.com/antitrust/delta-wins-challenge-of-dot-order-to-end-aeromexico-partnership"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "latam": {
+  "nombre": "LATAM Airlines Group",
+  "eventos": [
+   {
+    "tema": "corrupcion",
+    "titulo": "Acuerdo FCPA con DOJ y SEC por pagos a sindicatos en Argentina",
+    "pais": "EE.UU.",
+    "anio": 2016,
+    "estado": "acuerdo",
+    "monto": "≈US$22,2 millones",
+    "resumen": "En julio de 2016 LATAM firmó con el Departamento de Justicia un acuerdo de enjuiciamiento diferido de tres años con una multa penal de 12,75 millones de dólares, más unos 9,4 millones en un acuerdo con la SEC. El caso se refería a pagos de LAN Airlines a sindicalistas argentinos entre 2006 y 2007 a través de un contrato de consultoría ficticio. LATAM admitió los hechos y aceptó un monitor independiente.",
+    "fuente": "U.S. Department of Justice",
+    "url": "https://www.justice.gov/opa/pr/latam-airlines-group-resolves-foreign-corrupt-practices-act-investigation-and-agrees-pay-1275"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web",
+  "parcial": true
+ },
+ "inditex": {
+  "nombre": "Inditex (Zara)",
+  "eventos": [
+   {
+    "tema": "derechos_humanos",
+    "titulo": "Denuncia en Francia por trabajo forzoso uigur en proveedores",
+    "pais": "Francia",
+    "anio": 2023,
+    "estado": "alegacion",
+    "monto": "",
+    "resumen": "En mayo de 2023 ONG como Sherpa y el Instituto Uigur de Europa presentaron una nueva denuncia penal contra Inditex, Uniqlo France, SMCP y Skechers por presunto aprovechamiento de trabajo forzoso uigur. Una causa anterior ante la fiscalía antiterrorista se había archivado en abril de 2023 por falta de competencia. Inditex calificó las acusaciones de «infundadas». No se ha confirmado el estado posterior de la nueva denuncia (estado a la fecha de la fuente).",
+    "fuente": "AFP (vía Business & Human Rights Resource Centre)",
+    "url": "https://www.bhrrc.org/tr/en-son-haberler/france-investigating-judge-to-examine-connection-between-fashion-groups-and-uyghur-forced-labour/"
+   },
+   {
+    "tema": "ambiental",
+    "titulo": "Informe vincula algodón de proveedores con deforestación en Brasil",
+    "pais": "Brasil",
+    "anio": 2024,
+    "estado": "alegacion",
+    "monto": "",
+    "resumen": "Un informe de la ONG Earthsight (abril de 2024) alegó que fábricas proveedoras de Zara y H&M usaban algodón del Cerrado brasileño vinculado a deforestación ilegal y acaparamiento de tierras, parte certificado por Better Cotton. Inditex dijo que se tomaba «muy en serio» las alegaciones contra Better Cotton y que seguiría el resultado de su investigación. No hay procedimiento judicial ni sanción contra Inditex.",
+    "fuente": "Context (Thomson Reuters Foundation)",
+    "url": "https://www.context.news/nature/ngo-links-h-and-m-and-zara-cotton-to-deforestation-in-brazils-cerrado"
+   }
+  ],
+  "positivos": [
+   {
+    "tema": "ambiental",
+    "titulo": "Incluida en la «Lista A» de CDP correspondiente a 2023",
+    "anio": 2023,
+    "resumen": "Inditex figuró entre las 17 empresas españolas incluidas en la Lista A de CDP correspondiente a 2023, que reconoce a empresas líderes en transparencia y acción climática.",
+    "fuente": "Forbes España",
+    "url": "https://forbes.es/ultima-hora/407641/inditex-caixabank-telefonica-e-iberdrola-entre-las-firmas-espanolas-reconocidas-contra-el-cambio-climatico/"
+   }
+  ],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€300.000–399.999",
+    "detalle": "Rango de gasto declarado en el Registro de transparencia de la UE, según datos publicados en junio de 2025",
+    "fuente": "Modaes (datos del Registro de transparencia UE)",
+    "url": "https://www.modaes.com/global/back-stage/fashion-shakes-up-its-lobby-in-brussels-from-inditexs-reorganization-to-zalandos-bet"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "lvmh": {
+  "nombre": "LVMH",
+  "eventos": [],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€1.750.000–1.999.999",
+    "detalle": "Rango de gasto declarado en el Registro de transparencia de la UE, según datos publicados en junio de 2025",
+    "fuente": "Modaes (datos del Registro de transparencia UE)",
+    "url": "https://www.modaes.com/global/back-stage/fashion-shakes-up-its-lobby-in-brussels-from-inditexs-reorganization-to-zalandos-bet"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web",
+  "parcial": true
+ },
+ "nike": {
+  "nombre": "Nike Inc.",
+  "eventos": [],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€700.000–799.999",
+    "detalle": "Rango de gasto declarado en el Registro de transparencia de la UE, según datos publicados en junio de 2025",
+    "fuente": "Modaes (datos del Registro de transparencia UE)",
+    "url": "https://www.modaes.com/global/back-stage/fashion-shakes-up-its-lobby-in-brussels-from-inditexs-reorganization-to-zalandos-bet"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web",
+  "parcial": true
+ },
+ "alibaba": {
+  "nombre": "Alibaba Group",
+  "eventos": [
+   {
+    "tema": "consumidor",
+    "titulo": "Multa de la UE a AliExpress por productos ilegales (DSA)",
+    "pais": "UE",
+    "anio": 2026,
+    "estado": "multa",
+    "monto": "€550 millones",
+    "resumen": "En julio de 2026 la Comisión Europea multó a AliExpress por no evaluar ni mitigar adecuadamente el riesgo de difusión de productos ilegales, inseguros o falsificados, en virtud de la Ley de Servicios Digitales.",
+    "fuente": "Comisión Europea",
+    "url": "https://digital-strategy.ec.europa.eu/en/news/commission-fines-aliexpress-eu550-million-breaching-digital-services-act"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Multa récord en China por abuso de posición dominante",
+    "pais": "China",
+    "anio": 2021,
+    "estado": "multa",
+    "monto": "≈18.200 millones de yuanes (≈US$2.750 millones)",
+    "resumen": "En abril de 2021 la Administración Estatal de Regulación del Mercado (SAMR) sancionó a Alibaba por abusar de su posición dominante desde 2015 al impedir que sus comerciantes vendieran en otras plataformas. Alibaba aceptó la decisión y se comprometió a cumplirla.",
+    "fuente": "Al Jazeera",
+    "url": "https://www.aljazeera.com/economy/2021/4/10/china-fines-alibaba-record-2-75bn-for-anti-monopoly-violations"
+   },
+   {
+    "tema": "seguridad",
+    "titulo": "Incluida en la lista 1260H del Pentágono; Alibaba lo impugna",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "En junio de 2026 el Departamento de Defensa de EE.UU. incluyó a Alibaba en su lista de «empresas militares chinas» (sección 1260H), designación que no implica sanciones automáticas. Alibaba niega ser una empresa militar y demandó al Departamento de Defensa ante un tribunal federal en San José (California); el litigio está pendiente a la fecha de la fuente.",
+    "fuente": "South China Morning Post (vía The Star)",
+    "url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/06/26/tech-giant-alibaba-sues-pentagon-over-china-military-blacklist"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2026,
+    "tipo": "registro_ue",
+    "dato": "€700.000–799.999",
+    "detalle": "Registro de transparencia de la UE (Alibaba Group Holding Limited), ejercicio abril 2025–marzo 2026",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/b92f0c5302f944ef89b1c5bc6052f670/alibaba-group-holding-limited"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "bytedance": {
+  "nombre": "ByteDance (TikTok)",
+  "eventos": [
+   {
+    "tema": "privacidad",
+    "titulo": "Multa de Irlanda por transferencias de datos de europeos a China",
+    "pais": "Irlanda / UE",
+    "anio": 2025,
+    "estado": "multa",
+    "monto": "€530 millones",
+    "resumen": "En mayo de 2025 la Comisión de Protección de Datos de Irlanda (DPC) multó a TikTok por transferir datos de usuarios del EEE a China sin garantizar una protección equivalente y por falta de transparencia (RGPD), y le ordenó adecuar el tratamiento en seis meses. TikTok rechazó la decisión y anunció que la recurriría.",
+    "fuente": "Infosecurity Magazine",
+    "url": "https://www.infosecurity-magazine.com/news/tiktok-fined-530m-euros-european/"
+   },
+   {
+    "tema": "privacidad",
+    "titulo": "Acuerdo de US$400 millones con el DOJ por privacidad infantil",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "acuerdo",
+    "monto": "US$400 millones",
+    "resumen": "En agosto de 2026 TikTok y ByteDance acordaron pagar US$400 millones para cerrar la demanda presentada en 2024 por el Departamento de Justicia por presuntas violaciones de la ley de privacidad infantil COPPA: US$300 millones de inmediato y US$100 millones tras anularse un decreto previo contra Musical.ly. Las fuentes consultadas no informan de admisión de responsabilidad.",
+    "fuente": "Associated Press",
+    "url": "https://www.wvva.com/2026/08/22/tiktok-reaches-400-million-settlement-with-us-justice-department-over-childrens-privacy/"
+   },
+   {
+    "tema": "privacidad",
+    "titulo": "Multa de Irlanda por el tratamiento de datos de menores",
+    "pais": "Irlanda / UE",
+    "anio": 2023,
+    "estado": "multa",
+    "monto": "€345 millones",
+    "resumen": "En septiembre de 2023 la DPC irlandesa multó a TikTok por su tratamiento de datos personales de usuarios adolescentes (RGPD). ByteDance recurrió la multa ante el Tribunal General de la UE y TikTok impugnó también la orden del regulador; los recursos estaban pendientes a la fecha de la fuente.",
+    "fuente": "Caixin Global",
+    "url": "https://www.caixinglobal.com/2023-10-17/tiktok-fights-636-million-eu-teen-privacy-fine-102117359.html"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Compromisos vinculantes con la UE sobre transparencia publicitaria",
+    "pais": "UE",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "",
+    "resumen": "Tras conclusiones preliminares de mayo de 2025 según las cuales TikTok no mantenía un repositorio de anuncios completo (Ley de Servicios Digitales), la Comisión Europea aceptó en diciembre de 2025 compromisos vinculantes de TikTok para mejorar ese repositorio. No se impuso multa.",
+    "fuente": "Comisión Europea",
+    "url": "https://digital-strategy.ec.europa.eu/en/news/commission-accepts-tiktoks-commitments-advertising-transparency-under-digital-services-act"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "fondo:blackrock": {
+  "nombre": "BlackRock",
+  "eventos": [
+   {
+    "tema": "competencia",
+    "titulo": "Demanda antimonopolio de estados de EE.UU. por el mercado del carbón",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "Texas y otros estados demandaron en diciembre de 2024 a BlackRock, Vanguard y State Street alegando que usaron sus participaciones y compromisos climáticos para reducir la producción de carbón. En agosto de 2025 un juez federal rechazó en lo sustancial la moción de desestimación; BlackRock niega las acusaciones y el caso seguía abierto a la fecha de la fuente (agosto de 2025).",
+    "fuente": "ESG Dive",
+    "url": "https://www.esgdive.com/news/blackrock-vanguard-state-street-motion-to-dismiss-coal-antitrust-case-denied-texas-ag/757336/"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "Acuerdo con el fiscal general de Tennessee sobre prácticas ESG",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "",
+    "resumen": "Tennessee demandó a BlackRock bajo su ley de protección al consumidor por sus comunicaciones sobre ESG. En enero de 2025 se resolvió con un acuerdo de mayor transparencia en votaciones y controles de cumplimiento, sin que el comunicado indique admisión de responsabilidad; la demanda se desestimó sin perjuicio.",
+    "fuente": "Fiscalía General de Tennessee",
+    "url": "https://www.tn.gov/attorneygeneral/news/2025/1/17/pr25-3.html"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: información engañosa sobre inversiones de un fondo cotizado",
+    "pais": "EE.UU.",
+    "anio": 2023,
+    "estado": "acuerdo",
+    "monto": "US$2,5 millones",
+    "resumen": "La SEC acusó a BlackRock Advisors de describir de forma inexacta inversiones de un fondo que asesoraba. BlackRock aceptó pagar una sanción civil de US$2,5 millones sin admitir ni negar los hallazgos.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/news/press-release/2023-226"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: no revelar un conflicto de interés de un gestor",
+    "pais": "EE.UU.",
+    "anio": 2015,
+    "estado": "acuerdo",
+    "monto": "US$12 millones",
+    "resumen": "La SEC acusó a BlackRock Advisors de no informar a clientes y consejos de fondos sobre un conflicto de interés de un gestor de cartera. La firma pagó US$12 millones sin admitir ni negar los hallazgos.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/news/press-release/2015-71"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [
+   {
+    "pais": "UE",
+    "anio": 2025,
+    "tipo": "registro_ue",
+    "dato": "€1.000.000–1.249.999",
+    "detalle": "Gasto de lobbying declarado en el Registro de transparencia de la UE (ID 51436554494-18), ejercicio enero–diciembre 2025",
+    "fuente": "LobbyFacts (datos del Registro de transparencia UE)",
+    "url": "https://lobbyfacts.eu/representative/bc00bbb0e3cb4fd7a03231d84a00f7a5/blackrock"
+   }
+  ],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "fondo:vanguard": {
+  "nombre": "The Vanguard Group",
+  "eventos": [
+   {
+    "tema": "consumidor",
+    "titulo": "SEC y estados: fondos de fecha objetivo con información engañosa",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "US$106,41 millones",
+    "resumen": "La SEC concluyó que los folletos de sus fondos Target Retirement omitieron el riesgo de grandes distribuciones de plusvalías que afectaron fiscalmente a inversores minoristas. Vanguard pagó US$106,41 millones (SEC y reguladores estatales) sin admitir ni negar los hallazgos; aparte acordó US$40 millones en una demanda colectiva.",
+    "fuente": "SEC",
+    "url": "https://sec.gov/newsroom/press-releases/2025-21"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Acuerdo en la demanda antimonopolio de estados por el carbón",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "acuerdo",
+    "monto": "US$29,5 millones",
+    "resumen": "Vanguard resolvió en febrero de 2026 la demanda de 11 estados encabezados por Texas que la acusaban de coludirse para reducir la producción de carbón. Pagó US$29,5 millones y aceptó límites a su interacción con empresas participadas, sin admitir irregularidades.",
+    "fuente": "ESG Dive",
+    "url": "https://www.esgdive.com/news/vanguard-settles-antitrust-coal-case-texast-red-states-state-street-blackrock/813513/"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "SEC: conflictos de interés no revelados en su servicio de asesoría",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "acuerdo",
+    "monto": "US$19,5 millones",
+    "resumen": "La SEC halló que Vanguard Advisers dio información contradictoria sobre los incentivos que recibían los asesores de su programa Personal Advisor Services. Pagó una sanción civil de US$19,5 millones sin admitir ni negar los hallazgos.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/enforcement-litigation/administrative-proceedings/ia-6912-s"
+   },
+   {
+    "tema": "ambiental",
+    "titulo": "Australia: multa récord por greenwashing en un fondo «ético»",
+    "pais": "Australia",
+    "anio": 2024,
+    "estado": "condena",
+    "monto": "A$12,9 millones",
+    "resumen": "A demanda de ASIC, el Tribunal Federal impuso a Vanguard Investments Australia una sanción civil de A$12,9 millones. La filial admitió haber engañado a inversores sobre los filtros ESG de un fondo de bonos.",
+    "fuente": "ASIC",
+    "url": "https://asic.gov.au/about-asic/news-centre/find-a-media-release/2024-releases/24-213mr-asic-s-vanguard-greenwashing-action-results-in-record-12-9-million-penalty"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "fondo:statestreet": {
+  "nombre": "State Street (State Street Global Advisors / State Street Investment Management)",
+  "eventos": [
+   {
+    "tema": "consumidor",
+    "titulo": "Acuerdo de enjuiciamiento diferido por sobrecargos a clientes",
+    "pais": "EE.UU.",
+    "anio": 2021,
+    "estado": "acuerdo",
+    "monto": "US$115 millones",
+    "resumen": "State Street admitió que entre 1998 y 2015 directivos añadieron recargos ocultos a gastos cobrados a clientes de custodia. Pagó una sanción penal de US$115 millones mediante un acuerdo de enjuiciamiento diferido con el Departamento de Justicia, con monitor independiente durante dos años.",
+    "fuente": "Departamento de Justicia de EE.UU.",
+    "url": "https://www.justice.gov/usao-ma/pr/state-street-corporation-pay-115-million-criminal-penalty-and-enter-deferred-prosecution"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "US$382 millones por precios de divisas cobrados a clientes",
+    "pais": "EE.UU.",
+    "anio": 2016,
+    "estado": "acuerdo",
+    "monto": "US$382,4 millones",
+    "resumen": "State Street Bank and Trust acordó pagar al menos US$382,4 millones a DOJ, SEC y clientes de planes de pensiones por cómo fijaba precios en operaciones de divisas. En el acuerdo con el DOJ admitió que en general no aplicaba tipos interbancarios vigentes sino un margen predeterminado.",
+    "fuente": "Departamento de Justicia de EE.UU.",
+    "url": "https://www.justice.gov/opa/pr/state-street-bank-pay-382-million-settle-allegations-fraudulent-foreign-currency-exchange"
+   },
+   {
+    "tema": "consumidor",
+    "titulo": "SEC: recargos no revelados en gastos facturados a fondos",
+    "pais": "EE.UU.",
+    "anio": 2019,
+    "estado": "acuerdo",
+    "monto": "Más de US$88 millones",
+    "resumen": "La SEC concluyó que State Street cobró a fondos clientes gastos superiores a su coste real, incluido un recargo oculto en mensajes SWIFT. Pagó más de US$88 millones (incluida una sanción de US$40 millones) sin admitir ni negar los hallazgos.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/news/press-release/2019-114"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "Demanda antimonopolio de estados de EE.UU. por el mercado del carbón",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "Texas y otros estados acusan a State Street, BlackRock y Vanguard de usar sus participaciones para reducir la producción de carbón. Un juez rechazó la desestimación en agosto de 2025; State Street afirma que la demanda carece de fundamento y el caso seguía abierto contra ella a la fecha de la fuente (marzo de 2026).",
+    "fuente": "ESG Dive",
+    "url": "https://www.esgdive.com/news/vanguard-settles-antitrust-coal-case-texast-red-states-state-street-blackrock/813513/"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "fondo:blackstone": {
+  "nombre": "Blackstone",
+  "eventos": [
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: comisiones no reveladas a inversores de fondos de capital privado",
+    "pais": "EE.UU.",
+    "anio": 2015,
+    "estado": "acuerdo",
+    "monto": "Casi US$39 millones",
+    "resumen": "La SEC concluyó que tres asesores de Blackstone aceleraron comisiones de seguimiento y obtuvieron descuentos legales sin informar adecuadamente a sus fondos. Blackstone pagó casi US$39 millones sin admitir ni negar los hallazgos.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/news/press-release/2015-235"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: comunicaciones por canales no autorizados",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "multa",
+    "monto": "US$12 millones",
+    "resumen": "Tres entidades de Blackstone pagaron en conjunto US$12 millones por no conservar comunicaciones de empleados enviadas por canales no autorizados. Las firmas admitieron los hechos descritos en las órdenes de la SEC.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/newsroom/press-releases/2025-6"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "fondo:kkr": {
+  "nombre": "KKR",
+  "eventos": [
+   {
+    "tema": "competencia",
+    "titulo": "Sanción récord por infringir la ley de notificación de fusiones (HSR)",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "acuerdo",
+    "monto": "US$250 millones",
+    "resumen": "El Departamento de Justicia alegó que KKR eludió la revisión antimonopolio en al menos 16 operaciones de 2021–2022, incluida la alteración de documentos. En agosto de 2026 KKR acordó pagar US$250 millones, la mayor sanción por la ley HSR; el comunicado no indica admisión de responsabilidad y el acuerdo figuraba como propuesto, pendiente de aprobación judicial a la fecha de la fuente.",
+    "fuente": "Departamento de Justicia de EE.UU.",
+    "url": "https://www.justice.gov/opa/pr/kkr-agrees-pay-record-250m-penalty-serial-violations-federal-premerger-review-law"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: reparto indebido de gastos de operaciones fallidas",
+    "pais": "EE.UU.",
+    "anio": 2015,
+    "estado": "acuerdo",
+    "monto": "Casi US$30 millones",
+    "resumen": "La SEC concluyó que KKR cargó a sus fondos principales más de US$17 millones en gastos de operaciones fallidas que también debían asumir coinversores. KKR pagó casi US$30 millones sin admitir ni negar los hallazgos.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/news/press-release/2015-131"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: comunicaciones por canales no autorizados",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "multa",
+    "monto": "US$11 millones",
+    "resumen": "Kohlberg Kravis Roberts & Co. pagó US$11 millones por no conservar comunicaciones de empleados enviadas por canales no autorizados. Admitió los hechos descritos en la orden de la SEC.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/newsroom/press-releases/2025-6"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "fondo:berkshire": {
+  "nombre": "Berkshire Hathaway",
+  "eventos": [
+   {
+    "tema": "seguridad",
+    "titulo": "PacifiCorp paga US$575 millones al Gobierno de EE.UU. por incendios",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "acuerdo",
+    "monto": "US$575 millones",
+    "resumen": "PacifiCorp, eléctrica de Berkshire Hathaway Energy, acordó pagar US$575 millones para resolver reclamaciones federales por daños de seis incendios en Oregón y California que el Gobierno atribuye a la empresa. El DOJ señala que no hubo determinación de responsabilidad y PacifiCorp la niega.",
+    "fuente": "Departamento de Justicia de EE.UU.",
+    "url": "https://www.justice.gov/opa/pr/pacificorp-agrees-pay-575m-settle-claims-damage-caused-six-wildfires-california-and-oregon"
+   },
+   {
+    "tema": "seguridad",
+    "titulo": "PacifiCorp: demanda colectiva por incendios de 2020 en Oregón",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "Jurados han concedido indemnizaciones a damnificados por los incendios de 2020 (p. ej., US$305 millones a 16 demandantes en febrero de 2026) y la empresa ha pagado unos US$2.200 millones en acuerdos. En abril de 2026 un tribunal de apelación de Oregón falló que el caso no debió tramitarse como acción colectiva y lo devolvió al juez de primera instancia; el litigio seguía abierto a la fecha de la fuente.",
+    "fuente": "Reuters (vía Insurance Journal)",
+    "url": "https://amp.insurancejournal.com/news/west/2026/04/09/865048.htm"
+   },
+   {
+    "tema": "competencia",
+    "titulo": "HomeServices pacta US$250 millones en demandas por comisiones",
+    "pais": "EE.UU.",
+    "anio": 2024,
+    "estado": "acuerdo",
+    "monto": "US$250 millones",
+    "resumen": "La inmobiliaria HomeServices of America, de Berkshire, acordó pagar US$250 millones en cuatro años para resolver demandas que alegaban colusión para mantener altas las comisiones de agentes, tras un veredicto de 2023 contra la asociación de Realtors y otros. La empresa defendió la legalidad de sus prácticas; el acuerdo requería aprobación judicial a la fecha de la fuente.",
+    "fuente": "Fortune",
+    "url": "https://fortune.com/2024/04/26/homeservices-real-estate-commissions-lawsuit-settlement-warren-buffett"
+   },
+   {
+    "tema": "corrupcion",
+    "titulo": "OFAC: acuerdo por ventas de una filial turca a clientes en Irán",
+    "pais": "EE.UU.",
+    "anio": 2020,
+    "estado": "acuerdo",
+    "monto": "US$4,14 millones",
+    "resumen": "Berkshire Hathaway pagó, en nombre propio y de su filial Iscar Turquía, US$4.144.651 para resolver 144 aparentes violaciones de las sanciones a Irán. Berkshire las reveló voluntariamente, aunque OFAC consideró el caso grave.",
+    "fuente": "OFAC (Departamento del Tesoro de EE.UU.)",
+    "url": "https://ofac.treasury.gov/recent-actions/20201020"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ },
+ "fondo:apollo": {
+  "nombre": "Apollo Global Management",
+  "eventos": [
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "Demanda de accionistas por presunta ocultación de vínculos con Epstein",
+    "pais": "EE.UU.",
+    "anio": 2026,
+    "estado": "litigio",
+    "monto": "",
+    "resumen": "Accionistas presentaron en marzo de 2026 una demanda colectiva en Nueva York contra Apollo, Leon Black y Marc Rowan, alegando que negaron falsamente en documentos regulatorios haber hecho negocios con Jeffrey Epstein. Apollo declinó comentar y Black niega irregularidades; el caso estaba en fase inicial a la fecha de la fuente.",
+    "fuente": "Reuters (vía Yahoo Finance)",
+    "url": "https://finance.yahoo.com/news/apollo-leon-black-sued-allegedly-004535212.html"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: comisiones no reveladas y falta de supervisión",
+    "pais": "EE.UU.",
+    "anio": 2016,
+    "estado": "acuerdo",
+    "monto": "Unos US$52,7 millones",
+    "resumen": "La SEC concluyó que asesores de Apollo no revelaron adecuadamente la aceleración de comisiones de seguimiento y no supervisaron a un socio que cargó gastos personales a fondos. Apollo pagó unos US$52,7 millones sin admitir ni negar los hallazgos.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/news/press-release/2016-165"
+   },
+   {
+    "tema": "gobierno_corporativo",
+    "titulo": "SEC: comunicaciones por canales no autorizados",
+    "pais": "EE.UU.",
+    "anio": 2025,
+    "estado": "multa",
+    "monto": "US$8,5 millones",
+    "resumen": "Apollo Capital Management pagó US$8,5 millones por no conservar comunicaciones de empleados enviadas por canales no autorizados. Admitió los hechos descritos en la orden de la SEC.",
+    "fuente": "SEC",
+    "url": "https://www.sec.gov/newsroom/press-releases/2025-6"
+   }
+  ],
+  "positivos": [],
+  "lobbying": [],
+  "revisado": "2026-10-08",
+  "origen": "Investigación inicial con búsqueda web"
+ }
+}

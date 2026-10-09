@@ -1,0 +1,2530 @@
+{
+ "version": "2026-10-08",
+ "sitios": [
+  {
+   "d": "amazon.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.fr",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.co.jp",
+   "pais": "Japón",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.sg",
+   "pais": "Singapur",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "amazon.in",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "amazon_tienda",
+   "nombre": "Amazon",
+   "p": "/(dp|gp/product|gp/aw/d)/"
+  },
+  {
+   "d": "mercadolibre.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "mercadolibre",
+   "nombre": "Mercado Libre",
+   "p": "(articulo\\.|produto\\.|/p/ML[A-Z]\\d+|/ML[A-Z]-?\\d+)"
+  },
+  {
+   "d": "mercadolibre.com.ar",
+   "pais": "Argentina",
+   "tipo": "tienda",
+   "g": "mercadolibre",
+   "nombre": "Mercado Libre",
+   "p": "(articulo\\.|produto\\.|/p/ML[A-Z]\\d+|/ML[A-Z]-?\\d+)"
+  },
+  {
+   "d": "mercadolibre.cl",
+   "pais": "Chile",
+   "tipo": "tienda",
+   "g": "mercadolibre",
+   "nombre": "Mercado Libre",
+   "p": "(articulo\\.|produto\\.|/p/ML[A-Z]\\d+|/ML[A-Z]-?\\d+)"
+  },
+  {
+   "d": "mercadolivre.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "mercadolibre",
+   "nombre": "Mercado Libre",
+   "p": "(articulo\\.|produto\\.|/p/ML[A-Z]\\d+|/ML[A-Z]-?\\d+)"
+  },
+  {
+   "d": "mercadolibre.com.co",
+   "pais": "Colombia",
+   "tipo": "tienda",
+   "g": "mercadolibre",
+   "nombre": "Mercado Libre",
+   "p": "(articulo\\.|produto\\.|/p/ML[A-Z]\\d+|/ML[A-Z]-?\\d+)"
+  },
+  {
+   "d": "walmart.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "walmart_tienda",
+   "nombre": "Walmart",
+   "p": "/ip/"
+  },
+  {
+   "d": "walmart.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "walmart_tienda",
+   "nombre": "Walmart Canadá",
+   "p": "/ip/"
+  },
+  {
+   "d": "walmart.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "walmex",
+   "nombre": "Walmart México",
+   "p": "/ip/"
+  },
+  {
+   "d": "bodegaaurrera.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "walmex",
+   "nombre": "Bodega Aurrera",
+   "p": "/ip/"
+  },
+  {
+   "d": "sams.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "walmex",
+   "nombre": "Sam's Club México",
+   "p": "/ip/"
+  },
+  {
+   "d": "lider.cl",
+   "pais": "Chile",
+   "tipo": "tienda",
+   "g": "walmart_tienda",
+   "nombre": "Líder (Walmart Chile)"
+  },
+  {
+   "d": "target.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "target",
+   "nombre": "Target",
+   "p": "/p/"
+  },
+  {
+   "d": "bestbuy.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "bestbuy",
+   "nombre": "Best Buy",
+   "p": "\\.p(\\?|$)"
+  },
+  {
+   "d": "homedepot.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "homedepot",
+   "nombre": "The Home Depot",
+   "p": "/p/"
+  },
+  {
+   "d": "lowes.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "lowes",
+   "nombre": "Lowe's",
+   "p": "/pd/"
+  },
+  {
+   "d": "costco.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "costco_tienda",
+   "nombre": "Costco",
+   "p": "\\.product\\."
+  },
+  {
+   "d": "ebay.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "ebay",
+   "nombre": "eBay",
+   "p": "/itm/"
+  },
+  {
+   "d": "etsy.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "etsy",
+   "nombre": "Etsy",
+   "p": "/listing/"
+  },
+  {
+   "d": "kroger.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "kroger",
+   "nombre": "Kroger",
+   "p": "/p/"
+  },
+  {
+   "d": "cvs.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "cvs",
+   "nombre": "CVS",
+   "p": "prodid"
+  },
+  {
+   "d": "walgreens.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "walgreens",
+   "nombre": "Walgreens",
+   "p": "ID="
+  },
+  {
+   "d": "macys.com",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "macys",
+   "nombre": "Macy's",
+   "p": "/shop/product/"
+  },
+  {
+   "d": "temu.com",
+   "pais": "Global",
+   "tipo": "tienda",
+   "g": "pdd",
+   "nombre": "Temu",
+   "p": "-g-\\d+\\.html"
+  },
+  {
+   "d": "shein.com",
+   "pais": "Global",
+   "tipo": "tienda",
+   "g": "shein",
+   "nombre": "Shein",
+   "p": "-p-\\d+"
+  },
+  {
+   "d": "aliexpress.com",
+   "pais": "Global",
+   "tipo": "tienda",
+   "g": "alibaba",
+   "nombre": "AliExpress",
+   "p": "/item/"
+  },
+  {
+   "d": "aliexpress.us",
+   "pais": "EE.UU.",
+   "tipo": "tienda",
+   "g": "alibaba",
+   "nombre": "AliExpress",
+   "p": "/item/"
+  },
+  {
+   "d": "liverpool.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "liverpool",
+   "nombre": "Liverpool",
+   "p": "/pdp/"
+  },
+  {
+   "d": "suburbia.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "liverpool",
+   "nombre": "Suburbia",
+   "p": "/pdp/"
+  },
+  {
+   "d": "coppel.com",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "coppel",
+   "nombre": "Coppel"
+  },
+  {
+   "d": "elektra.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "elektra",
+   "nombre": "Elektra"
+  },
+  {
+   "d": "elektra.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "elektra",
+   "nombre": "Elektra"
+  },
+  {
+   "d": "soriana.com",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "soriana",
+   "nombre": "Soriana"
+  },
+  {
+   "d": "chedraui.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "chedraui",
+   "nombre": "Chedraui"
+  },
+  {
+   "d": "sanborns.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "sanborns",
+   "nombre": "Sanborns"
+  },
+  {
+   "d": "sears.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "sanborns",
+   "nombre": "Sears México"
+  },
+  {
+   "d": "claroshop.com",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "sanborns",
+   "nombre": "Claro Shop"
+  },
+  {
+   "d": "elpalaciodehierro.com",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "palacio",
+   "nombre": "El Palacio de Hierro"
+  },
+  {
+   "d": "costco.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "costco_tienda",
+   "nombre": "Costco México"
+  },
+  {
+   "d": "homedepot.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "homedepot",
+   "nombre": "The Home Depot México"
+  },
+  {
+   "d": "canadiantire.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "canadiantire",
+   "nombre": "Canadian Tire",
+   "p": "/pdp/"
+  },
+  {
+   "d": "bestbuy.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "bestbuy",
+   "nombre": "Best Buy Canadá",
+   "p": "/product/"
+  },
+  {
+   "d": "costco.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "costco_tienda",
+   "nombre": "Costco Canadá",
+   "p": "\\.product\\."
+  },
+  {
+   "d": "loblaws.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "loblaw",
+   "nombre": "Loblaws"
+  },
+  {
+   "d": "realcanadiansuperstore.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "loblaw",
+   "nombre": "Real Canadian Superstore"
+  },
+  {
+   "d": "shoppersdrugmart.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "loblaw",
+   "nombre": "Shoppers Drug Mart"
+  },
+  {
+   "d": "magazineluiza.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "magalu",
+   "nombre": "Magazine Luiza",
+   "p": "/p/"
+  },
+  {
+   "d": "magalu.com",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "magalu",
+   "nombre": "Magalu",
+   "p": "/p/"
+  },
+  {
+   "d": "netshoes.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "magalu",
+   "nombre": "Netshoes"
+  },
+  {
+   "d": "casasbahia.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "casasbahia",
+   "nombre": "Casas Bahia"
+  },
+  {
+   "d": "americanas.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "americanas",
+   "nombre": "Americanas",
+   "p": "/produto/"
+  },
+  {
+   "d": "shopee.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "sea",
+   "nombre": "Shopee Brasil",
+   "p": "-i\\.\\d+\\.\\d+"
+  },
+  {
+   "d": "carrefour.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "carrefour",
+   "nombre": "Carrefour Brasil"
+  },
+  {
+   "d": "carrefour.com.ar",
+   "pais": "Argentina",
+   "tipo": "tienda",
+   "g": "carrefour",
+   "nombre": "Carrefour Argentina"
+  },
+  {
+   "d": "cotodigital.com.ar",
+   "pais": "Argentina",
+   "tipo": "tienda",
+   "g": "coto",
+   "nombre": "Coto Digital"
+  },
+  {
+   "d": "cotodigital3.com.ar",
+   "pais": "Argentina",
+   "tipo": "tienda",
+   "g": "coto",
+   "nombre": "Coto Digital"
+  },
+  {
+   "d": "falabella.com",
+   "pais": "Chile",
+   "tipo": "tienda",
+   "g": "falabella",
+   "nombre": "Falabella",
+   "p": "/product/"
+  },
+  {
+   "d": "falabella.com.ar",
+   "pais": "Argentina",
+   "tipo": "tienda",
+   "g": "falabella",
+   "nombre": "Falabella",
+   "p": "/product/"
+  },
+  {
+   "d": "sodimac.cl",
+   "pais": "Chile",
+   "tipo": "tienda",
+   "g": "falabella",
+   "nombre": "Sodimac",
+   "p": "/product/"
+  },
+  {
+   "d": "ripley.cl",
+   "pais": "Chile",
+   "tipo": "tienda",
+   "g": "ripley",
+   "nombre": "Ripley"
+  },
+  {
+   "d": "paris.cl",
+   "pais": "Chile",
+   "tipo": "tienda",
+   "g": "cencosud",
+   "nombre": "Paris"
+  },
+  {
+   "d": "jumbo.cl",
+   "pais": "Chile",
+   "tipo": "tienda",
+   "g": "cencosud",
+   "nombre": "Jumbo"
+  },
+  {
+   "d": "tesco.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "tesco",
+   "nombre": "Tesco",
+   "p": "/products/"
+  },
+  {
+   "d": "sainsburys.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "sainsburys",
+   "nombre": "Sainsbury's",
+   "p": "/product/"
+  },
+  {
+   "d": "argos.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "sainsburys",
+   "nombre": "Argos",
+   "p": "/product/"
+  },
+  {
+   "d": "asda.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "asda",
+   "nombre": "Asda",
+   "p": "/product/"
+  },
+  {
+   "d": "boots.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "walgreens",
+   "nombre": "Boots"
+  },
+  {
+   "d": "johnlewis.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "johnlewis",
+   "nombre": "John Lewis",
+   "p": "/p\\d+"
+  },
+  {
+   "d": "waitrose.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "johnlewis",
+   "nombre": "Waitrose",
+   "p": "/products/"
+  },
+  {
+   "d": "currys.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "currys",
+   "nombre": "Currys",
+   "p": "/products/"
+  },
+  {
+   "d": "asos.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "asos",
+   "nombre": "ASOS",
+   "p": "/prd/"
+  },
+  {
+   "d": "next.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "next",
+   "nombre": "Next",
+   "p": "/style/"
+  },
+  {
+   "d": "ocado.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "ocado",
+   "nombre": "Ocado",
+   "p": "/products/"
+  },
+  {
+   "d": "marksandspencer.com",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "marks",
+   "nombre": "Marks & Spencer",
+   "p": "/p/"
+  },
+  {
+   "d": "ebay.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "ebay",
+   "nombre": "eBay UK",
+   "p": "/itm/"
+  },
+  {
+   "d": "otto.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "otto",
+   "nombre": "Otto",
+   "p": "/p/"
+  },
+  {
+   "d": "zalando.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "zalando",
+   "nombre": "Zalando"
+  },
+  {
+   "d": "zalando.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "zalando",
+   "nombre": "Zalando"
+  },
+  {
+   "d": "zalando.fr",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "zalando",
+   "nombre": "Zalando"
+  },
+  {
+   "d": "zalando.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "zalando",
+   "nombre": "Zalando"
+  },
+  {
+   "d": "zalando.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "zalando",
+   "nombre": "Zalando"
+  },
+  {
+   "d": "mediamarkt.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "ceconomy",
+   "nombre": "MediaMarkt",
+   "p": "/product/"
+  },
+  {
+   "d": "saturn.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "ceconomy",
+   "nombre": "Saturn",
+   "p": "/product/"
+  },
+  {
+   "d": "lidl.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "schwarz",
+   "nombre": "Lidl",
+   "p": "/p/"
+  },
+  {
+   "d": "kaufland.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "schwarz",
+   "nombre": "Kaufland",
+   "p": "/product/"
+  },
+  {
+   "d": "aldi-sued.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "aldi",
+   "nombre": "Aldi Süd"
+  },
+  {
+   "d": "aldi-nord.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "aldi",
+   "nombre": "Aldi Nord"
+  },
+  {
+   "d": "dm.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "dm",
+   "nombre": "dm",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "rossmann.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "rossmann",
+   "nombre": "Rossmann",
+   "p": "/p/"
+  },
+  {
+   "d": "ebay.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "ebay",
+   "nombre": "eBay Alemania",
+   "p": "/itm/"
+  },
+  {
+   "d": "cdiscount.com",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "casino",
+   "nombre": "Cdiscount",
+   "p": "/f-"
+  },
+  {
+   "d": "fnac.com",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "fnac",
+   "nombre": "Fnac",
+   "p": "/a\\d+"
+  },
+  {
+   "d": "darty.com",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "fnac",
+   "nombre": "Darty"
+  },
+  {
+   "d": "carrefour.fr",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "carrefour",
+   "nombre": "Carrefour",
+   "p": "/p/"
+  },
+  {
+   "d": "e.leclerc",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "leclerc",
+   "nombre": "E.Leclerc"
+  },
+  {
+   "d": "auchan.fr",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Auchan",
+   "p": "/pr-"
+  },
+  {
+   "d": "boulanger.com",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Boulanger",
+   "p": "/ref/"
+  },
+  {
+   "d": "decathlon.fr",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "decathlon.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "decathlon.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "decathlon.de",
+   "pais": "Alemania",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "decathlon.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "decathlon.ca",
+   "pais": "Canadá",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "decathlon.com.mx",
+   "pais": "México",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "decathlon.com.br",
+   "pais": "Brasil",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Decathlon",
+   "p": "/p/"
+  },
+  {
+   "d": "leroymerlin.fr",
+   "pais": "Francia",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Leroy Merlin"
+  },
+  {
+   "d": "leroymerlin.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "mulliez",
+   "nombre": "Leroy Merlin"
+  },
+  {
+   "d": "elcorteingles.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "elcorteingles",
+   "nombre": "El Corte Inglés"
+  },
+  {
+   "d": "carrefour.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "carrefour",
+   "nombre": "Carrefour España"
+  },
+  {
+   "d": "mercadona.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "mercadona",
+   "nombre": "Mercadona"
+  },
+  {
+   "d": "mediamarkt.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "ceconomy",
+   "nombre": "MediaMarkt España",
+   "p": "/product/"
+  },
+  {
+   "d": "fnac.es",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "fnac",
+   "nombre": "Fnac España"
+  },
+  {
+   "d": "zara.com",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "inditex",
+   "nombre": "Zara",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "pullandbear.com",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "inditex",
+   "nombre": "Pull&Bear",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "bershka.com",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "inditex",
+   "nombre": "Bershka",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "massimodutti.com",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "inditex",
+   "nombre": "Massimo Dutti",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "stradivarius.com",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "inditex",
+   "nombre": "Stradivarius",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "oysho.com",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "inditex",
+   "nombre": "Oysho",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "zarahome.com",
+   "pais": "España",
+   "tipo": "tienda",
+   "g": "inditex",
+   "nombre": "Zara Home",
+   "p": "-p\\d+\\.html"
+  },
+  {
+   "d": "esselunga.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "esselunga",
+   "nombre": "Esselunga"
+  },
+  {
+   "d": "coopshop.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "coop_it",
+   "nombre": "Coop"
+  },
+  {
+   "d": "mediaworld.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "ceconomy",
+   "nombre": "MediaWorld",
+   "p": "/product/"
+  },
+  {
+   "d": "unieuro.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "fnac",
+   "nombre": "Unieuro"
+  },
+  {
+   "d": "ebay.it",
+   "pais": "Italia",
+   "tipo": "tienda",
+   "g": "ebay",
+   "nombre": "eBay Italia",
+   "p": "/itm/"
+  },
+  {
+   "d": "taobao.com",
+   "pais": "China",
+   "tipo": "tienda",
+   "g": "alibaba",
+   "nombre": "Taobao",
+   "p": "item\\.taobao"
+  },
+  {
+   "d": "tmall.com",
+   "pais": "China",
+   "tipo": "tienda",
+   "g": "alibaba",
+   "nombre": "Tmall",
+   "p": "detail\\.tmall"
+  },
+  {
+   "d": "jd.com",
+   "pais": "China",
+   "tipo": "tienda",
+   "g": "jd",
+   "nombre": "JD.com",
+   "p": "item\\.jd\\.com"
+  },
+  {
+   "d": "yangkeduo.com",
+   "pais": "China",
+   "tipo": "tienda",
+   "g": "pdd",
+   "nombre": "Pinduoduo"
+  },
+  {
+   "d": "pinduoduo.com",
+   "pais": "China",
+   "tipo": "tienda",
+   "g": "pdd",
+   "nombre": "Pinduoduo"
+  },
+  {
+   "d": "suning.com",
+   "pais": "China",
+   "tipo": "tienda",
+   "g": "suning",
+   "nombre": "Suning",
+   "p": "product\\.suning"
+  },
+  {
+   "d": "rakuten.co.jp",
+   "pais": "Japón",
+   "tipo": "tienda",
+   "g": "rakuten",
+   "nombre": "Rakuten Ichiba",
+   "p": "item\\.rakuten"
+  },
+  {
+   "d": "shopping.yahoo.co.jp",
+   "pais": "Japón",
+   "tipo": "tienda",
+   "g": "lycorp",
+   "nombre": "Yahoo! Shopping",
+   "p": "/item|/products/"
+  },
+  {
+   "d": "mercari.com",
+   "pais": "Japón",
+   "tipo": "tienda",
+   "g": "mercari",
+   "nombre": "Mercari",
+   "p": "/item/"
+  },
+  {
+   "d": "uniqlo.com",
+   "pais": "Japón",
+   "tipo": "tienda",
+   "g": "fastretailing",
+   "nombre": "Uniqlo",
+   "p": "/products/"
+  },
+  {
+   "d": "yodobashi.com",
+   "pais": "Japón",
+   "tipo": "tienda",
+   "g": "yodobashi",
+   "nombre": "Yodobashi",
+   "p": "/product/"
+  },
+  {
+   "d": "coupang.com",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "coupang",
+   "nombre": "Coupang",
+   "p": "/vp/products/"
+  },
+  {
+   "d": "smartstore.naver.com",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "naver",
+   "nombre": "Naver Smart Store",
+   "p": "/products/"
+  },
+  {
+   "d": "brand.naver.com",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "naver",
+   "nombre": "Naver Brand Store",
+   "p": "/products/"
+  },
+  {
+   "d": "shopping.naver.com",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "naver",
+   "nombre": "Naver Shopping"
+  },
+  {
+   "d": "gmarket.co.kr",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "gmarket",
+   "nombre": "Gmarket"
+  },
+  {
+   "d": "ssg.com",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "shinsegae",
+   "nombre": "SSG.com"
+  },
+  {
+   "d": "lotteon.com",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "lotte",
+   "nombre": "Lotte ON"
+  },
+  {
+   "d": "11st.co.kr",
+   "pais": "Corea del Sur",
+   "tipo": "tienda",
+   "g": "elevenst",
+   "nombre": "11st",
+   "p": "/products/"
+  },
+  {
+   "d": "shopee.sg",
+   "pais": "Singapur",
+   "tipo": "tienda",
+   "g": "sea",
+   "nombre": "Shopee",
+   "p": "-i\\.\\d+\\.\\d+"
+  },
+  {
+   "d": "lazada.sg",
+   "pais": "Singapur",
+   "tipo": "tienda",
+   "g": "alibaba",
+   "nombre": "Lazada",
+   "p": "-i\\d+"
+  },
+  {
+   "d": "fairprice.com.sg",
+   "pais": "Singapur",
+   "tipo": "tienda",
+   "g": "fairprice",
+   "nombre": "FairPrice",
+   "p": "/product/"
+  },
+  {
+   "d": "shufersal.co.il",
+   "pais": "Israel",
+   "tipo": "tienda",
+   "g": "shufersal",
+   "nombre": "Shufersal"
+  },
+  {
+   "d": "rami-levy.co.il",
+   "pais": "Israel",
+   "tipo": "tienda",
+   "g": "ramilevy",
+   "nombre": "Rami Levy"
+  },
+  {
+   "d": "flipkart.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "flipkart",
+   "nombre": "Flipkart",
+   "p": "/p/"
+  },
+  {
+   "d": "myntra.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "flipkart",
+   "nombre": "Myntra"
+  },
+  {
+   "d": "jiomart.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "reliance_retail",
+   "nombre": "JioMart",
+   "p": "/p/"
+  },
+  {
+   "d": "ajio.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "reliance_retail",
+   "nombre": "Ajio",
+   "p": "/p/"
+  },
+  {
+   "d": "nykaa.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "nykaa",
+   "nombre": "Nykaa",
+   "p": "/p/"
+  },
+  {
+   "d": "meesho.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "meesho",
+   "nombre": "Meesho",
+   "p": "/p/"
+  },
+  {
+   "d": "bigbasket.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "tata_digital",
+   "nombre": "BigBasket",
+   "p": "/pd/"
+  },
+  {
+   "d": "tatacliq.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "tata_digital",
+   "nombre": "Tata CLiQ",
+   "p": "/p-"
+  },
+  {
+   "d": "croma.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "tata_digital",
+   "nombre": "Croma",
+   "p": "/p/"
+  },
+  {
+   "d": "blinkit.com",
+   "pais": "India",
+   "tipo": "tienda",
+   "g": "eternal",
+   "nombre": "Blinkit",
+   "p": "/prn/"
+  },
+  {
+   "d": "google.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.com.mx",
+   "pais": "México",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.ca",
+   "pais": "Canadá",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.com.br",
+   "pais": "Brasil",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.com.ar",
+   "pais": "Argentina",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.cl",
+   "pais": "Chile",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.de",
+   "pais": "Alemania",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.fr",
+   "pais": "Francia",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.es",
+   "pais": "España",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.it",
+   "pais": "Italia",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.co.jp",
+   "pais": "Japón",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.co.kr",
+   "pais": "Corea del Sur",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.com.sg",
+   "pais": "Singapur",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.co.il",
+   "pais": "Israel",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "google.co.in",
+   "pais": "India",
+   "tipo": "agencia",
+   "g": "google_travel",
+   "nombre": "Google Vuelos",
+   "path": "/travel/",
+   "v": "/travel/flights"
+  },
+  {
+   "d": "expedia.com",
+   "pais": "EE.UU.",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.com.mx",
+   "pais": "México",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.ca",
+   "pais": "Canadá",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.com.br",
+   "pais": "Brasil",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.com.ar",
+   "pais": "Argentina",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.de",
+   "pais": "Alemania",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.fr",
+   "pais": "Francia",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.es",
+   "pais": "España",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.it",
+   "pais": "Italia",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.co.jp",
+   "pais": "Japón",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.co.kr",
+   "pais": "Corea del Sur",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.com.sg",
+   "pais": "Singapur",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "expedia.co.in",
+   "pais": "India",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Expedia",
+   "v": "/(Flights|flights|Vuelos|vuelos|Fluge|Vols|Voli|Voos)"
+  },
+  {
+   "d": "hotels.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Hotels.com"
+  },
+  {
+   "d": "vrbo.com",
+   "pais": "Global",
+   "tipo": "hospedaje",
+   "g": "expedia",
+   "nombre": "Vrbo",
+   "p": "/\\d+"
+  },
+  {
+   "d": "trivago.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "expedia",
+   "nombre": "Trivago"
+  },
+  {
+   "d": "booking.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Booking.com"
+  },
+  {
+   "d": "kayak.com",
+   "pais": "EE.UU.",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.com.mx",
+   "pais": "México",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.de",
+   "pais": "Alemania",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.fr",
+   "pais": "Francia",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.es",
+   "pais": "España",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.it",
+   "pais": "Italia",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.co.jp",
+   "pais": "Japón",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.co.in",
+   "pais": "India",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "kayak.com.br",
+   "pais": "Brasil",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Kayak"
+  },
+  {
+   "d": "priceline.com",
+   "pais": "EE.UU.",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Priceline"
+  },
+  {
+   "d": "agoda.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Agoda"
+  },
+  {
+   "d": "momondo.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Momondo"
+  },
+  {
+   "d": "cheapflights.com",
+   "pais": "EE.UU.",
+   "tipo": "agencia",
+   "g": "booking",
+   "nombre": "Cheapflights"
+  },
+  {
+   "d": "despegar.com.mx",
+   "pais": "México",
+   "tipo": "agencia",
+   "g": "despegar",
+   "nombre": "Despegar"
+  },
+  {
+   "d": "despegar.com.ar",
+   "pais": "Argentina",
+   "tipo": "agencia",
+   "g": "despegar",
+   "nombre": "Despegar"
+  },
+  {
+   "d": "despegar.cl",
+   "pais": "Chile",
+   "tipo": "agencia",
+   "g": "despegar",
+   "nombre": "Despegar"
+  },
+  {
+   "d": "despegar.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "despegar",
+   "nombre": "Despegar"
+  },
+  {
+   "d": "decolar.com",
+   "pais": "Brasil",
+   "tipo": "agencia",
+   "g": "despegar",
+   "nombre": "Decolar"
+  },
+  {
+   "d": "bestday.com.mx",
+   "pais": "México",
+   "tipo": "agencia",
+   "g": "despegar",
+   "nombre": "Best Day"
+  },
+  {
+   "d": "trip.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Trip.com"
+  },
+  {
+   "d": "ctrip.com",
+   "pais": "China",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Ctrip"
+  },
+  {
+   "d": "qunar.com",
+   "pais": "China",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Qunar"
+  },
+  {
+   "d": "skyscanner.net",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.com",
+   "pais": "EE.UU.",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.com.mx",
+   "pais": "México",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.ca",
+   "pais": "Canadá",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.com.br",
+   "pais": "Brasil",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.cl",
+   "pais": "Chile",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.de",
+   "pais": "Alemania",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.fr",
+   "pais": "Francia",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.es",
+   "pais": "España",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.it",
+   "pais": "Italia",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.jp",
+   "pais": "Japón",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.co.kr",
+   "pais": "Corea del Sur",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.com.sg",
+   "pais": "Singapur",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.co.il",
+   "pais": "Israel",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "skyscanner.co.in",
+   "pais": "India",
+   "tipo": "agencia",
+   "g": "tripcom",
+   "nombre": "Skyscanner"
+  },
+  {
+   "d": "edreams.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "eDreams"
+  },
+  {
+   "d": "edreams.es",
+   "pais": "España",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "eDreams"
+  },
+  {
+   "d": "edreams.fr",
+   "pais": "Francia",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "eDreams"
+  },
+  {
+   "d": "edreams.it",
+   "pais": "Italia",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "eDreams"
+  },
+  {
+   "d": "opodo.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "Opodo"
+  },
+  {
+   "d": "opodo.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "Opodo"
+  },
+  {
+   "d": "opodo.de",
+   "pais": "Alemania",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "Opodo"
+  },
+  {
+   "d": "opodo.fr",
+   "pais": "Francia",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "Opodo"
+  },
+  {
+   "d": "govoyages.com",
+   "pais": "Francia",
+   "tipo": "agencia",
+   "g": "edreams",
+   "nombre": "GO Voyages"
+  },
+  {
+   "d": "kiwi.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "kiwi",
+   "nombre": "Kiwi.com"
+  },
+  {
+   "d": "hopper.com",
+   "pais": "Global",
+   "tipo": "agencia",
+   "g": "hopper",
+   "nombre": "Hopper"
+  },
+  {
+   "d": "makemytrip.com",
+   "pais": "India",
+   "tipo": "agencia",
+   "g": "makemytrip",
+   "nombre": "MakeMyTrip"
+  },
+  {
+   "d": "goibibo.com",
+   "pais": "India",
+   "tipo": "agencia",
+   "g": "makemytrip",
+   "nombre": "Goibibo"
+  },
+  {
+   "d": "cleartrip.com",
+   "pais": "India",
+   "tipo": "agencia",
+   "g": "flipkart",
+   "nombre": "Cleartrip"
+  },
+  {
+   "d": "airbnb.com",
+   "pais": "Global",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.mx",
+   "pais": "México",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.ca",
+   "pais": "Canadá",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.com.br",
+   "pais": "Brasil",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.com.ar",
+   "pais": "Argentina",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.cl",
+   "pais": "Chile",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.co.uk",
+   "pais": "Reino Unido",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.de",
+   "pais": "Alemania",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.fr",
+   "pais": "Francia",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.es",
+   "pais": "España",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.it",
+   "pais": "Italia",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.jp",
+   "pais": "Japón",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.co.kr",
+   "pais": "Corea del Sur",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.com.sg",
+   "pais": "Singapur",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.co.il",
+   "pais": "Israel",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "airbnb.co.in",
+   "pais": "India",
+   "tipo": "hospedaje",
+   "g": "airbnb",
+   "nombre": "Airbnb",
+   "p": "/rooms/"
+  },
+  {
+   "d": "aeromexico.com",
+   "pais": "México",
+   "tipo": "aerolinea",
+   "g": "aeromexico",
+   "nombre": "Aeroméxico"
+  },
+  {
+   "d": "volaris.com",
+   "pais": "México",
+   "tipo": "aerolinea",
+   "g": "volaris",
+   "nombre": "Volaris"
+  },
+  {
+   "d": "vivaaerobus.com",
+   "pais": "México",
+   "tipo": "aerolinea",
+   "g": "viva",
+   "nombre": "Viva Aerobus"
+  },
+  {
+   "d": "aa.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "american",
+   "nombre": "American Airlines"
+  },
+  {
+   "d": "delta.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "delta",
+   "nombre": "Delta Air Lines"
+  },
+  {
+   "d": "united.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "united",
+   "nombre": "United Airlines"
+  },
+  {
+   "d": "southwest.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "southwest",
+   "nombre": "Southwest Airlines"
+  },
+  {
+   "d": "jetblue.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "jetblue",
+   "nombre": "JetBlue"
+  },
+  {
+   "d": "alaskaair.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "alaska",
+   "nombre": "Alaska Airlines"
+  },
+  {
+   "d": "hawaiianairlines.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "alaska",
+   "nombre": "Hawaiian Airlines"
+  },
+  {
+   "d": "spirit.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "spirit",
+   "nombre": "Spirit Airlines"
+  },
+  {
+   "d": "flyfrontier.com",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "frontier",
+   "nombre": "Frontier Airlines"
+  },
+  {
+   "d": "aircanada.com",
+   "pais": "Canadá",
+   "tipo": "aerolinea",
+   "g": "aircanada",
+   "nombre": "Air Canada"
+  },
+  {
+   "d": "westjet.com",
+   "pais": "Canadá",
+   "tipo": "aerolinea",
+   "g": "westjet",
+   "nombre": "WestJet"
+  },
+  {
+   "d": "flyporter.com",
+   "pais": "Canadá",
+   "tipo": "aerolinea",
+   "g": "porter",
+   "nombre": "Porter Airlines"
+  },
+  {
+   "d": "latamairlines.com",
+   "pais": "Chile",
+   "tipo": "aerolinea",
+   "g": "latam",
+   "nombre": "LATAM"
+  },
+  {
+   "d": "voeazul.com.br",
+   "pais": "Brasil",
+   "tipo": "aerolinea",
+   "g": "azul",
+   "nombre": "Azul"
+  },
+  {
+   "d": "voegol.com.br",
+   "pais": "Brasil",
+   "tipo": "aerolinea",
+   "g": "abra",
+   "nombre": "GOL"
+  },
+  {
+   "d": "avianca.com",
+   "pais": "Colombia",
+   "tipo": "aerolinea",
+   "g": "abra",
+   "nombre": "Avianca"
+  },
+  {
+   "d": "aerolineas.com.ar",
+   "pais": "Argentina",
+   "tipo": "aerolinea",
+   "g": "aerolineas_ar",
+   "nombre": "Aerolíneas Argentinas"
+  },
+  {
+   "d": "flybondi.com",
+   "pais": "Argentina",
+   "tipo": "aerolinea",
+   "g": "flybondi",
+   "nombre": "Flybondi"
+  },
+  {
+   "d": "jetsmart.com",
+   "pais": "Chile",
+   "tipo": "aerolinea",
+   "g": "jetsmart",
+   "nombre": "JetSMART"
+  },
+  {
+   "d": "skyairline.com",
+   "pais": "Chile",
+   "tipo": "aerolinea",
+   "g": "sky_cl",
+   "nombre": "Sky Airline"
+  },
+  {
+   "d": "copaair.com",
+   "pais": "Panamá",
+   "tipo": "aerolinea",
+   "g": "copa",
+   "nombre": "Copa Airlines"
+  },
+  {
+   "d": "britishairways.com",
+   "pais": "Reino Unido",
+   "tipo": "aerolinea",
+   "g": "iag",
+   "nombre": "British Airways"
+  },
+  {
+   "d": "iberia.com",
+   "pais": "España",
+   "tipo": "aerolinea",
+   "g": "iag",
+   "nombre": "Iberia"
+  },
+  {
+   "d": "vueling.com",
+   "pais": "España",
+   "tipo": "aerolinea",
+   "g": "iag",
+   "nombre": "Vueling"
+  },
+  {
+   "d": "aerlingus.com",
+   "pais": "Irlanda",
+   "tipo": "aerolinea",
+   "g": "iag",
+   "nombre": "Aer Lingus"
+  },
+  {
+   "d": "flylevel.com",
+   "pais": "España",
+   "tipo": "aerolinea",
+   "g": "iag",
+   "nombre": "Level"
+  },
+  {
+   "d": "easyjet.com",
+   "pais": "Reino Unido",
+   "tipo": "aerolinea",
+   "g": "easyjet",
+   "nombre": "easyJet"
+  },
+  {
+   "d": "ryanair.com",
+   "pais": "Irlanda",
+   "tipo": "aerolinea",
+   "g": "ryanair",
+   "nombre": "Ryanair"
+  },
+  {
+   "d": "virginatlantic.com",
+   "pais": "Reino Unido",
+   "tipo": "aerolinea",
+   "g": "virgin",
+   "nombre": "Virgin Atlantic"
+  },
+  {
+   "d": "lufthansa.com",
+   "pais": "Alemania",
+   "tipo": "aerolinea",
+   "g": "lufthansa",
+   "nombre": "Lufthansa"
+  },
+  {
+   "d": "swiss.com",
+   "pais": "Suiza",
+   "tipo": "aerolinea",
+   "g": "lufthansa",
+   "nombre": "SWISS"
+  },
+  {
+   "d": "austrian.com",
+   "pais": "Austria",
+   "tipo": "aerolinea",
+   "g": "lufthansa",
+   "nombre": "Austrian Airlines"
+  },
+  {
+   "d": "brusselsairlines.com",
+   "pais": "Bélgica",
+   "tipo": "aerolinea",
+   "g": "lufthansa",
+   "nombre": "Brussels Airlines"
+  },
+  {
+   "d": "eurowings.com",
+   "pais": "Alemania",
+   "tipo": "aerolinea",
+   "g": "lufthansa",
+   "nombre": "Eurowings"
+  },
+  {
+   "d": "discover-airlines.com",
+   "pais": "Alemania",
+   "tipo": "aerolinea",
+   "g": "lufthansa",
+   "nombre": "Discover Airlines"
+  },
+  {
+   "d": "condor.com",
+   "pais": "Alemania",
+   "tipo": "aerolinea",
+   "g": "condor",
+   "nombre": "Condor"
+  },
+  {
+   "d": "airfrance.com",
+   "pais": "Francia",
+   "tipo": "aerolinea",
+   "g": "afklm",
+   "nombre": "Air France"
+  },
+  {
+   "d": "airfrance.fr",
+   "pais": "Francia",
+   "tipo": "aerolinea",
+   "g": "afklm",
+   "nombre": "Air France"
+  },
+  {
+   "d": "airfrance.us",
+   "pais": "EE.UU.",
+   "tipo": "aerolinea",
+   "g": "afklm",
+   "nombre": "Air France"
+  },
+  {
+   "d": "klm.com",
+   "pais": "Países Bajos",
+   "tipo": "aerolinea",
+   "g": "afklm",
+   "nombre": "KLM"
+  },
+  {
+   "d": "klm.nl",
+   "pais": "Países Bajos",
+   "tipo": "aerolinea",
+   "g": "afklm",
+   "nombre": "KLM"
+  },
+  {
+   "d": "transavia.com",
+   "pais": "Países Bajos",
+   "tipo": "aerolinea",
+   "g": "afklm",
+   "nombre": "Transavia"
+  },
+  {
+   "d": "ita-airways.com",
+   "pais": "Italia",
+   "tipo": "aerolinea",
+   "g": "ita",
+   "nombre": "ITA Airways"
+  },
+  {
+   "d": "airchina.com.cn",
+   "pais": "China",
+   "tipo": "aerolinea",
+   "g": "airchina",
+   "nombre": "Air China"
+  },
+  {
+   "d": "ceair.com",
+   "pais": "China",
+   "tipo": "aerolinea",
+   "g": "chinaeastern",
+   "nombre": "China Eastern"
+  },
+  {
+   "d": "csair.com",
+   "pais": "China",
+   "tipo": "aerolinea",
+   "g": "chinasouthern",
+   "nombre": "China Southern"
+  },
+  {
+   "d": "hainanairlines.com",
+   "pais": "China",
+   "tipo": "aerolinea",
+   "g": "hainan",
+   "nombre": "Hainan Airlines"
+  },
+  {
+   "d": "jal.co.jp",
+   "pais": "Japón",
+   "tipo": "aerolinea",
+   "g": "jal",
+   "nombre": "Japan Airlines"
+  },
+  {
+   "d": "jal.com",
+   "pais": "Japón",
+   "tipo": "aerolinea",
+   "g": "jal",
+   "nombre": "Japan Airlines"
+  },
+  {
+   "d": "ana.co.jp",
+   "pais": "Japón",
+   "tipo": "aerolinea",
+   "g": "ana",
+   "nombre": "ANA"
+  },
+  {
+   "d": "koreanair.com",
+   "pais": "Corea del Sur",
+   "tipo": "aerolinea",
+   "g": "korean",
+   "nombre": "Korean Air"
+  },
+  {
+   "d": "flyasiana.com",
+   "pais": "Corea del Sur",
+   "tipo": "aerolinea",
+   "g": "korean",
+   "nombre": "Asiana Airlines"
+  },
+  {
+   "d": "singaporeair.com",
+   "pais": "Singapur",
+   "tipo": "aerolinea",
+   "g": "sia",
+   "nombre": "Singapore Airlines"
+  },
+  {
+   "d": "flyscoot.com",
+   "pais": "Singapur",
+   "tipo": "aerolinea",
+   "g": "sia",
+   "nombre": "Scoot"
+  },
+  {
+   "d": "elal.com",
+   "pais": "Israel",
+   "tipo": "aerolinea",
+   "g": "elal",
+   "nombre": "El Al"
+  },
+  {
+   "d": "airindia.com",
+   "pais": "India",
+   "tipo": "aerolinea",
+   "g": "airindia",
+   "nombre": "Air India"
+  },
+  {
+   "d": "goindigo.in",
+   "pais": "India",
+   "tipo": "aerolinea",
+   "g": "indigo_in",
+   "nombre": "IndiGo"
+  },
+  {
+   "d": "emirates.com",
+   "pais": "Emiratos",
+   "tipo": "aerolinea",
+   "g": "emirates",
+   "nombre": "Emirates"
+  },
+  {
+   "d": "qatarairways.com",
+   "pais": "Qatar",
+   "tipo": "aerolinea",
+   "g": "qatar",
+   "nombre": "Qatar Airways"
+  },
+  {
+   "d": "turkishairlines.com",
+   "pais": "Turquía",
+   "tipo": "aerolinea",
+   "g": "turkish",
+   "nombre": "Turkish Airlines"
+  },
+  {
+   "d": "cathaypacific.com",
+   "pais": "Hong Kong",
+   "tipo": "aerolinea",
+   "g": "cathay",
+   "nombre": "Cathay Pacific"
+  }
+ ]
+}

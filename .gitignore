@@ -1,0 +1,8 @@
+node_modules/
+test/node_modules/
+*.zip
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+

@@ -1,0 +1,7 @@
+{
+  "_ayuda": "Llena «repo» con tu usuario/repositorio de GitHub (p. ej. «tuusuario/project-gina») y «contacto» con el correo de correcciones. Luego ejecuta: python3 datagen/build_data.py",
+  "nombre": "Project Gina",
+  "repo": "ginaproyecto02-lgtm/project-gina",
+  "rama": "main",
+  "contacto": "gina.proyecto02@gmail.com"
+}

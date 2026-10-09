@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gina — tus valores y opciones</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<header>
+  <img class="logo" src="../icons/icon48.png" alt="" width="36" height="36">
+  <div><h1>Gina — tus valores y opciones</h1>
+  <p>Gina te muestra a quién apoya tu dinero: quién es dueño de cada marca, su historial público y su lobbying, para que cada compra vaya a donde tú quieras. Así decide quién es el dueño: <b>1)</b> tus marcas → <b>2)</b> marcas verificadas por la investigación → <b>3)</b> base (local o remota) → <b>4)</b> caché de IA → <b>5)</b> consulta en vivo al modelo pequeño. Lo que no se sabe queda en <b>pendientes</b> para el job semanal.</p></div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Tus valores <span class="tag">se guardan al momento</span></h2>
+    <p class="help">Elige qué temas te importan. Cada tarjeta muestra el <b>índice de reputación</b> (igual para todos: resume solo hechos públicos con fuente) y, además, <b>qué tan alineada está con tus valores</b>. Si un tema es «Muy importante», Gina te avisa cuando la empresa tiene multas, acuerdos o condenas recientes en ese tema.</p>
+    <div class="grid" id="values"></div>
+    <label class="row"><input type="checkbox" id="showLobbying"> Mostrar el lobbying y las donaciones políticas declaradas (dato público, sin etiquetas ideológicas)</label>
+    <label class="row"><input type="checkbox" id="showAlternatives"> Sugerir alternativas con dueño local (cooperativas, de empleados, familiares) para el tipo de producto que ves</label>
+    <div class="actions"><span class="msg" id="msg_values"></span></div>
+  </section>
+
+  <section class="card">
+    <h2>Base del proyecto <span class="tag">gratis, sin claves</span></h2>
+    <p class="help">Gina funciona sin cuenta ni clave de IA. La base de dueños, reputación y alternativas la mantiene <b id="projName">Project Gina</b>: una investigación automática la actualiza cada una o dos semanas y tu navegador la descarga sola, sin enviar nada tuyo.</p>
+    <div id="projStatus" class="status"></div>
+    <div class="actions"><button class="ghost" id="sendPending">💡 Sugerir al proyecto las marcas que no encontró Gina</button><span class="msg" id="msg_proj"></span></div>
+  </section>
+
+  <details class="card advanced"><summary><h2 style="display:inline">Avanzado: tu propia IA <span class="tag">opcional</span></h2></summary>
+  <p class="help">Solo si quieres respuestas al momento para marcas que aún no están en la base, o investigar por tu cuenta. Necesita tu propia clave de API (tiene costo en tu cuenta del proveedor).</p>
+  <section class="card">
+    <h2>1. Consulta en vivo <span class="tag">modelo pequeño y barato</span></h2>
+    <p class="help">Se usa solo cuando la marca no está en la memoria. Recomendado: Claude Haiku, Gemini Flash-Lite o un modelo pequeño en Groq/xAI.</p>
+    <label class="row"><input type="checkbox" id="aiEnabled"> Activar la clasificación con IA en las tiendas</label>
+    <div class="grid">
+      <label>Proveedor<select id="c_provider"></select></label>
+      <label>Modelo<input id="c_model" list="c_models" placeholder="nombre del modelo"><datalist id="c_models"></datalist></label>
+      <label class="wide">Clave de API<input id="c_key" type="password" autocomplete="off" placeholder="pega aquí tu clave"></label>
+      <label class="wide base">URL base (compatible con OpenAI)<input id="c_base" placeholder="https://api.ejemplo.com/v1"></label>
+      <label>Límite de consultas por día<input id="dailyLimit" type="number" min="1" max="5000"></label>
+      <label>Días que dura la caché<input id="cacheDays" type="number" min="1" max="365"></label>
+    </div>
+    <div class="actions"><button class="ghost" data-test="classify">Probar clave</button><span class="msg" id="msg_classify"></span></div>
+    <p class="privacy">Privacidad: a la IA se envía solo el nombre de la marca, el título del producto y el nombre de la tienda. No se envían tu historial, tu sesión ni la URL.</p>
+  </section>
+
+  <section class="card">
+    <h2>2. Investigación semanal <span class="tag">modelo grande con búsqueda web</span></h2>
+    <p class="help">Una vez por semana investiga las marcas pendientes (las más vistas primero), revalida los datos de la base marcados «Verificar» e investiga la reputación (controversias, lobbying) de las empresas y fondos que más ves. Solo se guardan hechos cuya fuente salió de la búsqueda real. Un dato solo queda como <b>Verificado</b> si las fuentes salen de la búsqueda real del proveedor. Claude (búsqueda web) y Gemini (Google Search) lo permiten; los compatibles con OpenAI no.</p>
+    <label class="row"><input type="checkbox" id="jobEnabled"> Ejecutar la investigación cada semana</label>
+    <div class="grid">
+      <label>Proveedor<select id="r_provider"></select></label>
+      <label>Modelo<input id="r_model" list="r_models" placeholder="nombre del modelo"><datalist id="r_models"></datalist></label>
+      <label class="wide">Clave de API (puede ser otra cuenta o proyecto)<input id="r_key" type="password" autocomplete="off" placeholder="pega aquí tu clave"></label>
+      <label class="row wide"><input type="checkbox" id="r_useClassifyKey"> Usar la misma clave de la consulta en vivo (si es el mismo proveedor)</label>
+      <label class="wide base">URL base (compatible con OpenAI)<input id="r_base" placeholder="https://api.ejemplo.com/v1"></label>
+      <label>Marcas investigadas por semana<input id="weeklyLimit" type="number" min="1" max="500"></label>
+      <label>Grupos revalidados por semana<input id="revalidateLimit" type="number" min="0" max="100"></label>
+      <label>Historiales de reputación por semana<input id="repLimit" type="number" min="0" max="50"></label>
+    </div>
+    <div class="actions">
+      <button class="ghost" data-test="research">Probar clave</button>
+      <button id="runNow">▶ Ejecutar ahora</button>
+      <span class="msg" id="msg_research"></span>
+    </div>
+    <div id="jobStatus" class="status"></div>
+  </section>
+
+  <section class="card">
+    <h2>3. Otra base remota <span class="tag">opcional</span></h2>
+    <p class="help">Déjalo vacío para usar la base del proyecto. Solo si mantienes tu propia copia (por ejemplo, con el job de <code>job/</code> en tu GitHub), pon aquí la URL de tu <code>brands.json</code>.</p>
+    <div class="grid"><label class="wide">URL del brands.json<input id="remoteUrl" placeholder="https://raw.githubusercontent.com/usuario/repo/main/data/brands.json"></label></div>
+    <div id="remoteStatus" class="status"></div>
+  </section>
+
+  </details>
+
+  <div class="savebar"><button id="save" class="primary">Guardar configuración</button><span class="msg" id="msg_save"></span></div>
+
+  <section class="card">
+    <h2>4. Memoria</h2>
+    <div class="stats" id="stats"></div>
+    <h3>Pendientes de análisis</h3>
+    <div class="tablewrap"><table id="pendingTable"><thead><tr><th>Marca / producto</th><th>Tienda</th><th>Veces vista</th><th>Estado</th><th>Último intento</th><th></th></tr></thead><tbody></tbody></table></div>
+    <h3>Marcas verificadas por la investigación</h3>
+    <div class="tablewrap"><table id="verifiedTable"><thead><tr><th>Marca</th><th>Empresa</th><th>Controlador</th><th>Fuente</th><th>Fecha</th><th></th></tr></thead><tbody></tbody></table></div>
+    <h3>Bitácora de ejecuciones</h3>
+    <div class="tablewrap"><table id="logTable"><thead><tr><th>Fecha</th><th>Origen</th><th>Investigadas</th><th>Verificadas</th><th>Sin fuentes</th><th>No encontradas</th><th>Revalidadas</th><th>Tokens (ent./sal.)</th><th>Cambios y errores</th></tr></thead><tbody></tbody></table></div>
+    <div class="actions">
+      <button class="ghost" id="exportBtn">⬇ Exportar memoria (JSON)</button>
+      <label class="ghost filebtn">⬆ Importar memoria<input type="file" id="importFile" accept="application/json"></label>
+      <button class="ghost" id="exportPending">⬇ Exportar pendientes para el job de servidor</button>
+      <button class="danger" id="clearCache">Vaciar caché de IA</button>
+      <span class="msg" id="msg_mem"></span>
+    </div>
+  </section>
+
+  <p class="foot">¿Encontraste un dato incorrecto sobre una empresa? Escríbenos para corregirlo: <span id="contacto"><a href="mailto:gina.proyecto02@gmail.com">gina.proyecto02@gmail.com</a></span>. Las claves se guardan solo en este navegador (almacenamiento local de la extensión) y se envían únicamente al proveedor que elijas. Recomendación: crea claves con límite de gasto. Información orientativa; no es una recomendación de compra ni de inversión.</p>
+</main>
+<script src="../src/matcher.js"></script>
+<script src="../src/reputation.js"></script>
+<script src="../src/alternativas.js"></script>
+<script src="../src/ai.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

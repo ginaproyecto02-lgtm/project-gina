@@ -1,0 +1,32 @@
+name: Project Gina — generar paquete
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  empaquetar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Regenerar base de datos y manifiesto
+        run: python3 datagen/build_data.py
+
+      - name: Crear archivo zip para las tiendas
+        run: |
+          mkdir -p dist
+          cd extension
+          zip -r ../dist/gina-extension-3.1.0.zip . -x "README.md"
+
+      - name: Guardar paquete como artefacto de descarga
+        uses: actions/upload-artifact@v4
+        with:
+          name: gina-extension-3.1.0
+          path: dist/gina-extension-3.1.0.zip
+          retention-days: 90

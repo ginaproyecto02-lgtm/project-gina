@@ -1,0 +1,57 @@
+# Project Gina: investiga cada 2 semanas (configurable) y publica la base que todas las extensiones descargan gratis.
+# Configura en GitHub → Settings → Secrets and variables → Actions:
+#   Secreto  GINA_API_KEY   = clave del proveedor de investigación (Anthropic, Gemini, …)
+#   Variable GINA_PROVIDER  = anthropic | gemini | groq | xai | openai   (opcional; por defecto anthropic)
+#   Variable GINA_MODEL     = modelo (opcional; por defecto el económico: claude-haiku-5-5 / gemini-3.5-flash-lite)
+#   Variable GINA_EVERY_DAYS = días entre ejecuciones (opcional; 14 por defecto, 7 = semanal)
+#   Variable GINA_BASE_URL  = solo para «openai» (compatible con OpenAI)
+# Pon tu «usuario/repositorio» en datagen/proyecto.json y vuelve a generar la extensión: todas descargarán esta base solas.
+name: Project Gina — investigación
+
+on:
+  schedule:
+    - cron: "17 9 * * 1"   # cada lunes 09:17 UTC; el job se salta las semanas que no tocan según GINA_EVERY_DAYS
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write       # leer y responder las sugerencias enviadas desde la extensión
+
+concurrency:
+  group: gina-investigacion
+  cancel-in-progress: false
+
+jobs:
+  investigar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Investigar pendientes y revalidar la base
+        env:
+          GINA_API_KEY: ${{ secrets.GINA_API_KEY }}
+          GINA_PROVIDER: ${{ vars.GINA_PROVIDER }}
+          GINA_MODEL: ${{ vars.GINA_MODEL }}
+          GINA_BASE_URL: ${{ vars.GINA_BASE_URL }}
+          GINA_LIMIT: "25"
+          GINA_REVALIDATE: "3"
+          GINA_REP_LIMIT: "5"
+          GINA_MAX_SEARCHES: "3"
+          GINA_EVERY_DAYS: ${{ vars.GINA_EVERY_DAYS || '14' }}
+          GINA_FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node job/investigar.js
+      - name: Publicar cambios
+        run: |
+          git config user.name "gina-bot"
+          git config user.email "gina-bot@users.noreply.github.com"
+          git add extension/data/brands.json job/estado.json job/reportes
+          if git diff --cached --quiet; then
+            echo "Sin cambios que publicar."
+          else
+            git commit -m "Investigación semanal $(date -u +%Y-%m-%d)"
+            git push
+          fi
