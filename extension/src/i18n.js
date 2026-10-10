@@ -417,20 +417,28 @@
 
     // ---------------- Modular Sections & Shopper Personas ----------------
     sec_reliability_title: {
-      es: "Confiabilidad de compra y producto",
+      es: "Confiabilidad de compra",
       en: "Purchase & Product Reliability",
       de: "Kauf- & Produktsicherheit",
       fr: "Fiabilité d'achat et produit",
       it: "Affidabilità dell'acquisto e prodotto",
       ja: "購入と商品の信頼性"
     },
+    sec_market_title: {
+      es: "Mercado y alternativas",
+      en: "Market and alternatives",
+      de: "Markt und Alternativen",
+      fr: "Marché et alternatives",
+      it: "Mercato e alternative",
+      ja: "市場と代替案"
+    },
     sec_alternatives_title: {
-      es: "Mercado y alternativas locales",
-      en: "Market & Local Alternatives",
-      de: "Markt & lokale Alternativen",
-      fr: "Marché et alternatives locales",
-      it: "Mercato e alternative locali",
-      ja: "市場と地域資本の代替案"
+      es: "Mercado y alternativas",
+      en: "Market and alternatives",
+      de: "Markt und Alternativen",
+      fr: "Marché et alternatives",
+      it: "Mercato e alternative",
+      ja: "市場と代替案"
     },
     sec_ownership_title: {
       es: "¿A quién le compras?",
@@ -793,14 +801,162 @@
       ja: "この商品カテゴリの地域資本の選択肢はまだ登録されていません。"
     },
 
+    // Confiabilidad Badges
+    badge_direct_store: {
+      es: "Tienda directa",
+      en: "Direct store",
+      de: "Direkter Shop",
+      fr: "Boutique directe",
+      it: "Negozio diretto",
+      ja: "直営ストア"
+    },
+    badge_direct_sale: {
+      es: "Venta directa",
+      en: "Direct sale",
+      de: "Direktverkauf",
+      fr: "Vente directe",
+      it: "Vendita diretta",
+      ja: "直接販売"
+    },
+    badge_official_store: {
+      es: "Tienda oficial",
+      en: "Official store",
+      de: "Offizieller Shop",
+      fr: "Boutique officielle",
+      it: "Negozio ufficiale",
+      ja: "公式ストア"
+    },
+    badge_check: {
+      es: "Revisar",
+      en: "Review",
+      de: "Prüfen",
+      fr: "À vérifier",
+      it: "Controllare",
+      ja: "要確認"
+    },
+    badge_verified: {
+      es: "Vendedor verificado",
+      en: "Verified seller",
+      de: "Verifizierter Verkäufer",
+      fr: "Vendeur vérifié",
+      it: "Venditore verificato",
+      ja: "認証済み出品者"
+    },
+
+    // 1-Line Summaries
+    summary_rel_direct: {
+      es: "Tienda directa",
+      en: "Direct store",
+      de: "Direkter Shop",
+      fr: "Boutique directe",
+      it: "Negozio diretto",
+      ja: "直営ストア"
+    },
+    summary_rel_fulfilled: {
+      es: "Vendido y enviado por {store}",
+      en: "Sold and shipped by {store}",
+      de: "Verkauft und versandt von {store}",
+      fr: "Vendu et expédié par {store}",
+      it: "Venduto e spedito da {store}",
+      ja: "{store}が販売・発送"
+    },
+    summary_rel_ext_intl: {
+      es: "Vendedor externo · se envía desde {country}",
+      en: "Third-party seller · ships from {country}",
+      de: "Drittanbieter · Versand aus {country}",
+      fr: "Vendeur tiers · expédié depuis {country}",
+      it: "Venditore terzo · spedito da {country}",
+      ja: "サードパーティ出品者 · {country}から発送"
+    },
+    summary_rel_ext: {
+      es: "Vendedor externo",
+      en: "Third-party seller",
+      de: "Drittanbieter",
+      fr: "Vendeur tiers",
+      it: "Venditore terzo",
+      ja: "サードパーティ出品者"
+    },
+    summary_mkt_count: {
+      es: "{count} alternativas locales",
+      en: "{count} local alternatives",
+      de: "{count} lokale Alternativen",
+      fr: "{count} alternatives locales",
+      it: "{count} alternative locali",
+      ja: "{count}件の地域資本の代替案"
+    },
+    summary_mkt_none: {
+      es: "Sin alternativas locales todavía",
+      en: "No local alternatives yet",
+      de: "Noch keine lokalen Alternativen",
+      fr: "Pas encore d'alternatives locales",
+      it: "Nessuna alternativa locale ancora",
+      ja: "地域資本の代替案はまだありません"
+    },
+    summary_own_unregistered: {
+      es: "Aún no en la base de Gina",
+      en: "Not yet in Gina database",
+      de: "Noch nicht in der Gina-Datenbank",
+      fr: "Pas encore dans la base Gina",
+      it: "Non ancora nel database Gina",
+      ja: "Ginaデータベース未登録"
+    },
+
+    // Provenance (Origins)
+    src_page: {
+      es: "Según la página",
+      en: "According to the page",
+      de: "Laut Webseite",
+      fr: "Selon la page",
+      it: "Secondo la pagina",
+      ja: "商品ページの記載"
+    },
+    src_official: {
+      es: "Dato oficial: {source}",
+      en: "Official record: {source}",
+      de: "Offizielle Angabe: {source}",
+      fr: "Donnée officielle : {source}",
+      it: "Dato ufficiale: {source}",
+      ja: "公的情報：{source}"
+    },
+    src_unverified: {
+      es: "Gina no lo verifica",
+      en: "Gina does not verify this",
+      de: "Gina prüft dies nicht",
+      fr: "Gina ne le vérifie pas",
+      it: "Gina non lo verifica",
+      ja: "Ginaによる独自検証なし"
+    },
+    src_read_from: {
+      es: "Leído de: {source}",
+      en: "Read from: {source}",
+      de: "Gelesen aus: {source}",
+      fr: "Lu depuis : {source}",
+      it: "Letto da: {source}",
+      ja: "読み取り元：{source}"
+    },
+
+    // 3-Line Data Labels (Uppercase)
+    lbl_seller: { es: "VENDEDOR", en: "SELLER", de: "VERKÄUFER", fr: "VENDEUR", it: "VENDITORE", ja: "販売元" },
+    lbl_shipping: { es: "ENVÍO", en: "SHIPPING", de: "VERSAND", fr: "EXPÉDITION", it: "SPEDIZIONE", ja: "配送" },
+    lbl_warranty: { es: "GARANTÍA Y DEVOLUCIÓN", en: "WARRANTY & RETURNS", de: "GARANTIE & RÜCKGABE", fr: "GARANTIE & RETOURS", it: "GARANZIA E RESI", ja: "保証・返品" },
+    lbl_norms: { es: "NORMAS APLICABLES", en: "APPLICABLE STANDARDS", de: "ANWENDBARE NORMEN", fr: "NORMES APPLICABLES", it: "NORME APPLICABILI", ja: "適用基準" },
+    lbl_controller: { es: "QUIÉN LA CONTROLA", en: "WHO CONTROLS IT", de: "WER ES KONTROLLIERT", fr: "QUI LA CONTRÔLE", it: "CHI LA CONTROLLA", ja: "実質的支配者" },
+    lbl_funds: { es: "GRANDES FONDOS", en: "MAJOR FUNDS", de: "GROSSE FONDS", fr: "GRANDS FONDS", it: "GRANDI FONDI", ja: "主要ファンド" },
+    lbl_gov: { es: "RELACIÓN CON GOBIERNOS", en: "GOVERNMENT TIES", de: "STAATSVERBINDUNGEN", fr: "LIENS AVEC L'ÉTAT", it: "LEGAMI CON IL GOVERNO", ja: "政府との関係" },
+    lbl_store: { es: "TIENDA", en: "STORE", de: "SHOP", fr: "BOUTIQUE", it: "NEGOZIO", ja: "店舗" },
+    lbl_reputation: { es: "REPUTACIÓN PÚBLICA", en: "PUBLIC REPUTATION", de: "ÖFFENTLICHE REPUTATION", fr: "RÉPUTATION PUBLIQUE", it: "REPUTAZIONE PUBBLICA", ja: "公的評価" },
+    lbl_official_alerts: { es: "ALERTAS OFICIALES", en: "OFFICIAL ALERTS", de: "OFFIZIELLE WARNUNGEN", fr: "ALERTES OFFICIELLES", it: "ALLERTE UFFICIALI", ja: "公的警告" },
+    lbl_other_brands: { es: "OTRAS MARCAS DEL MISMO DUEÑO", en: "OTHER BRANDS FROM SAME OWNER", de: "WEITERE MARKEN DESSELBEN EIGENTÜMERS", fr: "AUTRES MARQUES DU MÊME PROPRIÉTAIRE", it: "ALTRI MARCHI DELLO STESSO PROPRIETARIO", ja: "同一所有者の他のブランド" },
+    lbl_category_dominance: { es: "QUIÉN DOMINA ESTA CATEGORÍA", en: "CATEGORY LEADERS", de: "FÜHREND IN DIESER KATEGORIE", fr: "LEADERS DE LA CATÉGORIE", it: "LEADER DI CATEGORIA", ja: "このカテゴリの主要ブランド" },
+
     // Footer
     foot_disclaimer: {
-      es: "Información orientativa basada en fuentes públicas. No es una recomendación de compra ni de inversión.",
-      en: "Informational guidance based on public sources. Not a purchase or investment recommendation.",
-      de: "Orientierende Information aus öffentlichen Quellen. Keine Kauf- oder Anlageempfehlung.",
-      fr: "Information indicative basée sur des sources publiques. Ne constitue pas une recommandation d'achat ou d'investissement.",
-      it: "Informazioni orientative basate su fonti pubbliche. Non costituisce un consiglio di acquisto o investimento.",
-      ja: "公開情報に基づく参考情報です。購入や投資の推奨ではありません。"
+      es: "Orientativo, con fuentes públicas. No es recomendación de compra.",
+      en: "Orientational, based on public sources. Not a purchase recommendation.",
+      de: "Orientierend, aus öffentlichen Quellen. Keine Kaufempfehlung.",
+      fr: "Indicatif, sources publiques. Pas une recommandation d'achat.",
+      it: "Orientativo, da fonti pubbliche. Non è un consiglio di acquisto.",
+      ja: "公開情報に基づく参考情報です。購入推奨ではありません。"
     },
 
     // Popup

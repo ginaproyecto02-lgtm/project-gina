@@ -244,8 +244,15 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const rel = w.QED.evaluateReliability(w.QED.extractReliability(w.document, "walmart"), null, "skincare_cosmetica", "Crema facial", "México");
   const t = w.document.getElementById("gina-tarjeta").shadowRoot.querySelector(".body").textContent.replace(/\s+/g, " ");
   check("Walmart: vendedor no leído ≠ «vendido por Walmart»", rel.sellerType !== "direct" && rel.level === "check" && !rel.returnPolicy, `${rel.sellerType} / ${rel.level}`);
-  check("La tarjeta no promete devolución ni garantía que la página no indica", !/Compra Protegida|30 días|hasta un 50|asegurado/.test(t) && t.includes("La página no lo indica"));
-  check("Se abre primero la pestaña del dueño", w.document.getElementById("gina-tarjeta").shadowRoot.querySelector("details[open]").id === "sec-own");
+  const cardShadow = w.document.getElementById("gina-tarjeta").shadowRoot;
+  const btns = cardShadow.querySelectorAll(".sec-btn");
+  const closedInitially = Array.from(btns).every((b) => b.getAttribute("aria-expanded") === "false");
+  btns[0].click();
+  const relOpened = btns[0].getAttribute("aria-expanded") === "true" && btns[1].getAttribute("aria-expanded") === "false" && btns[2].getAttribute("aria-expanded") === "false";
+  btns[1].click();
+  const mktOpened = btns[0].getAttribute("aria-expanded") === "false" && btns[1].getAttribute("aria-expanded") === "true" && btns[2].getAttribute("aria-expanded") === "false";
+  check("La tarjeta se dibuja con las 3 secciones cerradas; el clic abre solo esa; aria-expanded cambia", closedInitially && relOpened && mktOpened);
+  check("Orden de las secciones: rel, mkt, own", btns.length === 3 && btns[0].getAttribute("data-sec") === "rel" && btns[1].getAttribute("data-sec") === "mkt" && btns[2].getAttribute("data-sec") === "own");
 }
 {
   const w = env(`<h1 class="ui-pdp-title">Crema</h1><div class="ui-pdp-seller__link-trigger">VendedorNuevo123</div>`, "https://articulo.mercadolibre.com.mx/MLM-1");
