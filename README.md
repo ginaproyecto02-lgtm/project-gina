@@ -10,7 +10,7 @@ En cada producto, vuelo u hospedaje muestra:
 - **Su lobbying:** gasto declarado y donaciones por partido cuando hay dato oficial, sin etiquetas ideológicas.
 - **Alternativas locales:** para el tipo de producto (lácteos, café, detergente, cerveza, electrónica…), marcas de cooperativas, de sus empleados, de un fideicomiso o de familias y fundadores con capital del país de la tienda.
 
-Cubre 335 sitios de 17 países: EE.UU., México, Canadá, Brasil, Argentina, Chile, Reino Unido, Alemania, Francia, España, Italia, China, Japón, Corea del Sur, Singapur, Israel e India. La base tiene 354 grupos dueños, 988 marcas, 110 aerolíneas, 16 categorías de producto y 33 historiales de reputación verificados.
+Cubre 335 sitios de 17 países: EE.UU., México, Canadá, Brasil, Argentina, Chile, Reino Unido, Alemania, Francia, España, Italia, China, Japón, Corea del Sur, Singapur, Israel e India. La base tiene 420 grupos dueños, 1.190 marcas, 110 aerolíneas, 24 categorías de producto y 33 historiales de reputación verificados.
 
 ## Cómo funciona (gratis para quien la usa)
 

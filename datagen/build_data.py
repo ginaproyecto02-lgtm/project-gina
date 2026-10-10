@@ -20,7 +20,8 @@ AMBIG = {x.lower() for x in ["Mi","Poco","Sol","Indio","Victoria","Corona","Mode
  "Theory","GU","Titan","Honor","Vivo","Elite","Swift","Lux","HIT","Sharp","Canon","Siemens","Persil","Wheel",
  # Palabras comunes, nombres propios o títulos de obras: solo cuentan desde el campo «marca» de la página
  "Cero","Simi","Shark","Ninja","Penn","Hardy","Shakespeare","Ender","Foca","Carisma","Babé","Berkley","Fenwick","Avent",
- "Savage Gear","Pflueger","Ugly Stik","Shimano","Klorane","Ducray","Teatrical","Goicoechea","Tumi","Hue","Norelco"]}
+ "Savage Gear","Pflueger","Ugly Stik","Shimano","Klorane","Ducray","Teatrical","Goicoechea","Tumi","Hue","Norelco",
+ "Easy","Foy","Advance","Noble","Proto","Hart","Raid","Off!","Duck","Dawn","Fairy","Oster","Tudor","Wenger"]}
 
 def entries(pairs, kind):
     out, seen = [], set()

@@ -1,5 +1,5 @@
 {
- "version": "2026-10-10T0815",
+ "version": "2026-10-10T1823",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
  "grupos": {
   "walmart": {
@@ -5493,6 +5493,709 @@
    "gobierno_en": "",
    "fuente_en": "Haleon Annual Report"
   },
+  "ikea": {
+   "empresa": "Inter IKEA / INGKA Group",
+   "controlador": "Stichting INGKA Foundation (fundación filantrópica holandesa) e Interogo Foundation",
+   "pais": "Países Bajos / Suecia",
+   "tipo": "Fideicomiso",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Mayor fabricante y vendedor minorista de muebles del mundo.",
+   "confianza": "Alta",
+   "fuente": "Ingka Group Sustainability & Governance Report",
+   "url": "https://www.ingka.com/reports-and-publications/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Stichting INGKA Foundation (Dutch philanthropic foundation) and Interogo Foundation",
+   "nota_en": "World's largest furniture manufacturer and retailer (IKEA).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Ingka Group Sustainability Report"
+  },
+  "ashley": {
+   "empresa": "Ashley Furniture Industries",
+   "controlador": "Familia Wanek (Todd Wanek CEO y Ron Wanek fundador)",
+   "pais": "EE.UU.",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Mayor fabricante y vendedor minorista de muebles para el hogar en EE.UU.",
+   "confianza": "Alta",
+   "fuente": "Forbes: America's Largest Private Companies",
+   "url": "https://www.forbes.com/companies/ashley-furniture-industries/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Wanek family (Todd Wanek CEO and Ron Wanek founder)",
+   "nota_en": "Largest home furniture manufacturer and retailer in North America.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Forbes: America's Largest Private Companies"
+  },
+  "millerknoll": {
+   "empresa": "MillerKnoll (Herman Miller, Knoll)",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "Contratos de mobiliario para oficinas de gobierno",
+   "nota": "Líder mundial en sillería ergonómica (Aeron) y mobiliario de oficina.",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de MillerKnoll (SEC)",
+   "url": "https://www.millerknoll.com/investor-relations",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
+   "nota_en": "Global leader in ergonomic office seating and design (Herman Miller, Knoll, Aeron).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "MillerKnoll Form 10-K (SEC)"
+  },
+  "steelcase": {
+   "empresa": "Steelcase",
+   "controlador": "Familias fundadoras Wege, Hunting e Idema (control de voto) y fondos",
+   "pais": "EE.UU.",
+   "tipo": "Familia + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Fabricante líder de mobiliario de oficina y entornos de trabajo.",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de Steelcase (SEC)",
+   "url": "https://ir.steelcase.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Founding families (Wege, Hunting, Idema via Class B voting shares) and public funds",
+   "nota_en": "Office furniture and workspace architecture manufacturer.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Steelcase Form 10-K (SEC)"
+  },
+  "electrolux": {
+   "empresa": "AB Electrolux",
+   "controlador": "Investor AB (familia Wallenberg, ~18% capital, ~30% voto)",
+   "pais": "Otros (Suecia)",
+   "tipo": "Familia + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Electrodomésticos de línea blanca (Electrolux, Frigidaire, AEG).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Electrolux (Nasdaq Stockholm)",
+   "url": "https://www.electroluxgroup.com/en/category/investors/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Investor AB (Wallenberg family, ~18% equity, ~30% voting)",
+   "nota_en": "Major home appliances manufacturer (Electrolux, Frigidaire, AEG).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Electrolux Annual Report"
+  },
+  "daikin": {
+   "empresa": "Daikin Industries",
+   "controlador": "Sin accionista de control",
+   "pais": "Otros (Japón)",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Mayor fabricante de sistemas de aire acondicionado y climatización del mundo.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Daikin (TSE)",
+   "url": "https://www.daikin.com/investor",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (TSE: 6367)",
+   "nota_en": "World's largest air conditioning and climate systems manufacturer.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Daikin Annual Report (TSE)"
+  },
+  "carrier": {
+   "empresa": "Carrier Global Corporation",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Sistemas de aire acondicionado, calefacción y climatización (HVAC).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de Carrier Global (SEC)",
+   "url": "https://ir.carrier.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NYSE: CARR; spun off from UTC)",
+   "nota_en": "Global provider of heating, ventilating and air conditioning (HVAC) systems.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Carrier Form 10-K (SEC)"
+  },
+  "dyson": {
+   "empresa": "Dyson Ltd",
+   "controlador": "Sir James Dyson y familia Dyson",
+   "pais": "Reino Unido / Singapur",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Aspiradoras sin cable, purificadores de aire, ventiladores y cuidado del cabello.",
+   "confianza": "Alta",
+   "fuente": "Dyson Corporate Overview / Forbes",
+   "url": "https://www.forbes.com/profile/james-dyson/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Sir James Dyson and Dyson family (100% privately held)",
+   "nota_en": "Cordless vacuums, air purifiers, fans and hair care technology.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Dyson Corporate Overview"
+  },
+  "irobot": {
+   "empresa": "iRobot Corporation",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Fabricante pionero de robots aspiradores inteligentes (Roomba, Braava).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de iRobot (SEC)",
+   "url": "https://investor.irobot.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NASDAQ: IRBT)",
+   "nota_en": "Consumer robot vacuum and mopping pioneer (Roomba, Braava).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "iRobot Form 10-K (SEC)"
+  },
+  "roborock": {
+   "empresa": "Roborock (Beijing Roborock Technology)",
+   "controlador": "Chang Jing (fundador y presidente) y fondos",
+   "pais": "China",
+   "tipo": "Fundador + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Robots aspiradores inteligentes y aspiradoras en seco y húmedo.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Roborock (STAR Market)",
+   "url": "https://global.roborock.com/pages/investor-relations",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Chang Jing (founder & chairman) and public shareholders (STAR Market: 688169)",
+   "nota_en": "Smart robot vacuum and floor cleaning appliances.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Roborock Annual Report (SSE)"
+  },
+  "ecovacs": {
+   "empresa": "Ecovacs Robotics",
+   "controlador": "Familia Qian (Qian Dongqi fundador)",
+   "pais": "China",
+   "tipo": "Familia",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Robots aspiradores y limpieza de ventanas (Deebot, Winbot).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Ecovacs (SSE)",
+   "url": "https://www.ecovacs.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Qian family (founder Qian Dongqi and David Qian)",
+   "nota_en": "Service robotics and smart robot vacuums (Deebot).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Ecovacs Annual Report (SSE)"
+  },
+  "vesync": {
+   "empresa": "VeSync (Levoit, Cosori)",
+   "controlador": "Grace Yang (Lin Yang, fundadora, ~65%)",
+   "pais": "EE.UU. / China",
+   "tipo": "Fundador",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Purificadores de aire y filtros HEPA (Levoit) y freidoras de aire (Cosori).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de VeSync (HKEX)",
+   "url": "https://www.vesync.com/investor-relations",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Grace Yang (founder and majority shareholder, HKEX: 2148)",
+   "nota_en": "Air purifiers and HEPA filters (Levoit) and kitchen appliances (Cosori).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "VeSync Annual Report (HKEX)"
+  },
+  "coway": {
+   "empresa": "Coway Co., Ltd.",
+   "controlador": "Netmarble Corporation (~25%) y fondos cotizados en KRX (021240)",
+   "pais": "Otros (Corea del Sur)",
+   "tipo": "Corporación + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Líder surcoreano en purificadores de aire (Airmega) y purificadores de agua.",
+   "confianza": "Alta",
+   "fuente": "Coway Sustainability Report / KRX",
+   "url": "https://sustainability.coway.co.kr/en/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Netmarble Corporation (~25% controlling stakeholder) and institutional funds",
+   "nota_en": "Korean air purifiers (Airmega) and water filtration systems.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Coway Sustainability Report (KRX)"
+  },
+  "stanley": {
+   "empresa": "Stanley Black & Decker",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Mayor fabricante mundial de herramientas manuales y electroportátiles.",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de Stanley Black & Decker (SEC)",
+   "url": "https://ir.stanleyblackanddecker.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NYSE: SWK)",
+   "nota_en": "World's largest power tools and hand tools manufacturer (DeWalt, Stanley, Craftsman).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Stanley Black & Decker Form 10-K (SEC)"
+  },
+  "makita": {
+   "empresa": "Makita Corporation",
+   "controlador": "Sin accionista de control",
+   "pais": "Otros (Japón)",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Herramientas eléctricas y a batería para construcción y jardinería.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Makita (TSE)",
+   "url": "https://www.makita.biz/ir/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (TSE: 6586)",
+   "nota_en": "Japanese power tools and cordless gardening equipment manufacturer.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Makita Annual Report (TSE)"
+  },
+  "tti": {
+   "empresa": "Techtronic Industries (TTI)",
+   "controlador": "Horst Julius Pudwill (~20%) y Roy Chung (~20%)",
+   "pais": "China / Hong Kong",
+   "tipo": "Fundador + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Herramientas a batería de uso profesional y residencial (Milwaukee, Ryobi).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de TTI (HKEX)",
+   "url": "https://www.ttigroup.com/investors/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Horst Julius Pudwill (~20%) and Roy Chung (~20%), HKEX: 0669",
+   "nota_en": "Cordless power tools and outdoor power equipment (Milwaukee, Ryobi).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Techtronic Industries Annual Report (HKEX)"
+  },
+  "husqvarna": {
+   "empresa": "Husqvarna Group",
+   "controlador": "Investor AB (familia Wallenberg, ~17% capital, ~33% voto)",
+   "pais": "Otros (Suecia)",
+   "tipo": "Familia + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Motosierras, cortacéspedes y herramientas de jardinería y riego (Husqvarna, Gardena).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Husqvarna (Nasdaq Stockholm)",
+   "url": "https://www.husqvarnagroup.com/en/investors",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Investor AB (Wallenberg family, ~17% equity, ~33% voting)",
+   "nota_en": "Outdoor power products and watering systems (Husqvarna, Gardena).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Husqvarna Annual Report"
+  },
+  "adm_pets": {
+   "empresa": "Archer Daniels Midland (ADM Animal Nutrition)",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Nutrición animal y alimentos para perros y gatos en México (Ganador, Minino).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de ADM (SEC)",
+   "url": "https://www.adm.com/en-us/investors/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NYSE: ADM)",
+   "nota_en": "Pet food manufacturer in Mexico and Latin America (Ganador, Minino).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "ADM Form 10-K (SEC)"
+  },
+  "generalmills": {
+   "empresa": "General Mills (Blue Buffalo)",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Alimentos naturales para mascotas (Blue Buffalo) y cereales (Cheerios).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de General Mills (SEC)",
+   "url": "https://investors.generalmills.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NYSE: GIS)",
+   "nota_en": "Pet food (Blue Buffalo) and consumer foods manufacturer.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "General Mills Form 10-K (SEC)"
+  },
+  "scjohnson": {
+   "empresa": "S.C. Johnson & Son",
+   "controlador": "Familia Johnson (Fisk Johnson, 100%)",
+   "pais": "EE.UU.",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Cuidado del hogar, ambientadores e insecticidas (Glade, Raid, Windex, Mr Músculo).",
+   "confianza": "Alta",
+   "fuente": "Forbes: America's Largest Private Companies",
+   "url": "https://www.forbes.com/companies/sc-johnson-son/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Johnson family (Fisk Johnson, 100% privately held)",
+   "nota_en": "Home cleaning, air care and pest control (Glade, Raid, Windex, Mr Músculo).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Forbes: America's Largest Private Companies"
+  },
+  "newell": {
+   "empresa": "Newell Brands",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Velas aromáticas (Yankee Candle), artículos para el hogar (Rubbermaid) y campismo (Coleman).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de Newell Brands (SEC)",
+   "url": "https://ir.newellbrands.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NASDAQ: NWL)",
+   "nota_en": "Scented candles (Yankee Candle), home organization and outdoor gear.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Newell Brands Form 10-K (SEC)"
+  },
+  "bbw": {
+   "empresa": "Bath & Body Works, Inc.",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Fragancias para el hogar, lociones de ambiente, velas y cuidado corporal.",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de Bath & Body Works (SEC)",
+   "url": "https://www.bbwinc.com/investors",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NYSE: BBWI)",
+   "nota_en": "Home fragrance, scented candles and personal care retailer.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Bath & Body Works Form 10-K (SEC)"
+  },
+  "asus": {
+   "empresa": "ASUS (ASUSTeK Computer)",
+   "controlador": "Jonney Shih y fondos institucionales",
+   "pais": "Otros (Taiwán)",
+   "tipo": "Corporación + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Computadoras, laptops gamer (ROG), placas base y monitores.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de ASUS (TWSE)",
+   "url": "https://www.asus.com/investor-relations/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Jonney Shih and institutional shareholders (TWSE: 2357)",
+   "nota_en": "Laptops, motherboards, gaming computers (ROG) and electronics.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "ASUSTeK Annual Report (TWSE)"
+  },
+  "acer": {
+   "empresa": "Acer Inc.",
+   "controlador": "Stan Shih (fundador) y fondos institucionales",
+   "pais": "Otros (Taiwán)",
+   "tipo": "Fundador + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Computadoras portátiles, de escritorio y equipos gamer (Predator).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Acer (TWSE)",
+   "url": "https://www.acer-group.com/ag/en/US/content/ir-home",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Stan Shih (founder) and public shareholders (TWSE: 2353)",
+   "nota_en": "Laptops, desktop computers and gaming hardware (Predator).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Acer Annual Report (TWSE)"
+  },
+  "garmin": {
+   "empresa": "Garmin Ltd.",
+   "controlador": "Min Kao (cofundador) y fondos institucionales",
+   "pais": "Otros (Suiza / EE.UU.)",
+   "tipo": "Fundador + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "Contratos de aviación y navegación con defensa",
+   "nota": "Relojes inteligentes con GPS para deporte, carrera y navegación.",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de Garmin (SEC)",
+   "url": "https://www.garmin.com/en-US/investors/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Min Kao (co-founder) and institutional funds (NYSE: GRMN)",
+   "nota_en": "GPS smartwatches, sports wearables and navigation technology.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Garmin Form 10-K (SEC)"
+  },
+  "audiotechnica": {
+   "empresa": "Audio-Technica Corporation",
+   "controlador": "Familia Matsushita (Kazuo Matsushita presidente)",
+   "pais": "Otros (Japón)",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Audífonos de estudio, tocadiscos y micrófonos profesionales.",
+   "confianza": "Alta",
+   "fuente": "Audio-Technica Corporate Profile",
+   "url": "https://www.audio-technica.co.jp/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Matsushita family (Kazuo Matsushita president; 100% Japanese family-owned)",
+   "nota_en": "Headphones, turntables and audio equipment.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Audio-Technica Corporate Profile"
+  },
+  "sennheiser": {
+   "empresa": "Sennheiser electronic",
+   "controlador": "Familia Sennheiser (Daniel y Andreas Sennheiser)",
+   "pais": "Otros (Alemania)",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Audífonos de alta fidelidad, barras de sonido y microfonía.",
+   "confianza": "Alta",
+   "fuente": "Sennheiser Group Press & Facts",
+   "url": "https://en-de.sennheiser.com/about-us",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Sennheiser family (Daniel and Andreas Sennheiser, 100% family-owned)",
+   "nota_en": "High-fidelity headphones, soundbars and audio equipment.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Sennheiser Group Profile"
+  },
+  "hm": {
+   "empresa": "H&M Group (Hennes & Mauritz)",
+   "controlador": "Familia Persson (Stefan Persson vía Ramsbury Invest, ~55% capital, ~79% voto)",
+   "pais": "Otros (Suecia)",
+   "tipo": "Familia",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Cadena multinacional de moda y prendas de vestir (H&M, COS, & Other Stories).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de H&M Group (Nasdaq Stockholm)",
+   "url": "https://hmgroup.com/investors/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Persson family (~55% equity, ~79% voting via Ramsbury Invest)",
+   "nota_en": "Global fashion retailer (H&M, COS, & Other Stories, Arket).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "H&M Group Annual Report"
+  },
+  "swatchgroup": {
+   "empresa": "The Swatch Group",
+   "controlador": "Familia Hayek (~43% de derechos de voto) y fondos",
+   "pais": "Otros (Suiza)",
+   "tipo": "Familia + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Mayor fabricante suizo de relojes de pulsera (Omega, Longines, Tissot, Swatch).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Swatch Group (SIX)",
+   "url": "https://www.swatchgroup.com/en/investor-relations",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Hayek family (~43% voting rights; SIX: UHR)",
+   "nota_en": "Swiss watchmaking conglomerate (Omega, Longines, Tissot, Swatch, Breguet).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "The Swatch Group Annual Report (SIX)"
+  },
+  "seiko": {
+   "empresa": "Seiko Group Corporation",
+   "controlador": "Familia fundadora Hattori (Shinji Hattori presidente) y fondos",
+   "pais": "Otros (Japón)",
+   "tipo": "Familia + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Fabricante japonés de relojes de pulsera de cuarzo y automáticos (Seiko, Grand Seiko).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Seiko (TSE)",
+   "url": "https://www.seiko.co.jp/en/ir/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Founding Hattori family (Shinji Hattori chairman, TSE: 8050)",
+   "nota_en": "Japanese watchmaker (Seiko, Grand Seiko, Astron).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Seiko Group Annual Report (TSE)"
+  },
+  "citizen": {
+   "empresa": "Citizen Watch Co.",
+   "controlador": "Sin accionista de control",
+   "pais": "Otros (Japón)",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Relojes de pulsera con tecnología Eco-Drive y relojes mecánicos.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Citizen Watch (TSE)",
+   "url": "https://www.citizen.co.jp/global/investors/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (TSE: 7762)",
+   "nota_en": "Japanese watch manufacturer (Citizen, Bulova, Eco-Drive).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Citizen Watch Annual Report (TSE)"
+  },
+  "essity": {
+   "empresa": "Essity AB",
+   "controlador": "Industrivärden (familia Lundberg / Handelsbanken, ~30% voto) y fondos",
+   "pais": "Otros (Suecia)",
+   "tipo": "Corporación + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Papel higiénico, toallitas y cuidado femenino e incontinencia (Regio, Saba, Tena).",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Essity (Nasdaq Stockholm)",
+   "url": "https://www.essity.com/investors/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Industrivärden (Lundberg family, ~30% voting) and public funds",
+   "nota_en": "Global hygiene and health company (Regio, Saba, Tena, Leukoplast).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Essity Annual Report"
+  },
+  "threem": {
+   "empresa": "3M Company",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "Contratos médicos y de defensa con gobiernos",
+   "nota": "Material de curación y apósitos (Nexcare, Micropore, Tegaderm) y adhesivos (Scotch, Post-it).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de 3M (SEC)",
+   "url": "https://investors.3m.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NYSE: MMM)",
+   "nota_en": "Medical first aid dressings (Nexcare, Micropore) and adhesives (Scotch, Post-it).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "3M Form 10-K (SEC)"
+  },
+  "omron": {
+   "empresa": "OMRON Corporation",
+   "controlador": "Sin accionista de control",
+   "pais": "Otros (Japón)",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Equipos de monitoreo para la salud: tensiómetros, termómetros digitales y nebulizadores.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Omron (TSE)",
+   "url": "https://www.omron.com/global/en/ir/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (TSE: 6645)",
+   "nota_en": "Healthcare monitoring devices (blood pressure monitors, digital thermometers).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Omron Integrated Report (TSE)"
+  },
+  "thule": {
+   "empresa": "Thule Group",
+   "controlador": "Sin accionista de control",
+   "pais": "Otros (Suecia)",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Mochilas de viaje, equipaje de mano, maletas y portaequipajes.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Thule Group (Nasdaq Stockholm)",
+   "url": "https://www.thulegroup.com/en/investors",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (Nasdaq Stockholm: THULE)",
+   "nota_en": "Travel backpacks, luggage, roof racks and active gear (Thule, Case Logic).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Thule Group Annual Report"
+  },
+  "helenoftroy": {
+   "empresa": "Helen of Troy (Osprey)",
+   "controlador": "Sin accionista de control",
+   "pais": "EE.UU.",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Mochilas técnicas de viaje y senderismo (Osprey) y botellas térmicas (Hydro Flask).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de Helen of Troy (SEC)",
+   "url": "https://investor.helenoftroy.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Dispersed institutional funds (NASDAQ: HELE)",
+   "nota_en": "Travel and hiking backpacks (Osprey) and consumer products (OXO, Hydro Flask).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Helen of Troy Form 10-K (SEC)"
+  },
+  "delsey_paris": {
+   "empresa": "Delsey Paris",
+   "controlador": "Fondos de inversión europeos (Arcapita / Pemberton)",
+   "pais": "Francia",
+   "tipo": "Capital privado",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Fabricante francés de maletas, equipaje de viaje y accesorios.",
+   "confianza": "Alta",
+   "fuente": "Delsey Paris Corporate Overview",
+   "url": "https://corporate.delsey.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "European private investment funds (Arcapita / Pemberton)",
+   "nota_en": "French luggage and travel accessories manufacturer.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Delsey Paris Corporate Profile"
+  },
   "loc_sociedad_cooperativa_trabajado": {
    "empresa": "Sociedad Cooperativa Trabajadores de Pascual S.C.L.",
    "controlador": "Pertenece a más de 4,000 trabajadores que eligen democráticamente su consejo de administración.",
@@ -6727,6 +7430,557 @@
    "fondos_en": "",
    "gobierno_en": "",
    "fuente_en": ""
+  },
+  "loc_luuna": {
+   "empresa": "Luuna (Zebrands)",
+   "controlador": "Fundadores mexicanos (Guillermo Villegas y socios) y capital privado mexicano.",
+   "pais": "México",
+   "tipo": "Fundador",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Colchones, almohadas y muebles para el hogar.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial Luuna: Quiénes somos",
+   "url": "https://luuna.mx/nosotros",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Mexican founders (Guillermo Villegas & partners)",
+   "nota_en": "Mexican mattresses, pillows and home furniture.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_dico": {
+   "empresa": "Muebles Dico",
+   "controlador": "Familia fundadora mexicana; empresa privada independiente 100% de capital mexicano.",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Muebles, salas, recámaras y comedores para el hogar.",
+   "confianza": "Alta",
+   "fuente": "Muebles Dico: Historia",
+   "url": "https://dico.com.mx/historia",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Mexican founding family (100% privately held)",
+   "nota_en": "Mexican furniture retailer and manufacturer.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_mabe": {
+   "empresa": "Controladora Mabe",
+   "controlador": "Familia Berrondo y familia Saenz (~51,6%) y Haier Smart Home (~48,4%).",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Líder mexicano en refrigeradores, estufas, lavadoras y minisplits (Mabe, IEM, Easy).",
+   "confianza": "Alta",
+   "fuente": "Expansión: Quiénes son los dueños de Mabe",
+   "url": "https://expansion.mx/empresas/2021/04/16/mabe-historia-duenos-linea-blanca",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Berrondo and Saenz families (~51.6%) and Haier Smart Home (~48.4%)",
+   "nota_en": "Leading Mexican major appliances manufacturer (Mabe, IEM, Easy).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_truper": {
+   "empresa": "Truper, S.A. de C.V.",
+   "controlador": "Familia Gómez; fundada en 1962 como Nacional de Herramientas; empresa 100% mexicana privada.",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Mayor fabricante de herramientas manuales de México y América Latina.",
+   "confianza": "Alta",
+   "fuente": "Expansión: Historia de Truper",
+   "url": "https://expansion.mx/empresas/truper",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Gómez family (100% Mexican family-owned private company)",
+   "nota_en": "Leading hand tools manufacturer in Mexico and Latin America.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_urrea": {
+   "empresa": "Grupo Urrea",
+   "controlador": "Familia Urrea (Guillermo Urrea Carroll y familia; fundada en Guadalajara en 1907).",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Herramientas de mano, cerrajería, plomería y grifería industrial.",
+   "confianza": "Alta",
+   "fuente": "Líderes Mexicanos: Grupo Urrea",
+   "url": "https://lideresmexicanos.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Urrea family (founded in Guadalajara in 1907)",
+   "nota_en": "Mexican hand tools, plumbing and industrial valves.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_rotoplas": {
+   "empresa": "Grupo Rotoplas",
+   "controlador": "Familia Rojas Mota Velasco (~40-45%) y accionistas en la BMV (AGUA).",
+   "pais": "México",
+   "tipo": "Familia + fondos",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Soluciones de agua, tuberías hidráulicas (Tuboplus) y tinacos.",
+   "confianza": "Alta",
+   "fuente": "Rotoplas Relación con Inversionistas (BMV)",
+   "url": "https://rotoplas.com/inversionistas/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Rojas Mota Velasco family (~40-45%) and BMV public funds",
+   "nota_en": "Mexican water piping systems (Tuboplus), tanks and pumps.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_coflex": {
+   "empresa": "Coflex, S.A. de C.V.",
+   "controlador": "Familia Fernández (Eduardo Fernández y familia; fundada en Monterrey en 1989).",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Conectores flexibles para agua y gas, refacciones y plomería.",
+   "confianza": "Alta",
+   "fuente": "Coflex: Quiénes somos",
+   "url": "https://www.coflex.com.mx/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Fernández family (founded in Monterrey, NL in 1989)",
+   "nota_en": "Mexican plumbing connectors and valves manufacturer.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_nupec": {
+   "empresa": "Grupo Nutec (Nupec)",
+   "controlador": "Familia Romo (fundadores mexicanos en Querétaro; empresa privada 100% mexicana).",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Nutrición científica para perros y gatos (Nupec, Nucan, Nufit).",
+   "confianza": "Alta",
+   "fuente": "Grupo Nutec: Nosotros",
+   "url": "https://www.nutec.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Romo family (Mexican private animal nutrition group in Querétaro)",
+   "nota_en": "Premium pet nutrition (Nupec, Nucan, Nufit, Optimo Felino).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_degasa": {
+   "empresa": "Degasa, S.A. de C.V.",
+   "controlador": "Fundadores e inversionistas mexicanos en Cuernavaca, Morelos; empresa 100% mexicana.",
+   "pais": "México",
+   "tipo": "Privada",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "Proveedor del sector salud público",
+   "nota": "Fabricante líder de material de curación: gasas, vendas, apósitos y botiquines.",
+   "confianza": "Alta",
+   "fuente": "Degasa: Quiénes somos",
+   "url": "https://www.degasa.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Mexican founding partners in Cuernavaca, Morelos",
+   "nota_en": "Leading Mexican medical dressing, bandages and first aid manufacturer.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_tardan": {
+   "empresa": "Sombreros Tardan",
+   "controlador": "Familia Tardan (fundada en 1847 en la Ciudad de México; empresa 100% familiar mexicana).",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Fabricación artesanal de sombreros de vestir, vaqueros, texanas y gorras.",
+   "confianza": "Alta",
+   "fuente": "Tardan: Nuestra Historia",
+   "url": "https://tardan.com.mx/pages/historia",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Tardan family (Mexican historic hat maker founded in 1847 in Mexico City)",
+   "nota_en": "Historic Mexican hatmaker (felt hats, cowboy hats, caps).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_kong": {
+   "empresa": "The KONG Company",
+   "controlador": "Joe Markham (fundador y dueño independiente en Golden, Colorado).",
+   "pais": "EE.UU.",
+   "tipo": "Fundador",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Juguetes de caucho natural y premios para perros y gatos.",
+   "confianza": "Alta",
+   "fuente": "KONG Company: Our Story",
+   "url": "https://www.kongcompany.com/about-us",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Joe Markham (founder, 100% privately held in Golden, CO)",
+   "nota_en": "Natural rubber pet toys and treats (KONG).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_kleintools": {
+   "empresa": "Klein Tools",
+   "controlador": "Familia Klein (fundada por Mathias Klein en 1857; sexta generación familiar).",
+   "pais": "EE.UU.",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Herramientas de mano para electricistas y mecánicos.",
+   "confianza": "Alta",
+   "fuente": "Klein Tools: About Us",
+   "url": "https://www.kleintools.com/about",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Klein family (sixth generation family-owned in Lincolnshire, IL)",
+   "nota_en": "Hand tools for electricians and trades professionals.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_stetson": {
+   "empresa": "John B. Stetson Company",
+   "controlador": "Licenciatarios e inversionistas privados estadounidenses independientes (fundada en 1865).",
+   "pais": "EE.UU.",
+   "tipo": "Privada",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Sombreros clásicos de vestir y estilo vaquero de fieltro.",
+   "confianza": "Alta",
+   "fuente": "Stetson: Heritage",
+   "url": "https://stetson.com/pages/heritage",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Privately held American brand founded by John B. Stetson in 1865",
+   "nota_en": "Iconic American hat brand.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_stihl": {
+   "empresa": "Andreas Stihl AG & Co. KG",
+   "controlador": "Familia Stihl (Hans Peter Stihl y descendientes, 100% familiar).",
+   "pais": "Otros (Alemania)",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Motosierras, desbrozadoras y herramientas de poda y jardinería.",
+   "confianza": "Alta",
+   "fuente": "Stihl Annual Report",
+   "url": "https://corporate.stihl.com/en/company/annual-report",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Stihl family (100% family-owned in Waiblingen, Germany)",
+   "nota_en": "World leading chainsaw and outdoor power equipment manufacturer.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_karcher": {
+   "empresa": "Alfred Kärcher SE & Co. KG",
+   "controlador": "Familia Kärcher (Johannes y Susanne Kärcher, 100% familiar).",
+   "pais": "Otros (Alemania)",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Hidrolavadoras de alta presión, aspiradoras y barredoras de limpieza.",
+   "confianza": "Alta",
+   "fuente": "Kärcher Facts & Figures",
+   "url": "https://www.kaercher.com/int/inside-kaercher/company/facts-figures.html",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Kärcher family (100% family-owned in Winnenden, Germany)",
+   "nota_en": "High pressure cleaners, floor scrubbers and outdoor cleaning.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_hartmann": {
+   "empresa": "Paul Hartmann AG (HARTMANN GROUP)",
+   "controlador": "Familia Schleicher / Schwenk (~60%) y accionistas en Alemania.",
+   "pais": "Otros (Alemania)",
+   "tipo": "Familia + corporación",
+   "fondos": "",
+   "gobierno": "Proveedor hospitalario de la UE",
+   "nota": "Material de curación, apósitos estériles (Cosmopor) y antisépticos (Sterillium).",
+   "confianza": "Alta",
+   "fuente": "HARTMANN GROUP Annual Report",
+   "url": "https://corporate.hartmann.info/en-corp/investor-relations",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Schleicher family / Schwenk (~60%) and German public shareholders",
+   "nota_en": "Medical dressings, wound care and first aid.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_urgo": {
+   "empresa": "Groupe URGO (Laboratoires Urgo)",
+   "controlador": "Familia Le Lous (fundada por Jean Le Lous; Hervé Le Lous y familia, 100%).",
+   "pais": "Francia",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Apósitos de primeros auxilios, curitas, apósitos hidrocoloides y antisépticos.",
+   "confianza": "Alta",
+   "fuente": "Groupe URGO Corporate",
+   "url": "https://www.urgo-group.fr/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Le Lous family (100% French family-owned healthcare group)",
+   "nota_en": "First aid bandages, wound dressings and antiseptic treatments.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_bellota": {
+   "empresa": "Bellota Herramientas (Venanpri Group)",
+   "controlador": "Corporación Patricio Echeverría histórica y Venanpri Group en Legazpi, Guipúzcoa.",
+   "pais": "España",
+   "tipo": "Privada",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Herramientas agrícolas, jardinería, construcción y poda.",
+   "confianza": "Alta",
+   "fuente": "Bellota: Quiénes somos",
+   "url": "https://www.bellota.com/es-es/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Venanpri Group and historical Echeverría founding roots in Guipúzcoa",
+   "nota_en": "Spanish agricultural, gardening and construction hand tools.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_agrolimen": {
+   "empresa": "Agrolimen (Affinity Petcare)",
+   "controlador": "Familia Carulla (holding familiar catalán presidido por Artur Carulla).",
+   "pais": "España",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Alimento para perros y gatos líder en España y Europa (Ultima, Advance, Brekkies).",
+   "confianza": "Alta",
+   "fuente": "Cinco Días: Agrolimen",
+   "url": "https://cincodias.elpais.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Carulla family (100% Catalan family-owned holding company)",
+   "nota_en": "Leading Spanish pet food company in Europe (Ultima, Advance, Brekkies).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_kavehome": {
+   "empresa": "Kave Home",
+   "controlador": "Francesc Julià (fundador y familia Julià en Sils, Girona, Cataluña).",
+   "pais": "España",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Diseño y fabricación de muebles de diseño mediterráneo para el hogar.",
+   "confianza": "Alta",
+   "fuente": "Kave Home: Sobre nosotros",
+   "url": "https://kavehome.com/es/es/sobre-nosotros",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Francesc Julià and Julià family (100% privately held in Girona)",
+   "nota_en": "Mediterranean design home and office furniture.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_mango": {
+   "empresa": "Punto Fa, S.L. (Mango)",
+   "controlador": "Isak Andic (fundador y presidente, 100% familiar).",
+   "pais": "España",
+   "tipo": "Fundador",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Moda contemporánea, vestidos, trajes y accesorios de temporada.",
+   "confianza": "Alta",
+   "fuente": "Cinco Días: Mango resultados y estructura",
+   "url": "https://cincodias.elpais.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Isak Andic (founder, 100% privately owned in Barcelona)",
+   "nota_en": "Spanish multinational fashion company (Mango).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_victorinox": {
+   "empresa": "Victorinox AG",
+   "controlador": "Victorinox Foundation (familia Elsener, 75%) y Carl y Elise Elsener-Gut Foundation (15%).",
+   "pais": "Otros (Suiza)",
+   "tipo": "Fideicomiso",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Navajas suizas, mochilas técnicas de viaje, maletas y relojes.",
+   "confianza": "Alta",
+   "fuente": "Victorinox: History & Corporate",
+   "url": "https://www.victorinox.com/en/About-Us/History/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Victorinox Foundation (Elsener family, 75%) and Elsener-Gut Foundation (15%)",
+   "nota_en": "Swiss army knives, travel luggage, backpacks and watches.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_rolex": {
+   "empresa": "Rolex SA",
+   "controlador": "Fondation Hans Wilsdorf (fundación filantrópica en Ginebra, 100%).",
+   "pais": "Otros (Suiza)",
+   "tipo": "Fideicomiso",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Alta relojería suiza independiente y manufactura de lujo (Rolex, Tudor).",
+   "confianza": "Alta",
+   "fuente": "Registre du Commerce de Genève / Fondation Hans Wilsdorf",
+   "url": "https://www.ge.ch/registre-du-commerce",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Hans Wilsdorf Foundation (100% philanthropic foundation in Geneva)",
+   "nota_en": "Independent Swiss luxury watch manufacture (Rolex, Tudor).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_satya": {
+   "empresa": "Shrinivas Sugandhalaya (BNG) LLP (Satya)",
+   "controlador": "Familia Setty (Late Shri K.N. Satyam Setty fundador; K.S. Balkrishna Setty).",
+   "pais": "India",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Fabricante original del incienso Satya Sai Baba Nag Champa en Bengaluru.",
+   "confianza": "Alta",
+   "fuente": "Satya Incense: Our History",
+   "url": "https://www.satyaincense.com/our-history",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Setty family (originators of Nag Champa incense in Bengaluru)",
+   "nota_en": "Traditional Indian incense and aroma diffusers (Satya Sai Baba, Nag Champa).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_hem": {
+   "empresa": "HEM Corporation",
+   "controlador": "Familia Shah (fundada por tres hermanos Shah en Mumbai en 1983).",
+   "pais": "India",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Inciensos aromáticos artesanales tradicionales y aceites esenciales.",
+   "confianza": "Alta",
+   "fuente": "HEM Corporation: About Us",
+   "url": "https://hemcorporation.com/about-us",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Shah family (100% Indian family-owned in Mumbai)",
+   "nota_en": "Traditional Indian incense sticks, cones and essential oils.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_agrosuper_pets": {
+   "empresa": "Agrosuper (Champion Dog / Champion Cat)",
+   "controlador": "Familia Vial (Gonzalo Vial Vial y descendientes; 100% privada chilena).",
+   "pais": "Chile",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Alimento y nutrición para perros y gatos líder en Chile (Champion Dog, Champion Cat).",
+   "confianza": "Alta",
+   "fuente": "Memoria anual Agrosuper",
+   "url": "https://www.agrosuper.cl/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Vial family (100% Chilean family-owned holding in Rancagua)",
+   "nota_en": "Leading Chilean pet food producer (Champion Dog, Champion Cat).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_softys": {
+   "empresa": "Empresas CMPC (Softys)",
+   "controlador": "Familia Matte (~55% a través de Grupo Matte; CMF: CMPC).",
+   "pais": "Chile",
+   "tipo": "Familia",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Papel higiénico, toallitas húmedas y pañales en América Latina (Noble, Babysec, Ladysoft).",
+   "confianza": "Alta",
+   "fuente": "Memoria anual CMPC / Softys (CMF)",
+   "url": "https://ir.cmpc.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Matte family (~55% via Grupo Matte; CMF Chile: CMPC)",
+   "nota_en": "Tissue paper, wet wipes and diapers across Latin America (Noble, Babysec, Ladysoft).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_herschel": {
+   "empresa": "Herschel Supply Co.",
+   "controlador": "Hermanos Jamie y Lyndon Cormack (fundadores en Vancouver, Columbia Británica).",
+   "pais": "Canadá",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Mochilas de viaje, maletas, porta pasaportes y accesorios de viaje.",
+   "confianza": "Alta",
+   "fuente": "Forbes: How The Cormack Brothers Built Herschel",
+   "url": "https://www.forbes.com/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Jamie and Lyndon Cormack brothers (founders in Vancouver, BC)",
+   "nota_en": "Travel backpacks, luggage, passport holders and travel accessories.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_goodai": {
+   "empresa": "Goodai Global (Beauty of Joseon)",
+   "controlador": "Lee Min-gu (fundador y CEO en Seúl, Corea del Sur).",
+   "pais": "Otros (Corea del Sur)",
+   "tipo": "Fundador",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Dermocosmética coreana (K-Beauty) y protección solar con extracto de arroz (Relief Sun).",
+   "confianza": "Alta",
+   "fuente": "Pulse News Korea / Maeil Business Newspaper",
+   "url": "https://pulsenews.co.kr/",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Lee Min-gu (founder and CEO in Seoul, South Korea)",
+   "nota_en": "Korean skincare and photoprotection (Relief Sun rice sunscreen).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   }
  },
  "marcas": [
@@ -7204,6 +8458,14 @@
    "g": "nestle"
   },
   {
+   "n": "Fancy Feast",
+   "g": "nestle"
+  },
+  {
+   "n": "Beneful",
+   "g": "nestle"
+  },
+  {
    "n": "Coffee-Mate",
    "g": "nestle"
   },
@@ -7365,6 +8627,20 @@
    "s": 1
   },
   {
+   "n": "Dawn",
+   "g": "pg",
+   "s": 1
+  },
+  {
+   "n": "Cascade",
+   "g": "pg"
+  },
+  {
+   "n": "Fairy",
+   "g": "pg",
+   "s": 1
+  },
+  {
    "n": "Venus",
    "g": "pg",
    "s": 1
@@ -7417,6 +8693,10 @@
   },
   {
    "n": "Hill's",
+   "g": "colgate"
+  },
+  {
+   "n": "Axion",
    "g": "colgate"
   },
   {
@@ -7485,6 +8765,10 @@
    "g": "kenvue"
   },
   {
+   "n": "Neosporin",
+   "g": "kenvue"
+  },
+  {
    "n": "Johnson's",
    "g": "kenvue"
   },
@@ -7544,6 +8828,11 @@
   {
    "n": "Sheba",
    "g": "mars"
+  },
+  {
+   "n": "Cesar",
+   "g": "mars",
+   "s": 1
   },
   {
    "n": "Uncle Ben's",
@@ -8744,6 +10033,14 @@
    "g": "beiersdorf"
   },
   {
+   "n": "Hansaplast",
+   "g": "beiersdorf"
+  },
+  {
+   "n": "Curitas",
+   "g": "beiersdorf"
+  },
+  {
    "n": "La Prairie",
    "g": "beiersdorf"
   },
@@ -8863,6 +10160,10 @@
    "n": "Klorane",
    "g": "pierrefabre",
    "s": 1
+  },
+  {
+   "n": "A-Derma",
+   "g": "pierrefabre"
   },
   {
    "n": "ISDIN",
@@ -9173,6 +10474,10 @@
   },
   {
    "n": "이니스프리",
+   "g": "amore"
+  },
+  {
+   "n": "COSRX",
    "g": "amore"
   },
   {
@@ -10035,6 +11340,508 @@
    "g": "haleon"
   },
   {
+   "n": "IKEA",
+   "g": "ikea"
+  },
+  {
+   "n": "Ashley Furniture",
+   "g": "ashley"
+  },
+  {
+   "n": "Ashley HomeStore",
+   "g": "ashley"
+  },
+  {
+   "n": "Herman Miller",
+   "g": "millerknoll"
+  },
+  {
+   "n": "Knoll",
+   "g": "millerknoll"
+  },
+  {
+   "n": "Aeron",
+   "g": "millerknoll"
+  },
+  {
+   "n": "Steelcase",
+   "g": "steelcase"
+  },
+  {
+   "n": "Electrolux",
+   "g": "electrolux"
+  },
+  {
+   "n": "Frigidaire",
+   "g": "electrolux"
+  },
+  {
+   "n": "AEG",
+   "g": "electrolux"
+  },
+  {
+   "n": "Daikin",
+   "g": "daikin"
+  },
+  {
+   "n": "Goodman",
+   "g": "daikin"
+  },
+  {
+   "n": "Carrier",
+   "g": "carrier"
+  },
+  {
+   "n": "Dyson",
+   "g": "dyson"
+  },
+  {
+   "n": "Dyson Airwrap",
+   "g": "dyson"
+  },
+  {
+   "n": "Dyson Supersonic",
+   "g": "dyson"
+  },
+  {
+   "n": "iRobot",
+   "g": "irobot"
+  },
+  {
+   "n": "Roomba",
+   "g": "irobot"
+  },
+  {
+   "n": "Braava",
+   "g": "irobot"
+  },
+  {
+   "n": "Roborock",
+   "g": "roborock"
+  },
+  {
+   "n": "Ecovacs",
+   "g": "ecovacs"
+  },
+  {
+   "n": "Deebot",
+   "g": "ecovacs"
+  },
+  {
+   "n": "Levoit",
+   "g": "vesync"
+  },
+  {
+   "n": "Cosori",
+   "g": "vesync"
+  },
+  {
+   "n": "Coway",
+   "g": "coway"
+  },
+  {
+   "n": "Airmega",
+   "g": "coway"
+  },
+  {
+   "n": "DeWalt",
+   "g": "stanley"
+  },
+  {
+   "n": "Stanley",
+   "g": "stanley"
+  },
+  {
+   "n": "Black+Decker",
+   "g": "stanley"
+  },
+  {
+   "n": "Black & Decker",
+   "g": "stanley"
+  },
+  {
+   "n": "Craftsman",
+   "g": "stanley"
+  },
+  {
+   "n": "Irwin",
+   "g": "stanley"
+  },
+  {
+   "n": "Lenox",
+   "g": "stanley"
+  },
+  {
+   "n": "Proto",
+   "g": "stanley",
+   "s": 1
+  },
+  {
+   "n": "Makita",
+   "g": "makita"
+  },
+  {
+   "n": "Milwaukee",
+   "g": "tti"
+  },
+  {
+   "n": "Ryobi",
+   "g": "tti"
+  },
+  {
+   "n": "Homelite",
+   "g": "tti"
+  },
+  {
+   "n": "Hart",
+   "g": "tti",
+   "s": 1
+  },
+  {
+   "n": "Husqvarna",
+   "g": "husqvarna"
+  },
+  {
+   "n": "Gardena",
+   "g": "husqvarna"
+  },
+  {
+   "n": "Flymo",
+   "g": "husqvarna"
+  },
+  {
+   "n": "Ganador",
+   "g": "adm_pets"
+  },
+  {
+   "n": "Minino",
+   "g": "adm_pets"
+  },
+  {
+   "n": "Ganador Premium",
+   "g": "adm_pets"
+  },
+  {
+   "n": "Minino Plus",
+   "g": "adm_pets"
+  },
+  {
+   "n": "Blue Buffalo",
+   "g": "generalmills"
+  },
+  {
+   "n": "Cheerios",
+   "g": "generalmills"
+  },
+  {
+   "n": "Nature Valley",
+   "g": "generalmills"
+  },
+  {
+   "n": "Häagen-Dazs",
+   "g": "generalmills"
+  },
+  {
+   "n": "Haagen-Dazs",
+   "g": "generalmills"
+  },
+  {
+   "n": "Betty Crocker",
+   "g": "generalmills"
+  },
+  {
+   "n": "Glade",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Raid",
+   "g": "scjohnson",
+   "s": 1
+  },
+  {
+   "n": "Baygon",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Windex",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Mr Músculo",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Mr Musculo",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Pledge",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Off!",
+   "g": "scjohnson",
+   "s": 1
+  },
+  {
+   "n": "Autan",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Duck",
+   "g": "scjohnson",
+   "s": 1
+  },
+  {
+   "n": "Pato Purific",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Sun Bum",
+   "g": "scjohnson"
+  },
+  {
+   "n": "Yankee Candle",
+   "g": "newell"
+  },
+  {
+   "n": "Paper Mate",
+   "g": "newell"
+  },
+  {
+   "n": "Sharpie",
+   "g": "newell"
+  },
+  {
+   "n": "Coleman",
+   "g": "newell"
+  },
+  {
+   "n": "Oster",
+   "g": "newell",
+   "s": 1
+  },
+  {
+   "n": "Rubbermaid",
+   "g": "newell"
+  },
+  {
+   "n": "Bath & Body Works",
+   "g": "bbw"
+  },
+  {
+   "n": "White Barn",
+   "g": "bbw"
+  },
+  {
+   "n": "Asus",
+   "g": "asus"
+  },
+  {
+   "n": "ROG",
+   "g": "asus"
+  },
+  {
+   "n": "Republic of Gamers",
+   "g": "asus"
+  },
+  {
+   "n": "ZenBook",
+   "g": "asus"
+  },
+  {
+   "n": "Acer",
+   "g": "acer"
+  },
+  {
+   "n": "Predator",
+   "g": "acer"
+  },
+  {
+   "n": "Garmin",
+   "g": "garmin"
+  },
+  {
+   "n": "Forerunner",
+   "g": "garmin"
+  },
+  {
+   "n": "Fenix",
+   "g": "garmin"
+  },
+  {
+   "n": "Audio-Technica",
+   "g": "audiotechnica"
+  },
+  {
+   "n": "Sennheiser",
+   "g": "sennheiser"
+  },
+  {
+   "n": "H&M",
+   "g": "hm"
+  },
+  {
+   "n": "COS",
+   "g": "hm"
+  },
+  {
+   "n": "& Other Stories",
+   "g": "hm"
+  },
+  {
+   "n": "Monki",
+   "g": "hm"
+  },
+  {
+   "n": "Arket",
+   "g": "hm"
+  },
+  {
+   "n": "Swatch",
+   "g": "swatchgroup"
+  },
+  {
+   "n": "Omega",
+   "g": "swatchgroup"
+  },
+  {
+   "n": "Tissot",
+   "g": "swatchgroup"
+  },
+  {
+   "n": "Longines",
+   "g": "swatchgroup"
+  },
+  {
+   "n": "Rado",
+   "g": "swatchgroup"
+  },
+  {
+   "n": "Hamilton",
+   "g": "swatchgroup"
+  },
+  {
+   "n": "Breguet",
+   "g": "swatchgroup"
+  },
+  {
+   "n": "Seiko",
+   "g": "seiko"
+  },
+  {
+   "n": "Grand Seiko",
+   "g": "seiko"
+  },
+  {
+   "n": "Citizen",
+   "g": "citizen"
+  },
+  {
+   "n": "Bulova",
+   "g": "citizen"
+  },
+  {
+   "n": "Regio",
+   "g": "essity"
+  },
+  {
+   "n": "Saba",
+   "g": "essity"
+  },
+  {
+   "n": "Tena",
+   "g": "essity"
+  },
+  {
+   "n": "Leukoplast",
+   "g": "essity"
+  },
+  {
+   "n": "Colhogar",
+   "g": "essity"
+  },
+  {
+   "n": "Lotus",
+   "g": "essity"
+  },
+  {
+   "n": "Tempo",
+   "g": "essity"
+  },
+  {
+   "n": "Zewa",
+   "g": "essity"
+  },
+  {
+   "n": "3M",
+   "g": "threem"
+  },
+  {
+   "n": "Nexcare",
+   "g": "threem"
+  },
+  {
+   "n": "Micropore",
+   "g": "threem"
+  },
+  {
+   "n": "Coban",
+   "g": "threem"
+  },
+  {
+   "n": "Tegaderm",
+   "g": "threem"
+  },
+  {
+   "n": "Filtrete",
+   "g": "threem"
+  },
+  {
+   "n": "Scotch",
+   "g": "threem"
+  },
+  {
+   "n": "Post-it",
+   "g": "threem"
+  },
+  {
+   "n": "Command",
+   "g": "threem"
+  },
+  {
+   "n": "Omron",
+   "g": "omron"
+  },
+  {
+   "n": "Thule",
+   "g": "thule"
+  },
+  {
+   "n": "Case Logic",
+   "g": "thule"
+  },
+  {
+   "n": "Osprey",
+   "g": "helenoftroy"
+  },
+  {
+   "n": "OXO",
+   "g": "helenoftroy"
+  },
+  {
+   "n": "Hydro Flask",
+   "g": "helenoftroy"
+  },
+  {
+   "n": "Delsey",
+   "g": "delsey_paris"
+  },
+  {
+   "n": "Delsey Paris",
+   "g": "delsey_paris"
+  },
+  {
    "n": "삼성",
    "g": "samsung"
   },
@@ -10833,6 +12640,276 @@
   {
    "n": "Institut Esthederm",
    "g": "loc_naos"
+  },
+  {
+   "n": "Luuna",
+   "g": "loc_luuna"
+  },
+  {
+   "n": "Dico",
+   "g": "loc_dico"
+  },
+  {
+   "n": "Muebles Dico",
+   "g": "loc_dico"
+  },
+  {
+   "n": "Mabe",
+   "g": "loc_mabe"
+  },
+  {
+   "n": "IEM",
+   "g": "loc_mabe"
+  },
+  {
+   "n": "Easy",
+   "g": "loc_mabe",
+   "s": 1
+  },
+  {
+   "n": "Pretul",
+   "g": "loc_truper"
+  },
+  {
+   "n": "Foset",
+   "g": "loc_truper"
+  },
+  {
+   "n": "Volteck",
+   "g": "loc_truper"
+  },
+  {
+   "n": "Fiero",
+   "g": "loc_truper"
+  },
+  {
+   "n": "Hermex",
+   "g": "loc_truper"
+  },
+  {
+   "n": "Klintek",
+   "g": "loc_truper"
+  },
+  {
+   "n": "Urrea",
+   "g": "loc_urrea"
+  },
+  {
+   "n": "Surtek",
+   "g": "loc_urrea"
+  },
+  {
+   "n": "Foy",
+   "g": "loc_urrea",
+   "s": 1
+  },
+  {
+   "n": "Urrea Herramientas",
+   "g": "loc_urrea"
+  },
+  {
+   "n": "Rotoplas",
+   "g": "loc_rotoplas"
+  },
+  {
+   "n": "Tuboplus",
+   "g": "loc_rotoplas"
+  },
+  {
+   "n": "Coflex",
+   "g": "loc_coflex"
+  },
+  {
+   "n": "Coflex Pro",
+   "g": "loc_coflex"
+  },
+  {
+   "n": "Nupec",
+   "g": "loc_nupec"
+  },
+  {
+   "n": "Nucan",
+   "g": "loc_nupec"
+  },
+  {
+   "n": "Nufit",
+   "g": "loc_nupec"
+  },
+  {
+   "n": "Optimo Felino",
+   "g": "loc_nupec"
+  },
+  {
+   "n": "Degasa",
+   "g": "loc_degasa"
+  },
+  {
+   "n": "Protec",
+   "g": "loc_degasa"
+  },
+  {
+   "n": "Tardan",
+   "g": "loc_tardan"
+  },
+  {
+   "n": "Sombreros Tardan",
+   "g": "loc_tardan"
+  },
+  {
+   "n": "KONG",
+   "g": "loc_kong"
+  },
+  {
+   "n": "Klein Tools",
+   "g": "loc_kleintools"
+  },
+  {
+   "n": "Stetson",
+   "g": "loc_stetson"
+  },
+  {
+   "n": "Stihl",
+   "g": "loc_stihl"
+  },
+  {
+   "n": "Kärcher",
+   "g": "loc_karcher"
+  },
+  {
+   "n": "Karcher",
+   "g": "loc_karcher"
+  },
+  {
+   "n": "Hartmann",
+   "g": "loc_hartmann"
+  },
+  {
+   "n": "Sterillium",
+   "g": "loc_hartmann"
+  },
+  {
+   "n": "Cosmopor",
+   "g": "loc_hartmann"
+  },
+  {
+   "n": "Urgo",
+   "g": "loc_urgo"
+  },
+  {
+   "n": "Humex",
+   "g": "loc_urgo"
+  },
+  {
+   "n": "Mercurochrome",
+   "g": "loc_urgo"
+  },
+  {
+   "n": "Bellota",
+   "g": "loc_bellota"
+  },
+  {
+   "n": "Ultima",
+   "g": "loc_agrolimen"
+  },
+  {
+   "n": "Advance",
+   "g": "loc_agrolimen",
+   "s": 1
+  },
+  {
+   "n": "Brekkies",
+   "g": "loc_agrolimen"
+  },
+  {
+   "n": "Kave Home",
+   "g": "loc_kavehome"
+  },
+  {
+   "n": "Mango",
+   "g": "loc_mango"
+  },
+  {
+   "n": "Victorinox",
+   "g": "loc_victorinox"
+  },
+  {
+   "n": "Swiss Army",
+   "g": "loc_victorinox"
+  },
+  {
+   "n": "Wenger",
+   "g": "loc_victorinox",
+   "s": 1
+  },
+  {
+   "n": "Rolex",
+   "g": "loc_rolex"
+  },
+  {
+   "n": "Tudor",
+   "g": "loc_rolex",
+   "s": 1
+  },
+  {
+   "n": "Satya",
+   "g": "loc_satya"
+  },
+  {
+   "n": "Satya Sai Baba",
+   "g": "loc_satya"
+  },
+  {
+   "n": "Nag Champa",
+   "g": "loc_satya"
+  },
+  {
+   "n": "HEM",
+   "g": "loc_hem"
+  },
+  {
+   "n": "HEM Incense",
+   "g": "loc_hem"
+  },
+  {
+   "n": "Champion Dog",
+   "g": "loc_agrosuper_pets"
+  },
+  {
+   "n": "Champion Cat",
+   "g": "loc_agrosuper_pets"
+  },
+  {
+   "n": "Noble",
+   "g": "loc_softys",
+   "s": 1
+  },
+  {
+   "n": "Babysec",
+   "g": "loc_softys"
+  },
+  {
+   "n": "Ladysoft",
+   "g": "loc_softys"
+  },
+  {
+   "n": "Cotidian",
+   "g": "loc_softys"
+  },
+  {
+   "n": "Higienol",
+   "g": "loc_softys"
+  },
+  {
+   "n": "Herschel",
+   "g": "loc_herschel"
+  },
+  {
+   "n": "Herschel Supply",
+   "g": "loc_herschel"
+  },
+  {
+   "n": "Beauty of Joseon",
+   "g": "loc_goodai"
   }
  ],
  "aerolineas": [
@@ -13214,7 +15291,7 @@
    ]
   },
   "limpieza": {
-   "label": "Limpieza del hogar",
+   "label": "Limpieza del hogar y vajilla",
    "kw": [
     "bleach",
     "cleaner",
@@ -13227,8 +15304,10 @@
     "dish soap",
     "fabric softener",
     "jabon para ropa",
+    "jabon para trastes",
     "laundry",
     "lavatrastes",
+    "lavavajillas",
     "lessive",
     "limpiador de banos",
     "limpiador de cocina",
@@ -13257,6 +15336,12 @@
     "Finish",
     "Calgon",
     "Harpic",
+    "Salvo",
+    "Dawn",
+    "Cascade",
+    "Fairy",
+    "Axion",
+    "Mr. Clean",
     "Surf Excel",
     "Rin",
     "Wheel",
@@ -13326,6 +15411,8 @@
     "Philips Sonicare",
     "Sonicare",
     "Norelco",
+    "Sensodyne",
+    "Listerine",
     "Jabón Tepeyac",
     "Dr. Bronner's",
     "Cero",
@@ -13416,6 +15503,12 @@
     "Cetaphil",
     "Avène",
     "ISDIN",
+    "Heliocare",
+    "Bioderma",
+    "Beauty of Joseon",
+    "Anessa",
+    "Bioré",
+    "COSRX",
     "Grisi Dermocosmética",
     "Jabón Neutro Grisi",
     "Concha Nácar Grisi",
@@ -13431,47 +15524,55 @@
     "Agua de Rosas Jaloma",
     "Sesderma",
     "Babé",
-    "Heliocare",
     "Endocare",
     "Neoretin",
     "Vanicream",
-    "Bioderma",
     "Institut Esthederm"
    ]
   },
   "ropa_calzado": {
-   "label": "Ropa, calzado y equipaje",
+   "label": "Ropa, calzado y accesorios",
    "kw": [
-    "backpack",
+    "anzug",
     "boots",
     "botas",
     "camiseta",
     "chamarra",
+    "chapeau",
     "chaqueta",
     "chaussures",
-    "equipaje",
-    "giacca",
+    "costume",
+    "dress",
+    "gorra",
+    "hat",
     "hoodie",
-    "jacke",
+    "hut",
     "jacket",
     "jeans",
-    "luggage",
-    "maleta",
-    "mochila",
+    "kleid",
     "pantalon",
     "playera",
+    "reloj",
+    "reloj de pulsera",
+    "robe",
     "sandalias",
     "sapato",
     "scarpe",
     "schuhe",
     "shoes",
     "sneakers",
+    "sombrero",
+    "sombreros",
     "sudadera",
-    "suitcase",
+    "suit",
     "t-shirt",
     "tenis",
-    "valija",
+    "traje",
+    "trajes",
     "veste",
+    "vestido",
+    "vestidos",
+    "watch",
     "zapatillas",
     "zapatos"
    ],
@@ -13504,12 +15605,25 @@
     "ASICS",
     "Onitsuka Tiger",
     "Primark",
-    "Samsonite",
-    "American Tourister",
-    "Tumi",
+    "H&M",
+    "Mango",
+    "Rolex",
+    "Casio",
+    "G-Shock",
+    "Seiko",
+    "Citizen",
+    "Swatch",
+    "Tissot",
+    "Stetson",
     "Flexi",
     "Patagonia",
-    "Camper"
+    "Camper",
+    "Tardan",
+    "Sombreros Tardan",
+    "Tudor",
+    "Samsonite",
+    "American Tourister",
+    "Tumi"
    ]
   },
   "deportes_outdoor": {
@@ -13558,10 +15672,9 @@
    ]
   },
   "electrodomesticos_cocina": {
-   "label": "Electrodomésticos y cocina",
+   "label": "Electrodomésticos de cocina",
    "kw": [
     "air fryer",
-    "aspiradora",
     "batidora",
     "blender",
     "cafetera",
@@ -13571,14 +15684,12 @@
     "freidora de aire",
     "horno tostador",
     "licuadora",
-    "microondas",
     "olla de presion",
     "parrilla electrica",
     "procesador de alimentos",
     "sandwichera",
     "toaster",
-    "tostadora",
-    "vacuum"
+    "tostadora"
    ],
    "marcas": [
     "Ninja",
@@ -13630,7 +15741,382 @@
     "JBL",
     "Beats",
     "Harman Kardon",
-    "AirPods"
+    "AirPods",
+    "Sennheiser",
+    "Audio-Technica",
+    "Anker",
+    "Soundcore"
+   ]
+  },
+  "hogar_muebles": {
+   "label": "Muebles y oficina",
+   "kw": [
+    "armario",
+    "buro",
+    "cama",
+    "colchon",
+    "comedor",
+    "desk",
+    "escritorio",
+    "estante",
+    "furniture",
+    "librero",
+    "mattress",
+    "meubles",
+    "mobel",
+    "mueble",
+    "muebles",
+    "office chair",
+    "ropero",
+    "silla de oficina",
+    "silla ergonomica",
+    "sillon",
+    "sofa"
+   ],
+   "marcas": [
+    "IKEA",
+    "Ashley Furniture",
+    "Herman Miller",
+    "Knoll",
+    "Steelcase",
+    "Luuna",
+    "Dico",
+    "Muebles Dico",
+    "Kave Home"
+   ]
+  },
+  "electrodomesticos_clima": {
+   "label": "Electrodomésticos, climatización y aspiración",
+   "kw": [
+    "air conditioner",
+    "air purifier",
+    "aire acondicionado",
+    "aspiradora inteligente",
+    "aspiradora robot",
+    "clima",
+    "climatiseur",
+    "estufa",
+    "filtro de aire",
+    "filtro hepa",
+    "frigobar",
+    "horno",
+    "klimaanlage",
+    "lavadora",
+    "lavavajillas",
+    "luftreiniger",
+    "minisplit",
+    "nevera",
+    "purificador de aire",
+    "refrigerador",
+    "robot aspirador",
+    "robot vacuum",
+    "secadora"
+   ],
+   "marcas": [
+    "Whirlpool",
+    "Haier",
+    "Electrolux",
+    "Daikin",
+    "Carrier",
+    "Midea",
+    "Dyson",
+    "iRobot",
+    "Roomba",
+    "Roborock",
+    "Ecovacs",
+    "Levoit",
+    "Coway",
+    "Mabe",
+    "IEM",
+    "Easy"
+   ]
+  },
+  "herramientas": {
+   "label": "Herramientas, jardinería y mantenimiento",
+   "kw": [
+    "alicate",
+    "bomba de agua",
+    "caja de herramientas",
+    "cautin",
+    "chainsaw",
+    "cortacesped",
+    "cortasetos",
+    "dado",
+    "desarmador",
+    "desbrozadora",
+    "desmalezadora",
+    "destornillador",
+    "drill",
+    "fontaneria",
+    "hidrolavadora",
+    "juego de llaves",
+    "lawn mower",
+    "llave espanola",
+    "llave inglesa",
+    "matraca",
+    "motosierra",
+    "multimetro",
+    "outils",
+    "pinzas",
+    "pliers",
+    "plomeria",
+    "plumbing",
+    "podadora",
+    "pressure washer",
+    "rotomartillo",
+    "screwdriver",
+    "soldadora",
+    "taladro",
+    "tijeras de podar",
+    "tuberia",
+    "valvula",
+    "werkzeug",
+    "wrench"
+   ],
+   "marcas": [
+    "DeWalt",
+    "Stanley",
+    "Black+Decker",
+    "Craftsman",
+    "Makita",
+    "Milwaukee",
+    "Ryobi",
+    "Husqvarna",
+    "Bosch",
+    "Pretul",
+    "Foset",
+    "Volteck",
+    "Fiero",
+    "Hermex",
+    "Klintek",
+    "Urrea",
+    "Surtek",
+    "Foy",
+    "Urrea Herramientas",
+    "Rotoplas",
+    "Tuboplus",
+    "Coflex",
+    "Coflex Pro",
+    "Klein Tools",
+    "Stihl",
+    "Kärcher",
+    "Karcher",
+    "Bellota"
+   ]
+  },
+  "mascotas": {
+   "label": "Alimento y cuidado de mascotas",
+   "kw": [
+    "alimento para gato",
+    "alimento para perro",
+    "arena para gato",
+    "bocadillos para perro",
+    "cat food",
+    "cat treats",
+    "comida para gato",
+    "comida para perro",
+    "croquetas",
+    "croquetas para gato",
+    "croquetas para perro",
+    "croquettes pour chien",
+    "dog food",
+    "dog treats",
+    "hundefutter",
+    "juguete para gato",
+    "juguete para perro",
+    "katzenfutter",
+    "pet toy",
+    "premios para gato",
+    "premios para perro",
+    "rascador para gato",
+    "treats para perro"
+   ],
+   "marcas": [
+    "Purina",
+    "Dog Chow",
+    "Cat Chow",
+    "Pro Plan",
+    "Pedigree",
+    "Whiskas",
+    "Royal Canin",
+    "Sheba",
+    "Cesar",
+    "Hill's",
+    "Blue Buffalo",
+    "Fancy Feast",
+    "Ganador",
+    "Minino",
+    "Nupec",
+    "Nucan",
+    "Nufit",
+    "Optimo Felino",
+    "KONG",
+    "Ultima",
+    "Advance",
+    "Brekkies",
+    "Champion Dog",
+    "Champion Cat"
+   ]
+  },
+  "aromas_ambiente": {
+   "label": "Aromatizantes, esencias e inciensos",
+   "kw": [
+    "aceite esencial",
+    "air freshener",
+    "ambientador",
+    "ambientador de cuarto",
+    "aromatizante",
+    "difusor de aromas",
+    "difusor ultrasonico",
+    "encens",
+    "esencia aromatica",
+    "esencia para difusor",
+    "essential oil",
+    "incense",
+    "incense sticks",
+    "incienso",
+    "inciensos",
+    "locion para cuarto",
+    "room spray",
+    "scented candle",
+    "varillas de incienso",
+    "vela aromatica"
+   ],
+   "marcas": [
+    "Glade",
+    "Air Wick",
+    "Febreze",
+    "Yankee Candle",
+    "Bath & Body Works",
+    "Satya",
+    "Satya Sai Baba",
+    "Nag Champa",
+    "HEM",
+    "HEM Incense"
+   ]
+  },
+  "higiene_papel": {
+   "label": "Papel higiénico, toallitas y cuidado íntimo",
+   "kw": [
+    "baby wipes",
+    "bath tissue",
+    "diapers",
+    "lingettes",
+    "panal",
+    "panales",
+    "papel de bano",
+    "papel higienico",
+    "papel sanitario",
+    "papier toilette",
+    "protectores diarios",
+    "toallas femeninas",
+    "toallas humedas",
+    "toallas sanitarias",
+    "toallitas humedas",
+    "toallitas para bebe",
+    "toilet paper",
+    "toilettenpapier",
+    "wet wipes"
+   ],
+   "marcas": [
+    "Pétalo",
+    "Regio",
+    "Cottonelle",
+    "Kleenex",
+    "Scott",
+    "Charmin",
+    "Huggies",
+    "Pampers",
+    "Saba",
+    "Always",
+    "Noble",
+    "Babysec",
+    "Ladysoft",
+    "Cotidian",
+    "Higienol"
+   ]
+  },
+  "viajes_equipaje": {
+   "label": "Equipaje y accesorios de viaje",
+   "kw": [
+    "almohada de viaje",
+    "carry on luggage",
+    "equipaje de mano",
+    "maleta carry on",
+    "maleta de viaje",
+    "mochila de viaje",
+    "mochila para viaje",
+    "neceser de viaje",
+    "organizador de maleta",
+    "passport holder",
+    "porta documentos de viaje",
+    "porta pasaporte",
+    "portapasaporte",
+    "porte passeport",
+    "sac de voyage",
+    "travel backpack",
+    "travel pillow",
+    "valija"
+   ],
+   "marcas": [
+    "Samsonite",
+    "American Tourister",
+    "Tumi",
+    "Thule",
+    "Osprey",
+    "Delsey Paris",
+    "The North Face",
+    "Victorinox",
+    "Swiss Army",
+    "Wenger",
+    "Herschel",
+    "Herschel Supply"
+   ]
+  },
+  "salud_primeros_auxilios": {
+   "label": "Salud y primeros auxilios",
+   "kw": [
+    "agua oxigenada",
+    "alcohol desnaturalizado",
+    "alcohol etilico",
+    "algodon absorbente",
+    "antiseptico",
+    "aposito",
+    "bandages",
+    "banditas adhesivas",
+    "botiquin",
+    "botiquin de primeros auxilios",
+    "curitas",
+    "first aid kit",
+    "gasa esteril",
+    "gasas",
+    "merthiolate",
+    "mertiolate",
+    "oximetro",
+    "primeros auxilios",
+    "sterile gauze",
+    "tensiometro",
+    "termometro digital",
+    "trousse premiers secours",
+    "venda elastica",
+    "vendas",
+    "verbandkasten"
+   ],
+   "marcas": [
+    "Band-Aid",
+    "Curitas",
+    "Hansaplast",
+    "Nexcare",
+    "3M",
+    "Omron",
+    "Degasa",
+    "Protec",
+    "Hartmann",
+    "Sterillium",
+    "Cosmopor",
+    "Urgo",
+    "Humex",
+    "Mercurochrome"
    ]
   },
   "tecnologia_3d": {

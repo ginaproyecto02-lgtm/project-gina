@@ -1,6 +1,6 @@
 # Marcas alternativas: cooperativas, de empleados, familiares o fundadoras de capital local.
 # Verificadas con búsqueda web el 8-oct-2026 (sitio oficial, Wikipedia o prensa).
-from data_base import g, b, A, V
+from data_base import g, b, A, V, OK, P, NC
 
 CAT = {}  # marca → categoría
 
@@ -242,5 +242,178 @@ g('loc_naos', 'NAOS (Bioderma, Institut Esthederm)', 'Fondation Jean-Noël Thore
 b('loc_naos', 'Bioderma', 'Institut Esthederm')
 CAT['Bioderma'] = 'skincare_cosmetica'
 CAT['Institut Esthederm'] = 'skincare_cosmetica'
+
+# ======================================================================
+# NUEVAS ALTERNATIVAS LOCALES (MÉXICO, ESPAÑA, ALEMANIA, FRANCIA, ETC.)
+# ======================================================================
+# ---- Muebles y hogar México
+g('loc_luuna', 'Luuna (Zebrands)', 'Fundadores mexicanos (Guillermo Villegas y socios) y capital privado mexicano.', 'México', 'Fundador', "", "", 'Colchones, almohadas y muebles para el hogar.', 'Alta', 'Sitio oficial Luuna: Quiénes somos', 'https://luuna.mx/nosotros', controlador_en='Mexican founders (Guillermo Villegas & partners)', nota_en='Mexican mattresses, pillows and home furniture.')
+b('loc_luuna', 'Luuna')
+CAT['Luuna'] = 'hogar_muebles'
+
+g('loc_dico', 'Muebles Dico', 'Familia fundadora mexicana; empresa privada independiente 100% de capital mexicano.', 'México', 'Familia', "", "", 'Muebles, salas, recámaras y comedores para el hogar.', 'Alta', 'Muebles Dico: Historia', 'https://dico.com.mx/historia', controlador_en='Mexican founding family (100% privately held)', nota_en='Mexican furniture retailer and manufacturer.')
+b('loc_dico', 'Dico', 'Muebles Dico')
+CAT['Dico'] = 'hogar_muebles'
+CAT['Muebles Dico'] = 'hogar_muebles'
+
+# ---- Electrodomésticos y climatización México
+g('loc_mabe', 'Controladora Mabe', 'Familia Berrondo y familia Saenz (~51,6%) y Haier Smart Home (~48,4%).', 'México', 'Familia', "", "", 'Líder mexicano en refrigeradores, estufas, lavadoras y minisplits (Mabe, IEM, Easy).', 'Alta', 'Expansión: Quiénes son los dueños de Mabe', 'https://expansion.mx/empresas/2021/04/16/mabe-historia-duenos-linea-blanca', controlador_en='Berrondo and Saenz families (~51.6%) and Haier Smart Home (~48.4%)', nota_en='Leading Mexican major appliances manufacturer (Mabe, IEM, Easy).')
+b('loc_mabe', 'Mabe', 'IEM', '!Easy')
+CAT['Mabe'] = 'electrodomesticos_clima'
+CAT['IEM'] = 'electrodomesticos_clima'
+CAT['Easy'] = 'electrodomesticos_clima'
+
+# ---- Herramientas México
+g('loc_truper', 'Truper, S.A. de C.V.', 'Familia Gómez; fundada en 1962 como Nacional de Herramientas; empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Mayor fabricante de herramientas manuales de México y América Latina.', 'Alta', 'Expansión: Historia de Truper', 'https://expansion.mx/empresas/truper', controlador_en='Gómez family (100% Mexican family-owned private company)', nota_en='Leading hand tools manufacturer in Mexico and Latin America.')
+b('loc_truper', 'Pretul', 'Foset', 'Volteck', 'Fiero', 'Hermex', 'Klintek')
+CAT['Pretul'] = 'herramientas'
+CAT['Foset'] = 'herramientas'
+CAT['Volteck'] = 'herramientas'
+CAT['Fiero'] = 'herramientas'
+CAT['Hermex'] = 'herramientas'
+CAT['Klintek'] = 'herramientas'
+
+g('loc_urrea', 'Grupo Urrea', 'Familia Urrea (Guillermo Urrea Carroll y familia; fundada en Guadalajara en 1907).', 'México', 'Familia', "", "", 'Herramientas de mano, cerrajería, plomería y grifería industrial.', 'Alta', 'Líderes Mexicanos: Grupo Urrea', 'https://lideresmexicanos.com/', controlador_en='Urrea family (founded in Guadalajara in 1907)', nota_en='Mexican hand tools, plumbing and industrial valves.')
+b('loc_urrea', 'Urrea', 'Surtek', '!Foy', 'Urrea Herramientas')
+CAT['Urrea'] = 'herramientas'
+CAT['Surtek'] = 'herramientas'
+CAT['Foy'] = 'herramientas'
+CAT['Urrea Herramientas'] = 'herramientas'
+
+g('loc_rotoplas', 'Grupo Rotoplas', 'Familia Rojas Mota Velasco (~40-45%) y accionistas en la BMV (AGUA).', 'México', 'Familia + fondos', "", "", 'Soluciones de agua, tuberías hidráulicas (Tuboplus) y tinacos.', 'Alta', 'Rotoplas Relación con Inversionistas (BMV)', 'https://rotoplas.com/inversionistas/', controlador_en='Rojas Mota Velasco family (~40-45%) and BMV public funds', nota_en='Mexican water piping systems (Tuboplus), tanks and pumps.')
+b('loc_rotoplas', 'Rotoplas', 'Tuboplus')
+CAT['Rotoplas'] = 'herramientas'
+CAT['Tuboplus'] = 'herramientas'
+
+g('loc_coflex', 'Coflex, S.A. de C.V.', 'Familia Fernández (Eduardo Fernández y familia; fundada en Monterrey en 1989).', 'México', 'Familia', "", "", 'Conectores flexibles para agua y gas, refacciones y plomería.', 'Alta', 'Coflex: Quiénes somos', 'https://www.coflex.com.mx/', controlador_en='Fernández family (founded in Monterrey, NL in 1989)', nota_en='Mexican plumbing connectors and valves manufacturer.')
+b('loc_coflex', 'Coflex', 'Coflex Pro')
+CAT['Coflex'] = 'herramientas'
+CAT['Coflex Pro'] = 'herramientas'
+
+# ---- Mascotas México
+g('loc_nupec', 'Grupo Nutec (Nupec)', 'Familia Romo (fundadores mexicanos en Querétaro; empresa privada 100% mexicana).', 'México', 'Familia', "", "", 'Nutrición científica para perros y gatos (Nupec, Nucan, Nufit).', 'Alta', 'Grupo Nutec: Nosotros', 'https://www.nutec.com/', controlador_en='Romo family (Mexican private animal nutrition group in Querétaro)', nota_en='Premium pet nutrition (Nupec, Nucan, Nufit, Optimo Felino).')
+b('loc_nupec', 'Nupec', 'Nucan', 'Nufit', 'Optimo Felino')
+CAT['Nupec'] = 'mascotas'
+CAT['Nucan'] = 'mascotas'
+CAT['Nufit'] = 'mascotas'
+CAT['Optimo Felino'] = 'mascotas'
+
+# ---- Material de curación y salud México
+g('loc_degasa', 'Degasa, S.A. de C.V.', 'Fundadores e inversionistas mexicanos en Cuernavaca, Morelos; empresa 100% mexicana.', 'México', 'Privada', NC, "Proveedor del sector salud público", 'Fabricante líder de material de curación: gasas, vendas, apósitos y botiquines.', 'Alta', 'Degasa: Quiénes somos', 'https://www.degasa.com/', controlador_en='Mexican founding partners in Cuernavaca, Morelos', nota_en='Leading Mexican medical dressing, bandages and first aid manufacturer.')
+b('loc_degasa', 'Degasa', 'Protec')
+CAT['Degasa'] = 'salud_primeros_auxilios'
+CAT['Protec'] = 'salud_primeros_auxilios'
+
+# ---- Sombreros y moda tradicional México
+g('loc_tardan', 'Sombreros Tardan', 'Familia Tardan (fundada en 1847 en la Ciudad de México; empresa 100% familiar mexicana).', 'México', 'Familia', "", "", 'Fabricación artesanal de sombreros de vestir, vaqueros, texanas y gorras.', 'Alta', 'Tardan: Nuestra Historia', 'https://tardan.com.mx/pages/historia', controlador_en='Tardan family (Mexican historic hat maker founded in 1847 in Mexico City)', nota_en='Historic Mexican hatmaker (felt hats, cowboy hats, caps).')
+b('loc_tardan', 'Tardan', 'Sombreros Tardan')
+CAT['Tardan'] = 'ropa_calzado'
+CAT['Sombreros Tardan'] = 'ropa_calzado'
+
+# ---- Alternativas internacionales
+# EE.UU.
+g('loc_kong', 'The KONG Company', 'Joe Markham (fundador y dueño independiente en Golden, Colorado).', 'EE.UU.', 'Fundador', "", "", 'Juguetes de caucho natural y premios para perros y gatos.', 'Alta', 'KONG Company: Our Story', 'https://www.kongcompany.com/about-us', controlador_en='Joe Markham (founder, 100% privately held in Golden, CO)', nota_en='Natural rubber pet toys and treats (KONG).')
+b('loc_kong', 'KONG')
+CAT['KONG'] = 'mascotas'
+
+g('loc_kleintools', 'Klein Tools', 'Familia Klein (fundada por Mathias Klein en 1857; sexta generación familiar).', 'EE.UU.', 'Familia', "", "", 'Herramientas de mano para electricistas y mecánicos.', 'Alta', 'Klein Tools: About Us', 'https://www.kleintools.com/about', controlador_en='Klein family (sixth generation family-owned in Lincolnshire, IL)', nota_en='Hand tools for electricians and trades professionals.')
+b('loc_kleintools', 'Klein Tools')
+CAT['Klein Tools'] = 'herramientas'
+
+g('loc_stetson', 'John B. Stetson Company', 'Licenciatarios e inversionistas privados estadounidenses independientes (fundada en 1865).', 'EE.UU.', 'Privada', "", "", 'Sombreros clásicos de vestir y estilo vaquero de fieltro.', 'Alta', 'Stetson: Heritage', 'https://stetson.com/pages/heritage', controlador_en='Privately held American brand founded by John B. Stetson in 1865', nota_en='Iconic American hat brand.')
+b('loc_stetson', 'Stetson')
+CAT['Stetson'] = 'ropa_calzado'
+
+# Alemania
+g('loc_stihl', 'Andreas Stihl AG & Co. KG', 'Familia Stihl (Hans Peter Stihl y descendientes, 100% familiar).', 'Otros (Alemania)', 'Familia', NC, "", 'Motosierras, desbrozadoras y herramientas de poda y jardinería.', 'Alta', 'Stihl Annual Report', 'https://corporate.stihl.com/en/company/annual-report', controlador_en='Stihl family (100% family-owned in Waiblingen, Germany)', nota_en='World leading chainsaw and outdoor power equipment manufacturer.')
+b('loc_stihl', 'Stihl')
+CAT['Stihl'] = 'herramientas'
+
+g('loc_karcher', 'Alfred Kärcher SE & Co. KG', 'Familia Kärcher (Johannes y Susanne Kärcher, 100% familiar).', 'Otros (Alemania)', 'Familia', NC, "", 'Hidrolavadoras de alta presión, aspiradoras y barredoras de limpieza.', 'Alta', 'Kärcher Facts & Figures', 'https://www.kaercher.com/int/inside-kaercher/company/facts-figures.html', controlador_en='Kärcher family (100% family-owned in Winnenden, Germany)', nota_en='High pressure cleaners, floor scrubbers and outdoor cleaning.')
+b('loc_karcher', 'Kärcher', 'Karcher')
+CAT['Kärcher'] = 'herramientas'
+CAT['Karcher'] = 'herramientas'
+
+g('loc_hartmann', 'Paul Hartmann AG (HARTMANN GROUP)', 'Familia Schleicher / Schwenk (~60%) y accionistas en Alemania.', 'Otros (Alemania)', 'Familia + corporación', "", "Proveedor hospitalario de la UE", 'Material de curación, apósitos estériles (Cosmopor) y antisépticos (Sterillium).', 'Alta', 'HARTMANN GROUP Annual Report', 'https://corporate.hartmann.info/en-corp/investor-relations', controlador_en='Schleicher family / Schwenk (~60%) and German public shareholders', nota_en='Medical dressings, wound care and first aid.')
+b('loc_hartmann', 'Hartmann', 'Sterillium', 'Cosmopor')
+CAT['Hartmann'] = 'salud_primeros_auxilios'
+CAT['Sterillium'] = 'salud_primeros_auxilios'
+CAT['Cosmopor'] = 'salud_primeros_auxilios'
+
+# Francia
+g('loc_urgo', 'Groupe URGO (Laboratoires Urgo)', 'Familia Le Lous (fundada por Jean Le Lous; Hervé Le Lous y familia, 100%).', 'Francia', 'Familia', NC, "", 'Apósitos de primeros auxilios, curitas, apósitos hidrocoloides y antisépticos.', 'Alta', 'Groupe URGO Corporate', 'https://www.urgo-group.fr/', controlador_en='Le Lous family (100% French family-owned healthcare group)', nota_en='First aid bandages, wound dressings and antiseptic treatments.')
+b('loc_urgo', 'Urgo', 'Humex', 'Mercurochrome')
+CAT['Urgo'] = 'salud_primeros_auxilios'
+CAT['Humex'] = 'salud_primeros_auxilios'
+CAT['Mercurochrome'] = 'salud_primeros_auxilios'
+
+# España
+g('loc_bellota', 'Bellota Herramientas (Venanpri Group)', 'Corporación Patricio Echeverría histórica y Venanpri Group en Legazpi, Guipúzcoa.', 'España', 'Privada', "", "", 'Herramientas agrícolas, jardinería, construcción y poda.', 'Alta', 'Bellota: Quiénes somos', 'https://www.bellota.com/es-es/', controlador_en='Venanpri Group and historical Echeverría founding roots in Guipúzcoa', nota_en='Spanish agricultural, gardening and construction hand tools.')
+b('loc_bellota', 'Bellota')
+CAT['Bellota'] = 'herramientas'
+
+g('loc_agrolimen', 'Agrolimen (Affinity Petcare)', 'Familia Carulla (holding familiar catalán presidido por Artur Carulla).', 'España', 'Familia', NC, "", 'Alimento para perros y gatos líder en España y Europa (Ultima, Advance, Brekkies).', 'Alta', 'Cinco Días: Agrolimen', 'https://cincodias.elpais.com/', controlador_en='Carulla family (100% Catalan family-owned holding company)', nota_en='Leading Spanish pet food company in Europe (Ultima, Advance, Brekkies).')
+b('loc_agrolimen', 'Ultima', '!Advance', 'Brekkies')
+CAT['Ultima'] = 'mascotas'
+CAT['Advance'] = 'mascotas'
+CAT['Brekkies'] = 'mascotas'
+
+g('loc_kavehome', 'Kave Home', 'Francesc Julià (fundador y familia Julià en Sils, Girona, Cataluña).', 'España', 'Familia', NC, "", 'Diseño y fabricación de muebles de diseño mediterráneo para el hogar.', 'Alta', 'Kave Home: Sobre nosotros', 'https://kavehome.com/es/es/sobre-nosotros', controlador_en='Francesc Julià and Julià family (100% privately held in Girona)', nota_en='Mediterranean design home and office furniture.')
+b('loc_kavehome', 'Kave Home')
+CAT['Kave Home'] = 'hogar_muebles'
+
+g('loc_mango', 'Punto Fa, S.L. (Mango)', 'Isak Andic (fundador y presidente, 100% familiar).', 'España', 'Fundador', NC, "", 'Moda contemporánea, vestidos, trajes y accesorios de temporada.', 'Alta', 'Cinco Días: Mango resultados y estructura', 'https://cincodias.elpais.com/', controlador_en='Isak Andic (founder, 100% privately owned in Barcelona)', nota_en='Spanish multinational fashion company (Mango).')
+b('loc_mango', 'Mango')
+CAT['Mango'] = 'ropa_calzado'
+
+# Suiza
+g('loc_victorinox', 'Victorinox AG', 'Victorinox Foundation (familia Elsener, 75%) y Carl y Elise Elsener-Gut Foundation (15%).', 'Otros (Suiza)', 'Fideicomiso', NC, "", 'Navajas suizas, mochilas técnicas de viaje, maletas y relojes.', 'Alta', 'Victorinox: History & Corporate', 'https://www.victorinox.com/en/About-Us/History/', controlador_en='Victorinox Foundation (Elsener family, 75%) and Elsener-Gut Foundation (15%)', nota_en='Swiss army knives, travel luggage, backpacks and watches.')
+b('loc_victorinox', 'Victorinox', 'Swiss Army', 'Wenger')
+CAT['Victorinox'] = 'viajes_equipaje'
+CAT['Swiss Army'] = 'viajes_equipaje'
+CAT['Wenger'] = 'viajes_equipaje'
+
+g('loc_rolex', 'Rolex SA', 'Fondation Hans Wilsdorf (fundación filantrópica en Ginebra, 100%).', 'Otros (Suiza)', 'Fideicomiso', NC, "", 'Alta relojería suiza independiente y manufactura de lujo (Rolex, Tudor).', 'Alta', 'Registre du Commerce de Genève / Fondation Hans Wilsdorf', 'https://www.ge.ch/registre-du-commerce', controlador_en='Hans Wilsdorf Foundation (100% philanthropic foundation in Geneva)', nota_en='Independent Swiss luxury watch manufacture (Rolex, Tudor).')
+b('loc_rolex', 'Rolex', 'Tudor')
+CAT['Rolex'] = 'ropa_calzado'
+CAT['Tudor'] = 'ropa_calzado'
+
+# India
+g('loc_satya', 'Shrinivas Sugandhalaya (BNG) LLP (Satya)', 'Familia Setty (Late Shri K.N. Satyam Setty fundador; K.S. Balkrishna Setty).', 'India', 'Familia', NC, "", 'Fabricante original del incienso Satya Sai Baba Nag Champa en Bengaluru.', 'Alta', 'Satya Incense: Our History', 'https://www.satyaincense.com/our-history', controlador_en='Setty family (originators of Nag Champa incense in Bengaluru)', nota_en='Traditional Indian incense and aroma diffusers (Satya Sai Baba, Nag Champa).')
+b('loc_satya', 'Satya', 'Satya Sai Baba', 'Nag Champa')
+CAT['Satya'] = 'aromas_ambiente'
+CAT['Satya Sai Baba'] = 'aromas_ambiente'
+CAT['Nag Champa'] = 'aromas_ambiente'
+
+g('loc_hem', 'HEM Corporation', 'Familia Shah (fundada por tres hermanos Shah en Mumbai en 1983).', 'India', 'Familia', NC, "", 'Inciensos aromáticos artesanales tradicionales y aceites esenciales.', 'Alta', 'HEM Corporation: About Us', 'https://hemcorporation.com/about-us', controlador_en='Shah family (100% Indian family-owned in Mumbai)', nota_en='Traditional Indian incense sticks, cones and essential oils.')
+b('loc_hem', 'HEM', 'HEM Incense')
+CAT['HEM'] = 'aromas_ambiente'
+CAT['HEM Incense'] = 'aromas_ambiente'
+
+# Chile
+g('loc_agrosuper_pets', 'Agrosuper (Champion Dog / Champion Cat)', 'Familia Vial (Gonzalo Vial Vial y descendientes; 100% privada chilena).', 'Chile', 'Familia', NC, "", 'Alimento y nutrición para perros y gatos líder en Chile (Champion Dog, Champion Cat).', 'Alta', 'Memoria anual Agrosuper', 'https://www.agrosuper.cl/', controlador_en='Vial family (100% Chilean family-owned holding in Rancagua)', nota_en='Leading Chilean pet food producer (Champion Dog, Champion Cat).')
+b('loc_agrosuper_pets', 'Champion Dog', 'Champion Cat')
+CAT['Champion Dog'] = 'mascotas'
+CAT['Champion Cat'] = 'mascotas'
+
+g('loc_softys', 'Empresas CMPC (Softys)', 'Familia Matte (~55% a través de Grupo Matte; CMF: CMPC).', 'Chile', 'Familia', P, "", 'Papel higiénico, toallitas húmedas y pañales en América Latina (Noble, Babysec, Ladysoft).', 'Alta', 'Memoria anual CMPC / Softys (CMF)', 'https://ir.cmpc.com/', controlador_en='Matte family (~55% via Grupo Matte; CMF Chile: CMPC)', nota_en='Tissue paper, wet wipes and diapers across Latin America (Noble, Babysec, Ladysoft).')
+b('loc_softys', '!Noble', 'Babysec', 'Ladysoft', 'Cotidian', 'Higienol')
+CAT['Noble'] = 'higiene_papel'
+CAT['Babysec'] = 'higiene_papel'
+CAT['Ladysoft'] = 'higiene_papel'
+CAT['Cotidian'] = 'higiene_papel'
+CAT['Higienol'] = 'higiene_papel'
+
+# Canadá
+g('loc_herschel', 'Herschel Supply Co.', 'Hermanos Jamie y Lyndon Cormack (fundadores en Vancouver, Columbia Británica).', 'Canadá', 'Familia', NC, "", 'Mochilas de viaje, maletas, porta pasaportes y accesorios de viaje.', 'Alta', 'Forbes: How The Cormack Brothers Built Herschel', 'https://www.forbes.com/', controlador_en='Jamie and Lyndon Cormack brothers (founders in Vancouver, BC)', nota_en='Travel backpacks, luggage, passport holders and travel accessories.')
+b('loc_herschel', 'Herschel', 'Herschel Supply')
+CAT['Herschel'] = 'viajes_equipaje'
+CAT['Herschel Supply'] = 'viajes_equipaje'
+
+# Corea del Sur
+g('loc_goodai', 'Goodai Global (Beauty of Joseon)', 'Lee Min-gu (fundador y CEO en Seúl, Corea del Sur).', 'Otros (Corea del Sur)', 'Fundador', NC, "", 'Dermocosmética coreana (K-Beauty) y protección solar con extracto de arroz (Relief Sun).', 'Alta', 'Pulse News Korea / Maeil Business Newspaper', 'https://pulsenews.co.kr/', controlador_en='Lee Min-gu (founder and CEO in Seoul, South Korea)', nota_en='Korean skincare and photoprotection (Relief Sun rice sunscreen).')
+b('loc_goodai', 'Beauty of Joseon')
+CAT['Beauty of Joseon'] = 'skincare_cosmetica'
+
 
 

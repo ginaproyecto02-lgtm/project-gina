@@ -45,7 +45,7 @@ WHERE IT WORKS
 Americas: United States, Mexico, Canada, Brazil, Argentina, Chile.
 Europe: United Kingdom, Germany, France, Spain, Italy.
 Asia: China, Japan, South Korea, Singapore, Israel, India.
-Ownership data for 354 groups, 988 brands (including Chinese, Japanese, Korean and Hebrew names), 110 airlines, and 16 product categories.
+Ownership data for 420 groups, 1,190 brands (including Chinese, Japanese, Korean and Hebrew names), 110 airlines, and 24 product categories.
 
 FREE AND COMMUNITY-POWERED
 Gina is free, with no account and no API key. Project Gina updates the shared database every one to two weeks with an automated research run that only keeps facts whose source came from a real web search. Missing a brand or know a local alternative? Suggest it from the Gina icon and it is verified before it is published.
@@ -81,7 +81,7 @@ TUS VALORES, TU VOTO
 Dile a Gina qué te importa. Cada tarjeta muestra un índice de reputación abierto (0–100, calculado solo con hechos con fuente y una fórmula publicada), qué tan alineada está la empresa con tus valores, y te avisa si tiene multas o acuerdos recientes en un tema que marcaste como muy importante.
 
 DÓNDE FUNCIONA
-335 tiendas, aerolíneas, agencias y plataformas de hospedaje en 17 países de América, Europa y Asia. 354 grupos, 988 marcas, 110 aerolíneas y 16 categorías de producto.
+335 tiendas, aerolíneas, agencias y plataformas de hospedaje en 17 países de América, Europa y Asia. 420 grupos, 1.190 marcas, 110 aerolíneas y 24 categorías de producto.
 
 GRATIS Y HECHA EN COMUNIDAD
 Gina es gratis, sin cuenta ni clave. Project Gina actualiza la base compartida cada una o dos semanas con una investigación automática que solo guarda hechos cuya fuente salió de una búsqueda real. ¿Falta una marca o conoces una alternativa local? Sugiérela desde el ícono de Gina; se verifica antes de publicarse.
