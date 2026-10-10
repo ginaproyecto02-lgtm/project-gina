@@ -44,17 +44,47 @@
   function category(prep, brand, title) {
     if (!prep) return null;
     const b = QED.norm(brand || "");
-    if (b && prep.byBrand.has(b)) return prep.byBrand.get(b);
     const t = " " + QED.norm(title || "") + " ";
-    for (const k of prep.kws) if (k.re.test(t)) return k.id;
+
+    // Filtros de descalificación por incompatibilidad semántica:
+    // Si el título describe cuidado de la piel/rostro/dermocosmética, no puede ser limpieza del hogar.
+    const isSkinOrFace = /\b(piel|facial|rostro|cutis|ojos|dermatol|dermocosmet|skincare|serum|suero|bloqueador|solar|niacinamid|ceramida|hialuronico|hidratante|antiarrugas|antiedad|antimanchas)\b/i.test(t);
+    const isHouseholdClean = /\b(lavatrastes|lavavajillas|ropa|pisos|banos|inodoro|suavizante|trastes|multiusos|lavanderia)\b/i.test(t);
+
+    const scores = new Map();
+    for (const k of prep.kws) {
+      if (isSkinOrFace && k.id === "limpieza") continue;
+      if (isHouseholdClean && k.id === "skincare_cosmetica") continue;
+      if (k.re.test(t)) {
+        const weight = k.len >= 10 ? k.len * 2 : k.len;
+        scores.set(k.id, (scores.get(k.id) || 0) + weight);
+      }
+    }
+
+    // 1) Si el título tiene una coincidencia semántica clara (≥ 12 pts), prima el tipo real de producto
+    if (scores.size) {
+      const sorted = Array.from(scores.entries()).sort((x, y) => y[1] - x[1]);
+      if (sorted[0][1] >= 12) return sorted[0][0];
+    }
+
+    // 2) Si no hay señal fuerte en el título, verificar si la marca tiene categoría fija
+    if (b && prep.byBrand.has(b)) return prep.byBrand.get(b);
+
+    // 3) Si hubo alguna coincidencia menor en el título
+    if (scores.size) {
+      const sorted = Array.from(scores.entries()).sort((x, y) => y[1] - x[1]);
+      return sorted[0][0];
+    }
+
     return null;
   }
 
   // Alternativas para una categoría en el país de la tienda, sin el grupo actual. values: valores del usuario.
-  function suggest(prep, catId, pais, currentGid, values, limit) {
+  function suggest(prep, catId, pais, currentGid, values, limit, title) {
     if (!prep || !catId || !pais || pais === "Global") return [];
     const cat = prep.cats[catId];
     if (!cat) return [];
+    const normTitle = QED.norm(title || "");
     const byGroup = new Map();
     for (const m of cat.marcas || []) {
       const e = prep.index.exact.get(QED.norm(m));
@@ -63,12 +93,23 @@
       if (!g || e.g === currentGid || !INDEP[g.tipo]) continue;
       if (!countries(g.pais).includes(pais)) continue;
       const cur = byGroup.get(e.g) || { gid: e.g, group: g, marcas: [] };
-      if (!cur.marcas.includes(e.n) && cur.marcas.length < 3) cur.marcas.push(e.n);
+      if (!cur.marcas.includes(e.n)) cur.marcas.push(e.n);
       byGroup.set(e.g, cur);
     }
     const out = Array.from(byGroup.values()).map((a) => {
       const sc = a.group.rep && QED.REP ? QED.REP.score(a.group.rep, values) : null;
       const repVal = sc && !sc.parcial ? (values ? sc.personal : sc.indice) : null;
+
+      // Ordenar marcas del grupo dando prioridad a las más afines léxicamente al título del producto
+      if (normTitle && a.marcas.length > 1) {
+        a.marcas.sort((m1, m2) => {
+          const score1 = normTitle.split(" ").filter((w) => w.length >= 4 && QED.norm(m1).includes(w)).length;
+          const score2 = normTitle.split(" ").filter((w) => w.length >= 4 && QED.norm(m2).includes(w)).length;
+          return score2 - score1;
+        });
+      }
+      a.marcas = a.marcas.slice(0, 3);
+
       return Object.assign(a, {
         motivo: INDEP[a.group.tipo].label, prio: INDEP[a.group.tipo].prio, rep: repVal, nivel: sc && !sc.parcial ? sc.nivel : "",
         capital: GENTILICIO[pais] ? `capital ${GENTILICIO[pais]}` : `capital de ${pais}`
@@ -78,6 +119,7 @@
     out.sort((x, y) => y.prio - x.prio || (y.rep == null ? 80 : y.rep) - (x.rep == null ? 80 : x.rep) || x.marcas[0].localeCompare(y.marcas[0]));
     return out.slice(0, limit || 3);
   }
+
 
   // Enlace para sugerir al proyecto marcas faltantes o alternativas locales (lo envía el usuario, por su voluntad):
   // un issue de GitHub prellenado o, si no hay repositorio, un correo. El job del servidor lee el marcador «gina:sugerencia».

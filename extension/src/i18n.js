@@ -694,6 +694,27 @@
     return (TEMAS_MAP[tema] && (TEMAS_MAP[tema][l] || TEMAS_MAP[tema]["es"])) || tema;
   }
 
+  const CATEGORIAS_MAP = {
+    lacteos: { es: "lácteos", en: "dairy", de: "Milchprodukte", fr: "produits laitiers", it: "latticini", ja: "乳製品" },
+    bebidas: { es: "bebidas y jugos", en: "beverages & juices", de: "Getränke & Säfte", fr: "boissons et jus", it: "bevande e succhi", ja: "飲料・ジュース" },
+    cerveza: { es: "cerveza", en: "beer", de: "Bier", fr: "bière", it: "birra", ja: "ビール" },
+    cafe: { es: "café", en: "coffee", de: "Kaffee", fr: "café", it: "caffè", ja: "コーヒー" },
+    chocolate_dulces: { es: "chocolates y dulces", en: "chocolates & sweets", de: "Schokolade & Süßwaren", fr: "chocolats et confiseries", it: "cioccolato e dolci", ja: "チョコレート・菓子" },
+    botanas_galletas: { es: "botanas y galletas", en: "snacks & cookies", de: "Snacks & Kekse", fr: "snacks et biscuits", it: "snack e biscotti", ja: "スナック・ビスケット" },
+    abarrotes: { es: "despensa y conservas", en: "pantry & groceries", de: "Grundnahrungsmittel", fr: "épicerie et conserves", it: "dispensa e conserve", ja: "食品・保存食" },
+    panaderia_harinas: { es: "pan, cereales y harinas", en: "bread & bakery", de: "Brot & Backwaren", fr: "pain et céréales", it: "pane e farine", ja: "パン・穀物" },
+    limpieza: { es: "limpieza del hogar", en: "household cleaning", de: "Haushaltsreinigung", fr: "nettoyage ménager", it: "pulizia della casa", ja: "家庭用洗剤・清掃" },
+    cuidado_personal: { es: "higiene y cuidado personal", en: "personal hygiene", de: "Körperpflege & Hygiene", fr: "hygiène corporelle", it: "igiene personale", ja: "ボディケア・衛生" },
+    skincare_cosmetica: { es: "dermocosmética y cuidado de la piel", en: "skincare & dermocosmetics", de: "Hautpflege & Dermokosmetik", fr: "soins de la peau et dermocosmétique", it: "cura della pelle e dermocosmesi", ja: "スキンケア・皮膚科学コスメ" },
+    ropa_calzado: { es: "ropa y calzado", en: "apparel & footwear", de: "Kleidung & Schuhe", fr: "vêtements et chaussures", it: "abbigliamento e calzature", ja: "衣類・靴" },
+    deportes_outdoor: { es: "deportes, pesca y aire libre", en: "sports, fishing & outdoors", de: "Sport, Angeln & Outdoor", fr: "sports, pêche et plein air", it: "sport, pesca e outdoor", ja: "スポーツ・釣り・アウトドア" }
+  };
+
+  function catLabel(catId, defaultLabel, lang) {
+    const l = lang || getLang();
+    return (CATEGORIAS_MAP[catId] && (CATEGORIAS_MAP[catId][l] || CATEGORIAS_MAP[catId]["es"])) || (defaultLabel || catId);
+  }
+
   QED.I18N = {
     SUPPORTED,
     detectLang,
@@ -704,6 +725,8 @@
     tipoInfo,
     estadoLabel,
     temaLabel,
-    repLevel
+    repLevel,
+    catLabel
   };
+
 })(typeof globalThis !== "undefined" ? globalThis : this);

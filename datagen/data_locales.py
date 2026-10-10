@@ -188,3 +188,39 @@ g('loc_industrias_guacamaya', 'Industrias Guacamaya', 'Empresa familiar de salsa
 b('loc_industrias_guacamaya', 'La Guacamaya', 'Salsa La Guacamaya')
 CAT['La Guacamaya'] = 'abarrotes'
 
+# ---- Cuidado de la piel y dermocosmética local
+g('loc_laboratorios_grisi', 'Laboratorios Grisi', 'Familia Grisi: empresa familiar mexicana fundada en 1863, especializada en dermocosmética y cuidado de la piel.', 'México', 'Familia', "", "", 'Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial.', 'Alta', 'Expansión: Grisi, 160 años de historia', 'https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia')
+b('loc_laboratorios_grisi', 'Grisi Dermocosmética', 'Jabón Neutro Grisi', 'Concha Nácar Grisi', 'Grisi Facial', 'Grisi')
+CAT['Grisi Dermocosmética'] = 'skincare_cosmetica'
+CAT['Jabón Neutro Grisi'] = 'skincare_cosmetica'
+CAT['Concha Nácar Grisi'] = 'skincare_cosmetica'
+CAT['Grisi Facial'] = 'skincare_cosmetica'
+CAT['Grisi'] = 'skincare_cosmetica'
+
+g('loc_genomma_lab', 'Genomma Lab (Cuidado Facial)', 'Rodrigo Herrera (fundador mexicano) y accionistas en la BMV; marcas de cuidado facial.', 'México', 'Fundador + fondos', "", "", 'Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica.', 'Alta', 'Reporte anual Genomma Lab (BMV)', 'https://www.genommalab.com')
+b('loc_genomma_lab', 'Cicatricure', 'Asepxia', 'Teatrical')
+CAT['Cicatricure'] = 'skincare_cosmetica'
+CAT['Asepxia'] = 'skincare_cosmetica'
+CAT['Teatrical'] = 'skincare_cosmetica'
+
+g('loc_sesderma', 'Laboratorios Sesderma', 'Dr. Gabriel Serrano y familia; laboratorio dermocosmético español fundado en 1989.', 'España', 'Familia', "", "", 'Pioneros españoles en nanotecnología dermatológica y cuidado facial con vitamina C.', 'Alta', 'Sitio oficial de Sesderma', 'https://www.sesderma.com')
+b('loc_sesderma', 'Sesderma', 'Babé')
+CAT['Sesderma'] = 'skincare_cosmetica'
+CAT['Babé'] = 'skincare_cosmetica'
+
+g('loc_cantabria_labs', 'Cantabria Labs', 'Familia Matji; laboratorio dermatológico español fundado en 1989.', 'España', 'Familia', "", "", 'Dermocosmética española y fotoprotección dermatológica.', 'Alta', 'Sitio oficial Cantabria Labs', 'https://www.cantabrialabs.com')
+b('loc_cantabria_labs', 'Heliocare', 'Endocare', 'Neoretin')
+CAT['Heliocare'] = 'skincare_cosmetica'
+CAT['Endocare'] = 'skincare_cosmetica'
+CAT['Neoretin'] = 'skincare_cosmetica'
+
+g('loc_vanicream', 'Vanicream (Pharmaceutical Specialties, Inc.)', 'Farmacéuticos fundadores independientes en Rochester, Minnesota.', 'EE.UU.', 'Privada', "", "", 'Dermocosmética para piel sensible y dermatitis, libre de fragancias, tintes y parabenos.', 'Alta', 'Sitio oficial Vanicream', 'https://www.vanicream.com')
+b('loc_vanicream', 'Vanicream')
+CAT['Vanicream'] = 'skincare_cosmetica'
+
+g('loc_naos', 'NAOS (Bioderma, Institut Esthederm)', 'Controlada por el fondo de dotación / fundación Jean-Noël Thorel con fin de utilidad pública.', 'Francia', 'Fideicomiso', "", "", 'Ecocosmética y dermocosmética francesa sin accionistas especulativos.', 'Alta', 'Sitio oficial NAOS', 'https://naos.com')
+b('loc_naos', 'Bioderma', 'Institut Esthederm')
+CAT['Bioderma'] = 'skincare_cosmetica'
+CAT['Institut Esthederm'] = 'skincare_cosmetica'
+
+

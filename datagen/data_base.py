@@ -95,6 +95,10 @@ g("beiersdorf","Beiersdorf","Familia Herz (vía maxingvest, ~50%)","Otros (Alema
 g("hermes","Hermès","Familias Hermès (~66%)","Francia","Familia",P,"","",A,"Informe anual de Hermès (AMF)")
 g("kering","Kering","Familia Pinault (Artémis, ~42%)","Francia","Familia",P,"","",A,"Informe anual de Kering (AMF)")
 g("prada","Prada","Familia Prada-Bertelli (~80%)","Italia","Familia",P,"","Compró Versace en 2025.",A,"Informe anual de Prada (HKEX)")
+# ---- Dermocosmética multinacional
+g("galderma","Galderma (Cetaphil)","EQT (capital privado sueco) y accionistas en la bolsa suiza (SIX)","Otros (Suiza)","Capital privado",NC,"","Antigua filial dermatológica de Nestlé y L'Oréal, vendida a EQT en 2019.",A,"Informe anual de Galderma (SIX)")
+g("pierrefabre","Laboratoires Pierre Fabre (Avène)","Fundación Pierre Fabre (fideicomiso público, 86%) y empleados (9%)","Francia","Fideicomiso",NC,"","La fundación apoya el acceso a la salud en países del Sur.",A,"Sitio oficial de Laboratoires Pierre Fabre")
+g("isdin","ISDIN","Familias Puig y Esteve (50% / 50%)","España","Familia",NC,"","Líder español en fotoprotección y cuidado dermatológico.",A,"Memoria de ISDIN")
 # ---- Deportes, actividades al aire libre y pesca
 g("purefishing","Pure Fishing (Penn, Abu Garcia, Berkley)","Sycamore Partners (capital privado)","EE.UU.","Capital privado",NC,"","Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",OK,"Sycamore Partners","https://www.sycamorepartners.com")
 g("shimano","Shimano Inc.","Familia fundadora Shimano y fondos institucionales","Otros (Japón)","Familia + fondos",P,"","Fabricante líder de componentes de ciclismo y equipos de pesca.",A,"Informe anual de Shimano (TSE)")
@@ -187,5 +191,8 @@ b("kering","Gucci","Saint Laurent","Balenciaga","Bottega Veneta","Alexander McQu
 b("prada","Prada","Miu Miu","Versace")
 b("purefishing","Penn","Penn Fishing","Abu Garcia","Berkley","Ugly Stik","Fenwick","Savage Gear","Hardy","Shakespeare","Pflueger")
 b("shimano","Shimano")
+b("galderma","Cetaphil")
+b("pierrefabre","Avène","Ducray","Klorane")
+b("isdin","ISDIN","Fotoprotector ISDIN")
 
 

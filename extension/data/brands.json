@@ -974,6 +974,42 @@
    "fuente": "Informe anual de Prada (HKEX)",
    "url": ""
   },
+  "galderma": {
+   "empresa": "Galderma (Cetaphil)",
+   "controlador": "EQT (capital privado sueco) y accionistas en la bolsa suiza (SIX)",
+   "pais": "Otros (Suiza)",
+   "tipo": "Capital privado",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Antigua filial dermatológica de Nestlé y L'Oréal, vendida a EQT en 2019.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Galderma (SIX)",
+   "url": ""
+  },
+  "pierrefabre": {
+   "empresa": "Laboratoires Pierre Fabre (Avène)",
+   "controlador": "Fundación Pierre Fabre (fideicomiso público, 86%) y empleados (9%)",
+   "pais": "Francia",
+   "tipo": "Fideicomiso",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "La fundación apoya el acceso a la salud en países del Sur.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial de Laboratoires Pierre Fabre",
+   "url": ""
+  },
+  "isdin": {
+   "empresa": "ISDIN",
+   "controlador": "Familias Puig y Esteve (50% / 50%)",
+   "pais": "España",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Líder español en fotoprotección y cuidado dermatológico.",
+   "confianza": "Alta",
+   "fuente": "Memoria de ISDIN",
+   "url": ""
+  },
   "purefishing": {
    "empresa": "Pure Fishing (Penn, Abu Garcia, Berkley)",
    "controlador": "Sycamore Partners (capital privado)",
@@ -4057,6 +4093,78 @@
    "confianza": "Alta",
    "fuente": "La Guacamaya: Historia",
    "url": "https://laguacamaya.mx/"
+  },
+  "loc_laboratorios_grisi": {
+   "empresa": "Laboratorios Grisi",
+   "controlador": "Familia Grisi: empresa familiar mexicana fundada en 1863, especializada en dermocosmética y cuidado de la piel.",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial.",
+   "confianza": "Alta",
+   "fuente": "Expansión: Grisi, 160 años de historia",
+   "url": "https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia"
+  },
+  "loc_genomma_lab": {
+   "empresa": "Genomma Lab (Cuidado Facial)",
+   "controlador": "Rodrigo Herrera (fundador mexicano) y accionistas en la BMV; marcas de cuidado facial.",
+   "pais": "México",
+   "tipo": "Fundador + fondos",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica.",
+   "confianza": "Alta",
+   "fuente": "Reporte anual Genomma Lab (BMV)",
+   "url": "https://www.genommalab.com"
+  },
+  "loc_sesderma": {
+   "empresa": "Laboratorios Sesderma",
+   "controlador": "Dr. Gabriel Serrano y familia; laboratorio dermocosmético español fundado en 1989.",
+   "pais": "España",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Pioneros españoles en nanotecnología dermatológica y cuidado facial con vitamina C.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial de Sesderma",
+   "url": "https://www.sesderma.com"
+  },
+  "loc_cantabria_labs": {
+   "empresa": "Cantabria Labs",
+   "controlador": "Familia Matji; laboratorio dermatológico español fundado en 1989.",
+   "pais": "España",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Dermocosmética española y fotoprotección dermatológica.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial Cantabria Labs",
+   "url": "https://www.cantabrialabs.com"
+  },
+  "loc_vanicream": {
+   "empresa": "Vanicream (Pharmaceutical Specialties, Inc.)",
+   "controlador": "Farmacéuticos fundadores independientes en Rochester, Minnesota.",
+   "pais": "EE.UU.",
+   "tipo": "Privada",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Dermocosmética para piel sensible y dermatitis, libre de fragancias, tintes y parabenos.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial Vanicream",
+   "url": "https://www.vanicream.com"
+  },
+  "loc_naos": {
+   "empresa": "NAOS (Bioderma, Institut Esthederm)",
+   "controlador": "Controlada por el fondo de dotación / fundación Jean-Noël Thorel con fin de utilidad pública.",
+   "pais": "Francia",
+   "tipo": "Fideicomiso",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Ecocosmética y dermocosmética francesa sin accionistas especulativos.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial NAOS",
+   "url": "https://naos.com"
   }
  },
  "marcas": [
@@ -6168,6 +6276,30 @@
    "g": "shimano"
   },
   {
+   "n": "Cetaphil",
+   "g": "galderma"
+  },
+  {
+   "n": "Avène",
+   "g": "pierrefabre"
+  },
+  {
+   "n": "Ducray",
+   "g": "pierrefabre"
+  },
+  {
+   "n": "Klorane",
+   "g": "pierrefabre"
+  },
+  {
+   "n": "ISDIN",
+   "g": "isdin"
+  },
+  {
+   "n": "Fotoprotector ISDIN",
+   "g": "isdin"
+  },
+  {
    "n": "Zara",
    "g": "inditex"
   },
@@ -7907,6 +8039,70 @@
   {
    "n": "Salsa La Guacamaya",
    "g": "loc_industrias_guacamaya"
+  },
+  {
+   "n": "Grisi Dermocosmética",
+   "g": "loc_laboratorios_grisi"
+  },
+  {
+   "n": "Jabón Neutro Grisi",
+   "g": "loc_laboratorios_grisi"
+  },
+  {
+   "n": "Concha Nácar Grisi",
+   "g": "loc_laboratorios_grisi"
+  },
+  {
+   "n": "Grisi Facial",
+   "g": "loc_laboratorios_grisi"
+  },
+  {
+   "n": "Grisi",
+   "g": "loc_laboratorios_grisi"
+  },
+  {
+   "n": "Cicatricure",
+   "g": "loc_genomma_lab"
+  },
+  {
+   "n": "Asepxia",
+   "g": "loc_genomma_lab"
+  },
+  {
+   "n": "Teatrical",
+   "g": "loc_genomma_lab"
+  },
+  {
+   "n": "Sesderma",
+   "g": "loc_sesderma"
+  },
+  {
+   "n": "Babé",
+   "g": "loc_sesderma"
+  },
+  {
+   "n": "Heliocare",
+   "g": "loc_cantabria_labs"
+  },
+  {
+   "n": "Endocare",
+   "g": "loc_cantabria_labs"
+  },
+  {
+   "n": "Neoretin",
+   "g": "loc_cantabria_labs"
+  },
+  {
+   "n": "Vanicream",
+   "g": "loc_vanicream"
+  },
+  {
+   "n": "Bioderma",
+   "g": "loc_naos"
+  },
+  {
+   "n": "Institut Esthederm",
+   "g": "loc_naos"
   }
  ],
  "aerolineas": [
@@ -10144,8 +10340,10 @@
   "limpieza": {
    "label": "Limpieza del hogar",
    "kw": [
+    "bleach",
     "cleaner",
     "cloro",
+    "desengrasante",
     "desinfectante",
     "detergent",
     "detergente",
@@ -10156,7 +10354,13 @@
     "laundry",
     "lavatrastes",
     "lessive",
-    "limpiador",
+    "limpiador de banos",
+    "limpiador de cocina",
+    "limpiador de pisos",
+    "limpiador liquido",
+    "limpiador multiusos",
+    "limpiapisos",
+    "multiusos",
     "sabao",
     "spulmittel",
     "suavizante",
@@ -10189,7 +10393,7 @@
    ]
   },
   "cuidado_personal": {
-   "label": "Cuidado personal",
+   "label": "Higiene y cuidado personal",
    "kw": [
     "body wash",
     "champu",
@@ -10228,8 +10432,6 @@
     "Crest",
     "Oral-B",
     "Nivea",
-    "Eucerin",
-    "Neutrogena",
     "Johnson's",
     "Lux",
     "Lifebuoy",
@@ -10241,6 +10443,104 @@
     "Godrej",
     "Cinthol",
     "Dr. Bronner's"
+   ]
+  },
+  "skincare_cosmetica": {
+   "label": "Dermocosmética y cuidado de la piel",
+   "kw": [
+    "acido glicolico",
+    "acido hialuronico",
+    "acido salicilico",
+    "acne",
+    "agua micelar",
+    "antiacne",
+    "antiarrugas",
+    "antiedad",
+    "antimanchas",
+    "barrera cutanea",
+    "bloqueador",
+    "bloqueador solar",
+    "centella asiatica",
+    "ceramidas",
+    "cleansing gel",
+    "concentrado facial",
+    "contorno de ojos",
+    "crema facial",
+    "cuidado de la piel",
+    "dermatologica",
+    "dermatologico",
+    "dermocosmetica",
+    "dermocosmetico",
+    "desmaquillante",
+    "espuma limpiadora",
+    "exfoliante facial",
+    "eye cream",
+    "face cream",
+    "face wash",
+    "facial cleanser",
+    "foaming cleanser",
+    "fotoprotector",
+    "fps",
+    "gel limpiador",
+    "hidratante facial",
+    "hyaluronic",
+    "limpiador en gel",
+    "limpiador espumoso",
+    "limpiador facial",
+    "limpiador para piel",
+    "limpiador suave",
+    "locion facial",
+    "mascarilla facial",
+    "moisturizer",
+    "niacinamida",
+    "pantenol",
+    "piel grasa",
+    "piel mixta",
+    "piel normal",
+    "piel seca",
+    "piel sensible",
+    "poros",
+    "protector solar",
+    "retinol",
+    "serum",
+    "skin care",
+    "skincare",
+    "spf",
+    "suero",
+    "suero facial",
+    "sunscreen",
+    "tonico facial",
+    "vitamina c"
+   ],
+   "marcas": [
+    "CeraVe",
+    "La Roche-Posay",
+    "Vichy",
+    "Eucerin",
+    "Neutrogena",
+    "Aveeno",
+    "Clean & Clear",
+    "Kiehl's",
+    "Clinique",
+    "Cetaphil",
+    "Avène",
+    "ISDIN",
+    "Grisi Dermocosmética",
+    "Jabón Neutro Grisi",
+    "Concha Nácar Grisi",
+    "Grisi Facial",
+    "Grisi",
+    "Cicatricure",
+    "Asepxia",
+    "Teatrical",
+    "Sesderma",
+    "Babé",
+    "Heliocare",
+    "Endocare",
+    "Neoretin",
+    "Vanicream",
+    "Bioderma",
+    "Institut Esthederm"
    ]
   },
   "ropa_calzado": {

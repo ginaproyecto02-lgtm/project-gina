@@ -366,7 +366,6 @@
         "src/alternativas.js",
         "src/extractors.js",
         "src/flights.js",
-        "src/i18n.js",
         "src/card.js",
         "src/content.js"
       ],

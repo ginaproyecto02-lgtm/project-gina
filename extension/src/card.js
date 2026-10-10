@@ -214,15 +214,16 @@
   function altBlock(res) {
     const a = res.alternativas;
     if (!a) return "";
-    const alsoLocal = a.actualEsLocal ? ` <small style="text-transform:none;letter-spacing:0">${t("alt_also_local")}</small>` : "";
-    const head = t("alt_header", { cat: esc(a.label.toLowerCase()), pais: esc(a.pais) }) + alsoLocal;
+    const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, a.label.toLowerCase()) : a.label.toLowerCase();
+    const head = t("alt_header", { cat: esc(catLabel), pais: esc(a.pais) }) + alsoLocal;
     if (!a.items.length) {
       return `<div class="alt"><div class="k">${head}</div><div class="sum">${t("alt_none_yet", { pais: esc(a.pais) })}</div></div>`;
     }
     return `<div class="alt"><div class="k">${head}</div>
       ${a.items.map((it) => `<div class="it"><b>${esc(it.marcas.join(", "))}</b> <span class="why">${esc(it.motivo)}</span> <small>· ${esc(it.capital)}</small>
-        <br><small>${esc(it.group.empresa)}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small></div>`).join("")}
+        <br><small><b>${esc(it.group.empresa)}</b>${it.group.nota ? ` · ${esc(it.group.nota)}` : ""}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small></div>`).join("")}
       <div class="method">${t("alt_disclaimer")}</div></div>`;
+
   }
 
   function storeBlock(store) {
