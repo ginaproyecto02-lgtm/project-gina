@@ -1,0 +1,104 @@
+[
+  {
+    "pais": "México",
+    "minimo": "90 días naturales",
+    "ley": "Ley Federal de Protección al Consumidor, Art. 77",
+    "url_oficial": "https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPC.pdf"
+  },
+  {
+    "pais": "EE.UU.",
+    "minimo": "Sin mínimo federal obligatorio; garantía según fabricante o ley estatal",
+    "ley": "Magnuson-Moss Warranty Act (15 U.S.C. § 2301) / FTC",
+    "url_oficial": "https://www.ftc.gov/business-guidance/resources/businesspersons-guide-federal-warranty-law"
+  },
+  {
+    "pais": "Canadá",
+    "minimo": "Garantía legal de durabilidad razonable según provincia",
+    "ley": "Loi sur la protection du consommateur (Québec art. 37) / Prov. Acts",
+    "url_oficial": "https://www.canada.ca/en/services/business/permits/federallyregulatedindustrysectors/consumer-protection.html"
+  },
+  {
+    "pais": "Alemania",
+    "minimo": "2 años (garantía legal de conformidad)",
+    "ley": "Bürgerliches Gesetzbuch (BGB) § 438 Abs. 1 Nr. 3",
+    "url_oficial": "https://www.gesetze-im-internet.de/bgb/__438.html"
+  },
+  {
+    "pais": "Francia",
+    "minimo": "2 ans (garantie légale de conformité)",
+    "ley": "Code de la consommation, Art. L217-3",
+    "url_oficial": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044142476"
+  },
+  {
+    "pais": "España",
+    "minimo": "3 años para bienes nuevos",
+    "ley": "Real Decreto Legislativo 1/2007, Art. 120",
+    "url_oficial": "https://www.boe.es/buscar/act.php?id=BOE-A-2007-20555"
+  },
+  {
+    "pais": "Italia",
+    "minimo": "2 anni (garanzia legale di conformità)",
+    "ley": "Codice del Consumo, Art. 133 (D.Lgs. 206/2005)",
+    "url_oficial": "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2005-09-06;206"
+  },
+  {
+    "pais": "Reino Unido",
+    "minimo": "Hasta 6 años por falta de conformidad",
+    "ley": "Consumer Rights Act 2015, Part 1",
+    "url_oficial": "https://www.legislation.gov.uk/ukpga/2015/15/part/1"
+  },
+  {
+    "pais": "Brasil",
+    "minimo": "90 dias (duráveis) / 30 dias (não duráveis)",
+    "ley": "Código de Defesa do Consumidor, Art. 26",
+    "url_oficial": "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"
+  },
+  {
+    "pais": "Argentina",
+    "minimo": "6 meses para cosas muebles no consumibles",
+    "ley": "Ley de Defensa del Consumidor nº 24.240, Art. 11",
+    "url_oficial": "https://servicios.infoleg.gob.ar/infolegInternet/anexos/0-4999/638/texact.htm"
+  },
+  {
+    "pais": "Chile",
+    "minimo": "6 meses (garantía legal Pro Consumidor)",
+    "ley": "Ley nº 19.496, Art. 21",
+    "url_oficial": "https://www.bcn.cl/leychile/navegar?idNorma=61438"
+  },
+  {
+    "pais": "Japón",
+    "minimo": "1 año estándar contra vicios ocultos / contrato",
+    "ley": "Consumer Contract Act / Civil Code Art. 566",
+    "url_oficial": "https://www.caa.go.jp/policies/policy/consumer_system/consumer_contract_act/"
+  },
+  {
+    "pais": "Corea del Sur",
+    "minimo": "1 año estándar para electrónicos",
+    "ley": "Framework Act on Consumers / KCA",
+    "url_oficial": "https://www.kca.go.kr"
+  },
+  {
+    "pais": "Singapur",
+    "minimo": "6 meses bajo Lemon Law",
+    "ley": "Consumer Protection (Fair Trading) Act, Part III",
+    "url_oficial": "https://sso.agc.gov.sg/Act/CPFTA2003"
+  },
+  {
+    "pais": "Israel",
+    "minimo": "1 año para bienes eléctricos > 150 NIS",
+    "ley": "Consumer Protection Regulations 2006",
+    "url_oficial": "https://www.gov.il/he/departments/legalInfo/consumer_protection_regulations_warranty"
+  },
+  {
+    "pais": "India",
+    "minimo": "Garantía de fabricante y responsabilidad objetiva",
+    "ley": "Consumer Protection Act, 2019",
+    "url_oficial": "https://consumeraffairs.nic.in/acts-and-rules/consumer-protection"
+  },
+  {
+    "pais": "China",
+    "minimo": "Política de Tres Garantías (San Bao, 1 año)",
+    "ley": "Ley de Protección del Consumidor de la RPC",
+    "url_oficial": "http://www.samr.gov.cn"
+  }
+]

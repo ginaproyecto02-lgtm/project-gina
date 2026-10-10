@@ -2,7 +2,20 @@
 # tipo: tienda | aerolinea | agencia | hospedaje
 # extras: p = expresión de URL de producto · path = prefijo de ruta obligatorio · v = expresión de URL de vuelos
 S = []
-def s(d, pais, tipo, gid, nombre, **x): S.append(dict(d=d, pais=pais, tipo=tipo, g=gid, nombre=nombre, **x))
+def s(d, pais, tipo, gid, nombre, modelo=None, **x):
+    if not modelo:
+        if tipo == "aerolinea":
+            modelo = "retailer"
+        elif tipo in ("agencia", "hospedaje"):
+            modelo = "marketplace"
+        elif tipo == "tienda":
+            if any(k in d for k in ["ebay", "etsy", "mercadolibre", "mercadolivre", "aliexpress", "temu", "shein", "shopee", "taobao", "tmall", "rakuten", "mercari", "claroshop"]):
+                modelo = "marketplace"
+            elif any(k in d for k in ["costco", "sams", "chedraui", "soriana", "elpalaciodehierro", "liverpool", "suburbia", "homedepot", "lowes", "kroger", "cvs", "walgreens", "macys", "canadiantire", "loblaws", "realcanadian", "shoppersdrug", "coto", "jumbo", "tesco", "sainsbury", "asda", "boots", "waitrose", "currys", "ocado", "marksandspencer", "lidl", "aldi", "dm.de", "rossmann", "e.leclerc", "leroymerlin", "elcorteingles", "mercadona", "esselunga", "coopshop", "uniqlo", "yodobashi", "oliveyoung", "daiso", "ssg", "fairprice", "shufersal", "dmart"]) or gid in ("inditex", "mulliez", "fastretailing"):
+                modelo = "retailer"
+            else:
+                modelo = "mixto"
+    S.append(dict(d=d, pais=pais, tipo=tipo, g=gid, nombre=nombre, modelo=modelo, **x))
 
 AMZ = r"/(dp|gp/product|gp/aw/d)/"
 for d, p in [("amazon.com","EE.UU."),("amazon.com.mx","México"),("amazon.ca","Canadá"),("amazon.com.br","Brasil"),("amazon.co.uk","Reino Unido"),

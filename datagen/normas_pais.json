@@ -1,0 +1,163 @@
+[
+  {
+    "pais": "México",
+    "categoria": "audio_electronica",
+    "codigo": "NOM-001-SCFI-2018 / NOM-024-SCFI-2013",
+    "organismo": "DGN / IFT",
+    "url_oficial": "https://www.gob.mx/se/acciones-y-programas/competitividad-y-normatividad-normalizacion"
+  },
+  {
+    "pais": "México",
+    "categoria": "tecnologia",
+    "codigo": "NOM-001-SCFI-2018 / NOM-024-SCFI-2013",
+    "organismo": "DGN / IFT",
+    "url_oficial": "https://www.gob.mx/se/acciones-y-programas/competitividad-y-normatividad-normalizacion"
+  },
+  {
+    "pais": "México",
+    "categoria": "skincare_cosmetica",
+    "codigo": "NOM-141-SSA1/SCFI-2012 (Etiquetado cosmético)",
+    "organismo": "COFEPRIS",
+    "url_oficial": "https://www.gob.mx/cofepris"
+  },
+  {
+    "pais": "México",
+    "categoria": "alimentos",
+    "codigo": "NOM-051-SCFI/SSA1-2010 (Etiquetado frontal)",
+    "organismo": "COFEPRIS / DGN",
+    "url_oficial": "https://www.gob.mx/se/acciones-y-programas/competitividad-y-normatividad-normalizacion"
+  },
+  {
+    "pais": "México",
+    "categoria": "lacteos",
+    "codigo": "NOM-243-SSA1-2010 / NOM-155-SCFI-2012",
+    "organismo": "COFEPRIS / DGN",
+    "url_oficial": "https://www.gob.mx/cofepris"
+  },
+  {
+    "pais": "México",
+    "categoria": "limpieza",
+    "codigo": "NOM-189-SSA1/SCFI-2018 (Etiquetado de productos de aseo)",
+    "organismo": "COFEPRIS / DGN",
+    "url_oficial": "https://www.gob.mx/cofepris"
+  },
+  {
+    "pais": "Alemania",
+    "categoria": "audio_electronica",
+    "codigo": "CE-Kennzeichnung / DIN EN 62368-1 / RED (2014/53/EU)",
+    "organismo": "Bundesnetzagentur (BNetzA)",
+    "url_oficial": "https://www.bundesnetzagentur.de"
+  },
+  {
+    "pais": "Alemania",
+    "categoria": "tecnologia",
+    "codigo": "CE-Kennzeichnung / DIN EN 62368-1 / EMV-Richtlinie",
+    "organismo": "Bundesnetzagentur (BNetzA)",
+    "url_oficial": "https://www.bundesnetzagentur.de"
+  },
+  {
+    "pais": "Alemania",
+    "categoria": "skincare_cosmetica",
+    "codigo": "EU Kosmetik-Verordnung (EG) Nr. 1223/2009",
+    "organismo": "Bundesamt für Verbraucherschutz und Lebensmittelsicherheit (BVL)",
+    "url_oficial": "https://www.bvl.bund.de"
+  },
+  {
+    "pais": "Alemania",
+    "categoria": "alimentos",
+    "codigo": "Lebensmittel-, Bedarfsgegenstände- und Futtermittelgesetzbuch (LFGB) / LMIV",
+    "organismo": "Bundesamt für Verbraucherschutz und Lebensmittelsicherheit (BVL)",
+    "url_oficial": "https://www.bvl.bund.de"
+  },
+  {
+    "pais": "Alemania",
+    "categoria": "limpieza",
+    "codigo": "Detergenzienverordnung (EG) Nr. 648/2004",
+    "organismo": "Bundesanstalt für Arbeitsschutz und Arbeitsmedizin (BAuA)",
+    "url_oficial": "https://www.baua.de"
+  },
+  {
+    "pais": "EE.UU.",
+    "categoria": "audio_electronica",
+    "codigo": "FCC Part 15 / UL 62368-1 Standard for Audio/Video",
+    "organismo": "Federal Communications Commission (FCC) / CPSC",
+    "url_oficial": "https://www.fcc.gov"
+  },
+  {
+    "pais": "EE.UU.",
+    "categoria": "tecnologia",
+    "codigo": "FCC Part 15 Class B / UL Certification",
+    "organismo": "Federal Communications Commission (FCC)",
+    "url_oficial": "https://www.fcc.gov"
+  },
+  {
+    "pais": "EE.UU.",
+    "categoria": "skincare_cosmetica",
+    "codigo": "Modernization of Cosmetics Regulation Act of 2022 (MoCRA)",
+    "organismo": "U.S. Food and Drug Administration (FDA)",
+    "url_oficial": "https://www.fda.gov/cosmetics"
+  },
+  {
+    "pais": "EE.UU.",
+    "categoria": "alimentos",
+    "codigo": "FDA Food Safety Modernization Act (FSMA) / 21 CFR 101",
+    "organismo": "U.S. Food and Drug Administration (FDA)",
+    "url_oficial": "https://www.fda.gov/food"
+  },
+  {
+    "pais": "España",
+    "categoria": "audio_electronica",
+    "codigo": "Marcado CE / Directiva RED 2014/53/UE",
+    "organismo": "Ministerio para la Transformación Digital / Secretaría de Telecomunicaciones",
+    "url_oficial": "https://portal.mineco.gob.es"
+  },
+  {
+    "pais": "España",
+    "categoria": "skincare_cosmetica",
+    "codigo": "Reglamento (CE) 1223/2009 sobre productos cosméticos",
+    "organismo": "Agencia Española de Medicamentos y Productos Sanitarios (AEMPS)",
+    "url_oficial": "https://www.aemps.gob.es"
+  },
+  {
+    "pais": "España",
+    "categoria": "alimentos",
+    "codigo": "Reglamento (UE) 1169/2011 sobre información alimentaria",
+    "organismo": "Agencia Española de Seguridad Alimentaria y Nutrición (AESAN)",
+    "url_oficial": "https://www.aesan.gob.es"
+  },
+  {
+    "pais": "Francia",
+    "categoria": "audio_electronica",
+    "codigo": "Marquage CE / Directive RED 2014/53/UE",
+    "organismo": "Agence Nationale des Fréquences (ANFR)",
+    "url_oficial": "https://www.economie.gouv.fr/dgccrf"
+  },
+  {
+    "pais": "Francia",
+    "categoria": "skincare_cosmetica",
+    "codigo": "Règlement (CE) n° 1223/2009 sur les produits cosmétiques",
+    "organismo": "Agence nationale de sécurité du médicament et des produits de santé (ANSM)",
+    "url_oficial": "https://ansm.sante.fr"
+  },
+  {
+    "pais": "Reino Unido",
+    "categoria": "audio_electronica",
+    "codigo": "UKCA mark / Radio Equipment Regulations 2017",
+    "organismo": "Office for Product Safety and Standards (OPSS)",
+    "url_oficial": "https://www.gov.uk/government/organisations/office-for-product-safety-and-standards"
+  },
+  {
+    "pais": "Brasil",
+    "categoria": "audio_electronica",
+    "codigo": "Homologação Anatel / Certificação Inmetro",
+    "organismo": "Agência Nacional de Telecomunicações (Anatel) / Inmetro",
+    "url_oficial": "https://www.gov.br/inmetro"
+  },
+  {
+    "pais": "Japón",
+    "categoria": "audio_electronica",
+    "codigo": "PSE Mark (電気用品安全法) / Giteki (技適)",
+    "organismo": "Ministry of Economy, Trade and Industry (METI)",
+    "url_oficial": "https://www.meti.go.jp"
+  }
+]

@@ -37,12 +37,15 @@ function analyze(w, url) {
   if (!QED.isProductPage(w.document, site, url, entry)) return { mode: "none", entry };
   const data = QED.extract(w.document, u.hostname);
   const r = QED.match(index, data.candidates, data.title);
-  r.store = entry && entry.tipo === "tienda" ? { nombre: entry.nombre, group: index.groups[entry.g] } : null;
+  r.store = entry && entry.tipo === "tienda" ? { nombre: entry.nombre, group: index.groups[entry.g], id: entry.g, entry, modelo: entry.modelo, pais: entry.pais } : null;
   // Igual que content.js: alternativas locales según el tipo de producto y el país de la tienda
   const prep = QED.ALT.prepare(db, index);
   const cat = entry && entry.tipo === "tienda" ? QED.ALT.category(prep, r.found ? r.brand : r.brandText, data.title) : null;
   if (cat) r.alternativas = { cat, label: prep.cats[cat].label, pais: entry.pais, items: QED.ALT.suggest(prep, cat, entry.pais, r.group && r.group.id, null, 3),
     actualEsLocal: !!(r.group && QED.ALT.INDEP[r.group.tipo] && QED.ALT.countries(r.group.pais).includes(entry.pais)) };
+  if (QED.evaluateReliability) {
+    r.reliabilityEval = QED.evaluateReliability(data.reliability, r.group, cat, data.title, entry ? entry.pais : "México", entry);
+  }
   QED.showCard(r, {});
   return Object.assign({ mode: "producto", entry }, r);
 }
@@ -273,6 +276,53 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
                ownT.includes("Water extraction concessions") &&
                ownT.includes("Nestlé Annual Report (SIX)");
   check("Tarjeta en inglés: controlador_en, fondos_en, gobierno_en, fuente_en y país traducido", okEn, "Nestlé S.A. (EN card translated)");
+}
+
+// ---------------------------------------------------------------- Bloque B: Confiabilidad estricta por país y modelo
+{
+  const w = env("", "https://www.amazon.de/dp/B001");
+  const normsDE = w.QED.getApplicableNorms("audio_electronica", null, "Kopfhörer", "Alemania");
+  const normsStr = JSON.stringify(normsDE);
+  check("amazon.de: sin NOM ni PROFECO", !normsStr.includes("NOM") && !normsStr.includes("PROFECO") && normsStr.includes("CE"));
+}
+{
+  const url = "https://www.liverpool.com.mx/tienda/pdp/pantalla-samsung/1234";
+  const w = env(`<h1>Pantalla Samsung 55"</h1>${ld({ "@type": "Product", name: "Pantalla", brand: "Samsung" })}`, url);
+  const r = analyze(w, url);
+  check("liverpool.com.mx sin vendedor leído: «Tienda directa»", r.reliabilityEval && r.reliabilityEval.sellerType === "direct" && r.reliabilityEval.sellerName === "Liverpool");
+}
+{
+  const url1 = "https://www.amazon.com.mx/dp/B0CHINA";
+  const w1 = env(`<h1>Audífonos</h1><div>Enviado desde China</div>${ld({ "@type": "Product", name: "Audífonos", brand: "Sony" })}`, url1);
+  const r1 = analyze(w1, url1);
+  const t1 = cardText(w1);
+  const url2 = "https://www.amazon.com.mx/dp/B0LOCAL";
+  const w2 = env(`<h1>Audífonos</h1><div>Enviado desde México</div>${ld({ "@type": "Product", name: "Audífonos", brand: "Sony" })}`, url2);
+  const r2 = analyze(w2, url2);
+  const t2 = cardText(w2);
+  check("«Enviado desde China» en tienda MX → aviso; sin ese texto → sin aviso", t1.includes("Compra internacional") && !t2.includes("Compra internacional"));
+}
+{
+  const urlWithRating = "https://www.amazon.com.mx/dp/B0RATE";
+  const wWith = env(`<h1>Producto</h1>${ld({ "@type": "Product", name: "Producto", brand: "Sony", aggregateRating: { ratingValue: 4.7, reviewCount: 12480 } })}`, urlWithRating);
+  analyze(wWith, urlWithRating);
+  const tWith = cardText(wWith);
+  const urlNoRating = "https://www.amazon.com.mx/dp/B0NORATE";
+  const wNo = env(`<h1>Producto</h1>${ld({ "@type": "Product", name: "Producto", brand: "Sony" })}`, urlNoRating);
+  analyze(wNo, urlNoRating);
+  const tNo = cardText(wNo);
+  check("La calificación solo aparece si hay aggregateRating en el DOM", tWith.includes("4,7 de 5 · 12.480 reseñas") && !tNo.includes("Calificación en la tienda"));
+}
+{
+  const w = env("", "https://example.com/");
+  const legalMX = w.QED.getLegalWarranty("México");
+  const legalNone = w.QED.getLegalWarranty("PaisSinTabla");
+  check("La garantía legal solo aparece con url_oficial", legalMX && legalMX.url_oficial.startsWith("https://") && legalMX.minimo.includes("90 días naturales") && legalNone === null);
+}
+{
+  const w = env("", "https://example.com/");
+  const rel = w.QED.evaluateReliability({}, null, null, "", "México");
+  check("evaluateReliability no contiene score artificial", rel.score === undefined);
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

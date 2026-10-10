@@ -154,6 +154,9 @@ for gid, grp in brands["grupos"].items():
 json.dump(brands, open(prev_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("conservado del job:", kept)
 json.dump({"version": VERSION, "sitios": S}, open(os.path.join(ROOT, "data", "sites.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+import shutil
+shutil.copyfile(os.path.join(os.path.dirname(__file__), "garantias_pais.json"), os.path.join(ROOT, "data", "garantias_pais.json"))
+shutil.copyfile(os.path.join(os.path.dirname(__file__), "normas_pais.json"), os.path.join(ROOT, "data", "normas_pais.json"))
 
 # ---- Proyecto: de dónde descargan todos la base actualizada (gratis, sin claves) y a dónde se sugieren marcas
 PROY = json.load(open(os.path.join(os.path.dirname(__file__), "proyecto.json"), encoding="utf-8"))

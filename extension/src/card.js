@@ -239,7 +239,14 @@
 
   // ---------------------------------------------------------------- SECCIÓN 1: Confiabilidad
   function renderReliability(res) {
-    const rel = res.reliabilityEval || (QED.evaluateReliability ? QED.evaluateReliability({}, res.group, null, res.title) : null) || {};
+    const rel = res.reliabilityEval || (QED.evaluateReliability ? QED.evaluateReliability(
+      {},
+      res.group,
+      res.alternativas && res.alternativas.cat,
+      res.title,
+      (res.store && (res.store.pais || (res.store.entry && res.store.entry.pais))) || "México",
+      res.store && (res.store.entry || res.store)
+    ) : {}) || {};
     const notStated = t("rel_not_stated");
     const srcPage = t("src_page");
 
@@ -247,25 +254,45 @@
     const sellerVal = `${esc(rel.sellerName || notStated)}`;
     const sellerRow = dataRow(t("lbl_seller"), sellerVal, srcPage);
 
-    // Calificación
+    // Calificación de la tienda (solo si existe aggregateRating en la página)
     let ratingRow = "";
-    if (rel.sellerRating) {
-      ratingRow = dataRow(t("rel_seller_label"), esc(rel.sellerRating), srcPage);
+    if (rel.storeRating) {
+      ratingRow = dataRow(t("rel_seller_label"), esc(rel.storeRating), srcPage);
     }
 
     // Envío
     const shipText = rel.isFulfilledByPlatform ? t("ship_platform_fulfilled") : (rel.shipper ? rel.shipper : notStated);
     const shipRow = dataRow(t("lbl_shipping"), esc(shipText), srcPage);
 
-    // Garantía y devolución
+    // Aviso de compra internacional
+    let intlBox = "";
+    if (rel.internationalWarning) {
+      intlBox = `<div class="box-warn">${esc(rel.internationalWarning)}</div>`;
+    }
+
+    // Garantía legal por país (solo si tiene url_oficial)
+    let legalRow = "";
+    if (rel.legalWarranty && rel.legalWarranty.url_oficial) {
+      const legalVal = `Mínimo legal: ${esc(rel.legalWarranty.minimo)} (${esc(rel.legalWarranty.ley)})`;
+      const legalLink = `<a href="${esc(safe(rel.legalWarranty.url_oficial))}" target="_blank" rel="noopener noreferrer">${esc(rel.legalWarranty.ley)}</a>`;
+      legalRow = dataRow(`GARANTÍA LEGAL (${esc(rel.legalWarranty.pais)})`, legalVal, `Dato oficial: ${legalLink}`);
+    }
+
+    // Garantía y devolución indicada en página
     const policyText = [rel.returnPolicy, rel.warranty].filter(Boolean).join(" · ");
     const warrantyRow = dataRow(t("lbl_warranty"), policyText ? esc(policyText) : esc(notStated), srcPage);
 
-    // Normas aplicables
+    // Normas aplicables según país de la tienda
     let normsRow = "";
     if (rel.norms && rel.norms.length) {
-      const normsList = rel.norms.map((n) => `<div><b>${esc(n.code)}</b>${n.descKey ? ` · ${esc(t(n.descKey))}` : ""}</div>`).join("");
+      const normsList = rel.norms.map((n) => `<div><b>${esc(n.code)}</b>${n.organismo ? ` (${esc(n.organismo)})` : ""}${n.url ? ` · <a href="${esc(safe(n.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</div>`).join("");
       normsRow = dataRow(t("lbl_norms"), normsList, t("src_unverified"));
+    }
+
+    // Certificaciones mencionadas en la página
+    let certsRow = "";
+    if (rel.certificationsText) {
+      certsRow = dataRow("CERTIFICACIONES MENCIONADAS", esc(rel.certificationsText), srcPage);
     }
 
     // Alertas oficiales
@@ -275,7 +302,7 @@
       alertsRow = dataRow(t("lbl_official_alerts"), alertsList, t("src_official", { source: "Entidad oficial" }));
     }
 
-    // Caja de aviso
+    // Caja de aviso si requiere revisión
     let tipBox = "";
     if (rel.level === "check") {
       tipBox = `<div class="box-warn">${t("rel_tip_check")}</div>`;
@@ -285,8 +312,11 @@
       ${sellerRow}
       ${ratingRow}
       ${shipRow}
+      ${intlBox}
+      ${legalRow}
       ${warrantyRow}
       ${normsRow}
+      ${certsRow}
       ${alertsRow}
       ${tipBox}
     `;
