@@ -201,7 +201,7 @@ async function runJob(trigger) {
           if (n.conocida && n.verificable) {
             const base = n.grupo_id && groups[n.grupo_id];
             ver[key] = Object.assign({}, base || {}, base ? {} : { empresa: n.empresa, controlador: n.controlador, pais: n.pais, tipo: n.tipo, fondos: n.fondos, gobierno: n.gobierno, nota: n.nota }, {
-              marca: n.marca || p.brand, grupo_id: n.grupo_id || null, confianza: "Verificado (investigación IA con fuentes)",
+              marca: n.marca || p.brand, grupo_id: n.grupo_id || null, confianza: "Verificado",
               fuente: n.fuentes[0].titulo, url: n.fuentes[0].url, fuentes: n.fuentes, fecha_dato: n.fecha_dato, verifiedAt: Date.now(), model: r.model
             });
             cur.status = "verificada"; delete cache[key]; log.verified++;

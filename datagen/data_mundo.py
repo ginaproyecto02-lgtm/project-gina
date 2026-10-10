@@ -102,7 +102,7 @@ g("edreams","eDreams ODIGEO (eDreams, Opodo, GO Voyages)","Fondos; Permira y Ard
 g("kiwi","Kiwi.com","General Atlantic (mayoritario) y fundadores","Chequia","Capital privado",NC,"","",V,"Conocimiento del modelo")
 g("hopper","Hopper","Fundadores y fondos de capital riesgo","Canadá","Fundador + fondos",NC,"","",V,"Conocimiento del modelo")
 g("makemytrip","MakeMyTrip (MakeMyTrip, Goibibo)","Fondos; Trip.com Group fue su mayor accionista y redujo su participación en 2025","India","Fondos dispersos",P,"","",V,"Informe 20-F de MakeMyTrip")
-g("airbnb","Airbnb, Inc.","Sus fundadores (Chesky 13,7%, Blecharczyk 9,8%, Gebbia 7,6% de la clase A)","EE.UU.","Fundador + fondos","Vanguard (7,15%), BlackRock (~5%)","Regulación municipal del alquiler de corto plazo","Los fundadores venden acciones de forma programada.",OK,"Registros 13G en la SEC","https://blarkad.com/ticker/ABNB/ownership")
+g("airbnb","Airbnb, Inc.","Sus fundadores (Chesky 13,7%, Blecharczyk 9,8%, Gebbia 7,6% de la clase A)","EE.UU.","Fundador + fondos","Vanguard (7,15%), BlackRock (~5%)","Regulación municipal del alquiler de corto plazo","Los fundadores venden acciones de forma programada.",OK,"SEC DEF 14A (Beneficial Ownership Table)","https://www.sec.gov/Archives/edgar/data/1559720/000155972024000021/abnb-20240424.htm",controlador_en="Co-founders (Chesky 13.7%, Blecharczyk 9.8%, Gebbia 7.6% Class A voting power)",nota_en="Online marketplace for short-and-long-term homestays and experiences.",fuente_en="SEC Form DEF 14A")
 
 # ======================================================================
 # AEROLÍNEAS

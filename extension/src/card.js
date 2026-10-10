@@ -146,10 +146,6 @@
     const s = String(c || "");
     const i18n = I18N();
     const l = i18n.getLang();
-    if (/investigación IA|revalidado/i.test(s)) {
-      const lbl = { es: "✔ Verificado por investigación", en: "✔ Verified by research", de: "✔ Durch Recherche verifiziert", fr: "✔ Vérifié par recherche", it: "✔ Verificato dalla ricerca", ja: "✔ 調査により検証済み" }[l] || "✔ Verified by research";
-      return `<span class="chip ok">${lbl}</span>`;
-    }
     if (/^IA sin verificar/i.test(s)) {
       const lbl = { es: "🤖 IA · sin verificar", en: "🤖 AI · unverified", de: "🤖 KI · ungeprüft", fr: "🤖 IA · non vérifié", it: "🤖 IA · non verificato", ja: "🤖 AI · 未検証" }[l] || "🤖 AI · unverified";
       return `<span class="chip ia">${lbl}</span>`;

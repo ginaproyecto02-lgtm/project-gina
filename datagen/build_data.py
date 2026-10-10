@@ -107,6 +107,50 @@ if os.path.exists(prev_path):
             extra = [m for m in c.get("marcas", []) if norm(m) in names and m not in brands["categorias"][cid]["marcas"]]
             brands["categorias"][cid]["marcas"] += extra; kept["categorias"] += len(extra)
     brands["version"] = max(VERSION, str(prev.get("version", "")))  # nunca hacia atrás
+
+# ---- S7: Validación estricta de evidencias para grupos con confianza «Verificado»
+import csv, urllib.parse
+evidencias_path = os.path.join(os.path.dirname(__file__), "evidencias.csv")
+assert os.path.exists(evidencias_path), f"Falta el archivo de evidencias: {evidencias_path}"
+evidencias = {}
+with open(evidencias_path, encoding="utf-8") as f:
+    reader = csv.DictReader(f)
+    req_cols = {"grupo_id", "url_final", "nivel_dominio", "cita", "fecha_consulta", "archivo_url", "safe_browsing", "gleif_lei", "gleif_coincide", "factcheck", "aprobado_en_pr"}
+    assert req_cols.issubset(set(reader.fieldnames or [])), f"Columnas requeridas en evidencias.csv: {req_cols}"
+    for row in reader:
+        gid = row.get("grupo_id", "").strip()
+        if gid: evidencias[gid] = row
+
+dominios_path = os.path.join(os.path.dirname(__file__), "dominios.json")
+assert os.path.exists(dominios_path), f"Falta el archivo de dominios: {dominios_path}"
+DOMINIOS = json.load(open(dominios_path, encoding="utf-8"))
+
+def host_level(url):
+    host = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
+    for d in DOMINIOS.get("bloqueado", []):
+        if host == d or host.endswith("." + d): return "bloqueado"
+    for d in DOMINIOS.get("oficial", []):
+        if host == d or host.endswith("." + d): return "oficial"
+    for d in DOMINIOS.get("prensa_referencia", []):
+        if host == d or host.endswith("." + d): return "prensa_referencia"
+    return None
+
+for gid, grp in brands["grupos"].items():
+    if grp.get("confianza") == "Verificado":
+        assert gid in evidencias, f"Grupo verificado '{gid}' ({grp.get('empresa')}) sin fila en evidencias.csv"
+        ev = evidencias[gid]
+        assert ev.get("url_final") and ev["url_final"].startswith("https://"), f"Grupo '{gid}': url_final no válida en evidencias"
+        assert ev.get("cita") and len(ev["cita"].strip()) > 10, f"Grupo '{gid}': cita vacía o incompleta en evidencias"
+        assert ev.get("fecha_consulta"), f"Grupo '{gid}': falta fecha_consulta en evidencias"
+        assert ev.get("aprobado_en_pr"), f"Grupo '{gid}': falta aprobado_en_pr en evidencias"
+        assert ev.get("safe_browsing") == "ok", f"Grupo '{gid}': safe_browsing no es 'ok' ({ev.get('safe_browsing')})"
+        assert ev.get("nivel_dominio") in ("oficial", "primaria", "prensa_referencia"), f"Grupo '{gid}': nivel_dominio no válido ({ev.get('nivel_dominio')})"
+        assert ev.get("gleif_coincide") in ("si", "na"), f"Grupo '{gid}': conflicto con GLEIF ({ev.get('gleif_coincide')})"
+        assert ev.get("factcheck") in ("ok", "na"), f"Grupo '{gid}': factcheck con conflicto ({ev.get('factcheck')})"
+        hl = host_level(ev["url_final"])
+        assert hl != "bloqueado", f"Grupo '{gid}': dominio bloqueado en evidencias ({ev['url_final']})"
+        assert hl in ("oficial", "prensa_referencia"), f"Grupo '{gid}': dominio fuera de dominios.json ({ev['url_final']})"
+
 json.dump(brands, open(prev_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("conservado del job:", kept)
 json.dump({"version": VERSION, "sitios": S}, open(os.path.join(ROOT, "data", "sites.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)

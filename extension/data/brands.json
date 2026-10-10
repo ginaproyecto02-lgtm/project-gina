@@ -1,5 +1,5 @@
 {
- "version": "2026-10-10T0612",
+ "version": "2026-10-10T0642",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
  "grupos": {
   "walmart": {
@@ -3526,15 +3526,15 @@
    "gobierno": "Regulación municipal del alquiler de corto plazo",
    "nota": "Los fundadores venden acciones de forma programada.",
    "confianza": "Verificado",
-   "fuente": "Registros 13G en la SEC",
-   "url": "https://blarkad.com/ticker/ABNB/ownership",
+   "fuente": "SEC DEF 14A (Beneficial Ownership Table)",
+   "url": "https://www.sec.gov/Archives/edgar/data/1559720/000155972024000021/abnb-20240424.htm",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": "",
+   "controlador_en": "Co-founders (Chesky 13.7%, Blecharczyk 9.8%, Gebbia 7.6% Class A voting power)",
+   "nota_en": "Online marketplace for short-and-long-term homestays and experiences.",
    "fondos_en": "",
    "gobierno_en": "",
-   "fuente_en": ""
+   "fuente_en": "SEC Form DEF 14A"
   },
   "aeromexico": {
    "empresa": "Grupo Aeroméxico",

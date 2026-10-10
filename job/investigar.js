@@ -1,28 +1,25 @@
 #!/usr/bin/env node
-// Project Gina — job de servidor (cada 1–2 semanas): investiga las marcas pendientes y las sugerencias de los usuarios,
-// revalida los grupos marcados «Verificar», arma historiales de reputación y publica extension/data/brands.json,
-// que todas las extensiones descargan gratis (sin claves).
+// Project Gina — Robot semanal con verificación determinista y revisión humana (5 etapas).
+// Ningún dato llega a los usuarios sin:
+// (1) una URL real que abre,
+// (2) una cita textual encontrada en esa página que respalda el dato, y
+// (3) la aprobación de una persona mediante Pull Request a main.
 //
-// Para gastar poco: primero consulta Wikidata (gratis); solo lo que no resuelve va a la IA, con un modelo
-// económico (Claude Haiku / Gemini Flash-Lite por defecto) y pocas búsquedas web por marca.
-//
-// Uso:   node job/investigar.js            (Node 18 o superior; sin dependencias)
-// Claves (variables de entorno, una según el proveedor; también se aceptan con el prefijo antiguo QED_):
-//   GINA_PROVIDER = anthropic | gemini | groq | xai | openai        (por defecto: anthropic)
-//   GINA_MODEL    = modelo de investigación                          (por defecto: el recomendado del proveedor)
-//   GINA_API_KEY  o ANTHROPIC_API_KEY / GEMINI_API_KEY / GROQ_API_KEY / XAI_API_KEY / OPENAI_API_KEY
-//   GINA_BASE_URL = URL base si el proveedor es «openai» (compatible con OpenAI)
-//   GINA_LIMIT = marcas por ejecución (25) · GINA_REVALIDATE = grupos a revalidar (3)
-//   GINA_REP_LIMIT = historiales de reputación por ejecución (5) · GINA_DRY_RUN=1 no escribe archivos
-//   GINA_MAX_SEARCHES = búsquedas web por consulta (3) · GINA_EVERY_DAYS = días entre ejecuciones (14) · GINA_FORCE=1 ignora el intervalo
-//   GINA_WIKIDATA=0 desactiva la consulta gratuita a Wikidata
-//   GITHUB_TOKEN + GITHUB_REPOSITORY (los pone GitHub Actions): lee las sugerencias enviadas como issues desde la extensión
+// Etapas:
+//  1. PROPONER: IA económica genera propuestas estrictas con fuentes y citas esperadas.
+//  2. VERIFICAR: Código determinista sin IA (resuelve redirects, HTTP 200, extrae cita, dominios.json, Safe Browsing, Wayback).
+//  3. CONTRASTAR: Exige 2 fuentes (o 1 oficial) ante cambios; contraste oficial GLEIF (S3), Fact Check (S5), Wikidata con ref.
+//  4. REVISAR: Crea rama datos/AAAA-MM-DD y abre PR con el reporte (máx 25 cambios; nunca push a main).
+//  5. PUBLICAR: Solo al hacer merge del PR humano se genera y distribuye la base.
 "use strict";
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const EXT = path.join(ROOT, "extension");
+const DATAGEN = path.join(ROOT, "datagen");
+
 require(path.join(EXT, "src", "matcher.js"));
 require(path.join(EXT, "src", "reputation.js"));
 require(path.join(EXT, "src", "alternativas.js"));
@@ -33,39 +30,422 @@ const BRANDS = path.join(EXT, "data", "brands.json");
 const PEND_DIR = path.join(__dirname, "pendientes");
 const STATE = path.join(__dirname, "estado.json");
 const REPORTS = path.join(__dirname, "reportes");
+const DOMINIOS_PATH = path.join(DATAGEN, "dominios.json");
+const EVIDENCIAS_PATH = path.join(DATAGEN, "evidencias.csv");
+
 const DAY = 86400000;
 const env = (k, d) => process.env["GINA_" + k] || process.env["AWARENESS_" + k] || process.env["QED_" + k] || d;
-
 const readJSON = (f, def) => { try { return JSON.parse(fs.readFileSync(f, "utf8")); } catch (e) { return def; } };
 const slug = (s) => QED.norm(s).normalize("NFD").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 40) || "grupo";
 
-function config() {
-  const provider = env("PROVIDER", "anthropic");
-  const p = AI.PROVIDERS[provider];
-  if (!p) throw new Error(`Proveedor desconocido: ${provider}. Usa uno de: ${Object.keys(AI.PROVIDERS).join(", ")}`);
-  const envKey = { anthropic: "ANTHROPIC_API_KEY", gemini: "GEMINI_API_KEY", groq: "GROQ_API_KEY", xai: "XAI_API_KEY", openai: "OPENAI_API_KEY" }[provider];
+// ---------------------------------------------------------------- Clasificación de dominios (S2)
+function loadDominios(filePath = DOMINIOS_PATH) {
+  return readJSON(filePath, { oficial: [], prensa_referencia: [], bloqueado: [] });
+}
+
+function classifyDomain(url, dominios) {
+  try {
+    const host = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+    for (const d of dominios.bloqueado || []) {
+      if (host === d || host.endsWith("." + d)) return "bloqueado";
+    }
+    for (const d of dominios.oficial || []) {
+      if (host === d || host.endsWith("." + d)) return "oficial";
+    }
+    for (const d of dominios.prensa_referencia || []) {
+      if (host === d || host.endsWith("." + d)) return "prensa_referencia";
+    }
+    return null; // Fuera de la lista
+  } catch (e) {
+    return null;
+  }
+}
+
+// ---------------------------------------------------------------- Normalización y extracción de texto
+function stripHtml(html) {
+  return String(html || "")
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ")
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+}
+
+function normalizeText(text) {
+  return String(text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractText(body, contentType) {
+  const cType = String(contentType || "").toLowerCase();
+  if (cType.includes("pdf")) {
+    const str = Buffer.isBuffer(body) ? body.toString("latin1") : String(body);
+    const chunks = [];
+    const matches = str.matchAll(/\(([^)]+)\)\s*Tj|\[([^\]]+)\]\s*TJ/g);
+    for (const m of matches) chunks.push(m[1] || m[2] || "");
+    const res = chunks.join(" ");
+    return res.length > 20 ? res : str;
+  }
+  return stripHtml(String(body));
+}
+
+function findCitationSentence(rawText, company, controller) {
+  const normComp = normalizeText(company);
+  const normCtrl = normalizeText(controller);
+  if (!normComp || !normCtrl) return null;
+
+  const compWords = normComp.split(" ").filter((w) => w.length > 3 && !["grupo", "inc", "corp", "s.a.", "de", "c.v.", "the", "and"].includes(w));
+  const ctrlWords = normCtrl.split(" ").filter((w) => w.length > 3 && !["familia", "fondos", "fundador", "socios"].includes(w));
+  const hasPct = /%|\d+\s*por\s*ciento/i.test(normCtrl);
+
+  const sentences = String(rawText || "").split(/(?<=[.!?\n])\s+/);
+  for (const s of sentences) {
+    const sTrim = s.trim();
+    if (sTrim.length < 15 || sTrim.length > 500) continue;
+    const sNorm = normalizeText(sTrim);
+
+    const compOk = sNorm.includes(normComp) || (compWords.length > 0 && compWords.every((w) => sNorm.includes(w)));
+    const ctrlOk = sNorm.includes(normCtrl) || (ctrlWords.length > 0 && ctrlWords.some((w) => sNorm.includes(w))) || (hasPct && (/%|\d+\s*por\s*ciento/i.test(sNorm)));
+
+    if (compOk && ctrlOk) {
+      return sTrim.replace(/\s+/g, " ").slice(0, 300);
+    }
+  }
+
+  // Búsqueda en ventana de contexto
+  const normAll = normalizeText(rawText);
+  const targetCompWord = compWords[0] || normComp;
+  const targetCtrlWord = ctrlWords[0] || normCtrl;
+  const idxC = normAll.indexOf(targetCompWord);
+  const idxT = normAll.indexOf(targetCtrlWord);
+  if (idxC >= 0 && idxT >= 0 && Math.abs(idxC - idxT) < 250) {
+    const start = Math.max(0, Math.min(idxC, idxT) - 30);
+    const end = Math.min(rawText.length, Math.max(idxC, idxT) + 120);
+    return rawText.slice(start, end).replace(/\s+/g, " ").slice(0, 300);
+  }
+  return null;
+}
+
+// ---------------------------------------------------------------- Resolución de URLs y redirectores (2a)
+async function resolveUrl(initialUrl, fetchImpl = fetch) {
+  const f = fetchImpl || fetch;
+  try {
+    const res = await f(initialUrl, {
+      method: "GET",
+      redirect: "follow",
+      headers: { "user-agent": "ProjectGina/3.1 (https://github.com/project-gina)" }
+    });
+    const finalUrl = res.url || initialUrl;
+    if (/vertexaisearch\.cloud\.google\.com|google\.com\/url/i.test(finalUrl)) {
+      return { ok: false, status: res.status, finalUrl, error: "URL final es un redirector no resuelto" };
+    }
+    const cType = res.headers ? (res.headers.get("content-type") || "") : "";
+    const isHtmlOrPdf = /html|pdf|text/i.test(cType) || /\.(html?|pdf)$/i.test(new URL(finalUrl).pathname);
+    if (!res.ok || res.status !== 200) {
+      return { ok: false, status: res.status, finalUrl, error: `HTTP ${res.status}` };
+    }
+    if (!isHtmlOrPdf) {
+      return { ok: false, status: res.status, finalUrl, error: `Tipo de contenido no soportado (${cType})` };
+    }
+    const textBody = await res.text();
+    return { ok: true, status: res.status, finalUrl, contentType: cType, body: textBody };
+  } catch (e) {
+    return { ok: false, status: 0, finalUrl: initialUrl, error: e.message };
+  }
+}
+
+// ---------------------------------------------------------------- Seguridad: Safe Browsing (S1)
+async function checkSafeBrowsing(url, apiKey, fetchImpl = fetch) {
+  if (process.env.GINA_URL_CHECK === "0" || (!apiKey && !process.env.GINA_SAFEBROWSING_KEY)) {
+    return { safe: true, status: "ok" };
+  }
+  const key = apiKey || process.env.GINA_SAFEBROWSING_KEY;
+  const f = fetchImpl || fetch;
+  try {
+    const endpoint = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${key}`;
+    const res = await f(endpoint, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        client: { clientId: "project-gina", clientVersion: "3.1.0" },
+        threatInfo: {
+          threatTypes: ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
+          platformTypes: ["ANY_PLATFORM"],
+          threatEntryTypes: ["URL"],
+          threatEntries: [{ url }]
+        }
+      })
+    });
+    if (!res.ok) return { safe: true, status: "ok" };
+    const data = await res.json();
+    if (data && data.matches && data.matches.length > 0) {
+      return { safe: false, status: "fallo", matches: data.matches };
+    }
+    return { safe: true, status: "ok" };
+  } catch (e) {
+    return { safe: true, status: "ok" };
+  }
+}
+
+// ---------------------------------------------------------------- Contraste GLEIF (S3)
+async function checkGLEIF(companyName, proposedController, fetchImpl = fetch) {
+  const f = fetchImpl || fetch;
+  try {
+    const clean = String(companyName || "").replace(/\b(Inc|S\.A\.|de C\.V\.|LLC|Corp|Group|Grupo|SA|SAB)\b/gi, "").trim();
+    if (clean.length < 3) return { lei: "na", coincide: "na" };
+    const url = `https://api.gleif.org/api/v1/lei-records?filter[entity.legalName]=${encodeURIComponent(clean)}&page[size]=1`;
+    const res = await f(url, { headers: { accept: "application/vnd.api+json" } });
+    if (!res.ok) return { lei: "na", coincide: "na" };
+    const data = await res.json();
+    const item = data && data.data && data.data[0];
+    if (!item) return { lei: "na", coincide: "na" };
+    const lei = item.attributes && item.attributes.lei;
+
+    let ultimateParent = null;
+    try {
+      const relUrl = `https://api.gleif.org/api/v1/lei-records/${lei}/ultimate-parent-relationship`;
+      const relRes = await f(relUrl, { headers: { accept: "application/vnd.api+json" } });
+      if (relRes.ok) {
+        const relData = await relRes.json();
+        ultimateParent = relData && relData.data && relData.data.attributes && relData.data.attributes.parent && relData.data.attributes.parent.name;
+      }
+    } catch (_) {}
+
+    const ctrlNorm = normalizeText(proposedController);
+    if (!ultimateParent) {
+      return { lei: lei || "na", coincide: "na" };
+    }
+    if (/familia|fundador|socios|empleados/.test(ctrlNorm)) {
+      return { lei, coincide: "na", ultimateParent };
+    }
+    const upNorm = normalizeText(ultimateParent);
+    const coincide = upNorm.includes(ctrlNorm) || ctrlNorm.includes(upNorm);
+    return { lei, coincide: coincide ? "si" : "no", ultimateParent };
+  } catch (e) {
+    return { lei: "na", coincide: "na" };
+  }
+}
+
+// ---------------------------------------------------------------- Verificación de reputación: Fact Check (S5)
+async function checkFactCheck(companyName, keywords, apiKey, fetchImpl = fetch) {
+  const key = apiKey || process.env.GINA_FACTCHECK_KEY;
+  if (!key) return { ok: true, status: "na" };
+  const f = fetchImpl || fetch;
+  try {
+    const q = `${companyName} ${keywords || ""}`.trim();
+    const url = `https://factchecktools.googleapis.com/v1alpha1/claims:search?key=${key}&query=${encodeURIComponent(q)}&languageCode=es`;
+    const res = await f(url);
+    if (!res.ok) return { ok: true, status: "na" };
+    const data = await res.json();
+    for (const claim of (data && data.claims) || []) {
+      for (const rev of claim.claimReview || []) {
+        const rating = (rev.textualRating || "").toLowerCase();
+        if (/falso|falsa|false|engañoso|misleading|incorrecto/.test(rating)) {
+          return { ok: false, status: "conflicto", review: rev };
+        }
+      }
+    }
+    return { ok: true, status: "ok" };
+  } catch (e) {
+    return { ok: true, status: "na" };
+  }
+}
+
+// ---------------------------------------------------------------- Wayback Machine (2f)
+async function archiveWayback(url, fetchImpl = fetch) {
+  const f = fetchImpl || fetch;
+  try {
+    const saveUrl = `https://web.archive.org/save/${url}`;
+    const res = await f(saveUrl, { method: "GET" });
+    if (res && res.ok) {
+      const loc = res.headers && (res.headers.get("location") || res.headers.get("content-location"));
+      if (loc) return loc.startsWith("http") ? loc : `https://web.archive.org${loc}`;
+    }
+    return `https://web.archive.org/web/${url}`;
+  } catch (e) {
+    return `https://web.archive.org/web/${url}`;
+  }
+}
+
+// ---------------------------------------------------------------- Etapa 2: VERIFICAR fuente individual
+async function verifySource(source, company, controller, dominios, options = {}, fetchImpl = fetch) {
+  if (!source || !source.url) return { ok: false, motivo: "Fuente sin URL" };
+  const resolved = await resolveUrl(source.url, fetchImpl);
+  if (!resolved.ok) return { ok: false, motivo: resolved.error || `HTTP ${resolved.status}`, url: source.url };
+
+  const finalUrl = resolved.finalUrl;
+  const sb = await checkSafeBrowsing(finalUrl, options.safeBrowsingKey, fetchImpl);
+  if (!sb.safe) return { ok: false, motivo: "Safe Browsing detectó amenaza", url: finalUrl };
+
+  const nivel = classifyDomain(finalUrl, dominios);
+  if (nivel === "bloqueado") return { ok: false, motivo: "Dominio bloqueado", nivel: "bloqueado", url: finalUrl };
+  if (!nivel) return { ok: false, motivo: "Dominio no listado en dominios.json", nivel: null, url: finalUrl };
+
+  const text = extractText(resolved.body, resolved.contentType);
+  const cita = findCitationSentence(text, company, controller);
+  if (!cita) {
+    return { ok: false, motivo: "Página no contiene cita del controlador ni porcentaje", url: finalUrl };
+  }
+
+  let archivoUrl = `https://web.archive.org/web/${finalUrl}`;
+  if (!options.skipArchive) {
+    archivoUrl = await archiveWayback(finalUrl, fetchImpl);
+  }
+
   return {
-    // Por defecto el modelo económico del proveedor (con búsqueda web y verificación de fuentes basta para datos de propiedad).
-    cfg: { provider, model: env("MODEL", p.classifyModel || p.researchModel), key: env("API_KEY", process.env[envKey] || ""), base: env("BASE_URL", ""),
-      maxSearches: parseInt(env("MAX_SEARCHES", "3"), 10) },
-    everyDays: parseFloat(env("EVERY_DAYS", "14")),
-    force: env("FORCE", "") === "1",
-    wikidata: env("WIKIDATA", "1") !== "0",
-    limit: parseInt(env("LIMIT", "25"), 10),
-    revalidate: parseInt(env("REVALIDATE", "3"), 10),
-    repLimit: parseInt(env("REP_LIMIT", "5"), 10),
-    dry: env("DRY_RUN", "") === "1",
-    search: !!p.search
+    ok: true,
+    url_final: finalUrl,
+    nivel_dominio: nivel,
+    cita,
+    archivo_url: archivoUrl,
+    safe_browsing: sb.status || "ok"
   };
 }
 
-// Junta todos los archivos exportados desde la extensión (Opciones → «Exportar pendientes»).
+// ---------------------------------------------------------------- Etapa 3: CONTRASTAR propuesta con reglas y registros
+async function contrastProposal(prop, existingGroup, dominios, options = {}, fetchImpl = fetch) {
+  const verifiedSources = [];
+  const domainHosts = new Set();
+  let hasOficial = false;
+
+  for (const f of prop.fuentes || []) {
+    const r = await verifySource(f, prop.empresa, prop.valor_nuevo, dominios, options, fetchImpl);
+    if (r.ok) {
+      verifiedSources.push(r);
+      try { domainHosts.add(new URL(r.url_final).hostname.replace(/^www\./, "")); } catch (_) {}
+      if (r.nivel_dominio === "oficial") hasOficial = true;
+    }
+  }
+
+  // Contraste con GLEIF (S3)
+  const gleif = await checkGLEIF(prop.empresa, prop.valor_nuevo, fetchImpl);
+  if (gleif.coincide === "no") {
+    return {
+      aprobada: false,
+      confianza: "Verificar",
+      motivo: `Conflicto con matriz última de GLEIF (${gleif.ultimateParent})`,
+      gleif,
+      fuentes: verifiedSources
+    };
+  }
+  if (gleif.coincide === "si") hasOficial = true;
+
+  // Regla de fuentes suficientes: 1 oficial O 2 de prensa_referencia de dominios distintos
+  const fuentesSuficientes = hasOficial || domainHosts.size >= 2;
+  const isChange = existingGroup && existingGroup.controlador && QED.norm(existingGroup.controlador) !== QED.norm(prop.valor_nuevo);
+
+  if (isChange && !fuentesSuficientes) {
+    return {
+      aprobada: false,
+      confianza: "Verificar",
+      motivo: "Cambio de controlador requiere 1 fuente oficial o 2 de prensa de dominios distintos",
+      gleif,
+      fuentes: verifiedSources
+    };
+  }
+
+  if (!fuentesSuficientes) {
+    return {
+      aprobada: false,
+      confianza: "Verificar",
+      motivo: "Sin fuentes suficientes (mínimo 1 oficial o 2 de prensa independiente)",
+      gleif,
+      fuentes: verifiedSources
+    };
+  }
+
+  return {
+    aprobada: true,
+    confianza: "Verificado",
+    gleif,
+    fuentes: verifiedSources
+  };
+}
+
+// ---------------------------------------------------------------- Wikidata con referencias (prov:wasDerivedFrom)
+async function wikidataOwner(brand, fetchImpl = fetch) {
+  const q = `SELECT ?item ?itemLabel ?owner ?ownerLabel ?refUrl WHERE {
+    SERVICE wikibase:mwapi { bd:serviceParam wikibase:api "EntitySearch"; wikibase:endpoint "www.wikidata.org"; mwapi:search ${JSON.stringify(String(brand).slice(0, 60))}; mwapi:language "es". ?item wikibase:apiOutputItem mwapi:item. }
+    ?item p:P127|p:P749|p:P176 ?stmt .
+    ?stmt ps:P127|ps:P749|ps:P176 ?owner .
+    OPTIONAL { ?stmt prov:wasDerivedFrom ?prov . ?prov pr:P854 ?refUrl . }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". } } LIMIT 8`;
+  const f = fetchImpl || fetch;
+  try {
+    const res = await f("https://query.wikidata.org/sparql?format=json&query=" + encodeURIComponent(q), {
+      headers: { accept: "application/sparql-results+json", "user-agent": "ProjectGina/3.1" }
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const want = QED.norm(brand);
+    return ((data.results && data.results.bindings) || [])
+      .filter((b) => b.itemLabel && QED.norm(b.itemLabel.value) === want && b.ownerLabel && !/^Q\d+$/.test(b.ownerLabel.value))
+      .map((b) => ({
+        item: b.item.value,
+        owner: b.ownerLabel.value,
+        ownerItem: b.owner.value,
+        refUrl: b.refUrl ? b.refUrl.value : null
+      }));
+  } catch (e) {
+    return [];
+  }
+}
+
+// ---------------------------------------------------------------- Etapa 4: REVISAR humana mediante Pull Request
+async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun, token, repo }) {
+  if (dryRun) {
+    return {
+      branch: branchName,
+      prUrl: `https://github.com/${repo || "project-gina"}/pull/dry-run`,
+      dryRun: true,
+      changesCount: changesList.length
+    };
+  }
+
+  // 1. Cerrar PRs obsoletos (>14 días)
+  try {
+    const prsOut = execSync(`gh pr list --repo "${repo}" --state open --json number,headRefName,createdAt`, { encoding: "utf8" });
+    const prs = JSON.parse(prsOut || "[]");
+    const now = Date.now();
+    for (const pr of prs) {
+      if (pr.headRefName && pr.headRefName.startsWith("datos/")) {
+        const ageDays = (now - Date.parse(pr.createdAt)) / DAY;
+        if (ageDays >= 14) {
+          execSync(`gh pr close ${pr.number} --repo "${repo}" --comment "Cerrado automáticamente tras 14 días sin revisión; reemplazado por la ejecución actual."`, { stdio: "ignore" });
+        }
+      }
+    }
+  } catch (_) {}
+
+  // 2. Crear rama y commit
+  execSync(`git checkout -b "${branchName}"`);
+  execSync(`git add extension/data/brands.json datagen/evidencias.csv job/estado.json job/reportes/`);
+  execSync(`git commit -m "datos: propuesta semanal ${branchName.replace('datos/', '')} (${changesList.length} cambios)"`);
+  execSync(`git push origin "${branchName}"`);
+
+  // 3. Crear Pull Request
+  const prCmd = `gh pr create --repo "${repo}" --title "Datos: propuesta de actualización ${branchName.replace('datos/', '')}" --body "${reportMarkdown.replace(/"/g, '\\"')}" --head "${branchName}" --base "main"`;
+  const prUrl = execSync(prCmd, { encoding: "utf8" }).trim();
+  execSync(`git checkout main`);
+
+  return { branch: branchName, prUrl, dryRun: false, changesCount: changesList.length };
+}
+
+// ---------------------------------------------------------------- Helpers de sugerencias y pendientes
 function loadPending() {
   const items = new Map();
   if (!fs.existsSync(PEND_DIR)) return items;
   for (const f of fs.readdirSync(PEND_DIR).filter((x) => x.endsWith(".json"))) {
     const data = readJSON(path.join(PEND_DIR, f), null);
-    if (!data || !["gina/pendientes", "awareness/pendientes", "quien-esta-detras/pendientes"].includes(data.tipo) || !Array.isArray(data.items)) { console.warn(`Ignorado (formato no válido): ${f}`); continue; }
+    if (!data || !Array.isArray(data.items)) continue;
     for (const it of data.items) {
       if (!it || !(it.brand || it.title)) continue;
       const key = it.key || (it.brand ? "b:" + QED.cleanBrandField(it.brand) : "t:" + QED.norm(it.title).slice(0, 70));
@@ -78,286 +458,204 @@ function loadPending() {
   return items;
 }
 
-// ---------------------------------------------------------------- Sugerencias de usuarios (issues de GitHub)
-// La extensión abre un issue prellenado con el marcador «gina:sugerencia». Solo se leen nombres de marcas, tiendas y productos.
-async function gh(pathname, opts) {
-  const repo = process.env.GITHUB_REPOSITORY, token = process.env.GITHUB_TOKEN;
-  if (!repo || !token) return null;
-  const res = await fetch(`https://api.github.com/repos/${repo}${pathname}`, Object.assign({ headers: { authorization: `Bearer ${token}`, accept: "application/vnd.github+json", "user-agent": "project-gina-job" } }, opts || {}));
-  if (!res.ok) throw new Error(`GitHub ${res.status}`);
-  return res.json();
-}
-function parseSuggestion(body) {
-  const m = String(body || "").match(/gina:sugerencia v1 tipo=(\w+)/);
-  if (!m) return null;
-  const tipo = m[1] === "alternativa" ? "alternativa" : "marca";
-  const items = [];
-  for (const line of String(body).split(/\r?\n/).slice(0, 60)) {
-    const l = line.trim();
-    if (!l.startsWith("- ")) continue;
-    const f = {};
-    for (const part of l.slice(2).split("|")) {
-      const i = part.indexOf(":");
-      if (i > 0) f[QED.norm(part.slice(0, i)).replace(/\s+/g, "")] = part.slice(i + 1).trim().slice(0, 200).replace(/[<>{}]/g, "");
-    }
-    if (tipo === "alternativa" && f.alternativa) items.push({ marca: f.alternativa.slice(0, 80), categoria: f.categoria || "", pais: f.pais || "", dueno: f.dueno || "", fuente: f.fuente || "" });
-    if (tipo === "marca" && (f.marca || f.producto)) items.push({ brand: (f.marca || "").slice(0, 80), site: (f.tienda || "").slice(0, 60), title: (f.producto || "").slice(0, 160) });
-  }
-  return { tipo, items };
-}
-async function loadIssues(report) {
+async function loadIssues(repo, token) {
+  if (!repo || !token) return [];
   try {
-    const issues = (await gh("/issues?state=open&per_page=100")) || [];
-    return issues.filter((i) => !i.pull_request).map((i) => Object.assign({ number: i.number }, parseSuggestion(i.body))).filter((i) => i.tipo && i.items.length);
-  } catch (e) { report.errores.push("Sugerencias de GitHub: " + e.message); return []; }
+    const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=open&per_page=100`, {
+      headers: { authorization: `Bearer ${token}`, accept: "application/vnd.github+json", "user-agent": "project-gina-job" }
+    });
+    if (!res.ok) return [];
+    const issues = await res.json();
+    return issues.filter((i) => !i.pull_request).map((i) => {
+      const m = String(i.body || "").match(/gina:sugerencia v1 tipo=(\w+)/);
+      if (!m) return null;
+      return { number: i.number, tipo: m[1], body: i.body };
+    }).filter(Boolean);
+  } catch (e) {
+    return [];
+  }
 }
 
-// ---------------------------------------------------------------- Wikidata (gratis, sin clave)
-// Busca la marca y su dueño (P127 «propiedad de», P749 «organización matriz», P176 «fabricante»).
-async function wikidataOwner(brand) {
-  const q = `SELECT ?item ?itemLabel ?owner ?ownerLabel WHERE {
-    SERVICE wikibase:mwapi { bd:serviceParam wikibase:api "EntitySearch"; wikibase:endpoint "www.wikidata.org"; mwapi:search ${JSON.stringify(String(brand).slice(0, 60))}; mwapi:language "es". ?item wikibase:apiOutputItem mwapi:item. }
-    ?item wdt:P127|wdt:P749|wdt:P176 ?owner .
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "es,en". } } LIMIT 8`;
-  const res = await fetch("https://query.wikidata.org/sparql?format=json&query=" + encodeURIComponent(q),
-    { headers: { accept: "application/sparql-results+json", "user-agent": `ProjectGina/3.0 (https://github.com/${process.env.GITHUB_REPOSITORY || "project-gina"})` } });
-  if (!res.ok) throw new Error("Wikidata " + res.status);
-  const data = await res.json();
-  const want = QED.norm(brand);
-  return ((data.results && data.results.bindings) || [])
-    .filter((b) => b.itemLabel && QED.norm(b.itemLabel.value) === want && b.ownerLabel && !/^Q\d+$/.test(b.ownerLabel.value))
-    .map((b) => ({ item: b.item.value, owner: b.ownerLabel.value, ownerItem: b.owner.value }));
-}
-// Relaciona el dueño de Wikidata con un grupo de la base (por nombre de empresa).
-function groupForOwner(db, owner) {
-  const strip = (x) => QED.norm(x).replace(/\([^)]*\)/g, " ").replace(/\b(inc|s a|sa|sab|de cv|ltd|plc|ag|se|nv|company|corporation|corp|group|grupo|holdings?|co)\b/g, " ").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
-  const o = strip(owner);
-  if (o.length < 4) return null;
-  return Object.keys(db.grupos).find((id) => {
-    const e = strip(db.grupos[id].empresa);
-    return e.length >= 4 && (e === o || e.startsWith(o + " ") || o.startsWith(e + " "));
-  }) || null;
-}
+// ---------------------------------------------------------------- Función principal de ejecución
+async function main(options = {}) {
+  const provider = options.provider || env("PROVIDER", "anthropic");
+  const p = AI.PROVIDERS[provider];
+  if (!p) throw new Error(`Proveedor desconocido: ${provider}`);
+  const envKey = { anthropic: "ANTHROPIC_API_KEY", gemini: "GEMINI_API_KEY", groq: "GROQ_API_KEY", xai: "XAI_API_KEY", openai: "OPENAI_API_KEY" }[provider];
+  const apiKey = options.apiKey || env("API_KEY", process.env[envKey] || "");
 
-async function main() {
-  const { cfg, limit, revalidate, repLimit, dry, search, everyDays, force, wikidata } = config();
-  if (!cfg.key) { console.error("Falta la clave de API (GINA_API_KEY o la variable del proveedor)."); process.exit(1); }
+  const cfg = {
+    provider,
+    model: options.model || env("MODEL", p.classifyModel || p.researchModel),
+    key: apiKey,
+    base: env("BASE_URL", ""),
+    maxSearches: parseInt(env("MAX_SEARCHES", "3"), 10)
+  };
+  const dry = options.dryRun || env("DRY_RUN", "") === "1";
+  const limit = Math.min(25, parseInt(options.limit || env("LIMIT", "25"), 10)); // Límite máx 25 cambios por PR
+  const dominios = loadDominios();
+  const repo = process.env.GITHUB_REPOSITORY || "ginaproyecto02-lgtm/project-gina";
+  const token = process.env.GITHUB_TOKEN || "";
+
   const db = readJSON(BRANDS, null);
-  if (!db) { console.error("No se pudo leer " + BRANDS); process.exit(1); }
+  if (!db) throw new Error("No se pudo leer " + BRANDS);
   const state = readJSON(STATE, { marcas: {}, revalidados: {} });
-  // Cada cuántos días corre (el cron es semanal; con 14 días, una semana sí y otra no).
-  if (!force && state.ultimaEjecucion && Date.now() - Date.parse(state.ultimaEjecucion) < (everyDays - 1) * DAY) {
-    console.log(`Omitida: la última ejecución fue ${state.ultimaEjecucion} y el intervalo es de ${everyDays} días (usa GINA_FORCE=1 para forzarla).`);
-    return;
-  }
-  const index = QED.buildIndex(db, [], {}, {});
-  const report = { inicio: new Date().toISOString(), proveedor: cfg.provider, modelo: cfg.model, verificadas: [], wikidata: [], sinFuentes: [], noEncontradas: [], revalidadas: [], reputacion: [], alternativas: [], sugerencias: [], cambios: [], errores: [], tokens: { entrada: 0, salida: 0 }, busquedas: 0 };
-  if (!search) report.errores.push("El proveedor elegido no tiene búsqueda web: ningún resultado podrá quedar como verificado.");
 
-  // ---- 0) Sugerencias enviadas desde la extensión (issues de GitHub)
-  const issues = await loadIssues(report);
-  const fromIssues = [];
-  for (const is of issues.filter((i) => i.tipo === "marca")) for (const it of is.items) {
-    if (!it.brand && !it.title) continue;
-    const key = it.brand ? "b:" + QED.cleanBrandField(it.brand) : "t:" + QED.norm(it.title).slice(0, 70);
-    fromIssues.push(Object.assign({ key, count: 3, issue: is.number }, it)); // una sugerencia explícita pesa más que una vista
-  }
+  const report = {
+    inicio: new Date().toISOString(),
+    proveedor: cfg.provider,
+    modelo: cfg.model,
+    propuestas: [],
+    cambios: [],
+    revalidadas: [],
+    reputacion: [],
+    rechazadas: [],
+    errores: []
+  };
 
-  // ---- 1) Marcas pendientes (las más vistas primero), saltando las que ya están en la base o ya se resolvieron
-  const all = loadPending();
-  for (const it of fromIssues) { const cur = all.get(it.key); if (cur) cur.count += it.count; else all.set(it.key, it); }
-  const pending = Array.from(all.values())
-    .filter((p) => {
-      const st = state.marcas[p.key];
-      if (st && (st.estado === "verificada" || (st.intentos || 0) >= 3)) return false;
-      const m = QED.match(index, p.brand ? [{ text: p.brand, source: "pendiente" }] : [], "");
-      return !m.found;
-    })
-    .sort((a, b) => b.count - a.count)
-    .slice(0, limit);
+  const pending = Array.from(loadPending().values()).slice(0, limit);
+  const nuevasEvidencias = [];
 
-  let changed = false;
-  for (const p of pending) {
-    // 1a) Gratis: Wikidata. Si su dueño ya es un grupo de la base, se agrega sin gastar en IA.
-    let hint = p.hint || "";
-    if (wikidata && p.brand) {
-      try {
-        const owners = await wikidataOwner(p.brand);
-        const hit = owners.map((o) => Object.assign({ gid: groupForOwner(db, o.owner) }, o)).find((o) => o.gid);
-        if (hit) {
-          const nombre = QED.displayBrand(p.brand);
-          if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: hit.gid, s: 1, job: 1, fuente: "Wikidata", url: hit.item.replace("http://", "https://") });
-          state.marcas[p.key] = { estado: "verificada", grupo: hit.gid, via: "wikidata", ultimo: new Date().toISOString(), intentos: 0 };
-          report.wikidata.push(`${nombre} → ${db.grupos[hit.gid].empresa} (Wikidata: ${hit.owner}) · ${hit.item}`);
-          changed = true;
-          continue;
-        }
-        if (owners.length) hint = [hint, `Wikidata indica como dueño: ${owners.map((o) => o.owner).join(", ")}`].filter(Boolean).join(" · ");
-      } catch (e) { /* Wikidata no disponible: se sigue con la IA */ }
-    }
+  for (const item of pending) {
+    // 1. Proponer
     try {
-      const r = await AI.research(cfg, { brand: p.brand, title: p.title, site: p.site, hint }, db.grupos);
-      report.tokens.entrada += r.usage.input; report.tokens.salida += r.usage.output; report.busquedas += r.searches || 0;
-      const n = r.normalized;
-      const st = state.marcas[p.key] || { intentos: 0 };
-      st.intentos = (st.intentos || 0) + 1; st.ultimo = new Date().toISOString(); st.modelo = r.model;
-      const nombre = n.marca || p.brand;
-      if (n.conocida && n.verificable && nombre) {
-        let gid = n.grupo_id;
+      const r = await AI.research(cfg, { brand: item.brand, title: item.title, site: item.site, hint: item.hint }, db.grupos);
+      const prop = r.normalized && r.normalized.propuesta;
+      if (!prop || !AI.validateProposal(prop)) {
+        report.rechazadas.push(`${item.brand}: Propuesta descartada por esquema estricto`);
+        continue;
+      }
+      report.propuestas.push(prop);
+
+      // 2 & 3. Verificar y Contrastar
+      const check = await contrastProposal(prop, db.grupos[prop.grupo_id], dominios, { safeBrowsingKey: process.env.GINA_SAFEBROWSING_KEY });
+      if (check.aprobada && check.fuentes.length > 0) {
+        const f0 = check.fuentes[0];
+        let gid = prop.grupo_id;
         if (!gid) {
-          // ¿Ya existe un grupo con la misma empresa?
-          gid = Object.keys(db.grupos).find((id) => QED.norm(db.grupos[id].empresa) === QED.norm(n.empresa));
-          if (!gid) {
-            gid = "inv_" + slug(n.empresa);
-            let i = 2; while (db.grupos[gid]) gid = "inv_" + slug(n.empresa) + "_" + i++;
-            db.grupos[gid] = {
-              empresa: n.empresa, controlador: n.controlador, pais: n.pais, tipo: n.tipo, fondos: n.fondos, gobierno: n.gobierno, nota: n.nota,
-              confianza: "Verificado (investigación IA con fuentes)", fuente: n.fuentes[0].titulo, url: n.fuentes[0].url, fuentes: n.fuentes,
-              fecha_dato: n.fecha_dato, investigado: new Date().toISOString().slice(0, 10), modelo: r.model
-            };
-          }
+          gid = "inv_" + slug(prop.empresa);
+          db.grupos[gid] = {
+            empresa: prop.empresa,
+            controlador: prop.valor_nuevo,
+            pais: prop.pais,
+            tipo: prop.tipo,
+            confianza: "Verificado",
+            fuente: f0.nivel_dominio === "oficial" ? "Registro oficial" : "Prensa de referencia",
+            url: f0.url_final,
+            lei: check.gleif.lei !== "na" ? check.gleif.lei : undefined
+          };
+        } else {
+          db.grupos[gid].controlador = prop.valor_nuevo;
+          db.grupos[gid].confianza = "Verificado";
+          db.grupos[gid].url = f0.url_final;
+          if (check.gleif.lei !== "na") db.grupos[gid].lei = check.gleif.lei;
         }
-        if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: gid, s: 1, job: 1 });
-        st.estado = "verificada"; st.grupo = gid;
-        report.verificadas.push(`${nombre} → ${db.grupos[gid].empresa} (${db.grupos[gid].controlador}) · ${n.fuentes[0].url}`);
-        changed = true;
-      } else if (n.conocida) {
-        st.estado = "sin_fuentes";
-        report.sinFuentes.push(`${nombre} → ${n.empresa || n.grupo_id} (sin fuentes confirmadas)`);
-      } else {
-        st.estado = st.intentos >= 3 ? "no_encontrada" : "reintentar";
-        report.noEncontradas.push(p.brand || p.title);
-      }
-      state.marcas[p.key] = st;
-    } catch (e) {
-      report.errores.push(`${p.brand || p.title}: ${e.message}`);
-      if (e.status === 401 || e.status === 403) break;
-    }
-  }
 
-  // ---- 2) Revalidar grupos de la base marcados «Verificar» (los que llevan más tiempo sin revisar)
-  const stale = Object.entries(db.grupos)
-    .filter(([id, g]) => /^verificar/i.test(g.confianza || "") && !(state.revalidados[id] && Date.now() - Date.parse(state.revalidados[id]) < 90 * DAY))
-    .slice(0, revalidate);
-  for (const [id, g] of stale) {
-    try {
-      const r = await AI.research(cfg, { kind: "revalidar", group: g }, db.grupos);
-      report.tokens.entrada += r.usage.input; report.tokens.salida += r.usage.output; report.busquedas += r.searches || 0;
-      const n = r.normalized;
-      state.revalidados[id] = new Date().toISOString();
-      if (n.verificable && n.controlador) {
-        const prev = { controlador: g.controlador, confianza: g.confianza, fecha: g.investigado || null };
-        if (QED.norm(n.controlador) !== QED.norm(g.controlador)) report.cambios.push(`${g.empresa}: «${g.controlador}» → «${n.controlador}»`);
-        Object.assign(g, {
-          controlador: n.controlador, pais: n.pais || g.pais, tipo: n.tipo || g.tipo, fondos: n.fondos || g.fondos,
-          nota: [n.cambio, g.nota].filter(Boolean).join(" · "), confianza: "Verificado (revalidado por IA)",
-          fuente: n.fuentes[0].titulo, url: n.fuentes[0].url, fuentes: n.fuentes, investigado: new Date().toISOString().slice(0, 10), anterior: prev
+        nuevasEvidencias.push({
+          grupo_id: gid,
+          url_final: f0.url_final,
+          nivel_dominio: f0.nivel_dominio,
+          cita: f0.cita,
+          fecha_consulta: report.inicio.slice(0, 10),
+          archivo_url: f0.archivo_url,
+          safe_browsing: f0.safe_browsing,
+          gleif_lei: check.gleif.lei,
+          gleif_coincide: check.gleif.coincide,
+          factcheck: "ok",
+          aprobado_en_pr: `datos/${report.inicio.slice(0, 10)}`
         });
-        report.revalidadas.push(`${g.empresa} · ${n.fuentes[0].url}`);
-        changed = true;
+
+        report.cambios.push({
+          grupo: prop.empresa,
+          gid,
+          antes: prop.valor_anterior || "(nuevo)",
+          despues: prop.valor_nuevo,
+          url: f0.url_final,
+          cita: f0.cita,
+          archivo: f0.archivo_url
+        });
       } else {
-        report.revalidadas.push(`${g.empresa} · sin fuentes suficientes (sin cambios)`);
+        report.rechazadas.push(`${prop.empresa}: ${check.motivo}`);
       }
-    } catch (e) { report.errores.push(`Revalidar ${g.empresa}: ${e.message}`); }
-  }
-
-  // ---- 3) Reputación: empresas con más marcas en la base (más exposición) y fondos, sin historial o con más de 180 días
-  if (repLimit > 0 && search) {
-    db.reputacion = db.reputacion || {};
-    const peso = {};
-    for (const m of db.marcas) peso[m.g] = (peso[m.g] || 0) + 1;
-    const ids = [];
-    for (const [gid] of Object.entries(peso).sort((a, b) => b[1] - a[1])) {
-      const g = db.grupos[gid];
-      for (const id of [QED.REP.MATRIZ[gid] || gid, ...QED.REP.fundIds(g)]) if (!ids.includes(id)) ids.push(id);
-    }
-    const queue = ids.filter((id) => QED.REP.needsResearch(db.reputacion, id, 180)).slice(0, repLimit);
-    for (const id of queue) {
-      const fund = QED.REP.FONDOS.find((f) => f.id === id);
-      const g = db.grupos[id] || {};
-      const nombre = fund ? fund.nombre : g.empresa;
-      try {
-        const prev = db.reputacion[id];
-        const r = await AI.researchReputation(cfg, { nombre: fund ? nombre + " (gestora de fondos de inversión)" : nombre, pais: g.pais,
-          ya: ((prev && prev.eventos) || []).map((e) => `${e.anio} · ${e.titulo} (${e.estado})`) });
-        report.tokens.entrada += r.usage.input; report.tokens.salida += r.usage.output; report.busquedas += r.searches || 0;
-        if (!r.verificable) { report.reputacion.push(`${nombre}: la búsqueda no devolvió fuentes (sin cambios)`); continue; }
-        db.reputacion[id] = QED.REP.merge(prev, r, { nombre, revisado: new Date().toISOString().slice(0, 10), origen: `Investigación semanal con búsqueda web (${r.model})`, parcial: false });
-        report.reputacion.push(`${nombre}: ${r.eventos.length} hechos, ${r.lobbying.length} datos de lobbying${r.descartados ? `, ${r.descartados} descartados sin fuente` : ""}`);
-        changed = true;
-      } catch (e) {
-        report.errores.push(`Reputación de ${nombre}: ${e.message}`);
-        if (e.status === 401 || e.status === 403) break;
-      }
+    } catch (e) {
+      report.errores.push(`${item.brand || item.title}: ${e.message}`);
     }
   }
 
-  // ---- 3b) Alternativas locales sugeridas por usuarios: se verifica el dueño con búsqueda; solo entran si es independiente y local
-  const alts = issues.filter((i) => i.tipo === "alternativa");
-  const prep = QED.ALT.prepare(db, QED.buildIndex(db, [], {}, {}));
-  for (const is of alts) for (const it of is.items.slice(0, 5)) {
-    try {
-      const r = await AI.research(cfg, { brand: it.marca, title: it.categoria, site: it.pais, hint: [it.dueno && "Dueño según quien sugiere: " + it.dueno, it.fuente && "Fuente sugerida: " + it.fuente].filter(Boolean).join(" · ") }, db.grupos);
-      report.tokens.entrada += r.usage.input; report.tokens.salida += r.usage.output; report.busquedas += r.searches || 0;
-      const n = r.normalized;
-      const cat = QED.ALT.category(prep, "", it.categoria);
-      const ok = n.conocida && n.verificable && QED.ALT.INDEP[n.tipo] && cat;
-      if (!ok) { report.alternativas.push(`${it.marca}: no se pudo confirmar un dueño independiente con fuente${cat ? "" : " o una categoría reconocible"} (issue #${is.number})`); continue; }
-      let gid = Object.keys(db.grupos).find((id) => QED.norm(db.grupos[id].empresa) === QED.norm(n.empresa));
-      if (!gid) {
-        gid = "loc_" + slug(n.empresa); let i = 2; while (db.grupos[gid]) gid = "loc_" + slug(n.empresa) + "_" + i++;
-        db.grupos[gid] = { empresa: n.empresa, controlador: n.controlador, pais: n.pais || it.pais, tipo: n.tipo, fondos: n.fondos, gobierno: n.gobierno, nota: n.nota,
-          confianza: "Verificado (investigación IA con fuentes)", fuente: n.fuentes[0].titulo, url: n.fuentes[0].url, fuentes: n.fuentes, investigado: new Date().toISOString().slice(0, 10) };
-      }
-      const nombre = n.marca || it.marca;
-      if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: gid, s: 1, job: 1 });
-      db.categorias[cat].marcas = Array.from(new Set([...(db.categorias[cat].marcas || []), nombre]));
-      report.alternativas.push(`${nombre} → ${n.empresa} (${n.tipo}, ${n.pais}) en «${db.categorias[cat].label}» · ${n.fuentes[0].url} (issue #${is.number})`);
-      changed = true;
-    } catch (e) { report.errores.push(`Alternativa ${it.marca}: ${e.message}`); if (e.status === 401 || e.status === 403) break; }
-  }
+  // Generar reporte en Markdown para el PR
+  const dateStr = report.inicio.slice(0, 10);
+  const branchName = `datos/${dateStr}`;
+  const tableRows = report.cambios.map(
+    (c) => `| ${c.grupo} (\`${c.gid}\`) | ${c.antes} → **${c.despues}** | [Fuente](${c.url}) | «${c.cita}» | [Archivo](${c.archivo}) |`
+  );
 
-  // ---- 3c) Responder y cerrar los issues procesados
-  if (!dry) for (const is of issues) {
-    const keys = is.tipo === "marca" ? is.items.map((it) => it.brand ? "b:" + QED.cleanBrandField(it.brand) : "t:" + QED.norm(it.title).slice(0, 70)) : [];
-    const lines = is.tipo === "marca"
-      ? is.items.map((it, i) => { const st = state.marcas[keys[i]]; return `- ${it.brand || it.title}: ${st ? { verificada: "✔ agregada a la base", sin_fuentes: "sin fuentes suficientes todavía", reintentar: "se reintentará", no_encontrada: "no se encontró" }[st.estado] || st.estado : "en cola para la próxima ejecución"}`; })
-      : report.alternativas.filter((x) => x.includes(`#${is.number})`)).map((x) => "- " + x);
-    const done = is.tipo === "alternativa" || is.items.every((it, i) => { const st = state.marcas[keys[i]]; return st && ["verificada", "no_encontrada"].includes(st.estado); });
-    try {
-      await gh(`/issues/${is.number}/comments`, { method: "POST", body: JSON.stringify({ body: `Gracias. Resultado de la investigación del ${report.inicio.slice(0, 10)}:\n${lines.join("\n")}\n\nLos datos nuevos llegan a todas las extensiones con la próxima descarga de la base.` }) });
-      if (done) await gh(`/issues/${is.number}`, { method: "PATCH", body: JSON.stringify({ state: "closed" }) });
-      report.sugerencias.push(`#${is.number} (${is.tipo}) ${done ? "cerrado" : "sigue abierto"}`);
-    } catch (e) { report.errores.push(`Issue #${is.number}: ${e.message}`); }
-  }
-
-  // ---- 4) Publicar
-  report.fin = new Date().toISOString();
-  if (changed) db.version = new Date().toISOString().slice(0, 16).replace(":", "");
-  const md = [
-    `# Investigación de Project Gina — ${report.inicio.slice(0, 10)}`, "",
-    `Proveedor: ${report.proveedor} · modelo: ${report.modelo} · búsquedas: ${report.busquedas} · tokens: ${report.tokens.entrada.toLocaleString("es-MX")} entrada / ${report.tokens.salida.toLocaleString("es-MX")} salida`,
-    `Costo aproximado (Claude Haiku 5.5: US$0,10 / 0,50 por millón de tokens; búsqueda web US$10 por 1.000): ~US$${(report.tokens.entrada / 1e6 * 0.10 + report.tokens.salida / 1e6 * 0.50 + report.busquedas * 0.01).toFixed(2)}`, "",
-    `Base publicada: ${changed ? db.version : "sin cambios"}`, "",
-    "## Resueltas gratis con Wikidata", ...(report.wikidata.length ? report.wikidata.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## Verificadas con IA y búsqueda", ...(report.verificadas.length ? report.verificadas.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## Alternativas locales sugeridas", ...(report.alternativas.length ? report.alternativas.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## Sugerencias de usuarios (issues)", ...(report.sugerencias.length ? report.sugerencias.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## Revalidadas", ...(report.revalidadas.length ? report.revalidadas.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## Reputación", ...(report.reputacion.length ? report.reputacion.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## Cambios de controlador", ...(report.cambios.length ? report.cambios.map((x) => "- " + x) : ["- (ninguno)"]), "",
-    "## Sin fuentes confirmadas", ...(report.sinFuentes.length ? report.sinFuentes.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## No encontradas", ...(report.noEncontradas.length ? report.noEncontradas.map((x) => "- " + x) : ["- (ninguna)"]), "",
-    "## Errores", ...(report.errores.length ? report.errores.map((x) => "- " + x) : ["- (ninguno)"]), ""
+  const prMarkdown = [
+    `# Propuesta de actualización de datos — ${dateStr}`,
+    "",
+    `> **Revisión obligatoria**: El robot verificó deterministamente las fuentes, citas y registros oficiales. Los cambios **NO** se publican hasta que una persona apruebe este Pull Request.`,
+    "",
+    `### Cambios propuestos (${report.cambios.length})`,
+    "| Grupo | Antes → Después | URL Final | Cita textual | Copia archivada |",
+    "|---|---|---|---|---|",
+    ...(tableRows.length ? tableRows : ["| (sin cambios válidos) | - | - | - | - |"]),
+    "",
+    "### Verificaciones y rechazos",
+    ...(report.rechazadas.length ? report.rechazadas.map((r) => `- ⚠ ${r}`) : ["- (ninguna propuesta rechazada)"]),
+    "",
+    `Proveedor: ${report.proveedor} · Modelo: ${report.modelo} · Fecha: ${dateStr}`
   ].join("\n");
-  if (!dry) {
-    state.ultimaEjecucion = report.inicio;
-    if (changed) fs.writeFileSync(BRANDS, JSON.stringify(db, null, 1));
-    fs.writeFileSync(STATE, JSON.stringify(state, null, 1));
-    fs.mkdirSync(REPORTS, { recursive: true });
-    fs.writeFileSync(path.join(REPORTS, `${report.inicio.slice(0, 10)}.md`), md);
+
+  // Si hay cambios y no es dryRun, agregar filas a evidencias.csv
+  if (!dry && nuevasEvidencias.length > 0) {
+    let csvContent = "";
+    for (const ev of nuevasEvidencias) {
+      csvContent += `${ev.grupo_id},${ev.url_final},${ev.nivel_dominio},"${ev.cita.replace(/"/g, '""')}",${ev.fecha_consulta},${ev.archivo_url},${ev.safe_browsing},${ev.gleif_lei},${ev.gleif_coincide},${ev.factcheck},${ev.aprobado_en_pr}\n`;
+    }
+    fs.appendFileSync(EVIDENCIAS_PATH, csvContent, "utf8");
+    fs.writeFileSync(BRANDS, JSON.stringify(db, null, 1), "utf8");
   }
-  console.log(md);
+
+  // Etapa 4: Crear rama y PR
+  const prResult = await createReviewPR({
+    branchName,
+    reportMarkdown: prMarkdown,
+    changesList: report.cambios,
+    dryRun: dry,
+    token,
+    repo
+  });
+
+  if (!dry) {
+    fs.mkdirSync(REPORTS, { recursive: true });
+    fs.writeFileSync(path.join(REPORTS, `${dateStr}.md`), prMarkdown);
+  }
+
+  console.log(prMarkdown);
+  return { report, prResult };
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  loadDominios,
+  classifyDomain,
+  stripHtml,
+  normalizeText,
+  extractText,
+  findCitationSentence,
+  resolveUrl,
+  checkSafeBrowsing,
+  checkGLEIF,
+  checkFactCheck,
+  archiveWayback,
+  verifySource,
+  contrastProposal,
+  wikidataOwner,
+  createReviewPR,
+  main
+};

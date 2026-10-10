@@ -1,21 +1,23 @@
-# Project Gina: investiga cada 2 semanas (configurable) y publica la base que todas las extensiones descargan gratis.
+# Project Gina: investiga periódicamente con verificación determinista y abre un Pull Request para revisión humana.
 # Configura en GitHub → Settings → Secrets and variables → Actions:
-#   Secreto  GINA_API_KEY   = clave del proveedor de investigación (Anthropic, Gemini, …)
-#   Variable GINA_PROVIDER  = anthropic | gemini | groq | xai | openai   (opcional; por defecto anthropic)
-#   Variable GINA_MODEL     = modelo (opcional; por defecto el económico: claude-haiku-5-5 / gemini-3.5-flash-lite)
-#   Variable GINA_EVERY_DAYS = días entre ejecuciones (opcional; 14 por defecto, 7 = semanal)
-#   Variable GINA_BASE_URL  = solo para «openai» (compatible con OpenAI)
-# Pon tu «usuario/repositorio» en datagen/proyecto.json y vuelve a generar la extensión: todas descargarán esta base solas.
+#   Secreto  GINA_API_KEY          = clave del proveedor de investigación (Anthropic, Gemini, …)
+#   Secreto  GINA_SAFEBROWSING_KEY = clave de Google Safe Browsing Lookup API v4 (opcional)
+#   Secreto  GINA_FACTCHECK_KEY    = clave de Google Fact Check Tools API (opcional)
+#   Variable GINA_PROVIDER         = anthropic | gemini | groq | xai | openai (por defecto: anthropic)
+#   Variable GINA_MODEL            = modelo económico de investigación
+#   Variable GINA_EVERY_DAYS       = días entre ejecuciones (14 por defecto)
+#   Variable GINA_URL_CHECK        = safebrowsing | webrisk
 name: Project Gina — investigación
 
 on:
   schedule:
-    - cron: "17 9 * * 1"   # cada lunes 09:17 UTC; el job se salta las semanas que no tocan según GINA_EVERY_DAYS
+    - cron: "17 9 * * 1"   # cada lunes 09:17 UTC
   workflow_dispatch: {}
 
 permissions:
   contents: write
-  issues: write       # leer y responder las sugerencias enviadas desde la extensión
+  pull-requests: write
+  issues: write
 
 concurrency:
   group: gina-investigacion
@@ -27,12 +29,24 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Investigar pendientes y revalidar la base
+
+      - name: Configurar git
+        run: |
+          git config user.name "gina-bot"
+          git config user.email "gina-bot@users.noreply.github.com"
+
+      - name: Investigar, verificar fuentes y proponer cambios
         env:
           GINA_API_KEY: ${{ secrets.GINA_API_KEY }}
+          GINA_SAFEBROWSING_KEY: ${{ secrets.GINA_SAFEBROWSING_KEY }}
+          GINA_FACTCHECK_KEY: ${{ secrets.GINA_FACTCHECK_KEY }}
+          GINA_URL_CHECK: ${{ vars.GINA_URL_CHECK || 'safebrowsing' }}
           GINA_PROVIDER: ${{ vars.GINA_PROVIDER }}
           GINA_MODEL: ${{ vars.GINA_MODEL }}
           GINA_BASE_URL: ${{ vars.GINA_BASE_URL }}
@@ -44,14 +58,12 @@ jobs:
           GINA_FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node job/investigar.js
-      - name: Publicar cambios
+
+      - name: Comprobación de seguridad de rutas modificadas
         run: |
-          git config user.name "gina-bot"
-          git config user.email "gina-bot@users.noreply.github.com"
-          git add extension/data/brands.json job/estado.json job/reportes
-          if git diff --cached --quiet; then
-            echo "Sin cambios que publicar."
-          else
-            git commit -m "Investigación semanal $(date -u +%Y-%m-%d)"
-            git push
+          ALLOWED="^(extension/data/brands\.json|datagen/evidencias\.csv|job/estado\.json|job/reportes/)"
+          DISALLOWED=$(git status --porcelain | awk '{print $2}' | grep -vE "$ALLOWED" || true)
+          if [ -n "$DISALLOWED" ]; then
+            echo "::error::El job modificó archivos no permitidos: $DISALLOWED"
+            exit 1
           fi
