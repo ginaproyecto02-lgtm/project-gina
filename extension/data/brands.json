@@ -717,6 +717,45 @@
    "url": "",
    "ahorro": false
   },
+  "philips": {
+   "empresa": "Koninklijke Philips N.V. (Royal Philips)",
+   "controlador": "Exor (familia Agnelli, ~17.5%) y fondos cotizados en Euronext",
+   "pais": "Países Bajos / Italia",
+   "tipo": "Corporación",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "Contratos hospitalarios y de salud pública",
+   "nota": "Cuidado personal, salud materna (Avent, Sonicare) y tecnología médica. Pequeño electrodoméstico opera bajo licencia por Versuni.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Philips; folletos de Exor N.V.",
+   "url": "",
+   "ahorro": false
+  },
+  "sharkninja": {
+   "empresa": "SharkNinja, Inc.",
+   "controlador": "Cotizada en NYSE; Mark Barrocas (CEO) y JS Global Lifestyle",
+   "pais": "EE.UU. / China",
+   "tipo": "Corporación",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Fabricante de pequeños electrodomésticos de cocina (Ninja) y aspiración/cuidado del hogar (Shark).",
+   "confianza": "Alta",
+   "fuente": "Informe 10-K de SharkNinja (SEC)",
+   "url": "",
+   "ahorro": false
+  },
+  "creality": {
+   "empresa": "Shenzhen Creality 3D Technology Co., Ltd.",
+   "controlador": "Chen Chun, Liu Huilin y socios fundadores (empresa privada)",
+   "pais": "China",
+   "tipo": "Fundador",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Líder mundial en impresoras 3D domésticas de código abierto (Ender, K1, CR-10).",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial y registros mercantiles de Creality 3D",
+   "url": "",
+   "ahorro": false
+  },
   "nike": {
    "empresa": "Nike Inc.",
    "controlador": "Familia de Phil Knight (control por voto vía Swoosh LLC)",
@@ -909,6 +948,19 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
+   "url": "",
+   "ahorro": false
+  },
+  "samsonite": {
+   "empresa": "Samsonite International S.A.",
+   "controlador": "Cotizada en la Bolsa de Hong Kong (HKEX); fondos institucionales globales",
+   "pais": "Otros (Luxemburgo)",
+   "tipo": "Fondos dispersos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Mayor fabricante de equipaje y maletas del mundo; dueña también de American Tourister y Tumi.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Samsonite (HKEX)",
    "url": "",
    "ahorro": false
   },
@@ -1117,6 +1169,19 @@
    "nota": "Fabricante líder de componentes de ciclismo y equipos de pesca.",
    "confianza": "Alta",
    "fuente": "Informe anual de Shimano (TSE)",
+   "url": "",
+   "ahorro": false
+  },
+  "implus": {
+   "empresa": "Implus Footcare (Potable Aqua)",
+   "controlador": "Berkshire Partners (capital privado estadounidense)",
+   "pais": "EE.UU.",
+   "tipo": "Capital privado",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "Contratos con fuerzas armadas y protección civil",
+   "nota": "Dueña de Potable Aqua, pastillas purificadoras de agua para emergencias y campismo.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial Implus Footcare / Wisconsin Pharmacal",
    "url": "",
    "ahorro": false
   },
@@ -6673,6 +6738,94 @@
    "g": "isdin"
   },
   {
+   "n": "Philips",
+   "g": "philips"
+  },
+  {
+   "n": "Philips Avent",
+   "g": "philips"
+  },
+  {
+   "n": "Avent",
+   "g": "philips"
+  },
+  {
+   "n": "Sonicare",
+   "g": "philips"
+  },
+  {
+   "n": "Norelco",
+   "g": "philips"
+  },
+  {
+   "n": "Philips Sonicare",
+   "g": "philips"
+  },
+  {
+   "n": "Philips Hue",
+   "g": "philips"
+  },
+  {
+   "n": "Ninja",
+   "g": "sharkninja"
+  },
+  {
+   "n": "Shark",
+   "g": "sharkninja"
+  },
+  {
+   "n": "Ninja Foodi",
+   "g": "sharkninja"
+  },
+  {
+   "n": "Ninja Creami",
+   "g": "sharkninja"
+  },
+  {
+   "n": "SharkNinja",
+   "g": "sharkninja"
+  },
+  {
+   "n": "Creality",
+   "g": "creality"
+  },
+  {
+   "n": "Creality 3D",
+   "g": "creality"
+  },
+  {
+   "n": "Ender",
+   "g": "creality"
+  },
+  {
+   "n": "Ender 3",
+   "g": "creality"
+  },
+  {
+   "n": "Creality Ender",
+   "g": "creality"
+  },
+  {
+   "n": "Samsonite",
+   "g": "samsonite"
+  },
+  {
+   "n": "American Tourister",
+   "g": "samsonite"
+  },
+  {
+   "n": "Tumi",
+   "g": "samsonite"
+  },
+  {
+   "n": "Potable Aqua",
+   "g": "implus"
+  },
+  {
+   "n": "Potable Aqua PURE",
+   "g": "implus"
+  },
+  {
    "n": "Zara",
    "g": "inditex"
   },
@@ -10826,7 +10979,9 @@
   "cuidado_personal": {
    "label": "Higiene y cuidado personal",
    "kw": [
+    "afeitadora",
     "body wash",
+    "cepillo electrico",
     "champu",
     "crema corporal",
     "deodorant",
@@ -10835,6 +10990,7 @@
     "jabon de tocador",
     "lotion",
     "pasta dental",
+    "rasuradora",
     "sabonete",
     "sapone",
     "savon",
@@ -10873,6 +11029,10 @@
     "Syoss",
     "Godrej",
     "Cinthol",
+    "Philips",
+    "Philips Sonicare",
+    "Sonicare",
+    "Norelco",
     "Jabón Tepeyac",
     "Dr. Bronner's",
     "Cero",
@@ -10986,19 +11146,24 @@
    ]
   },
   "ropa_calzado": {
-   "label": "Ropa y calzado",
+   "label": "Ropa, calzado y equipaje",
    "kw": [
+    "backpack",
     "boots",
     "botas",
     "camiseta",
     "chamarra",
     "chaqueta",
     "chaussures",
+    "equipaje",
     "giacca",
     "hoodie",
     "jacke",
     "jacket",
     "jeans",
+    "luggage",
+    "maleta",
+    "mochila",
     "pantalon",
     "playera",
     "sandalias",
@@ -11008,8 +11173,10 @@
     "shoes",
     "sneakers",
     "sudadera",
+    "suitcase",
     "t-shirt",
     "tenis",
+    "valija",
     "veste",
     "zapatillas",
     "zapatos"
@@ -11043,6 +11210,9 @@
     "ASICS",
     "Onitsuka Tiger",
     "Primark",
+    "Samsonite",
+    "American Tourister",
+    "Tumi",
     "Flexi",
     "Patagonia",
     "Camper"
@@ -11064,8 +11234,11 @@
     "fishing",
     "lure",
     "moulinet",
+    "pastillas purificadoras",
     "peche",
     "pesca",
+    "potable aqua",
+    "purificador de agua",
     "reel",
     "rod",
     "rolle",
@@ -11073,7 +11246,8 @@
     "senuelo",
     "tackle",
     "tent",
-    "tienda de campana"
+    "tienda de campana",
+    "water purification"
    ],
    "marcas": [
     "Penn",
@@ -11084,7 +11258,67 @@
     "Fenwick",
     "Hardy",
     "Shakespeare",
-    "Shimano"
+    "Shimano",
+    "Potable Aqua",
+    "Potable Aqua PURE"
+   ]
+  },
+  "electrodomesticos_cocina": {
+   "label": "Electrodomésticos y cocina",
+   "kw": [
+    "air fryer",
+    "aspiradora",
+    "batidora",
+    "blender",
+    "cafetera",
+    "creami",
+    "extractor de jugos",
+    "foodi",
+    "freidora de aire",
+    "horno tostador",
+    "licuadora",
+    "microondas",
+    "olla de presion",
+    "parrilla electrica",
+    "procesador de alimentos",
+    "sandwichera",
+    "toaster",
+    "tostadora",
+    "vacuum"
+   ],
+   "marcas": [
+    "Ninja",
+    "Shark",
+    "Ninja Foodi",
+    "Ninja Creami",
+    "SharkNinja",
+    "Philips",
+    "KitchenAid",
+    "Whirlpool",
+    "Acros",
+    "GE Appliances"
+   ]
+  },
+  "tecnologia_3d": {
+   "label": "Tecnología e impresión 3D",
+   "kw": [
+    "3d printer",
+    "creality",
+    "ender",
+    "extrusor",
+    "filamento",
+    "hotend",
+    "impresora 3-d",
+    "impresora 3d",
+    "petg",
+    "pla",
+    "resina 3d"
+   ],
+   "marcas": [
+    "Creality",
+    "Creality 3D",
+    "Ender",
+    "Ender 3"
    ]
   }
  }

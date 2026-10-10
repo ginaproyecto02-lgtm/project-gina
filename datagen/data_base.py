@@ -67,7 +67,10 @@ g("whirlpool","Whirlpool","Sin accionista de control","EE.UU.","Fondos dispersos
 g("microsoft","Microsoft","Sin accionista de control","EE.UU.","Fondos dispersos",P,"Grandes contratos de nube con el Pentágono","",A,"Informe 10-K de Microsoft")
 g("nintendo","Nintendo","Sin accionista de control","Otros (Japón)","Fondos dispersos","","","",A,"Informe anual de Nintendo")
 g("bose","Bose Corporation","El MIT tiene la mayoría de las acciones (sin voto)","EE.UU.","Privada",NC,"","",A,"Conocimiento del modelo")
-# ---- Moda y calzado
+g("philips","Koninklijke Philips N.V. (Royal Philips)","Exor (familia Agnelli, ~17.5%) y fondos cotizados en Euronext","Países Bajos / Italia","Corporación",P,"Contratos hospitalarios y de salud pública","Cuidado personal, salud materna (Avent, Sonicare) y tecnología médica. Pequeño electrodoméstico opera bajo licencia por Versuni.",A,"Informe anual de Philips; folletos de Exor N.V.")
+g("sharkninja","SharkNinja, Inc.","Cotizada en NYSE; Mark Barrocas (CEO) y JS Global Lifestyle","EE.UU. / China","Corporación",P,"","Fabricante de pequeños electrodomésticos de cocina (Ninja) y aspiración/cuidado del hogar (Shark).",A,"Informe 10-K de SharkNinja (SEC)")
+g("creality","Shenzhen Creality 3D Technology Co., Ltd.","Chen Chun, Liu Huilin y socios fundadores (empresa privada)","China","Fundador",NC,"","Líder mundial en impresoras 3D domésticas de código abierto (Ender, K1, CR-10).",A,"Sitio oficial y registros mercantiles de Creality 3D")
+# ---- Moda, calzado y equipaje
 g("nike","Nike Inc.","Familia de Phil Knight (control por voto vía Swoosh LLC)","EE.UU.","Familia + fondos",P,"","Incluye Jordan y Converse.",A,"Informe 10-K de Nike")
 g("adidas","Adidas AG","Sin accionista de control","Otros (Alemania)","Fondos dispersos",P,"","",A,"Informe anual de Adidas")
 g("puma","Puma SE","Artémis (familia Pinault, ~29%)","Otros (Alemania)","Familia + fondos",P,"","Anta Sports (China) firmó en ene-2026 la compra del 29,06% a Artémis; cierre previsto antes de fin de 2026.",OK,"FashionUnited","https://fashionunited.uk/news/business/anta-sports-becomes-largest-shareholder-in-puma/2026012785939")
@@ -83,6 +86,7 @@ g("tapestry","Tapestry","Sin accionista de control","EE.UU.","Fondos dispersos",
 g("vf","VF Corporation","Sin accionista de control","EE.UU.","Fondos dispersos",P,"","",A,"Informe 10-K de VF")
 g("crocs","Crocs Inc.","Sin accionista de control","EE.UU.","Fondos dispersos",P,"","",A,"Informe 10-K de Crocs")
 g("lacoste","Lacoste (Maus Frères)","Familia Maus","Otros (Suiza)","Familia",NC,"","",A,"Conocimiento del modelo")
+g("samsonite","Samsonite International S.A.","Cotizada en la Bolsa de Hong Kong (HKEX); fondos institucionales globales","Otros (Luxemburgo)","Fondos dispersos",P,"","Mayor fabricante de equipaje y maletas del mundo; dueña también de American Tourister y Tumi.",A,"Informe anual de Samsonite (HKEX)")
 # ---- Belleza y perfume
 g("loreal","L'Oréal","Familia Bettencourt (~34%) y Nestlé (~20%)","Francia","Familia + corporación",P,"","Acordó comprar Kering Beauté y los derechos de Creed (oct-2025).",A,"Informe anual de L'Oréal (AMF)")
 g("estee","The Estée Lauder Companies","Familia Lauder (control por voto)","EE.UU.","Familia + fondos",P,"","",A,"Informe 10-K de Estée Lauder")
@@ -102,6 +106,7 @@ g("isdin","ISDIN","Familias Puig y Esteve (50% / 50%)","España","Familia",NC,""
 # ---- Deportes, actividades al aire libre y pesca
 g("purefishing","Pure Fishing (Penn, Abu Garcia, Berkley)","Sycamore Partners (capital privado)","EE.UU.","Capital privado",NC,"","Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",OK,"Sycamore Partners","https://www.sycamorepartners.com")
 g("shimano","Shimano Inc.","Familia fundadora Shimano y fondos institucionales","Otros (Japón)","Familia + fondos",P,"","Fabricante líder de componentes de ciclismo y equipos de pesca.",A,"Informe anual de Shimano (TSE)")
+g("implus","Implus Footcare (Potable Aqua)","Berkshire Partners (capital privado estadounidense)","EE.UU.","Capital privado",NC,"Contratos con fuerzas armadas y protección civil","Dueña de Potable Aqua, pastillas purificadoras de agua para emergencias y campismo.",A,"Sitio oficial Implus Footcare / Wisconsin Pharmacal")
 
 
 B = []  # (marca, grupo, alias..., ) ; un "!" delante = solo cuenta si viene del campo «marca», no del título
@@ -194,5 +199,10 @@ b("shimano","Shimano")
 b("galderma","Cetaphil")
 b("pierrefabre","Avène","Ducray","Klorane")
 b("isdin","ISDIN","Fotoprotector ISDIN")
+b("philips","Philips","Philips Avent","Avent","Sonicare","Norelco","Philips Sonicare","Philips Hue")
+b("sharkninja","Ninja","Shark","Ninja Foodi","Ninja Creami","SharkNinja")
+b("creality","Creality","Creality 3D","Ender","Ender 3","Creality Ender")
+b("samsonite","Samsonite","American Tourister","Tumi")
+b("implus","Potable Aqua","Potable Aqua PURE")
 
 
