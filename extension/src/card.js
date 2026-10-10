@@ -469,8 +469,12 @@
     const isEn = I18N().getLang && I18N().getLang() !== "es";
     const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
     const countryLbl = I18N().paisLabel ? I18N().paisLabel(g.pais) : g.pais;
-    const storeText = `<b>${esc(store.nombre)}</b> → ${esc(g.empresa)} · ${esc(ctrl)}${g.pais ? " · " + esc(countryLbl) : ""}`;
-    return dataRow(t("lbl_store"), storeText, t("src_official", { source: "Registro público" }));
+    const tipoLbl = I18N().tipoLabel ? I18N().tipoLabel(g.tipo) : g.tipo;
+    const chipsHtml = `<div class="chips">${g.pais ? `<span class="chip">🌎 ${esc(countryLbl)}</span>` : ""}${g.tipo ? `<span class="chip">${esc(tipoLbl)}</span>` : ""}${confChip(g.confianza)}</div>`;
+    const nota = (isEn && g.nota_en) ? g.nota_en : g.nota;
+    const fuenteLbl = (isEn && g.fuente_en) ? g.fuente_en : (g.fuente || "Registro oficial");
+    const storeVal = `<b>${esc(store.nombre)}</b>: ${esc(g.empresa)} · ${esc(ctrl)}${chipsHtml}${nota ? `<div style="font-size:11px;color:#5f687a;margin-top:3px;">${esc(nota)}</div>` : ""}`;
+    return dataRow(t("lbl_store"), storeVal, t("src_official", { source: fuenteLbl }));
   }
 
   // ---------------------------------------------------------------- Viajes
@@ -553,7 +557,7 @@
 
   // ---------------------------------------------------------------- Render principal
   function render(res, opts) {
-    if (res.mode) return renderTravel(res, opts);
+    if (res.mode && res.mode !== "producto") return renderTravel(res, opts);
 
     if (res.kind === "loading") {
       return `<div style="padding:16px 14px;"><span class="spin"></span>${t("loading") || "..."}</div>`;
@@ -685,7 +689,7 @@
     // Línea de marca: "<Marca> · <Empresa dueña>" en 16 px negrita, y debajo en 11 px gris de dónde se leyó
     let brandTitle = "";
     let brandOrigin = "";
-    if (res.mode) {
+    if (res.mode && res.mode !== "producto") {
       brandTitle = res.mode === "vuelos" ? t("card_title_flight") : t("card_title_hotel");
       brandOrigin = t("src_page");
     } else if (res.found) {
@@ -694,6 +698,15 @@
     } else {
       brandTitle = `${res.brandText || t("not_found_unreadable")} · ${t("not_found_title")}`;
       brandOrigin = t("src_read_from", { source: t("not_found_title") });
+    }
+
+    let valueAlertHtml = "";
+    if (res.group && res.group.rep && QED.REP && opts.values) {
+      const sc = QED.REP.score(res.group.rep, opts.values);
+      if (sc && sc.choques && sc.choques.length) {
+        const temasTxt = sc.choques.map((ch) => I18N().temaLabel ? I18N().temaLabel(ch) : ch).join(", ");
+        valueAlertHtml = `<div class="box-warn brand-warn" style="margin-top:6px;padding:5px 8px;font-size:11px;">⚠ ${esc(t("values_alert_msg", { topics: temasTxt }))}</div>`;
+      }
     }
 
     shadow.innerHTML = `<style>${CSS}</style>
@@ -712,6 +725,7 @@
         <div class="brand-bar">
           <div class="brand-line">${esc(brandTitle)}</div>
           <div class="brand-sub">${esc(brandOrigin)}</div>
+          ${valueAlertHtml}
         </div>
         <div class="body">${render(res, opts)}</div>
         <div class="foot">${t("foot_disclaimer")}</div>

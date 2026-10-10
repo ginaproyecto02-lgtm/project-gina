@@ -948,6 +948,14 @@
     lbl_official_alerts: { es: "ALERTAS OFICIALES", en: "OFFICIAL ALERTS", de: "OFFIZIELLE WARNUNGEN", fr: "ALERTES OFFICIELLES", it: "ALLERTE UFFICIALI", ja: "公的警告" },
     lbl_other_brands: { es: "OTRAS MARCAS DEL MISMO DUEÑO", en: "OTHER BRANDS FROM SAME OWNER", de: "WEITERE MARKEN DESSELBEN EIGENTÜMERS", fr: "AUTRES MARQUES DU MÊME PROPRIÉTAIRE", it: "ALTRI MARCHI DELLO STESSO PROPRIETARIO", ja: "同一所有者の他のブランド" },
     lbl_category_dominance: { es: "QUIÉN DOMINA ESTA CATEGORÍA", en: "CATEGORY LEADERS", de: "FÜHREND IN DIESER KATEGORIE", fr: "LEADERS DE LA CATÉGORIE", it: "LEADER DI CATEGORIA", ja: "このカテゴリの主要ブランド" },
+    values_alert_msg: {
+      es: "Tema relevante para tus valores: {topics}",
+      en: "Relevant topic to your values: {topics}",
+      de: "Relevantes Thema für deine Werte: {topics}",
+      fr: "Sujet pertinent selon vos valeurs : {topics}",
+      it: "Tema rilevante per i tuoi valori: {topics}",
+      ja: "あなたの価値観に関連する注意：{topics}"
+    },
 
     // Footer
     foot_disclaimer: {

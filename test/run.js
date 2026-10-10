@@ -346,6 +346,22 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const rel = w.QED.evaluateReliability({}, null, null, "", "México");
   check("evaluateReliability no contiene score artificial", rel.score === undefined);
 }
+{
+  const url = "https://www.walmart.com.mx/ip/detergente/00750";
+  const w = env(`<h1>Detergente Ariel 4 kg</h1>${ld({ "@type": "Product", name: "Detergente Ariel", brand: "Ariel" })}`, url);
+  const r = analyze(w, url);
+  w.QED.showCard(r, { values: { seguridad: 2 } });
+  const t = cardText(w);
+  const shadow = w.document.getElementById("gina-tarjeta").shadowRoot;
+  const ownBody = shadow.getElementById("sec-own-body");
+  const isClosed = ownBody && ownBody.hasAttribute("hidden");
+  check("El aviso de valor «Muy importante» se ve con la sección del dueño cerrada", isClosed && t.includes("Tema relevante para tus valores") && t.includes("Seguridad y salud"), t);
+}
+{
+  const lote1 = ["ferrero", "pg", "samsung", "philips", "pepsico", "nestle", "unilever", "coca", "walmart"];
+  const todosTienenHistorial = lote1.every((id) => db.reputacion[id] && db.reputacion[id].eventos && db.reputacion[id].eventos.length >= 2);
+  check("Lote 1 de reputación completo (grupos prioritarios con eventos verificados)", todosTienenHistorial, lote1.filter(id => !db.reputacion[id] || (db.reputacion[id].eventos || []).length < 2).join(", ") || "todos completos");
+}
 
 console.log(`\n${pass}/${total} pruebas correctas`);
 process.exit(pass === total ? 0 : 1);

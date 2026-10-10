@@ -1,5 +1,5 @@
 {
- "version": "2026-10-10T0753",
+ "version": "2026-10-10T0815",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
  "grupos": {
   "walmart": {
@@ -11747,7 +11747,30 @@
   },
   "pg": {
    "nombre": "Procter & Gamble",
-   "eventos": [],
+   "eventos": [
+    {
+     "tema": "competencia",
+     "titulo": "Multa de la Comisión Europea por cartel en detergentes para ropa",
+     "pais": "UE",
+     "anio": 2011,
+     "estado": "multa",
+     "monto": "€211,2 millones",
+     "resumen": "La Comisión Europea multó con 211,2 millones de euros a P&G por acordar precios de detergente en polvo en ocho países europeos.",
+     "fuente": "Comisión Europea",
+     "url": "https://ec.europa.eu/commission/presscorner/detail/en/IP_11_469"
+    },
+    {
+     "tema": "seguridad",
+     "titulo": "Retiro voluntario de antitranspirantes Old Spice y Secret por benceno",
+     "pais": "EE.UU.",
+     "anio": 2021,
+     "estado": "acuerdo",
+     "monto": "",
+     "resumen": "P&G retiró voluntariamente lotes de antitranspirantes en aerosol tras detectar trazas de benceno en el propulsor y resolvió demandas colectivas.",
+     "fuente": "FDA",
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/pg-issues-voluntary-recall-specific-old-spice-and-secret-aerosol-spray-antiperspirants-and-old-spice"
+    }
+   ],
    "positivos": [],
    "lobbying": [
     {
@@ -11762,7 +11785,7 @@
    ],
    "revisado": "2026-10-08",
    "origen": "Investigación inicial con búsqueda web",
-   "parcial": true
+   "parcial": false
   },
   "abinbev": {
    "nombre": "AB InBev",
@@ -12616,6 +12639,129 @@
    "lobbying": [],
    "revisado": "2026-10-08",
    "origen": "Investigación inicial con búsqueda web"
+  },
+  "ferrero": {
+   "nombre": "Grupo Ferrero",
+   "eventos": [
+    {
+     "tema": "seguridad",
+     "titulo": "Pesquisas penales en Bélgica por salmonela en planta Kinder",
+     "pais": "Bélgica",
+     "anio": 2022,
+     "estado": "investigacion",
+     "monto": "",
+     "resumen": "En abril de 2022 autoridades sanitarias de Bélgica suspendieron la operación de la planta de Arlon tras brote de salmonela en productos Kinder, y la fiscalía abrió una causa penal.",
+     "fuente": "Reuters",
+     "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/belgian-prosecutors-open-probe-into-ferrero-salmonella-outbreak-2022-04-11/"
+    },
+    {
+     "tema": "derechos_humanos",
+     "titulo": "Señalamientos por condiciones de cosecha de avellanas en Turquía",
+     "pais": "Turquía",
+     "anio": 2019,
+     "estado": "alegacion",
+     "monto": "",
+     "resumen": "Reportajes señalaron trabajo infantil y precariedad en huertos de avellanas en Turquía en la cadena de suministro. Ferrero afirma que aplica tolerancia cero al trabajo infantil.",
+     "fuente": "The Guardian",
+     "url": "https://www.theguardian.com/global-development/2019/dec/20/are-ferrero-rocher-chocolates-tainted-by-child-labour"
+    }
+   ],
+   "positivos": [],
+   "lobbying": [
+    {
+     "pais": "UE",
+     "anio": 2024,
+     "tipo": "registro_ue",
+     "dato": "€400.000–499.999",
+     "detalle": "Gasto declarado en el Registro de transparencia de la UE",
+     "fuente": "Registro de transparencia UE",
+     "url": "https://ec.europa.eu/transparencyregister/public/consultation/displaylobbyist.do?id=013401511526-16"
+    }
+   ],
+   "revisado": "2026-10-08",
+   "origen": "Investigación con fuentes públicas"
+  },
+  "samsung": {
+   "nombre": "Samsung Electronics",
+   "eventos": [
+    {
+     "tema": "corrupcion",
+     "titulo": "Condena de prisión a Jay Y. Lee por sobornos a la expresidenta Park",
+     "pais": "Corea del Sur",
+     "anio": 2021,
+     "estado": "condena",
+     "monto": "8.600 millones de wones",
+     "resumen": "El Tribunal Superior de Seúl condenó a dos años y medio de prisión al vicepresidente Jay Y. Lee en el caso de corrupción política que involucró a la expresidenta.",
+     "fuente": "Reuters",
+     "url": "https://www.reuters.com/article/us-southkorea-samsung-lee-idUSKBN29N0P2"
+    },
+    {
+     "tema": "seguridad",
+     "titulo": "Acuerdo y fondo para operarios de fábricas de semiconductores",
+     "pais": "Corea del Sur",
+     "anio": 2018,
+     "estado": "acuerdo",
+     "monto": "",
+     "resumen": "Samsung firmó un acuerdo de mediación con familias de operarios afectados por leucemia en líneas de producción de chips y emitió disculpa pública.",
+     "fuente": "AP News",
+     "url": "https://apnews.com/article/technology-business-south-korea-c5e31766c8914652a65893a778fc3dc1"
+    }
+   ],
+   "positivos": [],
+   "lobbying": [
+    {
+     "pais": "EE.UU.",
+     "anio": 2024,
+     "tipo": "lda_eeuu",
+     "dato": "US$4,3 millones",
+     "detalle": "Gasto federal en cabildeo reportado ante el Senado de EE.UU.",
+     "fuente": "OpenSecrets",
+     "url": "https://www.opensecrets.org/federal-lobbying/clients/summary?id=D000000570"
+    }
+   ],
+   "revisado": "2026-10-08",
+   "origen": "Investigación con fuentes públicas"
+  },
+  "philips": {
+   "nombre": "Koninklijke Philips N.V.",
+   "eventos": [
+    {
+     "tema": "seguridad",
+     "titulo": "Acuerdo de US$1.100 millones por respiradores para apnea del sueño",
+     "pais": "EE.UU.",
+     "anio": 2024,
+     "estado": "acuerdo",
+     "monto": "US$1.100 millones",
+     "resumen": "Philips Respironics acordó pagar 1.100 millones de dólares para cerrar demandas por lesiones personales relacionadas con respiradores CPAP y BiPAP retirados en 2021.",
+     "fuente": "Reuters",
+     "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/philips-pay-11-bln-settle-us-cases-over-recalled-breathing-devices-2024-04-29/"
+    },
+    {
+     "tema": "corrupcion",
+     "titulo": "Acuerdo con la SEC por ley FCPA en licitaciones en China",
+     "pais": "EE.UU.",
+     "anio": 2023,
+     "estado": "acuerdo",
+     "monto": "US$62 millones",
+     "resumen": "Philips resolvió cargos de la SEC pagando 62 millones de dólares por irregularidades y pagos indebidos en licitaciones públicas de hospitales en China.",
+     "fuente": "SEC",
+     "url": "https://www.sec.gov/news/press-release/2023-91"
+    }
+   ],
+   "positivos": [],
+   "lobbying": [
+    {
+     "pais": "UE",
+     "anio": 2024,
+     "tipo": "registro_ue",
+     "dato": "€700.000–799.999",
+     "detalle": "Gasto declarado en el Registro de transparencia de la UE",
+     "fuente": "Registro de transparencia UE",
+     "url": "https://ec.europa.eu/transparencyregister/public/consultation/displaylobbyist.do?id=40845371584-33"
+    }
+   ],
+   "revisado": "2026-10-08",
+   "origen": "Investigación con fuentes públicas"
   }
  },
  "categorias": {
