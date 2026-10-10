@@ -75,6 +75,18 @@
     return res;
   }
 
+  // Enriquecer el resultado con la evaluación de confiabilidad de compra y normas
+  function enrichProduct(res, data) {
+    if (!res) return res;
+    res.title = res.title || data.title;
+    const cat = res.alternativas ? res.alternativas.cat : (alt ? QED.ALT.category(alt, res.brand || res.brandText, data.title) : null);
+    const country = entry ? entry.pais : "MX";
+    if (QED.evaluateReliability) {
+      res.reliabilityEval = QED.evaluateReliability(data.reliability, res.group, cat, data.title, country);
+    }
+    return res;
+  }
+
   // ---------------------------------------------------------------- Productos
   function analyzeProduct(force) {
     const siteName = QED.site(location.hostname);
@@ -86,11 +98,15 @@
     lastKey = key;
     const store = storeOf(entry);
     const local = QED.match(index, data.candidates, data.title);
-    if (local.found) { lastResult = withAlternatives(Object.assign(local, { store }), local.brand, data.title); draw(); return; }
+    if (local.found) {
+      lastResult = enrichProduct(withAlternatives(Object.assign(local, { store }), local.brand, data.title), data);
+      draw();
+      return;
+    }
 
     // No está en la memoria local → service worker: caché de IA, clasificación en vivo y registro de pendientes.
     const my = ++seq;
-    lastResult = withAlternatives(Object.assign(local, { kind: prefs.aiEnabled ? "loading" : "none", title: data.title, store }), local.brandText, data.title);
+    lastResult = enrichProduct(withAlternatives(Object.assign(local, { kind: prefs.aiEnabled ? "loading" : "none", title: data.title, store }), local.brandText, data.title), data);
     draw();
     const site = entry ? `${entry.nombre} (${entry.pais})` : siteName;
     api.runtime.sendMessage({ type: "qed:resolve", brandText: local.brandText, title: data.title, site }).then((r) => {
@@ -98,9 +114,9 @@
       if ((r.status === "ai" || r.status === "cache") && r.result) {
         // Si la IA asignó la marca a un grupo de la base, se usan los datos locales (incluida su reputación).
         if (r.result.gid && index.groups[r.result.gid]) r.result.group = index.groups[r.result.gid];
-        lastResult = withAlternatives(Object.assign(r.result, { store }), r.result.brand, data.title);
+        lastResult = enrichProduct(withAlternatives(Object.assign(r.result, { store }), r.result.brand, data.title), data);
       }
-      else lastResult = withAlternatives(Object.assign({}, local, { kind: "none", aiStatus: r.status, aiError: r.error, limit: r.limit, aiOn: prefs.aiEnabled, store }), local.brandText, data.title);
+      else lastResult = enrichProduct(withAlternatives(Object.assign({}, local, { kind: "none", aiStatus: r.status, aiError: r.error, limit: r.limit, aiOn: prefs.aiEnabled, store }), local.brandText, data.title), data);
       draw();
     }).catch(() => {});
   }

@@ -1,4 +1,8 @@
 // Tarjeta flotante dentro de un Shadow DOM, para que el CSS de la tienda no la afecte.
+// Soporta 3 secciones modulares para tres tipos de consumidores:
+//   1. Consumidor Inteligente: Confiabilidad de compra, vendedor, logística, garantías y normas de calidad.
+//   2. Consumidor Ahorrador: Mercado y alternativas locales trazables.
+//   3. Consumidor Consciente: Control corporativo, fondos indexados, historial y cabildeo.
 // Soporta internacionalización (i18n: es, en, de, fr, it, ja) y sugerencias directas en 1 clic.
 (function (root) {
   const QED = (root.QED = root.QED || {});
@@ -68,11 +72,61 @@
   .sum { font-size: 11.5px; color: #5a6478; margin-top: 2px; }
   details.more { margin-top: 8px; } details.more summary { cursor: pointer; color: #1f6fb2; font-size: 12px; }
   .method { font-size: 11px; color: #6a7386; margin-top: 8px; }
-  .alt { margin-top: 10px; border-radius: 10px; padding: 8px 10px; background: #eef7ea; border: 1px solid #d3e8c9; }
-  .alt .k { color: #3d6b2c; }
-  .alt .it { margin-top: 6px; font-size: 12.5px; line-height: 1.35; }
-  .alt .it b { font-size: 13px; } .alt .it small { color: #5a6478; }
-  .alt .why { display: inline-block; font-size: 10.5px; padding: 0 6px; border-radius: 999px; background: #d9eecf; color: #2d5a1b; margin-left: 2px; }
+  
+  /* Tabs superiores */
+  .sec-tabs { display: flex; gap: 4px; margin: 10px 0 8px; border-bottom: 1px solid #eef1f7; padding-bottom: 6px; }
+  .tab-btn { flex: 1; text-align: center; font-size: 11px; font-weight: 600; padding: 5px 3px; border-radius: 6px; background: #f2f5fb; color: #3c4b6e; border: 1px solid #dce2ee; cursor: pointer; transition: all .15s ease; white-space: nowrap; }
+  .tab-btn:hover { background: #e3ebf7; color: #1c2a4d; }
+  .tab-btn.active { background: #1f2a44; color: #fff; border-color: #1f2a44; }
+
+  /* Acordeones modulares */
+  details.sec-acc { margin-top: 8px; border: 1px solid #e2e6f0; border-radius: 9px; overflow: hidden; background: #fff; transition: all .15s ease; }
+  details.sec-acc[open] { border-color: #c4ceea; box-shadow: 0 3px 10px rgba(20,35,65,.05); }
+  details.sec-acc summary { cursor: pointer; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; font-weight: 650; font-size: 12px; background: #f9fafc; list-style: none; user-select: none; }
+  details.sec-acc summary::-webkit-details-marker { display: none; }
+  details.sec-acc[open] summary { background: #f0f4fa; border-bottom: 1px solid #e2e7f2; }
+  .sec-acc-title { display: flex; align-items: center; gap: 5px; flex: 1; text-align: left; }
+  .sec-acc-persona { font-size: 9px; text-transform: uppercase; letter-spacing: .3px; padding: 1px 5px; border-radius: 4px; background: #e6ebf5; color: #3e4b68; font-weight: 600; }
+  .sec-acc-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px; white-space: nowrap; margin-left: 6px; }
+  .sec-acc-badge.high { background: #d7f1d4; color: #1f5f19; }
+  .sec-acc-badge.standard { background: #fff1c7; color: #7a5800; }
+  .sec-acc-badge.check { background: #fde2df; color: #8a1f14; }
+  .sec-acc-badge.local { background: #d9eecf; color: #2d5a1b; }
+  .sec-acc-badge.corp { background: #e4eaf7; color: #1f3b73; }
+  .sec-acc-content { padding: 9px 10px; font-size: 12px; }
+
+  /* Confiabilidad de compra */
+  .rel-box { font-size: 12px; }
+  .rel-row { display: flex; gap: 8px; margin-top: 8px; align-items: flex-start; }
+  .rel-row:first-child { margin-top: 0; }
+  .rel-ic { font-size: 14px; flex: none; line-height: 1.3; }
+  .rel-info { flex: 1; }
+  .rel-val { font-size: 12.5px; font-weight: 600; color: #1c2233; margin-top: 1px; }
+  .rel-sub { font-size: 11px; color: #5a6478; margin-top: 2px; line-height: 1.35; }
+  .rel-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; }
+  .rel-tag.official { background: #d7f1d4; color: #1f5f19; }
+  .rel-tag.direct { background: #d9e8fb; color: #124386; }
+  .rel-tag.verified { background: #e6f3e6; color: #235b1d; }
+  .rel-tag.third_party { background: #f0f2f7; color: #434c62; }
+  .norm-item { margin-top: 4px; padding: 4px 6px; background: #f6f8fb; border-radius: 6px; border: 1px solid #e3e8f2; }
+  .norm-code { font-weight: 600; color: #213555; font-size: 11px; }
+  .norm-desc { font-size: 10.5px; color: #5a6478; margin-top: 1px; line-height: 1.3; }
+  .rel-tip { margin-top: 10px; padding: 7px 9px; border-radius: 7px; font-size: 11.5px; line-height: 1.35; }
+  .rel-tip.high { background: #f2f9f1; border-left: 3px solid #3c8d2f; color: #1e4a17; }
+  .rel-tip.standard { background: #fdfaf0; border-left: 3px solid #d4a106; color: #6b5100; }
+  .rel-tip.check { background: #fdf2f0; border-left: 3px solid #c0392b; color: #871c12; }
+
+  /* Alternativas & Mercado */
+  .alt-content { font-size: 12px; }
+  .alt-lead { font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: #3d6b2c; font-weight: 600; margin-bottom: 6px; }
+  .alt-content .it { margin-top: 6px; padding: 6px 8px; background: #f6fbf4; border-radius: 7px; border: 1px solid #e1efe0; line-height: 1.35; }
+  .alt-content .it b { font-size: 12.5px; }
+  .alt-content .why { display: inline-block; font-size: 10px; padding: 0 6px; border-radius: 999px; background: #d9eecf; color: #2d5a1b; margin-left: 2px; }
+  .alt-tip { margin-top: 8px; padding: 7px 9px; border-radius: 7px; font-size: 11.5px; line-height: 1.35; background: #f2f8ee; border-left: 3px solid #4a8b30; color: #254d16; }
+  .alt-empty { padding: 4px 0; }
+  .also-loc { color: #2d5a1b; font-weight: normal; font-size: 11px; }
+
+  /* Botones sugerir */
   .btn-sug { display: block; width: 100%; box-sizing: border-box; text-align: center; margin-top: 8px; padding: 7px 10px; border-radius: 8px; background: #1f2a44; color: #fff; border: none; cursor: pointer; font-size: 12px; font-weight: 600; }
   .btn-sug:hover { background: #2d3d63; }
   .sug-ok { display: none; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: #e2f0d9; color: #235017; font-size: 11.5px; font-weight: 500; }
@@ -210,22 +264,6 @@
     return sc.parcial ? "" : ` <span class="st">${sc.indice}/100</span>`;
   };
 
-  // ---------------------------------------------------------------- Alternativas locales
-  function altBlock(res) {
-    const a = res.alternativas;
-    if (!a) return "";
-    const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, a.label.toLowerCase()) : a.label.toLowerCase();
-    const head = t("alt_header", { cat: esc(catLabel), pais: esc(a.pais) }) + alsoLocal;
-    if (!a.items.length) {
-      return `<div class="alt"><div class="k">${head}</div><div class="sum">${t("alt_none_yet", { pais: esc(a.pais) })}</div></div>`;
-    }
-    return `<div class="alt"><div class="k">${head}</div>
-      ${a.items.map((it) => `<div class="it"><b>${esc(it.marcas.join(", "))}</b> <span class="why">${esc(it.motivo)}</span> <small>· ${esc(it.capital)}</small>
-        <br><small><b>${esc(it.group.empresa)}</b>${it.group.nota ? ` · ${esc(it.group.nota)}` : ""}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small></div>`).join("")}
-      <div class="method">${t("alt_disclaimer")}</div></div>`;
-
-  }
-
   function storeBlock(store) {
     if (!store || !store.group) return "";
     const g = store.group;
@@ -233,6 +271,121 @@
     return `<div class="store">${storeLine}${g.pais ? ` · ${esc(g.pais)}` : ""} ${confChip(g.confianza)}${repChip(g)}</div>`;
   }
 
+  // ---------------------------------------------------------------- SECCIÓN 1: Confiabilidad de compra (Consumidor Inteligente)
+  function reliabilityBlock(res) {
+    const rel = res.reliabilityEval || (QED.evaluateReliability ? QED.evaluateReliability({}, res.group, null, res.title) : null);
+    if (!rel) return "";
+
+    let sellerBadgeText = "";
+    if (rel.sellerType === "official") sellerBadgeText = t("seller_official");
+    else if (rel.sellerType === "direct") sellerBadgeText = t("seller_direct", { platform: rel.storeName || "Plataforma" });
+    else if (rel.sellerType === "verified") sellerBadgeText = t("seller_verified");
+    else sellerBadgeText = t("seller_third_party");
+
+    const shipText = rel.isFulfilledByPlatform ? t("ship_platform_fulfilled") : t("ship_seller_fulfilled");
+    const tipKey = rel.level === "high" ? "rel_tip_high" : rel.level === "standard" ? "rel_tip_standard" : "rel_tip_check";
+
+    const normsHtml = (rel.norms || []).map((n) => {
+      const desc = n.descKey ? t(n.descKey) : "";
+      return `<div class="norm-item"><span class="norm-code">📋 ${esc(n.code)}</span>${desc ? `<div class="norm-desc">${esc(desc)}</div>` : ""}</div>`;
+    }).join("");
+
+    return `
+      <div class="rel-box">
+        <div class="rel-row">
+          <div class="rel-ic">🏬</div>
+          <div class="rel-info">
+            <div class="k">${t("rel_seller_label")}</div>
+            <div class="rel-val"><b>${esc(rel.sellerName || rel.storeName || "—")}</b> <span class="rel-tag ${esc(rel.sellerType)}">${esc(sellerBadgeText)}</span></div>
+            ${rel.sellerRating ? `<div class="rel-sub">${esc(rel.sellerRating)}</div>` : ""}
+          </div>
+        </div>
+
+        <div class="rel-row">
+          <div class="rel-ic">📦</div>
+          <div class="rel-info">
+            <div class="k">${t("rel_shipping_label")}</div>
+            <div class="rel-val">${esc(shipText)}</div>
+          </div>
+        </div>
+
+        <div class="rel-row">
+          <div class="rel-ic">🔄</div>
+          <div class="rel-info">
+            <div class="k">${t("rel_warranty_label")}</div>
+            <div class="rel-val"><b>${t("warranty_protected_30d")}</b></div>
+            <div class="rel-sub">${t("warranty_factory_note")}</div>
+          </div>
+        </div>
+
+        <div class="rel-row">
+          <div class="rel-ic">🛡️</div>
+          <div class="rel-info">
+            <div class="k">${t("rel_norms_label")}</div>
+            ${normsHtml}
+          </div>
+        </div>
+
+        <div class="rel-tip ${esc(rel.level)}">${t(tipKey)}</div>
+      </div>
+    `;
+  }
+
+  // ---------------------------------------------------------------- SECCIÓN 2: Mercado & Alternativas (Consumidor Ahorrador)
+  function alternativesSection(res) {
+    const a = res.alternativas;
+    if (!a || !a.items || !a.items.length) {
+      return `
+        <div class="alt-empty">
+          <div class="sum">${t("no_local_alternatives")}</div>
+          <div class="alt-tip">${t("alt_saver_tip")}</div>
+        </div>
+      `;
+    }
+
+    const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, a.label.toLowerCase()) : a.label.toLowerCase();
+    const alsoLocal = a.actualEsLocal ? ` <span class="also-loc">${t("alt_also_local")}</span>` : "";
+
+    return `
+      <div class="alt-content">
+        <div class="alt-lead">${t("alt_header", { cat: esc(catLabel), pais: esc(a.pais) })}${alsoLocal}</div>
+        ${a.items.map((it) => `
+          <div class="it">
+            <b>${esc(it.marcas.join(", "))}</b> <span class="why">${esc(it.motivo)}</span> <small>· ${esc(it.capital)}</small>
+            <br><small><b>${esc(it.group.empresa)}</b>${it.group.nota ? ` · ${esc(it.group.nota)}` : ""}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small>
+          </div>
+        `).join("")}
+        <div class="alt-tip">${t("alt_saver_tip")}</div>
+        <div class="method">${t("alt_disclaimer")}</div>
+      </div>
+    `;
+  }
+
+  // ---------------------------------------------------------------- SECCIÓN 3: ¿A quién le compras? (Consumidor Consciente)
+  function ownershipSection(res, opts) {
+    if (res.found) {
+      const g = res.group || {};
+      return `
+        <div class="own-content">
+          ${groupBlock(g)}
+          ${res.how === "título" ? `<div class="hint">${t("hint_title_deduced")}</div>` : ""}
+          ${res.kind === "ai" ? `<div class="hint">${t("hint_ai_classified", { model: esc(res.model), certeza: esc(res.certeza) })}</div>` : ""}
+          ${res.kind === "ai-base" ? `<div class="hint">${t("hint_ai_base", { model: esc(res.model) })}</div>` : ""}
+          ${res.kind === "ai" ? "" : repBlock(g, opts)}
+          ${storeBlock(res.store)}
+        </div>
+      `;
+    }
+    return `
+      <div class="own-content">
+        <div class="sum">${t("not_found_desc", { brand: esc(res.brandText || "") })}</div>
+        <div class="hint">${t("not_found_pending_hint")}</div>
+        ${storeBlock(res.store)}
+      </div>
+    `;
+  }
+
+  // ---------------------------------------------------------------- Viajes
   function renderTravel(res, opts) {
     if (res.mode === "hospedaje") {
       return `<div class="lead">${t("booking_with", { agency: esc(res.agency && res.agency.nombre) })}</div>${groupBlock(res.agency && res.agency.group)}${repBlock(res.agency && res.agency.group, opts)}`;
@@ -256,40 +409,85 @@
     return h;
   }
 
+  // ---------------------------------------------------------------- Render principal modular
   function render(res, opts) {
     if (res.mode) return renderTravel(res, opts);
-    if (res.found) {
-      const g = res.group || {};
-      return `
-        <div class="brand">${t("brand_detected")} <b>${esc(res.brand)}</b> <span style="color:#9aa2b2">(${esc(res.source)})</span></div>
-        ${groupBlock(g)}
-        ${res.how === "título" ? `<div class="hint">${t("hint_title_deduced")}</div>` : ""}
-        ${res.kind === "ai" ? `<div class="hint">${t("hint_ai_classified", { model: esc(res.model), certeza: esc(res.certeza) })}</div>` : ""}
-        ${res.kind === "ai-base" ? `<div class="hint">${t("hint_ai_base", { model: esc(res.model) })}</div>` : ""}
-        ${altBlock(res)}
-        ${res.kind === "ai" ? "" : repBlock(g, opts)}
-        ${storeBlock(res.store)}`;
-    }
+
     if (res.kind === "loading") {
       return `<div class="emp"><span class="spin"></span>...</div>
         <div class="v">${res.brandText ? `<b>${esc(res.brandText)}</b>...` : "..."}</div>`;
     }
-    const brandName = res.brandText || "";
+
+    const brandName = res.found ? res.brand : (res.brandText || "");
     const storeName = res.store ? res.store.nombre : "";
     const emailSubject = encodeURIComponent(`Sugerencia de marca: ${brandName}`);
     const emailBody = encodeURIComponent(`Marca: ${brandName}\nTienda: ${storeName}\nProducto: ${res.title || ""}\n`);
     const mailtoUrl = `mailto:gina.proyecto02@gmail.com?subject=${emailSubject}&body=${emailBody}`;
 
+    // Parámetros de insignia para cada sección
+    const rel = res.reliabilityEval || (QED.evaluateReliability ? QED.evaluateReliability({}, res.group, null, res.title) : { level: "standard" });
+    const relBadgeText = rel.level === "high" ? t("rel_high") : rel.level === "standard" ? t("rel_standard") : t("rel_check");
+
+    const altCount = (res.alternativas && res.alternativas.items && res.alternativas.items.length) || 0;
+    const altBadgeText = altCount > 0 ? `${altCount} ${t("alt_options_count")}` : "";
+
+    const corpBadgeText = res.found && res.group ? esc(res.group.empresa) : "";
+
     return `
-      <div class="emp">${t("not_found_title")}</div>
-      <div class="v">${brandName ? t("not_found_desc", { brand: esc(brandName) }) : t("not_found_unreadable")}</div>
-      <div class="hint">${t("not_found_pending_hint")}</div>
-      <button id="card-suggest-btn" class="btn-sug">${t("suggest_btn")}</button>
-      <div id="card-suggest-ok" class="sug-ok">${t("suggest_success")}
-        <div class="sug-links"><a href="${mailtoUrl}" target="_blank">${t("suggest_email_opt")}</a></div>
+      <div class="brand">
+        ${res.found
+          ? `${t("brand_detected")} <b>${esc(res.brand)}</b> <span style="color:#9aa2b2">(${esc(res.source)})</span>`
+          : `<b>${esc(brandName || t("not_found_unreadable"))}</b> <span style="color:#9aa2b2">(${t("not_found_title")})</span>`
+        }
       </div>
-      ${altBlock(res)}
-      ${storeBlock(res.store)}`;
+
+      ${!res.found ? `
+        <div class="hint">${t("not_found_pending_hint")}</div>
+        <button id="card-suggest-btn" class="btn-sug">${t("suggest_btn")}</button>
+        <div id="card-suggest-ok" class="sug-ok">${t("suggest_success")}
+          <div class="sug-links"><a href="${mailtoUrl}" target="_blank">${t("suggest_email_opt")}</a></div>
+        </div>
+      ` : ""}
+
+      <div class="sec-tabs">
+        <button class="tab-btn active" data-target="sec-rel">${t("tab_smart")}</button>
+        <button class="tab-btn" data-target="sec-alt">${t("tab_saver")}</button>
+        <button class="tab-btn" data-target="sec-own">${t("tab_conscious")}</button>
+      </div>
+
+      <!-- SECCIÓN 1: Consumidor Inteligente (Confiabilidad) -->
+      <details id="sec-rel" class="sec-acc" open>
+        <summary>
+          <span class="sec-acc-title">🛡️ ${t("sec_reliability_title")} <span class="sec-acc-persona">${t("persona_smart")}</span></span>
+          <span class="sec-acc-badge ${esc(rel.level)}">${esc(relBadgeText)}</span>
+        </summary>
+        <div class="sec-acc-content">
+          ${reliabilityBlock(res)}
+        </div>
+      </details>
+
+      <!-- SECCIÓN 2: Consumidor Ahorrador (Mercado y Alternativas) -->
+      <details id="sec-alt" class="sec-acc">
+        <summary>
+          <span class="sec-acc-title">💡 ${t("sec_alternatives_title")} <span class="sec-acc-persona">${t("persona_saver")}</span></span>
+          ${altBadgeText ? `<span class="sec-acc-badge local">${esc(altBadgeText)}</span>` : ""}
+        </summary>
+        <div class="sec-acc-content">
+          ${alternativesSection(res)}
+        </div>
+      </details>
+
+      <!-- SECCIÓN 3: Consumidor Consciente (¿A qué bicho le compras?) -->
+      <details id="sec-own" class="sec-acc">
+        <summary>
+          <span class="sec-acc-title">🏢 ${t("sec_ownership_title")} <span class="sec-acc-persona">${t("persona_conscious")}</span></span>
+          ${corpBadgeText ? `<span class="sec-acc-badge corp">${corpBadgeText}</span>` : ""}
+        </summary>
+        <div class="sec-acc-content">
+          ${ownershipSection(res, opts)}
+        </div>
+      </details>
+    `;
   }
 
   function getHost() {
@@ -322,6 +520,33 @@
       </div></div>`;
     shadow.querySelector(".min").onclick = () => { opts.onToggle && opts.onToggle(true); };
     shadow.querySelector(".x").onclick = () => { QED.hideCard(); opts.onClose && opts.onClose(); };
+
+    // Handler de pestañas interactivas (abre y desplaza la sección seleccionada)
+    shadow.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.onclick = () => {
+        const targetId = btn.getAttribute("data-target");
+        shadow.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const el = shadow.getElementById(targetId);
+        if (el) {
+          el.open = true;
+          el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+      };
+    });
+
+    // Sincronización bidireccional al abrir/cerrar acordeones
+    shadow.querySelectorAll("details.sec-acc").forEach((det) => {
+      det.ontoggle = () => {
+        if (det.open) {
+          const id = det.id;
+          shadow.querySelectorAll(".tab-btn").forEach((b) => {
+            if (b.getAttribute("data-target") === id) b.classList.add("active");
+            else b.classList.remove("active");
+          });
+        }
+      };
+    });
 
     // Handler para sugerir la marca en 1 clic directamente desde la tarjeta
     const sugBtn = shadow.querySelector("#card-suggest-btn");

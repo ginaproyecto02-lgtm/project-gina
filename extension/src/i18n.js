@@ -399,6 +399,352 @@
       ja: "所有形態（協同組合、従業員、創業家、創業者）と国に基づく提案です。価格や品質の比較ではありません。"
     },
 
+    // ---------------- Modular Sections & Shopper Personas ----------------
+    sec_reliability_title: {
+      es: "Confiabilidad de compra y producto",
+      en: "Purchase & Product Reliability",
+      de: "Kauf- & Produktsicherheit",
+      fr: "Fiabilité d'achat et produit",
+      it: "Affidabilità dell'acquisto e prodotto",
+      ja: "購入と商品の信頼性"
+    },
+    sec_alternatives_title: {
+      es: "Mercado y alternativas locales",
+      en: "Market & Local Alternatives",
+      de: "Markt & lokale Alternativen",
+      fr: "Marché et alternatives locales",
+      it: "Mercato e alternative locali",
+      ja: "市場と地域資本の代替案"
+    },
+    sec_ownership_title: {
+      es: "¿A qué bicho le compras?",
+      en: "Who are you buying from?",
+      de: "Von wem kaufst du wirklich?",
+      fr: "À qui donnez-vous votre argent ?",
+      it: "A chi stai dando i tuoi soldi?",
+      ja: "実質的に誰から買っていますか？"
+    },
+    persona_smart: {
+      es: "Consumidor Inteligente",
+      en: "Smart Shopper",
+      de: "Kluger Käufer",
+      fr: "Consommateur Malin",
+      it: "Consumatore Intelligente",
+      ja: "スマート消費者"
+    },
+    persona_saver: {
+      es: "Consumidor Ahorrador",
+      en: "Value & Local Shopper",
+      de: "Sparbewusster Käufer",
+      fr: "Consommateur Économe",
+      it: "Consumatore Attento",
+      ja: "地域・節約志向"
+    },
+    persona_conscious: {
+      es: "Consumidor Consciente",
+      en: "Conscious Shopper",
+      de: "Bewusster Käufer",
+      fr: "Consommateur Engagé",
+      it: "Consumatore Consapevole",
+      ja: "エシカル消費者"
+    },
+
+    // Tabs
+    tab_smart: {
+      es: "🛡️ Confiabilidad",
+      en: "🛡️ Reliability",
+      de: "🛡️ Sicherheit",
+      fr: "🛡️ Fiabilité",
+      it: "🛡️ Affidabilità",
+      ja: "🛡️ 信頼性"
+    },
+    tab_saver: {
+      es: "💡 Alternativas",
+      en: "💡 Alternatives",
+      de: "💡 Alternativen",
+      fr: "💡 Alternatives",
+      it: "💡 Alternative",
+      ja: "💡 代替案"
+    },
+    tab_conscious: {
+      es: "🏢 ¿Quién controla?",
+      en: "🏢 Who controls?",
+      de: "🏢 Wer kontrolliert?",
+      fr: "🏢 Qui contrôle ?",
+      it: "🏢 Chi controlla?",
+      ja: "🏢 実質支配者"
+    },
+
+    // Reliability Levels
+    rel_high: {
+      es: "✔ Alta confiabilidad",
+      en: "✔ High reliability",
+      de: "✔ Hohe Zuverlässigkeit",
+      fr: "✔ Haute fiabilité",
+      it: "✔ Alta affidabilità",
+      ja: "✔ 高い信頼性"
+    },
+    rel_standard: {
+      es: "✔ Confiabilidad estándar",
+      en: "✔ Standard reliability",
+      de: "✔ Standard-Zuverlässigkeit",
+      fr: "✔ Fiabilité standard",
+      it: "✔ Affidabilità standard",
+      ja: "✔ 標準的な信頼性"
+    },
+    rel_check: {
+      es: "⚠ Verificar vendedor",
+      en: "⚠ Verify seller",
+      de: "⚠ Verkäufer prüfen",
+      fr: "⚠ Vérifier le vendeur",
+      it: "⚠ Verificare il venditore",
+      ja: "⚠ 出品者を確認"
+    },
+
+    // Reliability Labels
+    rel_seller_label: {
+      es: "Vendedor y tienda",
+      en: "Seller & Store",
+      de: "Verkäufer & Shop",
+      fr: "Vendeur & Boutique",
+      it: "Venditore e Negozio",
+      ja: "販売元・店舗"
+    },
+    rel_shipping_label: {
+      es: "Envío y origen",
+      en: "Shipping & Fulfillment",
+      de: "Versand & Logistik",
+      fr: "Livraison & Expédition",
+      it: "Spedizione e Logistica",
+      ja: "配送・発送元"
+    },
+    rel_warranty_label: {
+      es: "Garantía y protección",
+      en: "Warranty & Protection",
+      de: "Garantie & Käuferschutz",
+      fr: "Garantie & Protection",
+      it: "Garanzia e Protezione",
+      ja: "保証・購入者保護"
+    },
+    rel_norms_label: {
+      es: "Normas de calidad y seguridad",
+      en: "Quality & Safety Standards",
+      de: "Qualitäts- & Sicherheitsnormen",
+      fr: "Normes de qualité et sécurité",
+      it: "Norme di qualità e sicurezza",
+      ja: "品質・安全基準"
+    },
+
+    // Seller Types
+    seller_official: {
+      es: "Tienda Oficial de la marca",
+      en: "Official Brand Store",
+      de: "Offizieller Markenshop",
+      fr: "Boutique Officielle de la marque",
+      it: "Negozio Ufficiale del marchio",
+      ja: "公式ブランドストア"
+    },
+    seller_direct: {
+      es: "Vendido directamente por {platform}",
+      en: "Sold directly by {platform}",
+      de: "Direkt von {platform} verkauft",
+      fr: "Vendu directement par {platform}",
+      it: "Venduto direttamente da {platform}",
+      ja: "{platform}直販"
+    },
+    seller_verified: {
+      es: "Vendedor verificado de la plataforma",
+      en: "Verified platform seller",
+      de: "Verifizierter Plattform-Verkäufer",
+      fr: "Vendeur vérifié par la plateforme",
+      it: "Venditore verificato della piattaforma",
+      ja: "プラットフォーム認証出品者"
+    },
+    seller_third_party: {
+      es: "Vendedor externo independiente",
+      en: "Third-party marketplace seller",
+      de: "Externer Drittanbieter",
+      fr: "Vendeur tiers indépendant",
+      it: "Venditore terzo indipendente",
+      ja: "サードパーティ出品者"
+    },
+
+    // Fulfillment
+    ship_platform_fulfilled: {
+      es: "Almacén oficial (Prime / Full) con envío asegurado",
+      en: "Official warehouse (Prime / Full) with insured shipping",
+      de: "Offizielles Lager (Prime / Full) mit versichertem Versand",
+      fr: "Entrepôt officiel (Prime / Full) avec expédition assurée",
+      it: "Magazzino ufficiale (Prime / Full) con spedizione assicurata",
+      ja: "公式倉庫（Prime / フルフィルメント）による安心発送"
+    },
+    ship_seller_fulfilled: {
+      es: "Envío directo gestionado por el vendedor",
+      en: "Direct shipping fulfilled by the seller",
+      de: "Direktversand durch den Verkäufer",
+      fr: "Expédition directe gérée par le vendeur",
+      it: "Spedizione diretta gestita dal venditore",
+      ja: "出品者による直接発送"
+    },
+
+    // Warranty
+    warranty_protected_30d: {
+      es: "Compra Protegida · 30 días de devolución sin costo",
+      en: "Buyer Protection · Free 30-day returns",
+      de: "Käuferschutz · Kostenlose 30-Tage-Rückgabe",
+      fr: "Protection acheteur · Retours gratuits sous 30 jours",
+      it: "Protezione acquisti · Reso gratuito entro 30 giorni",
+      ja: "購入者保護 · 30日間無料返品"
+    },
+    warranty_factory_note: {
+      es: "Garantía legal y de fabricante aplicable contra defectos",
+      en: "Applicable legal and manufacturer warranty against defects",
+      de: "Gesetzliche und Herstellergarantie gegen Mängel",
+      fr: "Garantie légale et fabricant contre les défauts",
+      it: "Garanzia legale e del produttore contro i difetti",
+      ja: "製造欠陥に対する法的保証およびメーカー保証"
+    },
+
+    // Norms descriptions
+    norm_health_desc: {
+      es: "Fórmula e ingredientes con registro sanitario y trazabilidad de lote.",
+      en: "Formula and ingredients with sanitary registration and batch traceability.",
+      de: "Rezeptur und Inhaltsstoffe mit gesundheitlicher Registrierung und Chargenrückverfolgbarkeit.",
+      fr: "Formule et ingrédients avec enregistrement sanitaire et traçabilité des lots.",
+      it: "Formula e ingredienti con registrazione sanitaria e tracciabilità del lotto.",
+      ja: "衛生登録およびロット追跡管理された成分・配合。"
+    },
+    norm_batch_desc: {
+      es: "Cumple especificaciones dermatológicas y etiquetado libre de sustancias nocivas.",
+      en: "Meets dermatological specifications and clean, compliant labeling.",
+      de: "Erfüllt dermatologische Vorgaben und schadstofffreie Kennzeichnung.",
+      fr: "Conforme aux spécifications dermatologiques et étiquetage sécurisé.",
+      it: "Conforme alle specifiche dermatologiche ed etichettatura conforme.",
+      ja: "皮膚科学的仕様および有害物質不使用の基準に適合。"
+    },
+    norm_food_desc: {
+      es: "Etiquetado nutrimental claro y estándares de inocuidad en alimentos.",
+      en: "Clear nutritional labeling and food safety standards.",
+      de: "Klare Nährwertkennzeichnung und Lebensmittelsicherheitsstandards.",
+      fr: "Étiquetage nutritionnel clair et normes de sécurité alimentaire.",
+      it: "Etichettatura nutrizionale trasparente e norme di sicurezza alimentare.",
+      ja: "明確な栄養表示と食品安全基準。"
+    },
+    norm_freshness_desc: {
+      es: "Garantía de fecha de caducidad vigente y almacenamiento higiénico.",
+      en: "Valid expiration date guarantee and proper storage conditions.",
+      de: "Garantie gültigen Haltbarkeitsdatums und fachgerechte Lagerung.",
+      fr: "Garantie de date de péremption valide et stockage adapté.",
+      it: "Garanzia di data di scadenza valida e stoccaggio idoneo.",
+      ja: "有効な賞味期限保証と適切な保管管理。"
+    },
+    norm_tech_desc: {
+      es: "Seguridad eléctrica, aislamiento y compatibilidad electromagnética certificada.",
+      en: "Certified electrical safety, insulation, and electromagnetic compatibility.",
+      de: "Zertifizierte elektrische Sicherheit, Isolation und elektromagnetische Verträglichkeit.",
+      fr: "Sécurité électrique, isolation et compatibilité électromagnétique certifiés.",
+      it: "Sicurezza elettrica, isolamento e compatibilità elettromagnetica certificati.",
+      ja: "電気安全、絶縁性、電磁両立性の認証適合。"
+    },
+    norm_warranty_law_desc: {
+      es: "Garantía obligatoria de funcionamiento técnico (mínimo 90 días a 1 año).",
+      en: "Mandatory technical functioning warranty (minimum 90 days to 1 year).",
+      de: "Gesetzliche technische Funktionsgarantie (mindestens 90 Tage bis 1 Jahr).",
+      fr: "Garantie légale de bon fonctionnement technique (90 jours à 1 an min.).",
+      it: "Garanzia obbligatoria di conformità tecnica (minimo da 90 giorni a 1 anno).",
+      ja: "技術的動作保証（最低90日から1年間）。"
+    },
+    norm_sport_desc: {
+      es: "Materiales probados para tensión, resistencia al desgaste y uso deportivo.",
+      en: "Materials tested for stress, wear resistance, and outdoor/sport performance.",
+      de: "Materialien geprüft auf Belastung, Verschleißfestigkeit und sportliche Nutzung.",
+      fr: "Matériaux testés pour la traction, la résistance à l'usure et l'usage sportif.",
+      it: "Materiali testati per trazione, resistenza all'usura e uso sportivo.",
+      ja: "張力、耐摩耗性、実釣・スポーツ使用に耐えるテスト済み素材。"
+    },
+    norm_gear_guarantee_desc: {
+      es: "Garantía de ensamble y componentes mecánicos originales.",
+      en: "Warranty on mechanical assembly and original parts.",
+      de: "Garantie auf mechanische Montage und Originalteile.",
+      fr: "Garantie sur l'assemblage mécanique et les pièces d'origine.",
+      it: "Garanzia sull'assemblaggio meccanico e sui componenti originali.",
+      ja: "機械的組み立ておよび純正部品に対する保証。"
+    },
+    norm_cleaning_desc: {
+      es: "Cumple normas de aseo doméstico, seguridad de envase y prevención de riesgos.",
+      en: "Complies with household cleaning safety, secure packaging, and hazard warnings.",
+      de: "Erfüllt Reinigungsnormen, Verpackungssicherheit und Gefahrenhinweise.",
+      fr: "Conforme aux normes ménagères, sécurité du conditionnement et étiquetage des risques.",
+      it: "Conforme alle norme per la pulizia, sicurezza della confezione e avvertenze.",
+      ja: "家庭用洗剤基準、容器の安全性、リスク防止表示に適合。"
+    },
+    norm_general_desc: {
+      es: "Protección legal de los derechos del consumidor y garantía de satisfacción.",
+      en: "Consumer legal rights protection and satisfaction guarantee.",
+      de: "Gesetzlicher Schutz der Verbraucherrechte und Zufriedenheitsgarantie.",
+      fr: "Protection légale des droits des consommateurs et garantie de satisfaction.",
+      it: "Tutela legale dei diritti del consumatore e garanzia di conformità.",
+      ja: "消費者保護法に基づく権利保護および適合保証。"
+    },
+    norm_registered_brand_desc: {
+      es: "Empresa matriz legalmente establecida con domicilio social y responsabilidad corporativa.",
+      en: "Legally established parent company with registered office and corporate liability.",
+      de: "Rechtlich eingetragene Muttergesellschaft mit Firmensitz und Haftung.",
+      fr: "Société mère légalement constituée avec siège social et responsabilité civile.",
+      it: "Società controllante legalmente costituita con sede sociale e responsabilità aziendale.",
+      ja: "法人登記された親会社による責任と体制。"
+    },
+
+    // Shopping Advice Tips
+    rel_tip_high: {
+      es: "💡 Compra de máxima confianza: vendedor oficial/directo con devolución garantizada de 30 días.",
+      en: "💡 Maximum confidence purchase: official/direct seller with guaranteed 30-day returns.",
+      de: "💡 Höchste Zuverlässigkeit: offizieller/direkter Verkäufer mit 30 Tagen Rückgabegarantie.",
+      fr: "💡 Achat de confiance maximale : vendeur officiel/direct avec retours garantis sous 30 jours.",
+      it: "💡 Acquisto di massima fiducia: venditore ufficiale/diretto con reso garantito entro 30 giorni.",
+      ja: "💡 最高度の信頼性：公式・直販出品者、30日間の返品保証付き。"
+    },
+    rel_tip_standard: {
+      es: "💡 Vendedor con buen historial en plataforma y política activa de devoluciones.",
+      en: "💡 Seller with good platform track record and active return policy.",
+      de: "💡 Verkäufer mit gutem Plattform-Verlauf und aktiver Rückgaberichtlinie.",
+      fr: "💡 Vendeur avec un bon historique sur la plateforme et politique de retours active.",
+      it: "💡 Venditore con buona reputazione sulla piattaforma e politica di reso attiva.",
+      ja: "💡 プラットフォーム実績良好、返品ポリシー適用の出品者です。"
+    },
+    rel_tip_check: {
+      es: "⚠️ Vendedor externo: recomendamos revisar sus calificaciones recientes y tiempos de entrega antes de pagar.",
+      en: "⚠️ Third-party seller: we recommend checking recent ratings and delivery times before checkout.",
+      de: "⚠️ Drittanbieter: Prüfe bitte vor dem Kauf aktuelle Bewertungen und Lieferzeiten.",
+      fr: "⚠️ Vendeur tiers : nous vous conseillons de vérifier les avis récents et délais de livraison avant d'acheter.",
+      it: "⚠️ Venditore terzo: ti consigliamo di verificare recensioni recenti e tempi di consegna prima dell'acquisto.",
+      ja: "⚠️ サードパーティ出品者：購入前に最近の評価と配送予定日を確認することをおすすめします。"
+    },
+    alt_saver_tip: {
+      es: "💡 Las alternativas de capital local reinvierten su valor en el país y evitan sobreprecios de monopolio.",
+      en: "💡 Locally-owned alternatives reinvest value in the community and avoid corporate monopoly markups.",
+      de: "💡 Lokale Alternativen reinvestieren Wert vor Ort und vermeiden überhöhte Monopolaufschläge.",
+      fr: "💡 Les alternatives locales réinvestissent la valeur dans le pays et évitent les surcoûts monopolistiques.",
+      it: "💡 Le alternative a capitale locale reinvestono valore nel territorio ed evitano sovrapprezzi monopolistici.",
+      ja: "💡 地域資本の代替品は国内経済に価値を還元し、独占による価格上乗せを回避します。"
+    },
+    alt_options_count: {
+      es: "opciones locales",
+      en: "local options",
+      de: "lokale Optionen",
+      fr: "options locales",
+      it: "opzioni locali",
+      ja: "件の地域選択肢"
+    },
+    no_local_alternatives: {
+      es: "Aún no hay alternativas locales registradas para este tipo de producto.",
+      en: "No locally-owned alternatives registered for this product category yet.",
+      de: "Noch keine lokalen Alternativen für diese Produktkategorie erfasst.",
+      fr: "Aucune alternative locale enregistrée pour cette catégorie de produit pour le moment.",
+      it: "Nessuna alternativa locale ancora registrata per questa categoria di prodotto.",
+      ja: "この商品カテゴリの地域資本の選択肢はまだ登録されていません。"
+    },
+
     // Footer
     foot_disclaimer: {
       es: "Información orientativa basada en fuentes públicas. No es una recomendación de compra ni de inversión.",

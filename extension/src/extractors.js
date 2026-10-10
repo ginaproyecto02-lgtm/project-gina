@@ -100,6 +100,269 @@
     }
   };
 
+  // --- Extracción de datos de confiabilidad de compra (vendedor, logística, garantías) ---
+  function extractAmazonReliability(doc) {
+    const merchantInfo = txt(q(doc, "#merchant-info, #fulfillerInfoFeature_feature_div, #merchantInfoFeature_feature_div"));
+    const tabularShips = txt(q(doc, "#tabular-buybox .tabular-buybox-row[data-csa-c-slot-id*='ship'] .tabular-buybox-text, [tabular-attribute-name='Ships from'], [tabular-attribute-name='Envía desde']"));
+    const tabularSold = txt(q(doc, "#tabular-buybox .tabular-buybox-row[data-csa-c-slot-id*='sold'] .tabular-buybox-text, [tabular-attribute-name='Sold by'], [tabular-attribute-name='Vendido por']"));
+    const sellerLink = txt(q(doc, "#sellerProfileTriggerId, #sellerName"));
+
+    let seller = sellerLink || tabularSold || "";
+    let shipper = tabularShips || "";
+
+    if (!seller && merchantInfo) {
+      const mSold = merchantInfo.match(/(?:Vendido por|Sold by|Vendu par|Verkauf durch)\s+([^.\n,]+)/i);
+      if (mSold) seller = mSold[1].trim();
+      else if (/enviado y vendido por|ships from and sold by|expédié et vendu par/i.test(merchantInfo)) {
+        seller = "Amazon";
+      } else {
+        seller = merchantInfo;
+      }
+    }
+
+    const byLine = txt(q(doc, "#bylineInfo, #brand"));
+    const isBrandStore = /visita la tienda|visit the .+ store|tienda de|visiter la boutique|besuche den .+ store/i.test(byLine);
+    const isDirectAmazon = /amazon/i.test(seller) || /vendido por amazon|sold by amazon/i.test(merchantInfo);
+    const isFullAmazon = /amazon/i.test(shipper) || /enviado por amazon|ships from amazon|expédié par amazon/i.test(merchantInfo);
+
+    const retPolicy = txt(q(doc, "#productSupportAndReturnPolicy, #RETURNS_POLICY, [data-feature-name='returns'], #return-policy-message"));
+    const warranty = txt(q(doc, "#warranty_feature_div, [data-feature-name='warranty']"));
+
+    return {
+      storeName: "Amazon",
+      seller: seller || (isDirectAmazon ? "Amazon" : ""),
+      shipper: shipper || (isFullAmazon ? "Amazon" : ""),
+      isOfficialStore: isBrandStore,
+      isDirectPlatform: isDirectAmazon,
+      isFulfilledByPlatform: isFullAmazon,
+      returnPolicy: retPolicy || "",
+      warranty: warranty || ""
+    };
+  }
+
+  function extractMercadoLibreReliability(doc) {
+    const officialStoreEl = q(doc, ".ui-pdp-seller__brand-title-container, .ui-pdp-brand__link, .ui-pdp-official-store-link, [class*='official-store']");
+    const officialStoreText = txt(officialStoreEl);
+    const hasOfficialText = /tienda oficial|loja oficial/i.test(txt(q(doc, ".ui-pdp-seller__header, .ui-seller-info, .ui-pdp-seller__reputation-info, .ui-pdp-seller__link-trigger")));
+    const isOfficialStore = !!officialStoreEl || hasOfficialText;
+
+    const sellerLink = txt(q(doc, ".ui-pdp-seller__link-trigger, .ui-seller-data-header__title-wrapper b, .ui-pdp-seller__header__title, .ui-seller-info__title-wrapper"));
+    const seller = officialStoreText || sellerLink || "";
+
+    const hasFull = !!q(doc, ".ui-pdp-icon--full, .ui-pdp-media--full, svg[class*='full']") || /full/i.test(txt(q(doc, ".ui-pdp-shipping__highlight, .ui-pdp-color--GREEN")));
+    const repBadge = txt(q(doc, ".ui-seller-info__status-info, .ui-pdp-seller__reputation-info, .ui-seller-reputation-level-5, .ui-seller-reputation-level-4"));
+
+    const benefitsText = txt(q(doc, ".ui-pdp-promotions-pill-label, .ui-pdp-benefits, [class*='protection']"));
+    const warranty = txt(q(doc, ".ui-pdp-warranty, .ui-pdp-specs__table tr:last-child"));
+    const hasProtection = /compra protegida|compra garantida|devoluci[oó]n gratis|devolu[cç][aã]o gr[aá]tis/i.test(benefitsText) || true;
+
+    return {
+      storeName: "Mercado Libre",
+      seller: seller || "",
+      shipper: hasFull ? "Mercado Libre Full" : "",
+      isOfficialStore: isOfficialStore,
+      isDirectPlatform: false,
+      isFulfilledByPlatform: hasFull,
+      sellerRating: repBadge || (isOfficialStore ? "Tienda Oficial" : ""),
+      returnPolicy: hasProtection ? "Compra Protegida (devolución sin costo 30 días)" : "",
+      warranty: warranty || "Garantía con el vendedor / Compra Protegida"
+    };
+  }
+
+  function extractWalmartReliability(doc) {
+    const sellerEl = q(doc, "[data-testid='seller-name'], a[link-identifier='sellerName'], .seller-info, [data-testid='fulfillment-shipping-text']");
+    const sellerText = txt(sellerEl);
+    const isDirect = /walmart/i.test(sellerText) || !sellerText;
+    const isFulfilled = /enviado por walmart|shipped by walmart/i.test(sellerText) || isDirect;
+
+    return {
+      storeName: "Walmart",
+      seller: sellerText || "Walmart",
+      shipper: isFulfilled ? "Walmart" : "",
+      isOfficialStore: false,
+      isDirectPlatform: isDirect,
+      isFulfilledByPlatform: isFulfilled,
+      returnPolicy: "Devoluciones hasta 30 días con comprobante",
+      warranty: ""
+    };
+  }
+
+  function extractGenericReliability(doc) {
+    let seller = "";
+    let returnPolicy = "";
+    for (const p of jsonLdProducts(doc)) {
+      if (p.offers) {
+        const off = Array.isArray(p.offers) ? p.offers[0] : p.offers;
+        if (off && off.seller && off.seller.name) seller = off.seller.name;
+        if (off && off.hasMerchantReturnPolicy) returnPolicy = "Política de devoluciones indicada";
+      }
+    }
+    return {
+      storeName: "",
+      seller: seller || "",
+      shipper: "",
+      isOfficialStore: false,
+      isDirectPlatform: false,
+      isFulfilledByPlatform: false,
+      returnPolicy: returnPolicy,
+      warranty: ""
+    };
+  }
+
+  function extractReliability(doc, siteName) {
+    if (siteName === "amazon") return extractAmazonReliability(doc);
+    if (siteName === "mercadolibre") return extractMercadoLibreReliability(doc);
+    if (siteName === "walmart") return extractWalmartReliability(doc);
+    return extractGenericReliability(doc);
+  }
+
+  // Identificación de normativas y certificaciones aplicables según categoría de producto
+  function getApplicableNorms(category, brandGroup, title, country) {
+    const norms = [];
+    const t = String(title || "").toLowerCase();
+    const cat = String(category || "").toLowerCase();
+
+    const isDermo = cat.includes("skincare") || cat.includes("cosmetica") || 
+      /\b(serum|crema|protector solar|bloqueador|gel limpiador|acido|hialuronico|ceramide|retinol|facial|dermo|shampoo|hidratante|locion|skin|dermatol)\b/i.test(t);
+
+    const isFood = cat.includes("alimento") || cat.includes("bebida") || cat.includes("lacteo") || cat.includes("snack") ||
+      /\b(leche|cafe|cereal|galletas|botana|bebida|refresco|jugo|pan|harina|queso|yogurt)\b/i.test(t);
+
+    const isTech = cat.includes("tecnologia") || cat.includes("electronica") || cat.includes("computo") ||
+      /\b(laptop|pantalla|tv|celular|smartphone|audifonos|bateria|teclado|mouse|cable|usb|camara|consola)\b/i.test(t);
+
+    const isFishingSport = cat.includes("pesca") || cat.includes("deporte") ||
+      /\b(pesca|caña|carrete|anzuelo|hilo|señuelo|linea|spinning|baitcasting|outdoor|camping)\b/i.test(t);
+
+    const isCleaning = cat.includes("limpieza") ||
+      /\b(detergente|jabon de lavanderia|suavizante|blanqueador|desinfectante|cloro|multiusos|lavatrastes)\b/i.test(t);
+
+    if (isDermo) {
+      norms.push({
+        key: "norm_health",
+        code: "COFEPRIS NOM-141-SSA1/SCFI · FDA / CE",
+        descKey: "norm_health_desc"
+      });
+      norms.push({
+        key: "norm_batch",
+        code: "Trazabilidad cosmética",
+        descKey: "norm_batch_desc"
+      });
+    } else if (isFood) {
+      norms.push({
+        key: "norm_food",
+        code: "NOM-051-SCFI/SSA1 · COFEPRIS / FDA",
+        descKey: "norm_food_desc"
+      });
+      norms.push({
+        key: "norm_freshness",
+        code: "Control de caducidad e inocuidad",
+        descKey: "norm_freshness_desc"
+      });
+    } else if (isTech) {
+      norms.push({
+        key: "norm_tech",
+        code: "Certificación NOM-001 / NOM-024 · CE / FCC",
+        descKey: "norm_tech_desc"
+      });
+      norms.push({
+        key: "norm_warranty_law",
+        code: "Garantía legal mínima de fabricante",
+        descKey: "norm_warranty_law_desc"
+      });
+    } else if (isFishingSport) {
+      norms.push({
+        key: "norm_sport",
+        code: "Resistencia de materiales y manufactura",
+        descKey: "norm_sport_desc"
+      });
+      norms.push({
+        key: "norm_gear_guarantee",
+        code: "Garantía contra defectos de ensamble",
+        descKey: "norm_gear_guarantee_desc"
+      });
+    } else if (isCleaning) {
+      norms.push({
+        key: "norm_cleaning",
+        code: "NOM-189-SSA1/SCFI (Seguridad en aseo)",
+        descKey: "norm_cleaning_desc"
+      });
+    } else {
+      norms.push({
+        key: "norm_general",
+        code: "Protección al Consumidor · PROFECO / Estándar Legal",
+        descKey: "norm_general_desc"
+      });
+    }
+
+    if (brandGroup && brandGroup.empresa) {
+      norms.push({
+        key: "norm_registered_brand",
+        code: "Fabricante registrado: " + brandGroup.empresa,
+        descKey: "norm_registered_brand_desc"
+      });
+    }
+
+    return norms;
+  }
+
+  // Evaluación sintética del nivel de certeza y confianza de la compra
+  function evaluateReliability(rel, brandGroup, category, title, country) {
+    rel = rel || {};
+    title = String(title || "").toLowerCase();
+    category = String(category || "").toLowerCase();
+
+    let score = 70;
+    let sellerType = "third_party";
+    const sellerName = rel.seller || rel.storeName || "";
+
+    if (rel.isOfficialStore) {
+      sellerType = "official";
+      score += 25;
+    } else if (rel.isDirectPlatform) {
+      sellerType = "direct";
+      score += 20;
+    } else if (rel.sellerRating && /platinum|gold|l[ií]der|destacado/i.test(rel.sellerRating)) {
+      sellerType = "verified";
+      score += 15;
+    } else if (rel.seller) {
+      sellerType = "third_party";
+    }
+
+    if (rel.isFulfilledByPlatform) {
+      score += 10;
+    }
+
+    let level = "standard";
+    if (score >= 85 || rel.isOfficialStore || rel.isDirectPlatform) {
+      level = "high";
+    } else if (score >= 60) {
+      level = "standard";
+    } else {
+      level = "check";
+    }
+
+    const norms = getApplicableNorms(category, brandGroup, title, country);
+
+    return {
+      level,
+      score: Math.min(100, Math.max(30, score)),
+      sellerName: sellerName || rel.storeName || "",
+      sellerType,
+      sellerRating: rel.sellerRating || "",
+      isOfficialStore: !!rel.isOfficialStore,
+      isDirectPlatform: !!rel.isDirectPlatform,
+      isFulfilledByPlatform: !!rel.isFulfilledByPlatform,
+      shipper: rel.shipper || "",
+      returnPolicy: rel.returnPolicy || "30 días de devolución · Compra Protegida",
+      warranty: rel.warranty || "Garantía de compra y fabricante aplicable",
+      storeName: rel.storeName || "",
+      brandVerified: !!(brandGroup && brandGroup.empresa),
+      brandEmpresa: brandGroup ? brandGroup.empresa : "",
+      norms
+    };
+  }
+
   function extract(doc, host) {
     const s = site(host);
     const base = s ? SITE[s](doc) : { candidates: [], title: "" };
@@ -120,10 +383,14 @@
     const spec = specRow(doc);
     if (spec) c.push({ text: spec, source: "Tabla de especificaciones" });
     if (!base.title) base.title = txt(q(doc, "h1")) || (doc.title || "");
-    return { site: s, candidates: c, title: base.title };
+    const reliability = extractReliability(doc, s);
+    return { site: s, candidates: c, title: base.title, reliability };
   }
 
   QED.site = site;
   QED.isProductPage = isProductPage;
   QED.extract = extract;
+  QED.extractReliability = extractReliability;
+  QED.evaluateReliability = evaluateReliability;
+  QED.getApplicableNorms = getApplicableNorms;
 })(typeof globalThis !== "undefined" ? globalThis : this);
