@@ -379,6 +379,25 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   }));
   check("I18N contiene traducciones completas de opciones y perfiles en 6 idiomas", okLangs);
 }
+{
+  const testUrls = [
+    ["https://www.amazon.com.mx/dp/B0TEST1", `<span id="productTitle">Nutella Crema de Avellanas 650 g</span><a id="bylineInfo">Visita la tienda de Ferrero</a>`],
+    ["https://www.walmart.com.mx/ip/detergente/00750", `<h1>Detergente Ariel 4 kg</h1>${ld({ "@type": "Product", name: "Detergente Ariel", brand: "Ariel" })}`],
+    ["https://articulo.mercadolibre.com.mx/MLM-PHILIPS", `<h1>Audífonos Philips TAH4205</h1>`],
+    ["https://www.liverpool.com.mx/tienda/pdp/pantalla-samsung/1000", `<h1>Pantalla Samsung 55</h1>`]
+  ];
+  let noQualityPromises = true;
+  for (const [url, html] of testUrls) {
+    const w = env(html, url);
+    analyze(w, url);
+    const text = cardText(w);
+    if (/cumple|garantizad|alta calidad|certificad[oa] por Gina/i.test(text)) {
+      noQualityPromises = false;
+      break;
+    }
+  }
+  check("Sin promesas de calidad ni certificación propia de Gina (/cumple|garantizad|alta calidad|certificad[oa] por Gina/)", noQualityPromises);
+}
 
 console.log(`\n${pass}/${total} pruebas correctas`);
 process.exit(pass === total ? 0 : 1);

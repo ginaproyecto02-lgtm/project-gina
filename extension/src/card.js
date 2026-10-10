@@ -159,11 +159,12 @@
 
   function dataRow(label, value, origin) {
     if (!value) return "";
+    const originHtml = (origin && origin.includes("<a ")) ? origin : esc(origin);
     return `
       <div class="d-row">
         <div class="d-k">${esc(label)}</div>
         <div class="d-v">${value}</div>
-        ${origin ? `<div class="d-src">${esc(origin)}</div>` : ""}
+        ${origin ? `<div class="d-src">${originHtml}</div>` : ""}
       </div>
     `;
   }

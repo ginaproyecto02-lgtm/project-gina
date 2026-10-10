@@ -4,12 +4,13 @@
 
 En cada producto, vuelo u hospedaje muestra:
 
+- **Confiabilidad de compra:** vendedor directo o externo, origen del envío y garantías legales aplicables, tomados textualmente de la página sin inventar ni calificar artificialmente.
 - **Quién es el dueño:** empresa, familia, fondo o Estado, y el país de su capital (también de la tienda, la aerolínea y la plataforma de reservas).
 - **Su historial público:** multas, juicios, acuerdos y sentencias, cada uno con fuente y estado exacto, resumidos en un índice de 0 a 100 con fórmula pública.
 - **Su lobbying:** gasto declarado y donaciones por partido cuando hay dato oficial, sin etiquetas ideológicas.
-- **Alternativas locales:** para el tipo de producto (lácteos, café, detergente, cerveza…), marcas de cooperativas, de sus empleados, de un fideicomiso o de familias y fundadores con capital del país de la tienda.
+- **Alternativas locales:** para el tipo de producto (lácteos, café, detergente, cerveza, electrónica…), marcas de cooperativas, de sus empleados, de un fideicomiso o de familias y fundadores con capital del país de la tienda.
 
-Cubre 335 sitios de 17 países: EE.UU., México, Canadá, Brasil, Argentina, Chile, Reino Unido, Alemania, Francia, España, Italia, China, Japón, Corea del Sur, Singapur, Israel e India. La base tiene 336 grupos dueños, 919 marcas, 110 aerolíneas, 30 historiales de reputación y 57 grupos alternativos verificados (cooperativas, de empleados, familiares).
+Cubre 335 sitios de 17 países: EE.UU., México, Canadá, Brasil, Argentina, Chile, Reino Unido, Alemania, Francia, España, Italia, China, Japón, Corea del Sur, Singapur, Israel e India. La base tiene 354 grupos dueños, 988 marcas, 110 aerolíneas, 16 categorías de producto y 33 historiales de reputación verificados.
 
 ## Cómo funciona (gratis para quien la usa)
 
@@ -73,6 +74,7 @@ Para publicarla en las tiendas sigue **`PUBLICAR.md`**.
 ## Privacidad
 
 - Sin la IA avanzada, Gina no envía nada: solo descarga la base del proyecto (un archivo de datos, sin código).
+- Los datos de confiabilidad (calificación de la tienda, vendedor, origen del envío y garantías legales) se extraen localmente de la página abierta y nunca salen de tu navegador.
 - Las sugerencias las envía el usuario por su voluntad, revisando el texto antes (issue de GitHub o correo). Solo incluyen marca, tienda y título del producto.
 - Con la IA avanzada activada, al proveedor elegido solo van la marca, el título del producto y el nombre de la tienda (y, en la investigación de reputación, el nombre de la empresa).
 - El conteo de qué empresas ves, tus valores y tus claves se quedan en tu navegador.
@@ -102,5 +104,5 @@ Para publicarla en las tiendas sigue **`PUBLICAR.md`**.
 - Las tiendas cambian su HTML; si un sitio deja de detectar, ajusta `src/extractors.js` (o la expresión `p` del sitio en `datagen/sites_data.py`).
 - Los nombres cortos o comunes (Delta, Roma, Valor…) solo cuentan cuando vienen del campo de marca, para evitar falsos positivos.
 - Los datos cambian: revisa la confianza y la fuente de cada tarjeta.
-- La tarjeta y las opciones están en español; el nombre y la ficha de la tienda, en inglés y español.
+- La interfaz (tarjeta flotante, menú emergente y opciones) está disponible en 6 idiomas (español, inglés, alemán, francés, italiano y japonés); los datos de las empresas están en español.
 - Es información orientativa basada en fuentes públicas, no una recomendación de compra ni de inversión.

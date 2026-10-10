@@ -30,6 +30,7 @@ Every dollar you spend is a vote. Gina shows you who it goes to.
 While you shop or book online, Gina adds a small card that tells you:
 
 • Who really owns the brand: the company, family, investment fund or government in control, and the country its capital comes from.
+• Purchase reliability: direct vs. third-party seller, fulfillment origin, and applicable legal warranties, strictly as stated on the page.
 • The big investment funds behind it, such as BlackRock, Vanguard, State Street, Blackstone, KKR, Berkshire Hathaway and Apollo, and their own track record.
 • Its public track record: fines, lawsuits, settlements and court rulings on the environment, labor, corruption, privacy, competition, consumer protection, human rights, taxes and safety. Every item links to its source and says its exact status (allegation, lawsuit, settlement, fine, ruling, dismissed).
 • Its declared lobbying and political donations where official data exists, shown as numbers, never as ideological labels.
@@ -44,7 +45,7 @@ WHERE IT WORKS
 Americas: United States, Mexico, Canada, Brazil, Argentina, Chile.
 Europe: United Kingdom, Germany, France, Spain, Italy.
 Asia: China, Japan, South Korea, Singapore, Israel, India.
-Ownership data for 279 groups, 785 brands (including Chinese, Japanese, Korean and Hebrew names) and 110 airlines.
+Ownership data for 354 groups, 988 brands (including Chinese, Japanese, Korean and Hebrew names), 110 airlines, and 16 product categories.
 
 FREE AND COMMUNITY-POWERED
 Gina is free, with no account and no API key. Project Gina updates the shared database every one to two weeks with an automated research run that only keeps facts whose source came from a real web search. Missing a brand or know a local alternative? Suggest it from the Gina icon and it is verified before it is published.
@@ -52,7 +53,8 @@ Advanced users can optionally connect their own AI key (Claude, Gemini, Groq or 
 
 PRIVATE BY DESIGN
 • Works without an account or key, and sends nothing about you.
-• Everything stays in your browser. No developer servers, analytics, ads or affiliate links.
+• Everything stays in your browser. Seller, rating, shipping, and warranty data are read locally from the page and never leave your computer.
+• No developer servers, analytics, ads or affiliate links.
 • Only if you turn on AI are the brand name, product title and store name sent to the provider you choose.
 
 The interface is available in 6 languages; company details are shown in Spanish.
@@ -67,25 +69,26 @@ Cada peso que gastas es un voto. Gina te muestra a quién va.
 Mientras compras o reservas en línea, Gina agrega una tarjeta discreta que te dice:
 
 • Quién es dueño de la marca: empresa, familia, fondo de inversión o Estado, y de qué país es su capital.
+• Confiabilidad de compra: vendedor directo o externo, origen del envío y garantías legales aplicables, estrictamente según lo que indica la página.
 • Los grandes fondos detrás, como BlackRock, Vanguard, State Street, Blackstone, KKR, Berkshire Hathaway y Apollo, y también su propio historial.
 • Su historial público: multas, juicios, acuerdos y sentencias en medio ambiente, trabajo, corrupción, privacidad, competencia, trato al consumidor, derechos humanos, impuestos y seguridad. Cada hecho enlaza a su fuente e indica su estado exacto (alegación, juicio, acuerdo, multa, sentencia, desestimado).
 • Su lobbying y sus donaciones políticas declaradas, cuando hay dato oficial: cifras, nunca etiquetas ideológicas.
 • Quién es dueño de la tienda donde compras, de la aerolínea en que vuelas y de la plataforma donde reservas.
 
-• Alternativas locales: para el tipo de producto que ves (lácteos, café, detergente, cerveza y más), marcas de cooperativas, de sus empleados, de un fideicomiso o de familias y fundadores del país de la tienda, para que tu dinero vaya a donde tú decidas.
+• Alternativas locales: para el tipo de producto que ves (lácteos, café, detergente, cerveza, electrónica y más), marcas de cooperativas, de sus empleados, de un fideicomiso o de familias y fundadores del país de la tienda, para que tu dinero vaya a donde tú decidas.
 
 TUS VALORES, TU VOTO
 Dile a Gina qué te importa. Cada tarjeta muestra un índice de reputación abierto (0–100, calculado solo con hechos con fuente y una fórmula publicada), qué tan alineada está la empresa con tus valores, y te avisa si tiene multas o acuerdos recientes en un tema que marcaste como muy importante.
 
 DÓNDE FUNCIONA
-335 tiendas, aerolíneas, agencias y plataformas de hospedaje en 17 países de América, Europa y Asia. 279 grupos, 785 marcas y 110 aerolíneas.
+335 tiendas, aerolíneas, agencias y plataformas de hospedaje en 17 países de América, Europa y Asia. 354 grupos, 988 marcas, 110 aerolíneas y 16 categorías de producto.
 
 GRATIS Y HECHA EN COMUNIDAD
 Gina es gratis, sin cuenta ni clave. Project Gina actualiza la base compartida cada una o dos semanas con una investigación automática que solo guarda hechos cuya fuente salió de una búsqueda real. ¿Falta una marca o conoces una alternativa local? Sugiérela desde el ícono de Gina; se verifica antes de publicarse.
 Opcional y avanzado: conecta tu propia clave de IA (Claude, Gemini, Groq o xAI) para respuestas al momento.
 
 PRIVACIDAD
-Sin cuenta ni clave obligatoria. Todo se guarda en tu navegador. Sin servidores del desarrollador, analítica, publicidad ni enlaces de afiliado.
+Sin cuenta ni clave obligatoria. Todo se guarda en tu navegador. Los datos de confiabilidad (calificación, vendedor, envío y garantías) se extraen localmente y nunca salen de tu computadora. Sin servidores del desarrollador, analítica, publicidad ni enlaces de afiliado. La interfaz está disponible en 6 idiomas (español, inglés, alemán, francés, italiano y japonés).
 
 Información orientativa basada en fuentes públicas. No es una recomendación de compra ni de inversión. ¿Un dato incorrecto sobre una empresa? Escríbenos a gina.proyecto02@gmail.com.
 ```
@@ -108,7 +111,7 @@ Store images: `icono-128.png` (icon), `promo-pequeno-440x280.png` (small tile, r
 
 **Single purpose**
 ```
-Show shoppers who owns the brands, stores, airlines and travel platforms they see while shopping or booking online, each owner's public, sourced track record, and locally owned alternatives, so they can decide who their money supports.
+Help shoppers make informed purchases: seller and product reliability shown on the page, who owns the brand, and locally owned alternatives.
 ```
 
 **Permission justifications**
