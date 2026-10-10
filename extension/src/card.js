@@ -327,6 +327,7 @@
     const a = res.alternativas;
     const srcOfficial = t("src_official", { source: "Registro público" });
 
+    let localAltHtml = "";
     if (!a || !a.items || !a.items.length) {
       const brandName = res.found ? res.brand : (res.brandText || "");
       const storeName = res.store ? res.store.nombre : "";
@@ -335,7 +336,7 @@
       const contact = (QED.PROJECT && QED.PROJECT.contacto) || "";
       const mailtoUrl = contact ? `mailto:${contact}?subject=${emailSubject}&body=${emailBody}` : "";
 
-      return `
+      localAltHtml = `
         <div class="alt-empty-box">
           <div>${t("no_local_alternatives")}</div>
           <button id="card-suggest-btn" class="btn-sug">${t("suggest_btn")}</button>
@@ -343,36 +344,72 @@
             ${mailtoUrl ? `<br><a href="${esc(mailtoUrl)}" target="_blank" rel="noopener noreferrer">${t("suggest_email_opt")}</a>` : ""}
           </div>
         </div>
-        <div class="tip-box">${t("alt_saver_tip")}</div>
-        <div class="method">${t("alt_disclaimer")}</div>
+      `;
+    } else {
+      const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, a.label.toLowerCase()) : a.label.toLowerCase();
+      const alsoLocal = a.actualEsLocal ? ` <span class="d-src">(${t("alt_also_local")})</span>` : "";
+      const countryLbl = I18N().paisLabel ? I18N().paisLabel(a.pais) : a.pais;
+
+      const itemsHtml = a.items.map((it) => {
+        const isEn = I18N().getLang && I18N().getLang() !== "es";
+        const nota = (isEn && it.group.nota_en) ? it.group.nota_en : it.group.nota;
+        const fuente = it.group.url ? `<a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : "";
+        const budgetBadge = it.esEconomica ? ` · <span style="color:#1b5e20;font-weight:600;">🏷️ ${t("alt_badge_budget")}${it.group.ahorro_fuente ? ` (<a href="${esc(safe(it.group.ahorro_fuente))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>)` : ""}</span>` : "";
+        return `
+          <div class="alt-box">
+            <b>${esc(it.marcas.join(", "))}</b>
+            <div style="font-size:11.5px;color:#334155;margin-top:2px;">
+              <b>${esc(it.group.empresa)}</b> · ${esc(it.motivo)} · ${esc(it.capital)}${budgetBadge}
+              ${nota ? ` · ${esc(nota)}` : ""}
+              ${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}
+              ${fuente ? ` · ${fuente}` : ""}
+            </div>
+            <div class="d-src">${srcOfficial}</div>
+          </div>
+        `;
+      }).join("");
+
+      localAltHtml = `
+        <div class="d-k">${t("alt_header", { cat: esc(catLabel), pais: esc(countryLbl) })}${alsoLocal}</div>
+        ${itemsHtml}
       `;
     }
 
-    const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, a.label.toLowerCase()) : a.label.toLowerCase();
-    const alsoLocal = a.actualEsLocal ? ` <span class="d-src">(${t("alt_also_local")})</span>` : "";
-    const countryLbl = I18N().paisLabel ? I18N().paisLabel(a.pais) : a.pais;
-
-    const itemsHtml = a.items.map((it) => {
-      const isEn = I18N().getLang && I18N().getLang() !== "es";
-      const nota = (isEn && it.group.nota_en) ? it.group.nota_en : it.group.nota;
-      const fuente = it.group.url ? `<a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : "";
-      return `
-        <div class="alt-box">
-          <b>${esc(it.marcas.join(", "))}</b>
-          <div style="font-size:11.5px;color:#334155;margin-top:2px;">
-            <b>${esc(it.group.empresa)}</b> · ${esc(it.motivo)} · ${esc(it.capital)}
-            ${nota ? ` · ${esc(nota)}` : ""}
-            ${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}
-            ${fuente ? ` · ${fuente}` : ""}
-          </div>
-          <div class="d-src">${srcOfficial}</div>
+    // Quién domina esta categoría
+    let dominantHtml = "";
+    if (a && a.dominant && a.dominant.length) {
+      const domLines = a.dominant.map(d => {
+        const tipoLbl = I18N().tipoLabel ? I18N().tipoLabel(d.tipo) : d.tipo;
+        const countryLbl = I18N().paisLabel ? I18N().paisLabel(d.pais) : d.pais;
+        const link = d.url ? `<a href="${esc(safe(d.url))}" target="_blank" rel="noopener noreferrer">${esc(d.fuente || t("source").toLowerCase())}</a>` : esc(d.fuente || "");
+        return `<div style="margin-bottom:4px;"><b>${esc(d.marca)}</b> · ${esc(d.empresa)} <span style="color:#5f687a;font-size:11px;">(${esc(tipoLbl)}${countryLbl ? ` · ${esc(countryLbl)}` : ""})</span>${link ? ` · <small>${link}</small>` : ""}</div>`;
+      }).join("");
+      dominantHtml = `
+        <div class="d-row" style="margin-top:10px;">
+          <div class="d-k">${t("lbl_category_dominance")}</div>
+          <div class="d-v" style="font-weight:normal;line-height:1.45;">${domLines}</div>
+          <div class="d-src">${t("src_official", { source: "Registros corporativos públicos" })}</div>
         </div>
       `;
-    }).join("");
+    }
+
+    // Otras marcas del mismo dueño
+    let otherBrandsHtml = "";
+    if (a && a.otherBrands && a.otherBrands.length) {
+      const fuente = (res.group && res.group.fuente) || "Registro corporativo";
+      otherBrandsHtml = `
+        <div class="d-row" style="margin-top:10px;">
+          <div class="d-k">${t("lbl_other_brands")}</div>
+          <div class="d-v">${esc(a.otherBrands.join(", "))}</div>
+          <div class="d-src">${t("src_official", { source: fuente })}</div>
+        </div>
+      `;
+    }
 
     return `
-      <div class="d-k">${t("alt_header", { cat: esc(catLabel), pais: esc(countryLbl) })}${alsoLocal}</div>
-      ${itemsHtml}
+      ${localAltHtml}
+      ${dominantHtml}
+      ${otherBrandsHtml}
       <div class="tip-box">${t("alt_saver_tip")}</div>
       <div class="method">${t("alt_disclaimer")}</div>
     `;

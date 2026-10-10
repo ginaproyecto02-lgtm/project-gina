@@ -38,7 +38,7 @@
       }
     }
     kws.sort((a, b) => b.len - a.len);
-    return { cats, byBrand, kws, index };
+    return { cats, byBrand, kws, index, db };
   }
 
   function category(prep, brand, title) {
@@ -61,20 +61,14 @@
       }
     }
 
-    // 1) Si el título tiene una coincidencia semántica clara (≥ 12 pts), prima el tipo real de producto
-    if (scores.size) {
-      const sorted = Array.from(scores.entries()).sort((x, y) => y[1] - x[1]);
-      if (sorted[0][1] >= 12) return sorted[0][0];
-    }
-
-    // 2) Si no hay señal fuerte en el título, verificar si la marca tiene categoría fija
-    if (b && prep.byBrand.has(b)) return prep.byBrand.get(b);
-
-    // 3) Si hubo alguna coincidencia menor en el título
+    // 1) Primero palabras del título: si hay coincidencias en el título, prima el tipo real de producto
     if (scores.size) {
       const sorted = Array.from(scores.entries()).sort((x, y) => y[1] - x[1]);
       return sorted[0][0];
     }
+
+    // 2) Después por la marca (si no hubo palabras clave en el título)
+    if (b && prep.byBrand.has(b)) return prep.byBrand.get(b);
 
     return null;
   }
@@ -113,7 +107,7 @@
       return Object.assign(a, {
         motivo: INDEP[a.group.tipo].label, prio: INDEP[a.group.tipo].prio, rep: repVal, nivel: sc && !sc.parcial ? sc.nivel : "",
         capital: GENTILICIO[pais] ? `capital ${GENTILICIO[pais]}` : `capital de ${pais}`,
-        esEconomica: !!(a.group && a.group.ahorro)
+        esEconomica: !!(a.group && a.group.ahorro_fuente && /^https?:\/\//i.test(a.group.ahorro_fuente))
       });
     });
     // Primero cooperativas y de empleados; luego mejor reputación (sin historial cuenta como neutral, 80).
@@ -121,6 +115,56 @@
     return out.slice(0, limit || 5);
   }
 
+  // Otras marcas del mismo dueño en brands.json (máximo limit, por defecto 6), excluyendo la marca actual
+  function otherBrandsOfSameOwner(dbOrPrep, groupGid, currentBrand, limit) {
+    const db = (dbOrPrep && dbOrPrep.db) ? dbOrPrep.db : dbOrPrep;
+    if (!db || !db.marcas || !groupGid) return [];
+    const curNorm = QED.norm(currentBrand || "");
+    const seen = new Set();
+    const result = [];
+    const max = limit || 6;
+    for (const m of db.marcas) {
+      if (m.g === groupGid) {
+        const nm = (m.n || "").trim();
+        const nNorm = QED.norm(nm);
+        if (nNorm && nNorm !== curNorm && !seen.has(nNorm)) {
+          seen.add(nNorm);
+          result.push(nm);
+          if (result.length >= max) break;
+        }
+      }
+    }
+    return result;
+  }
+
+  // Marcas representativas/dominantes de una categoría en la base, con su dueño y tipo
+  function categoryDominantBrands(prep, catId, limit) {
+    if (!prep || !catId || !prep.cats || !prep.cats[catId]) return [];
+    const cat = prep.cats[catId];
+    const seen = new Set();
+    const result = [];
+    const max = limit || 4;
+    for (const m of (cat.marcas || [])) {
+      const e = prep.index && prep.index.exact && prep.index.exact.get(QED.norm(m));
+      if (!e) continue;
+      const g = prep.index && prep.index.groups && prep.index.groups[e.g];
+      if (!g) continue;
+      const key = QED.norm(e.n);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      result.push({
+        marca: e.n,
+        empresa: g.empresa || e.n,
+        controlador: g.controlador || "",
+        tipo: g.tipo || "",
+        pais: g.pais || "",
+        fuente: g.fuente || "",
+        url: g.url || ""
+      });
+      if (result.length >= max) break;
+    }
+    return result;
+  }
 
   // Enlace para sugerir al proyecto marcas faltantes o alternativas locales (lo envía el usuario, por su voluntad):
   // un issue de GitHub prellenado o, si no hay repositorio, un correo. El job del servidor lee el marcador «gina:sugerencia».
@@ -137,5 +181,5 @@
     return "";
   }
 
-  QED.ALT = { INDEP, countries, prepare, category, suggest, suggestionLink };
+  QED.ALT = { INDEP, countries, prepare, category, suggest, suggestionLink, otherBrandsOfSameOwner, categoryDominantBrands };
 })(typeof globalThis !== "undefined" ? globalThis : this);

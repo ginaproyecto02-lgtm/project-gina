@@ -72,7 +72,18 @@
     if (!cat) return res;
     const custom = Object.values(prefs.values || {}).some((v) => v !== 1 && v != null);
     const items = QED.ALT.suggest(alt, cat, entry.pais, res.group && res.group.id, custom ? prefs.values : null, 5, title);
-    res.alternativas = { cat, label: alt.cats[cat].label, pais: entry.pais, items, actualEsLocal: !!(res.group && QED.ALT.INDEP[res.group.tipo] && QED.ALT.countries(res.group.pais).includes(entry.pais)) };
+    const currentGid = res.group && res.group.id;
+    const otherBrands = currentGid ? QED.ALT.otherBrandsOfSameOwner(alt, currentGid, brand || res.brandText, 6) : [];
+    const dominant = QED.ALT.categoryDominantBrands(alt, cat, 4);
+    res.alternativas = {
+      cat,
+      label: alt.cats[cat].label,
+      pais: entry.pais,
+      items,
+      otherBrands,
+      dominant,
+      actualEsLocal: !!(res.group && QED.ALT.INDEP[res.group.tipo] && QED.ALT.countries(res.group.pais).includes(entry.pais))
+    };
     return res;
   }
 

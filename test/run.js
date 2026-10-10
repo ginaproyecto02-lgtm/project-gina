@@ -41,8 +41,19 @@ function analyze(w, url) {
   // Igual que content.js: alternativas locales según el tipo de producto y el país de la tienda
   const prep = QED.ALT.prepare(db, index);
   const cat = entry && entry.tipo === "tienda" ? QED.ALT.category(prep, r.found ? r.brand : r.brandText, data.title) : null;
-  if (cat) r.alternativas = { cat, label: prep.cats[cat].label, pais: entry.pais, items: QED.ALT.suggest(prep, cat, entry.pais, r.group && r.group.id, null, 3),
-    actualEsLocal: !!(r.group && QED.ALT.INDEP[r.group.tipo] && QED.ALT.countries(r.group.pais).includes(entry.pais)) };
+  if (cat) {
+    const otherBrands = r.group && r.group.id ? QED.ALT.otherBrandsOfSameOwner(prep, r.group.id, r.found ? r.brand : r.brandText, 6) : [];
+    const dominant = QED.ALT.categoryDominantBrands(prep, cat, 4);
+    r.alternativas = {
+      cat,
+      label: prep.cats[cat].label,
+      pais: entry.pais,
+      items: QED.ALT.suggest(prep, cat, entry.pais, r.group && r.group.id, null, 3),
+      otherBrands,
+      dominant,
+      actualEsLocal: !!(r.group && QED.ALT.INDEP[r.group.tipo] && QED.ALT.countries(r.group.pais).includes(entry.pais))
+    };
+  }
   if (QED.evaluateReliability) {
     r.reliabilityEval = QED.evaluateReliability(data.reliability, r.group, cat, data.title, entry ? entry.pais : "México", entry);
   }
@@ -221,6 +232,17 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const w = env(`<span id="productTitle">Laptop gamer 16 GB</span><a id="bylineInfo">Marca: Lenovo</a>`, url);
   const r = analyze(w, url);
   check("Sin categoría (electrónica): no se inventan alternativas", !r.alternativas);
+}
+{
+  const w = env("", "https://example.com/");
+  const idx = w.QED.buildIndex(db, [], {}, {});
+  const prep = w.QED.ALT.prepare(db, idx);
+  const cat = w.QED.ALT.category(prep, "Philips", "Audífonos inalámbricos Philips Bluetooth");
+  check("«Audífonos inalámbricos Philips» → audio_electronica, no cocina", cat === "audio_electronica", cat);
+  const others = w.QED.ALT.otherBrandsOfSameOwner(prep, "pg", "Ariel", 6);
+  check("Otras marcas del mismo dueño (P&G sin Ariel)", others.length >= 2 && !others.map(x => x.toLowerCase()).includes("ariel"), others.join(", "));
+  const dom = w.QED.ALT.categoryDominantBrands(prep, "audio_electronica", 4);
+  check("Marcas dominantes de audio_electronica (Sony, Bose, JBL, etc.)", dom.length >= 2 && dom.some((d) => d.marca === "Sony"), dom.map((d) => d.marca).join(", "));
 }
 {
   const w = env("", "https://example.com/");
