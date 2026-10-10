@@ -12,7 +12,8 @@
    "nota": "En México opera Walmex, ~70% de Walmart Inc.",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Walmart",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "amazon": {
    "empresa": "Amazon.com Inc. (marca propia)",
@@ -24,7 +25,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Amazon",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "costco": {
    "empresa": "Costco Wholesale (marca propia)",
@@ -36,7 +38,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Costco",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "herdez": {
    "empresa": "Grupo Herdez",
@@ -48,7 +51,8 @@
    "nota": "",
    "confianza": "Verificado",
    "fuente": "Prensa (jun-2026) citando registros",
-   "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/06/26/56440-quien-es-el-dueno-de-grupo-herdez-uno-de-los-emporios-de-alimentos-procesados-en-mexico"
+   "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/06/26/56440-quien-es-el-dueno-de-grupo-herdez-uno-de-los-emporios-de-alimentos-procesados-en-mexico",
+   "ahorro": false
   },
   "herdezfuerte": {
    "empresa": "Herdez Del Fuerte (50% Grupo Herdez / 50% Grupo KUO)",
@@ -60,7 +64,8 @@
    "nota": "Herdez Del Fuerte tiene a su vez el 50% de MegaMex Foods con Hormel en EE.UU.",
    "confianza": "Verificado",
    "fuente": "Página de Grupo KUO",
-   "url": "https://www.kuo.com.mx/sectores/consumo/megamex"
+   "url": "https://www.kuo.com.mx/sectores/consumo/megamex",
+   "ahorro": false
   },
   "mccormickmx": {
    "empresa": "McCormick de México (75% McCormick & Co. / 25% Grupo Herdez)",
@@ -72,7 +77,8 @@
    "nota": "McCormick subió del 50% al 75% el 2-ene-2026 (US$750 M). Fuera de México la marca es 100% de McCormick & Co.",
    "confianza": "Verificado",
    "fuente": "Comunicado de Grupo Herdez",
-   "url": "https://grupoherdez.com.mx/noticias/grupo-herdez-anuncia-cierre-venta-25-mccormick-mexico"
+   "url": "https://grupoherdez.com.mx/noticias/grupo-herdez-anuncia-cierre-venta-25-mccormick-mexico",
+   "ahorro": false
   },
   "bimbo": {
    "empresa": "Grupo Bimbo",
@@ -84,7 +90,8 @@
    "nota": "Mayor panificadora del mundo.",
    "confianza": "Alta",
    "fuente": "Reporte anual de Grupo Bimbo (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lala": {
    "empresa": "Grupo Lala",
@@ -96,7 +103,8 @@
    "nota": "Dejó la bolsa en 2022.",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo; verificar en registros públicos",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "alpura": {
    "empresa": "Alpura",
@@ -108,7 +116,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "costena": {
    "empresa": "Grupo La Costeña",
@@ -120,7 +129,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "gruma": {
    "empresa": "Gruma",
@@ -132,7 +142,8 @@
    "nota": "Mayor productora de harina de maíz y tortillas del mundo.",
    "confianza": "Alta",
    "fuente": "Reporte anual de Gruma (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sigma": {
    "empresa": "Sigma Foods (antes Alfa)",
@@ -144,7 +155,8 @@
    "nota": "También dueña de Campofrío (España) y Bar-S (EE.UU.).",
    "confianza": "Verificar",
    "fuente": "Reporte anual de Sigma/Alfa (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "pisa": {
    "empresa": "Grupo Pisa",
@@ -156,7 +168,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "becle": {
    "empresa": "Becle (José Cuervo)",
@@ -168,7 +181,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Reporte anual de Becle (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "coca": {
    "empresa": "The Coca-Cola Company",
@@ -180,7 +194,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Coca-Cola; 13F de Berkshire",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "pepsico": {
    "empresa": "PepsiCo",
@@ -192,7 +207,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de PepsiCo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "nestle": {
    "empresa": "Nestlé S.A.",
@@ -204,7 +220,8 @@
    "nota": "Nestlé también tiene ~20% de L'Oréal.",
    "confianza": "Alta",
    "fuente": "Informe anual de Nestlé",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "unilever": {
    "empresa": "Unilever plc",
@@ -216,7 +233,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Unilever",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "pg": {
    "empresa": "Procter & Gamble",
@@ -228,7 +246,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de P&G",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "colgate": {
    "empresa": "Colgate-Palmolive",
@@ -240,7 +259,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Colgate-Palmolive",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kcm": {
    "empresa": "Kimberly-Clark (en México: Kimberly-Clark de México)",
@@ -252,7 +272,8 @@
    "nota": "Kimberly-Clark Corp. anunció en nov-2025 la compra de Kenvue (Tylenol, Listerine, Neutrogena).",
    "confianza": "Verificar",
    "fuente": "Informe 10-K de Kimberly-Clark; reporte anual de KCM (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kenvue": {
    "empresa": "Kenvue (antes consumo de Johnson & Johnson)",
@@ -264,7 +285,8 @@
    "nota": "Kimberly-Clark anunció su compra en nov-2025; verificar si ya se cerró.",
    "confianza": "Verificar",
    "fuente": "Informe 10-K de Kenvue",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mars": {
    "empresa": "Mars, Incorporated",
@@ -276,7 +298,8 @@
    "nota": "Una de las mayores empresas privadas de EE.UU.",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kellanova": {
    "empresa": "Kellanova (comprada por Mars)",
@@ -288,7 +311,8 @@
    "nota": "Atención: en EE.UU. los cereales Kellogg's son de WK Kellogg Co, comprada por Ferrero en 2025. Fuera de EE.UU. (incluido México) son de Kellanova/Mars.",
    "confianza": "Verificar",
    "fuente": "Comunicados de Mars y Ferrero",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mondelez": {
    "empresa": "Mondelez International",
@@ -300,7 +324,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Mondelez",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ferrero": {
    "empresa": "Grupo Ferrero",
@@ -312,7 +337,8 @@
    "nota": "En 2025 compró WK Kellogg Co (cereales Kellogg's de EE.UU.).",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kraftheinz": {
    "empresa": "Kraft Heinz",
@@ -324,7 +350,8 @@
    "nota": "Anunció en 2025 su división en dos empresas.",
    "confianza": "Alta",
    "fuente": "Informe 10-K; 13F de Berkshire",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "danone": {
    "empresa": "Danone",
@@ -336,7 +363,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Danone",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "abinbev": {
    "empresa": "AB InBev (en México: Grupo Modelo)",
@@ -348,7 +376,8 @@
    "nota": "En EE.UU., Corona, Modelo y Pacífico pertenecen a Constellation Brands, no a AB InBev.",
    "confianza": "Alta",
    "fuente": "Informe anual de AB InBev",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "heineken": {
    "empresa": "Heineken (en México: Cuauhtémoc Moctezuma)",
@@ -360,7 +389,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Heineken",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "diageo": {
    "empresa": "Diageo",
@@ -372,7 +402,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Diageo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "bacardi": {
    "empresa": "Bacardi Limited",
@@ -384,7 +415,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "toyo": {
    "empresa": "Toyo Suisan (Maruchan)",
@@ -396,7 +428,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Toyo Suisan",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "nissin": {
    "empresa": "Nissin Foods",
@@ -408,7 +441,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de Nissin",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "duracell": {
    "empresa": "Duracell (100% Berkshire Hathaway)",
@@ -420,7 +454,8 @@
    "nota": "Berkshire la compró a P&G en 2016.",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Berkshire",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "energizer": {
    "empresa": "Energizer Holdings",
@@ -432,7 +467,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Energizer",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lego": {
    "empresa": "Grupo LEGO",
@@ -444,7 +480,8 @@
    "nota": "KIRKBI también es socio de Blackstone en Merlin Entertainments (Legoland).",
    "confianza": "Alta",
    "fuente": "Informe anual de LEGO",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mattel": {
    "empresa": "Mattel",
@@ -456,7 +493,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Mattel",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "hasbro": {
    "empresa": "Hasbro",
@@ -468,7 +506,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Hasbro",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "apple": {
    "empresa": "Apple Inc.",
@@ -480,7 +519,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "13F de la SEC; informe 10-K de Apple",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "samsung": {
    "empresa": "Samsung Electronics",
@@ -492,7 +532,8 @@
    "nota": "Samsung compró Harman (JBL, Harman Kardon) en 2017.",
    "confianza": "Alta",
    "fuente": "Informe anual de Samsung Electronics",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "xiaomi": {
    "empresa": "Xiaomi",
@@ -504,7 +545,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Xiaomi (HKEX)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "huawei": {
    "empresa": "Huawei",
@@ -516,7 +558,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Huawei",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lenovo": {
    "empresa": "Lenovo (incluye Motorola)",
@@ -528,7 +571,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de Lenovo (HKEX)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sony": {
    "empresa": "Sony Group",
@@ -540,7 +584,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Sony",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lg": {
    "empresa": "LG Electronics",
@@ -552,7 +597,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de LG",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "hp": {
    "empresa": "HP Inc.",
@@ -564,7 +610,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de HP",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "dell": {
    "empresa": "Dell Technologies",
@@ -576,7 +623,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Dell",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "hisense": {
    "empresa": "Hisense",
@@ -588,7 +636,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "tcl": {
    "empresa": "TCL",
@@ -600,7 +649,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "haier": {
    "empresa": "Haier",
@@ -612,7 +662,8 @@
    "nota": "Compró GE Appliances (2016) y Candy (2019).",
    "confianza": "Alta",
    "fuente": "Informe anual de Haier Smart Home",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "whirlpool": {
    "empresa": "Whirlpool",
@@ -624,7 +675,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Whirlpool",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "microsoft": {
    "empresa": "Microsoft",
@@ -636,7 +688,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Microsoft",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "nintendo": {
    "empresa": "Nintendo",
@@ -648,7 +701,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Nintendo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "bose": {
    "empresa": "Bose Corporation",
@@ -660,7 +714,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "nike": {
    "empresa": "Nike Inc.",
@@ -672,7 +727,8 @@
    "nota": "Incluye Jordan y Converse.",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Nike",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "adidas": {
    "empresa": "Adidas AG",
@@ -684,7 +740,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Adidas",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "puma": {
    "empresa": "Puma SE",
@@ -696,7 +753,8 @@
    "nota": "Anta Sports (China) firmó en ene-2026 la compra del 29,06% a Artémis; cierre previsto antes de fin de 2026.",
    "confianza": "Verificado",
    "fuente": "FashionUnited",
-   "url": "https://fashionunited.uk/news/business/anta-sports-becomes-largest-shareholder-in-puma/2026012785939"
+   "url": "https://fashionunited.uk/news/business/anta-sports-becomes-largest-shareholder-in-puma/2026012785939",
+   "ahorro": false
   },
   "skechers": {
    "empresa": "Skechers",
@@ -708,7 +766,8 @@
    "nota": "Dejó la bolsa al ser comprada por 3G en 2025 (~US$9.400 M).",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "reebok": {
    "empresa": "Reebok (Authentic Brands Group)",
@@ -720,7 +779,8 @@
    "nota": "Adidas la vendió en 2022.",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "underarmour": {
    "empresa": "Under Armour",
@@ -732,7 +792,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Under Armour",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "newbalance": {
    "empresa": "New Balance",
@@ -744,7 +805,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "levis": {
    "empresa": "Levi Strauss & Co.",
@@ -756,7 +818,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Levi's",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "pvh": {
    "empresa": "PVH Corp.",
@@ -768,7 +831,8 @@
    "nota": "La ropa es de PVH; los perfumes Calvin Klein se fabrican bajo licencia (Coty).",
    "confianza": "Alta",
    "fuente": "Informe 10-K de PVH",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "essilux": {
    "empresa": "EssilorLuxottica",
@@ -780,7 +844,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de EssilorLuxottica",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "capri": {
    "empresa": "Capri Holdings",
@@ -792,7 +857,8 @@
    "nota": "Vendió Versace a Prada en 2025.",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Capri",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "tapestry": {
    "empresa": "Tapestry",
@@ -804,7 +870,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Tapestry",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "vf": {
    "empresa": "VF Corporation",
@@ -816,7 +883,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de VF",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "crocs": {
    "empresa": "Crocs Inc.",
@@ -828,7 +896,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Crocs",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lacoste": {
    "empresa": "Lacoste (Maus Frères)",
@@ -840,7 +909,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "loreal": {
    "empresa": "L'Oréal",
@@ -852,7 +922,8 @@
    "nota": "Acordó comprar Kering Beauté y los derechos de Creed (oct-2025).",
    "confianza": "Alta",
    "fuente": "Informe anual de L'Oréal (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "estee": {
    "empresa": "The Estée Lauder Companies",
@@ -864,7 +935,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Estée Lauder",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "puig": {
    "empresa": "Puig",
@@ -876,7 +948,8 @@
    "nota": "Salió a bolsa en 2024.",
    "confianza": "Alta",
    "fuente": "Folleto de la CNMV",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lvmh": {
    "empresa": "LVMH",
@@ -888,7 +961,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de LVMH (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "chanel": {
    "empresa": "Chanel",
@@ -900,7 +974,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Companies House (Reino Unido)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "coty": {
    "empresa": "Coty",
@@ -912,7 +987,8 @@
    "nota": "Fabrica perfumes bajo licencia (Hugo Boss, Burberry, Calvin Klein, entre otros).",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Coty",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "natura": {
    "empresa": "Natura &Co",
@@ -924,7 +1000,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Natura (CVM)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "beiersdorf": {
    "empresa": "Beiersdorf",
@@ -936,7 +1013,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Beiersdorf",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "hermes": {
    "empresa": "Hermès",
@@ -948,7 +1026,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Hermès (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kering": {
    "empresa": "Kering",
@@ -960,7 +1039,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Kering (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "prada": {
    "empresa": "Prada",
@@ -972,7 +1052,8 @@
    "nota": "Compró Versace en 2025.",
    "confianza": "Alta",
    "fuente": "Informe anual de Prada (HKEX)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "galderma": {
    "empresa": "Galderma (Cetaphil)",
@@ -984,7 +1065,8 @@
    "nota": "Antigua filial dermatológica de Nestlé y L'Oréal, vendida a EQT en 2019.",
    "confianza": "Alta",
    "fuente": "Informe anual de Galderma (SIX)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "pierrefabre": {
    "empresa": "Laboratoires Pierre Fabre (Avène)",
@@ -996,7 +1078,8 @@
    "nota": "La fundación apoya el acceso a la salud en países del Sur.",
    "confianza": "Alta",
    "fuente": "Sitio oficial de Laboratoires Pierre Fabre",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "isdin": {
    "empresa": "ISDIN",
@@ -1008,7 +1091,8 @@
    "nota": "Líder español en fotoprotección y cuidado dermatológico.",
    "confianza": "Alta",
    "fuente": "Memoria de ISDIN",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "purefishing": {
    "empresa": "Pure Fishing (Penn, Abu Garcia, Berkley)",
@@ -1020,7 +1104,8 @@
    "nota": "Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",
    "confianza": "Verificado",
    "fuente": "Sycamore Partners",
-   "url": "https://www.sycamorepartners.com"
+   "url": "https://www.sycamorepartners.com",
+   "ahorro": false
   },
   "shimano": {
    "empresa": "Shimano Inc.",
@@ -1032,7 +1117,8 @@
    "nota": "Fabricante líder de componentes de ciclismo y equipos de pesca.",
    "confianza": "Alta",
    "fuente": "Informe anual de Shimano (TSE)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "amazon_tienda": {
    "empresa": "Amazon.com Inc.",
@@ -1044,7 +1130,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Amazon",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "walmart_tienda": {
    "empresa": "Walmart Inc.",
@@ -1056,7 +1143,8 @@
    "nota": "Opera también Walmart Canadá, Líder (Chile) y Flipkart (India).",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Walmart",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "walmex": {
    "empresa": "Walmart de México (Walmex)",
@@ -1068,7 +1156,8 @@
    "nota": "Incluye Walmart, Bodega Aurrera, Sam's Club y Walmart Express.",
    "confianza": "Alta",
    "fuente": "Reporte anual de Walmex (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "costco_tienda": {
    "empresa": "Costco Wholesale",
@@ -1080,7 +1169,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Costco",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mercadolibre": {
    "empresa": "MercadoLibre Inc.",
@@ -1092,7 +1182,8 @@
    "nota": "Baillie Gifford vendió ~248.000 acciones en el 1T-2026.",
    "confianza": "Verificado",
    "fuente": "Registro 13F (Yahoo Finance)",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/baillie-gifford-dumps-248-000-131447776.html"
+   "url": "https://finance.yahoo.com/markets/stocks/articles/baillie-gifford-dumps-248-000-131447776.html",
+   "ahorro": false
   },
   "target": {
    "empresa": "Target Corporation",
@@ -1104,7 +1195,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Target",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "bestbuy": {
    "empresa": "Best Buy",
@@ -1116,7 +1208,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Best Buy",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "homedepot": {
    "empresa": "The Home Depot",
@@ -1128,7 +1221,8 @@
    "nota": "En México invierte US$1.300 M en Altamira (Tamaulipas).",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Home Depot",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lowes": {
    "empresa": "Lowe's",
@@ -1140,7 +1234,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Lowe's",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ebay": {
    "empresa": "eBay Inc.",
@@ -1152,7 +1247,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de eBay",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "etsy": {
    "empresa": "Etsy",
@@ -1164,7 +1260,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Etsy",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kroger": {
    "empresa": "Kroger",
@@ -1176,7 +1273,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Kroger",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "cvs": {
    "empresa": "CVS Health",
@@ -1188,7 +1286,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de CVS",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "walgreens": {
    "empresa": "Walgreens Boots Alliance (Walgreens, Boots)",
@@ -1200,7 +1299,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Comunicados de Walgreens y Sycamore (2025)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "macys": {
    "empresa": "Macy's",
@@ -1212,7 +1312,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Macy's",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "pdd": {
    "empresa": "PDD Holdings (Temu, Pinduoduo)",
@@ -1224,7 +1325,8 @@
    "nota": "Sede formal en Dublín; operación principal en China.",
    "confianza": "Verificar",
    "fuente": "Informe 20-F de PDD Holdings",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "shein": {
    "empresa": "Shein",
@@ -1236,7 +1338,8 @@
    "nota": "No cotiza en bolsa.",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "alibaba": {
    "empresa": "Alibaba Group (AliExpress, Taobao, Tmall, Lazada)",
@@ -1248,7 +1351,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 20-F de Alibaba",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "liverpool": {
    "empresa": "El Puerto de Liverpool (Liverpool, Suburbia)",
@@ -1260,7 +1364,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Reporte anual de Liverpool (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "coppel": {
    "empresa": "Grupo Coppel (Coppel, BanCoppel)",
@@ -1272,7 +1377,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "elektra": {
    "empresa": "Grupo Elektra (Elektra, Banco Azteca)",
@@ -1284,7 +1390,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "soriana": {
    "empresa": "Organización Soriana",
@@ -1296,7 +1403,8 @@
    "nota": "",
    "confianza": "Verificado",
    "fuente": "El CEO",
-   "url": "https://elceo.com/negocios/soriana-quien-es-el-verdadero-dueno-de-este-supermercado/"
+   "url": "https://elceo.com/negocios/soriana-quien-es-el-verdadero-dueno-de-este-supermercado/",
+   "ahorro": false
   },
   "chedraui": {
    "empresa": "Grupo Comercial Chedraui",
@@ -1308,7 +1416,8 @@
    "nota": "También opera Smart & Final y El Super en EE.UU.",
    "confianza": "Alta",
    "fuente": "Reporte anual de Chedraui (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sanborns": {
    "empresa": "Grupo Sanborns (Sanborns, Sears México, Claro Shop)",
@@ -1320,7 +1429,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Reporte anual de Grupo Sanborns (BMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "palacio": {
    "empresa": "El Palacio de Hierro",
@@ -1332,7 +1442,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "canadiantire": {
    "empresa": "Canadian Tire Corporation",
@@ -1344,7 +1455,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Canadian Tire (SEDAR+)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "loblaw": {
    "empresa": "Loblaw (Loblaws, Real Canadian Superstore, Shoppers Drug Mart)",
@@ -1356,7 +1468,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Loblaw (SEDAR+)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "magalu": {
    "empresa": "Magazine Luiza (Magalu, Netshoes)",
@@ -1368,7 +1481,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe a la CVM",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "casasbahia": {
    "empresa": "Grupo Casas Bahia",
@@ -1380,7 +1494,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe a la CVM",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "americanas": {
    "empresa": "Americanas",
@@ -1392,7 +1507,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe a la CVM",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sea": {
    "empresa": "Sea Limited (Shopee)",
@@ -1404,7 +1520,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe 20-F de Sea Limited",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "carrefour": {
    "empresa": "Carrefour S.A.",
@@ -1416,7 +1533,8 @@
    "nota": "En Argentina, Carrefour rechazó las ofertas de compra y decidió quedarse (feb-2026).",
    "confianza": "Verificar",
    "fuente": "Noticias NQN (feb-2026)",
-   "url": "https://www.noticiasnqn.com.ar/noticias/2026/02/19/328334-carrefour-rechazo-todas-las-ofertas-de-compra-y-se-queda-en-la-argentina"
+   "url": "https://www.noticiasnqn.com.ar/noticias/2026/02/19/328334-carrefour-rechazo-todas-las-ofertas-de-compra-y-se-queda-en-la-argentina",
+   "ahorro": false
   },
   "coto": {
    "empresa": "Coto",
@@ -1428,7 +1546,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "falabella": {
    "empresa": "Falabella (Falabella, Sodimac, Tottus)",
@@ -1440,7 +1559,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Memoria anual de Falabella (CMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ripley": {
    "empresa": "Ripley Corp",
@@ -1452,7 +1572,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Memoria anual de Ripley (CMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "cencosud": {
    "empresa": "Cencosud (Jumbo, Paris, Santa Isabel, Easy)",
@@ -1464,7 +1585,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Memoria anual de Cencosud (CMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "tesco": {
    "empresa": "Tesco plc",
@@ -1476,7 +1598,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Tesco",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sainsburys": {
    "empresa": "J Sainsbury plc (Sainsbury's, Argos)",
@@ -1488,7 +1611,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de Sainsbury's",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "asda": {
    "empresa": "Asda",
@@ -1500,7 +1624,8 @@
    "nota": "Walmart conserva una participación minoritaria.",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "johnlewis": {
    "empresa": "John Lewis Partnership (John Lewis, Waitrose)",
@@ -1512,7 +1637,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de John Lewis Partnership",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "currys": {
    "empresa": "Currys plc",
@@ -1524,7 +1650,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Currys",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "asos": {
    "empresa": "ASOS",
@@ -1536,7 +1663,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de ASOS",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "next": {
    "empresa": "Next plc",
@@ -1548,7 +1676,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Next",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ocado": {
    "empresa": "Ocado Group",
@@ -1560,7 +1689,8 @@
    "nota": "Ocado Retail es empresa conjunta con Marks & Spencer.",
    "confianza": "Alta",
    "fuente": "Informe anual de Ocado",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "marks": {
    "empresa": "Marks & Spencer",
@@ -1572,7 +1702,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de M&S",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "otto": {
    "empresa": "Otto Group",
@@ -1584,7 +1715,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Otto Group",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "zalando": {
    "empresa": "Zalando SE",
@@ -1596,7 +1728,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de Zalando",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ceconomy": {
    "empresa": "Ceconomy (MediaMarkt, Saturn, MediaWorld)",
@@ -1608,7 +1741,8 @@
    "nota": "JD.com completó la compra en 2025.",
    "confianza": "Verificado",
    "fuente": "Jing Daily",
-   "url": "https://jingdaily.com/intels/2025-12/03/jd-com-completes-ceconomy-takeover"
+   "url": "https://jingdaily.com/intels/2025-12/03/jd-com-completes-ceconomy-takeover",
+   "ahorro": false
   },
   "schwarz": {
    "empresa": "Grupo Schwarz (Lidl, Kaufland)",
@@ -1620,7 +1754,8 @@
    "nota": "No cotiza en bolsa.",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "aldi": {
    "empresa": "Aldi (Aldi Nord y Aldi Süd)",
@@ -1632,7 +1767,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "dm": {
    "empresa": "dm-drogerie markt",
@@ -1644,7 +1780,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "rossmann": {
    "empresa": "Rossmann",
@@ -1656,7 +1793,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "casino": {
    "empresa": "Groupe Casino (Cdiscount)",
@@ -1668,7 +1806,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de Casino (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "fnac": {
    "empresa": "Fnac Darty (Fnac, Darty, Unieuro)",
@@ -1680,7 +1819,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de Fnac Darty (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "leclerc": {
    "empresa": "E.Leclerc",
@@ -1692,7 +1832,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mulliez": {
    "empresa": "Asociación Familiar Mulliez (Auchan, Decathlon, Boulanger, Leroy Merlin)",
@@ -1704,7 +1845,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "inditex": {
    "empresa": "Inditex (Zara)",
@@ -1716,7 +1858,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Cuentas anuales de Inditex (CNMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "elcorteingles": {
    "empresa": "El Corte Inglés",
@@ -1728,7 +1871,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Cuentas anuales de El Corte Inglés",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mercadona": {
    "empresa": "Mercadona",
@@ -1740,7 +1884,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "esselunga": {
    "empresa": "Esselunga",
@@ -1752,7 +1897,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "coop_it": {
    "empresa": "Coop Italia",
@@ -1764,7 +1910,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "jd": {
    "empresa": "JD.com",
@@ -1776,7 +1923,8 @@
    "nota": "Desde 2025 controla MediaMarkt (Ceconomy) en Europa.",
    "confianza": "Alta",
    "fuente": "Informe 20-F de JD.com",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "bytedance": {
    "empresa": "ByteDance (Douyin, TikTok Shop)",
@@ -1788,7 +1936,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "suning": {
    "empresa": "Suning.com",
@@ -1800,7 +1949,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "rakuten": {
    "empresa": "Rakuten Group",
@@ -1812,7 +1962,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Rakuten",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lycorp": {
    "empresa": "LY Corporation (Yahoo! Shopping, LINE)",
@@ -1824,7 +1975,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de LY Corporation",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mercari": {
    "empresa": "Mercari",
@@ -1836,7 +1988,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Mercari",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "fastretailing": {
    "empresa": "Fast Retailing (Uniqlo, GU, Theory)",
@@ -1848,7 +2001,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Fast Retailing",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "yodobashi": {
    "empresa": "Yodobashi Camera",
@@ -1860,7 +2014,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "aeon": {
    "empresa": "Aeon Group",
@@ -1872,7 +2027,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Aeon",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "coupang": {
    "empresa": "Coupang Inc.",
@@ -1884,7 +2040,8 @@
    "nota": "Cotiza en Nueva York.",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Coupang",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "naver": {
    "empresa": "Naver Corporation",
@@ -1896,7 +2053,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Naver",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "gmarket": {
    "empresa": "Gmarket",
@@ -1908,7 +2066,8 @@
    "nota": "",
    "confianza": "Verificado",
    "fuente": "Inside Retail Asia",
-   "url": "https://insideretail.asia/2025/09/19/shinsegae-alibaba-e-commerce-venture-gets-green-light/"
+   "url": "https://insideretail.asia/2025/09/19/shinsegae-alibaba-e-commerce-venture-gets-green-light/",
+   "ahorro": false
   },
   "shinsegae": {
    "empresa": "Shinsegae / E-mart (SSG.com)",
@@ -1920,7 +2079,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de E-mart",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lotte": {
    "empresa": "Grupo Lotte (Lotte ON, Lotte Mart)",
@@ -1932,7 +2092,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Lotte",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "elevenst": {
    "empresa": "11st",
@@ -1944,7 +2105,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "fairprice": {
    "empresa": "NTUC FairPrice",
@@ -1956,7 +2118,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "shufersal": {
    "empresa": "Shufersal",
@@ -1968,7 +2131,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe en Maya (TASE)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ramilevy": {
    "empresa": "Rami Levy Hashikma",
@@ -1980,7 +2144,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe en Maya (TASE)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "flipkart": {
    "empresa": "Flipkart (Flipkart, Myntra, Cleartrip)",
@@ -1992,7 +2157,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Walmart",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "reliance_retail": {
    "empresa": "Reliance Retail (JioMart, Ajio)",
@@ -2004,7 +2170,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Reliance Industries",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "nykaa": {
    "empresa": "FSN E-Commerce (Nykaa)",
@@ -2016,7 +2183,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe a la SEBI",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "meesho": {
    "empresa": "Meesho",
@@ -2028,7 +2196,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "tata_digital": {
    "empresa": "Tata Digital (BigBasket, Tata CLiQ, Croma)",
@@ -2040,7 +2209,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Tata Sons",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "eternal": {
    "empresa": "Eternal (Zomato, Blinkit)",
@@ -2052,7 +2222,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe a la SEBI",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "expedia": {
    "empresa": "Expedia Group (Expedia, Hotels.com, Vrbo, Trivago)",
@@ -2064,7 +2235,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe 10-K de Expedia",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "booking": {
    "empresa": "Booking Holdings (Booking.com, Kayak, Priceline, Agoda, Momondo)",
@@ -2076,7 +2248,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Booking Holdings",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "despegar": {
    "empresa": "Despegar (Decolar, Best Day)",
@@ -2088,7 +2261,8 @@
    "nota": "Prosus completó la compra en mayo de 2025.",
    "confianza": "Verificado",
    "fuente": "Business Wire (comunicado oficial)",
-   "url": "https://www.businesswire.com/news/home/20250515026178/en/Prosus-and-Despegar-Complete-Acquisition"
+   "url": "https://www.businesswire.com/news/home/20250515026178/en/Prosus-and-Despegar-Complete-Acquisition",
+   "ahorro": false
   },
   "tripcom": {
    "empresa": "Trip.com Group (Trip.com, Ctrip, Skyscanner, Qunar)",
@@ -2100,7 +2274,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe 20-F de Trip.com Group",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "google_travel": {
    "empresa": "Alphabet (Google Vuelos)",
@@ -2112,7 +2287,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Alphabet",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "edreams": {
    "empresa": "eDreams ODIGEO (eDreams, Opodo, GO Voyages)",
@@ -2124,7 +2300,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de eDreams ODIGEO (CNMV)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kiwi": {
    "empresa": "Kiwi.com",
@@ -2136,7 +2313,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "hopper": {
    "empresa": "Hopper",
@@ -2148,7 +2326,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "makemytrip": {
    "empresa": "MakeMyTrip (MakeMyTrip, Goibibo)",
@@ -2160,7 +2339,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe 20-F de MakeMyTrip",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "airbnb": {
    "empresa": "Airbnb, Inc.",
@@ -2172,7 +2352,8 @@
    "nota": "Los fundadores venden acciones de forma programada.",
    "confianza": "Verificado",
    "fuente": "Registros 13G en la SEC",
-   "url": "https://blarkad.com/ticker/ABNB/ownership"
+   "url": "https://blarkad.com/ticker/ABNB/ownership",
+   "ahorro": false
   },
   "aeromexico": {
    "empresa": "Grupo Aeroméxico",
@@ -2184,7 +2365,8 @@
    "nota": "Apollo vendió acciones en la oferta de 2025; Delta firmó no vender durante 4 años.",
    "confianza": "Verificado",
    "fuente": "Formulario 6-K (SEC)",
-   "url": "https://www.sec.gov/Archives/edgar/data/1561861/000119312525309747/d23130dex991.htm"
+   "url": "https://www.sec.gov/Archives/edgar/data/1561861/000119312525309747/d23130dex991.htm",
+   "ahorro": false
   },
   "volaris": {
    "empresa": "Volaris",
@@ -2196,7 +2378,8 @@
    "nota": "",
    "confianza": "Verificado",
    "fuente": "El CEO",
-   "url": "https://elceo.com/negocios/fusion-con-viva-hara-a-iamsa-de-roberto-alcantara-el-principal-accionista-de-volaris/"
+   "url": "https://elceo.com/negocios/fusion-con-viva-hara-a-iamsa-de-roberto-alcantara-el-principal-accionista-de-volaris/",
+   "ahorro": false
   },
   "viva": {
    "empresa": "Viva Aerobus",
@@ -2208,7 +2391,8 @@
    "nota": "",
    "confianza": "Verificado",
    "fuente": "El CEO",
-   "url": "https://elceo.com/negocios/fusion-con-viva-hara-a-iamsa-de-roberto-alcantara-el-principal-accionista-de-volaris/"
+   "url": "https://elceo.com/negocios/fusion-con-viva-hara-a-iamsa-de-roberto-alcantara-el-principal-accionista-de-volaris/",
+   "ahorro": false
   },
   "american": {
    "empresa": "American Airlines Group",
@@ -2220,7 +2404,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de American Airlines",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "delta": {
    "empresa": "Delta Air Lines",
@@ -2232,7 +2417,8 @@
    "nota": "Socio con participación en Aeroméxico, LATAM, Air France-KLM, Virgin Atlantic y WestJet.",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Delta",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "united": {
    "empresa": "United Airlines Holdings",
@@ -2244,7 +2430,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de United",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "southwest": {
    "empresa": "Southwest Airlines",
@@ -2256,7 +2443,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe 10-K de Southwest",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "jetblue": {
    "empresa": "JetBlue Airways",
@@ -2268,7 +2456,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de JetBlue",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "alaska": {
    "empresa": "Alaska Air Group (Alaska Airlines, Hawaiian Airlines)",
@@ -2280,7 +2469,8 @@
    "nota": "Compró Hawaiian Airlines en 2024.",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Alaska Air Group",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "spirit": {
    "empresa": "Spirit Airlines",
@@ -2292,7 +2482,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "frontier": {
    "empresa": "Frontier Group",
@@ -2304,7 +2495,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Frontier",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "aircanada": {
    "empresa": "Air Canada",
@@ -2316,7 +2508,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Air Canada",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "westjet": {
    "empresa": "WestJet",
@@ -2328,7 +2521,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Comunicados de WestJet (2025)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "porter": {
    "empresa": "Porter Airlines",
@@ -2340,7 +2534,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "latam": {
    "empresa": "LATAM Airlines Group",
@@ -2352,7 +2547,8 @@
    "nota": "Confirma porcentajes en su informe 20-F.",
    "confianza": "Verificar",
    "fuente": "Informe 20-F de LATAM (SEC)",
-   "url": "https://www.sec.gov/Archives/edgar/data/1047716/000104771626000046/ltm-20251231.htm"
+   "url": "https://www.sec.gov/Archives/edgar/data/1047716/000104771626000046/ltm-20251231.htm",
+   "ahorro": false
   },
   "azul": {
    "empresa": "Azul Linhas Aéreas",
@@ -2364,7 +2560,8 @@
    "nota": "La fusión con Gol se canceló.",
    "confianza": "Verificar",
    "fuente": "Yahoo Finance",
-   "url": "https://finance.yahoo.com/news/brazilian-airline-gols-controller-ends-013853112.html"
+   "url": "https://finance.yahoo.com/news/brazilian-airline-gols-controller-ends-013853112.html",
+   "ahorro": false
   },
   "abra": {
    "empresa": "Abra Group (GOL, Avianca)",
@@ -2376,7 +2573,8 @@
    "nota": "Abra canceló la fusión de Gol con Azul.",
    "confianza": "Verificar",
    "fuente": "Yahoo Finance",
-   "url": "https://finance.yahoo.com/news/brazilian-airline-gols-controller-ends-013853112.html"
+   "url": "https://finance.yahoo.com/news/brazilian-airline-gols-controller-ends-013853112.html",
+   "ahorro": false
   },
   "aerolineas_ar": {
    "empresa": "Aerolíneas Argentinas",
@@ -2388,7 +2586,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "flybondi": {
    "empresa": "Flybondi",
@@ -2400,7 +2599,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "jetsmart": {
    "empresa": "JetSMART",
@@ -2412,7 +2612,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sky_cl": {
    "empresa": "Sky Airline",
@@ -2424,7 +2625,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "copa": {
    "empresa": "Copa Holdings",
@@ -2436,7 +2638,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe 20-F de Copa",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "iag": {
    "empresa": "IAG (British Airways, Iberia, Vueling, Aer Lingus, Level)",
@@ -2448,7 +2651,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de IAG",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "easyjet": {
    "empresa": "easyJet",
@@ -2460,7 +2664,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de easyJet",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ryanair": {
    "empresa": "Ryanair Holdings",
@@ -2472,7 +2677,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Ryanair",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "virgin": {
    "empresa": "Virgin Atlantic",
@@ -2484,7 +2690,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lufthansa": {
    "empresa": "Lufthansa Group (Lufthansa, SWISS, Austrian, Brussels, Eurowings)",
@@ -2496,7 +2703,8 @@
    "nota": "Tiene el 41% de ITA Airways.",
    "confianza": "Verificar",
    "fuente": "Informe anual de Lufthansa",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "condor": {
    "empresa": "Condor",
@@ -2508,7 +2716,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "afklm": {
    "empresa": "Air France-KLM (Air France, KLM, Transavia)",
@@ -2520,7 +2729,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe anual de Air France-KLM (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ita": {
    "empresa": "ITA Airways",
@@ -2532,7 +2742,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "airchina": {
    "empresa": "Air China",
@@ -2544,7 +2755,8 @@
    "nota": "Air China tiene ~30% de Cathay Pacific.",
    "confianza": "Alta",
    "fuente": "Informe anual de Air China (HKEX)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "chinaeastern": {
    "empresa": "China Eastern Airlines",
@@ -2556,7 +2768,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de China Eastern (HKEX)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "chinasouthern": {
    "empresa": "China Southern Airlines",
@@ -2568,7 +2781,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de China Southern (HKEX)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "hainan": {
    "empresa": "Hainan Airlines",
@@ -2580,7 +2794,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "jal": {
    "empresa": "Japan Airlines",
@@ -2592,7 +2807,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de JAL",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ana": {
    "empresa": "ANA Holdings",
@@ -2604,7 +2820,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de ANA",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "korean": {
    "empresa": "Korean Air (incluye Asiana)",
@@ -2616,7 +2833,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Korean Air",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sia": {
    "empresa": "Singapore Airlines (incluye Scoot)",
@@ -2628,7 +2846,8 @@
    "nota": "Tiene el 25,1% de Air India.",
    "confianza": "Alta",
    "fuente": "Informe anual de Singapore Airlines",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "elal": {
    "empresa": "El Al Israel Airlines",
@@ -2640,7 +2859,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe en Maya (TASE)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "airindia": {
    "empresa": "Air India (incluye Air India Express)",
@@ -2652,7 +2872,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Comunicados de Tata Sons y Singapore Airlines",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "indigo_in": {
    "empresa": "IndiGo (InterGlobe Aviation)",
@@ -2664,7 +2885,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe a la SEBI",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "emirates": {
    "empresa": "Emirates",
@@ -2676,7 +2898,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Emirates Group",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "qatar": {
    "empresa": "Qatar Airways",
@@ -2688,7 +2911,8 @@
    "nota": "Tiene ~25% de IAG.",
    "confianza": "Alta",
    "fuente": "Informe anual de Qatar Airways",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "turkish": {
    "empresa": "Turkish Airlines",
@@ -2700,7 +2924,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Turkish Airlines",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "cathay": {
    "empresa": "Cathay Pacific",
@@ -2712,7 +2937,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Cathay Pacific",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "panasonic": {
    "empresa": "Panasonic Holdings",
@@ -2724,7 +2950,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Panasonic",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "canon": {
    "empresa": "Canon Inc.",
@@ -2736,7 +2963,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Canon",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "nikon": {
    "empresa": "Nikon",
@@ -2748,7 +2976,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Nikon",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "casio": {
    "empresa": "Casio",
@@ -2760,7 +2989,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Casio",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sharp": {
    "empresa": "Sharp",
@@ -2772,7 +3002,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Sharp",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "shiseido": {
    "empresa": "Shiseido",
@@ -2784,7 +3015,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Shiseido",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "kao": {
    "empresa": "Kao Corporation (Bioré, Jergens, John Frieda)",
@@ -2796,7 +3028,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Kao",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "asics": {
    "empresa": "ASICS",
@@ -2808,7 +3041,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de ASICS",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "muji": {
    "empresa": "Ryohin Keikaku (Muji)",
@@ -2820,7 +3054,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Ryohin Keikaku",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "amore": {
    "empresa": "Amorepacific",
@@ -2832,7 +3067,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Amorepacific",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "nongshim": {
    "empresa": "Nongshim",
@@ -2844,7 +3080,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Nongshim",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "cj": {
    "empresa": "CJ CheilJedang (Bibigo)",
@@ -2856,7 +3093,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de CJ CheilJedang",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "bbk": {
    "empresa": "BBK Electronics (Oppo, Vivo, OnePlus, Realme)",
@@ -2868,7 +3106,8 @@
    "nota": "No cotiza en bolsa.",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "anker": {
    "empresa": "Anker Innovations",
@@ -2880,7 +3119,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe de Anker (Bolsa de Shenzhen)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "dji": {
    "empresa": "DJI",
@@ -2892,7 +3132,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "midea": {
    "empresa": "Midea Group",
@@ -2904,7 +3145,8 @@
    "nota": "Dueña de KUKA (Alemania).",
    "confianza": "Alta",
    "fuente": "Informe anual de Midea",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "honor": {
    "empresa": "Honor Device",
@@ -2916,7 +3158,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "tata_consumer": {
    "empresa": "Tata Consumer Products (Tata Tea, Tetley, Tata Salt)",
@@ -2928,7 +3171,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Tata Consumer",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "titan": {
    "empresa": "Titan Company (Titan, Tanishq, Fastrack)",
@@ -2940,7 +3184,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Titan",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "amul": {
    "empresa": "Amul (GCMMF)",
@@ -2952,7 +3197,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "hul": {
    "empresa": "Hindustan Unilever",
@@ -2964,7 +3210,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Hindustan Unilever",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "itc": {
    "empresa": "ITC Limited",
@@ -2976,7 +3223,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de ITC",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "dabur": {
    "empresa": "Dabur",
@@ -2988,7 +3236,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Dabur",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "britannia": {
    "empresa": "Britannia Industries",
@@ -3000,7 +3249,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Britannia",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "parle": {
    "empresa": "Parle Products",
@@ -3012,7 +3262,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "godrej": {
    "empresa": "Godrej Consumer Products",
@@ -3024,7 +3275,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Godrej",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "patanjali": {
    "empresa": "Patanjali Ayurved",
@@ -3036,7 +3288,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "strauss": {
    "empresa": "Strauss Group (Elite, Strauss)",
@@ -3048,7 +3301,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe en Maya (TASE)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "osem": {
    "empresa": "Osem",
@@ -3060,7 +3314,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Nestlé",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "tnuva": {
    "empresa": "Tnuva",
@@ -3072,7 +3327,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "sodastream": {
    "empresa": "SodaStream",
@@ -3084,7 +3340,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de PepsiCo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "brf": {
    "empresa": "BRF / MBRF (Sadia, Perdigão)",
@@ -3096,7 +3353,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Informe a la CVM",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "jbs": {
    "empresa": "JBS (Friboi, Seara, Swift, Pilgrim's)",
@@ -3108,7 +3366,8 @@
    "nota": "Cotiza también en Nueva York desde 2025.",
    "confianza": "Alta",
    "fuente": "Informe a la SEC y la CVM",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "alpargatas": {
    "empresa": "Alpargatas (Havaianas)",
@@ -3120,7 +3379,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe a la CVM",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "boticario": {
    "empresa": "Grupo Boticário (O Boticário, Eudora, Quem Disse Berenice?)",
@@ -3132,7 +3392,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "arcor": {
    "empresa": "Grupo Arcor (Arcor, Bagley, La Campagnola)",
@@ -3144,7 +3405,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "ccu": {
    "empresa": "CCU (Cristal, Escudo, Kunstmann)",
@@ -3156,7 +3418,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Memoria anual de CCU (CMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "conchaytoro": {
    "empresa": "Viña Concha y Toro",
@@ -3168,7 +3431,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Memoria anual de Concha y Toro",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "carozzi": {
    "empresa": "Carozzi",
@@ -3180,7 +3444,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "henkel": {
    "empresa": "Henkel (Persil, Schwarzkopf, Pritt)",
@@ -3192,7 +3457,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Henkel",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "haribo": {
    "empresa": "Haribo",
@@ -3204,7 +3470,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "bosch": {
    "empresa": "Bosch (incluye BSH: Bosch, Siemens electrodomésticos)",
@@ -3216,7 +3483,8 @@
    "nota": "Los electrodomésticos Siemens son de BSH (Bosch) bajo licencia; Siemens AG es otra empresa.",
    "confianza": "Alta",
    "fuente": "Informe anual de Bosch",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "miele": {
    "empresa": "Miele",
@@ -3228,7 +3496,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "oetker": {
    "empresa": "Dr. Oetker",
@@ -3240,7 +3509,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "melitta": {
    "empresa": "Melitta",
@@ -3252,7 +3522,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lactalis": {
    "empresa": "Lactalis (Président, Galbani, Parmalat)",
@@ -3264,7 +3535,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "seb": {
    "empresa": "Groupe SEB (T-fal, Rowenta, Moulinex, Krups)",
@@ -3276,7 +3548,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de SEB (AMF)",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "michelin": {
    "empresa": "Michelin",
@@ -3288,7 +3561,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Michelin",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "barilla": {
    "empresa": "Barilla",
@@ -3300,7 +3574,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "lavazza": {
    "empresa": "Lavazza",
@@ -3312,7 +3587,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "delonghi": {
    "empresa": "De'Longhi (De'Longhi, Kenwood, Braun electrodomésticos)",
@@ -3324,7 +3600,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de De'Longhi",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "illy": {
    "empresa": "illycaffè",
@@ -3336,7 +3613,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "mahou": {
    "empresa": "Mahou San Miguel",
@@ -3348,7 +3626,8 @@
    "nota": "San Miguel en Filipinas y Asia es de otra empresa (San Miguel Corporation).",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "damm": {
    "empresa": "Damm (Estrella Damm)",
@@ -3360,7 +3639,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "idilia": {
    "empresa": "Idilia Foods (Cola Cao, Nocilla)",
@@ -3372,7 +3652,8 @@
    "nota": "",
    "confianza": "Verificar",
    "fuente": "Conocimiento del modelo",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "abf": {
    "empresa": "Associated British Foods (Primark, Twinings, Ovomaltine)",
@@ -3384,7 +3665,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de ABF",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "reckitt": {
    "empresa": "Reckitt (Lysol, Vanish, Durex, Finish)",
@@ -3396,7 +3678,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Reckitt",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "haleon": {
    "empresa": "Haleon (Sensodyne, Advil, Centrum)",
@@ -3408,7 +3691,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Haleon",
-   "url": ""
+   "url": "",
+   "ahorro": false
   },
   "loc_sociedad_cooperativa_trabajado": {
    "empresa": "Sociedad Cooperativa Trabajadores de Pascual S.C.L.",
@@ -3420,7 +3704,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Expansión: ¿Quién es el dueño de Pascual?",
-   "url": "https://expansion.mx/empresas/2025/07/04/quien-es-el-dueno-de-pascual"
+   "url": "https://expansion.mx/empresas/2025/07/04/quien-es-el-dueno-de-pascual",
+   "ahorro": true
   },
   "loc_grupo_jumex": {
    "empresa": "Grupo Jumex",
@@ -3432,7 +3717,8 @@
    "nota": "La familia es López (no Fernández). Sin desglose accionario público.",
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "Tus Buenas Noticias: ¿Quién es el dueño de Jumex?",
-   "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/01/31/56280-quien-es-el-dueno-de-jumex-y-cual-es-su-fortuna"
+   "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/01/31/56280-quien-es-el-dueno-de-jumex-y-cual-es-su-fortuna",
+   "ahorro": false
   },
   "loc_grupo_la_moderna": {
    "empresa": "Grupo La Moderna",
@@ -3444,7 +3730,8 @@
    "nota": "Una sola fuente periodística; cotiza en la BMV.",
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "Tus Buenas Noticias: ¿Quién es el dueño de La Moderna?",
-   "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/04/13/58915-quien-es-el-dueno-de-sopas-la-moderna"
+   "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/04/13/58915-quien-es-el-dueno-de-sopas-la-moderna",
+   "ahorro": true
   },
   "loc_chocolatera_de_jalisco_s_a_de_": {
    "empresa": "Chocolatera de Jalisco, S.A. de C.V.",
@@ -3456,7 +3743,8 @@
    "nota": "No se halló estructura accionaria detallada, ni adquisiciones.",
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "Players of Life: Chocolate Ibarra y su centenario",
-   "url": "https://playersoflife.com/gourmet/historia-chocolate-ibarra-el-sabor-tapatio-que-va-por-su-centenario/"
+   "url": "https://playersoflife.com/gourmet/historia-chocolate-ibarra-el-sabor-tapatio-que-va-por-su-centenario/",
+   "ahorro": false
   },
   "loc_f_brica_de_jab_n_la_corona_s_a": {
    "empresa": "Fábrica de Jabón La Corona, S.A. de C.V.",
@@ -3465,10 +3753,11 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Control familiar actual inferido de la fuente (no hay cifras accionarias).",
+   "nota": "Líder mexicano en detergentes y jabones de máxima accesibilidad y rendimiento (Zote, Roma, Blanca Nieves, Foca).",
    "confianza": "Alta",
    "fuente": "El CEO: Zote, cómo surgió y quién es el dueño",
-   "url": "https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/"
+   "url": "https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/",
+   "ahorro": true
   },
   "loc_galletas_dond": {
    "empresa": "Galletas Dondé",
@@ -3480,7 +3769,8 @@
    "nota": "Control familiar actual no confirmado con fuente reciente.",
    "confianza": "Alta",
    "fuente": "Diario de Yucatán: Galletas Dondé, 115 años",
-   "url": "https://www.yucatan.com.mx/merida/2021/05/05/galletas-donde-115-anos-en-el-mercado.html"
+   "url": "https://www.yucatan.com.mx/merida/2021/05/05/galletas-donde-115-anos-en-el-mercado.html",
+   "ahorro": true
   },
   "loc_grupo_flexi": {
    "empresa": "Grupo Flexi (Flexi)",
@@ -3492,7 +3782,8 @@
    "nota": "Escrito también Plasencia.",
    "confianza": "Alta",
    "fuente": "El CEO: ¿Quién es el dueño de Flexi?",
-   "url": "https://elceo.com/negocios/quien-es-el-dueno-de-la-marca-flexi/"
+   "url": "https://elceo.com/negocios/quien-es-el-dueno-de-la-marca-flexi/",
+   "ahorro": false
   },
   "loc_land_o_lakes_inc": {
    "empresa": "Land O'Lakes, Inc.",
@@ -3504,7 +3795,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Land O'Lakes",
-   "url": "https://en.wikipedia.org/wiki/Land_O%27Lakes"
+   "url": "https://en.wikipedia.org/wiki/Land_O%27Lakes",
+   "ahorro": false
   },
   "loc_cropp_cooperative": {
    "empresa": "CROPP Cooperative",
@@ -3516,7 +3808,8 @@
    "nota": "La página confirma 'farmer-owned cooperative'; el nombre CROPP no aparece en ella.",
    "confianza": "Alta",
    "fuente": "Organic Valley: About us",
-   "url": "https://www.organicvalley.coop/about-us/"
+   "url": "https://www.organicvalley.coop/about-us/",
+   "ahorro": false
   },
   "loc_cabot_creamery_cooperative": {
    "empresa": "Cabot Creamery Cooperative (subsidiaria de Agri-Mark)",
@@ -3528,7 +3821,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Cabot Creamery",
-   "url": "https://en.wikipedia.org/wiki/Cabot_Creamery"
+   "url": "https://en.wikipedia.org/wiki/Cabot_Creamery",
+   "ahorro": false
   },
   "loc_tillamook_county_creamery_asso": {
    "empresa": "Tillamook County Creamery Association",
@@ -3540,7 +3834,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Tillamook: About us",
-   "url": "https://www.tillamook.com/about-us"
+   "url": "https://www.tillamook.com/about-us",
+   "ahorro": false
   },
   "loc_ocean_spray_cranberries_inc": {
    "empresa": "Ocean Spray Cranberries, Inc.",
@@ -3552,7 +3847,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Ocean Spray: About us",
-   "url": "https://www.oceanspray.com/en/About-Us"
+   "url": "https://www.oceanspray.com/en/About-Us",
+   "ahorro": false
   },
   "loc_welch_s": {
    "empresa": "Welch's / National Grape Cooperative Association",
@@ -3564,7 +3860,8 @@
    "nota": "Wikipedia marca la página como desactualizada (abr 2025); sin venta reportada.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Welch's",
-   "url": "https://en.wikipedia.org/wiki/Welch%27s"
+   "url": "https://en.wikipedia.org/wiki/Welch%27s",
+   "ahorro": false
   },
   "loc_bob_s_red_mill_natural_foods": {
    "empresa": "Bob's Red Mill Natural Foods",
@@ -3576,7 +3873,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Bob's Red Mill: About us",
-   "url": "https://www.bobsredmill.com/about-us"
+   "url": "https://www.bobsredmill.com/about-us",
+   "ahorro": false
   },
   "loc_king_arthur_baking_company_inc": {
    "empresa": "King Arthur Baking Company, Inc.",
@@ -3588,7 +3886,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: King Arthur Baking Company",
-   "url": "https://en.wikipedia.org/wiki/King_Arthur_Baking_Company"
+   "url": "https://en.wikipedia.org/wiki/King_Arthur_Baking_Company",
+   "ahorro": false
   },
   "loc_patagonia_inc": {
    "empresa": "Patagonia, Inc.",
@@ -3600,7 +3899,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Patagonia, Inc.",
-   "url": "https://en.wikipedia.org/wiki/Patagonia,_Inc."
+   "url": "https://en.wikipedia.org/wiki/Patagonia,_Inc.",
+   "ahorro": false
   },
   "loc_dr_bronner_s_magic_soaps": {
    "empresa": "Dr. Bronner's Magic Soaps",
@@ -3612,7 +3912,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Dr. Bronner's: Our story",
-   "url": "https://www.drbronner.com/about/ourselves/the-dr-bronners-story/"
+   "url": "https://www.drbronner.com/about/ourselves/the-dr-bronners-story/",
+   "ahorro": false
   },
   "loc_the_hershey_company": {
    "empresa": "The Hershey Company",
@@ -3624,7 +3925,8 @@
    "nota": "Cotiza en bolsa; es una gran empresa, pero de capital estadounidense.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Hershey Company",
-   "url": "https://en.wikipedia.org/wiki/Hershey_Company"
+   "url": "https://en.wikipedia.org/wiki/Hershey_Company",
+   "ahorro": false
   },
   "loc_d_g_yuengling_son": {
    "empresa": "D.G. Yuengling & Son",
@@ -3636,7 +3938,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Yuengling",
-   "url": "https://en.wikipedia.org/wiki/Yuengling"
+   "url": "https://en.wikipedia.org/wiki/Yuengling",
+   "ahorro": false
   },
   "loc_sierra_nevada_brewing_co": {
    "empresa": "Sierra Nevada Brewing Co.",
@@ -3648,7 +3951,8 @@
    "nota": "La fuente solo cita a Ken Grossman.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Sierra Nevada Brewing Company",
-   "url": "https://en.wikipedia.org/wiki/Sierra_Nevada_Brewing_Company"
+   "url": "https://en.wikipedia.org/wiki/Sierra_Nevada_Brewing_Company",
+   "ahorro": false
   },
   "loc_the_boston_beer_company": {
    "empresa": "The Boston Beer Company",
@@ -3660,7 +3964,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Boston Beer Company",
-   "url": "https://en.wikipedia.org/wiki/Boston_Beer_Company"
+   "url": "https://en.wikipedia.org/wiki/Boston_Beer_Company",
+   "ahorro": false
   },
   "loc_agropur_coop_rative": {
    "empresa": "Agropur Coopérative",
@@ -3672,7 +3977,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Agropur",
-   "url": "https://en.wikipedia.org/wiki/Agropur"
+   "url": "https://en.wikipedia.org/wiki/Agropur",
+   "ahorro": false
   },
   "loc_gay_lea_foods_co_operative_lim": {
    "empresa": "Gay Lea Foods Co-operative Limited",
@@ -3684,7 +3990,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Gay Lea Foods: About us",
-   "url": "https://www.gaylea.com/about-us"
+   "url": "https://www.gaylea.com/about-us",
+   "ahorro": false
   },
   "loc_cooperativa_central_aurora_ali": {
    "empresa": "Cooperativa Central Aurora Alimentos",
@@ -3696,7 +4003,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Compre Rural: Aurora Coop asume planta en Castro",
-   "url": "https://www.comprerural.com/aurora-coop-assume-a-operacao-da-planta-industrial-de-suinos-da-unium-em-castro-pr"
+   "url": "https://www.comprerural.com/aurora-coop-assume-a-operacao-da-planta-industrial-de-suinos-da-unium-em-castro-pr",
+   "ahorro": false
   },
   "loc_latic_nios_bela_vista_s_a": {
    "empresa": "Laticínios Bela Vista S.A.",
@@ -3708,7 +4016,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "InfoMoney: Dona da Piracanjuba faz planos",
-   "url": "https://www.infomoney.com.br/?p=2347395"
+   "url": "https://www.infomoney.com.br/?p=2347395",
+   "ahorro": false
   },
   "loc_qu_mica_amparo_ltda": {
    "empresa": "Química Amparo Ltda.",
@@ -3720,7 +4029,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "InvestNews: Crise Anvisa e Ypê",
-   "url": "https://investnews.com.br/negocios/crise-anvisa-ype-testa-marca-brasil/amp/"
+   "url": "https://investnews.com.br/negocios/crise-anvisa-ype-testa-marca-brasil/amp/",
+   "ahorro": false
   },
   "loc_cooperativa_agr_cola_y_lechera": {
    "empresa": "Cooperativa Agrícola y Lechera de La Unión Ltda.",
@@ -3732,7 +4042,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Colún",
-   "url": "https://en.wikipedia.org/wiki/Cooperativa_Agr%C3%ADcola_y_Lechera_de_La_Uni%C3%B3n_Limitada"
+   "url": "https://en.wikipedia.org/wiki/Cooperativa_Agr%C3%ADcola_y_Lechera_de_La_Uni%C3%B3n_Limitada",
+   "ahorro": false
   },
   "loc_procafecol_s_a": {
    "empresa": "Procafecol S.A. / Federación Nacional de Cafeteros de Colombia",
@@ -3744,7 +4055,8 @@
    "nota": "Gremio de productores, no cooperativa estricta; Procafecol tiene otros accionistas, sin verificar.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Juan Valdez Café",
-   "url": "https://es.wikipedia.org/wiki/Juan_Valdez_Café"
+   "url": "https://es.wikipedia.org/wiki/Juan_Valdez_Café",
+   "ahorro": false
   },
   "loc_arla_foods_amba": {
    "empresa": "Arla Foods amba",
@@ -3756,7 +4068,8 @@
    "nota": "Cooperativa de capital danés-sueco; sede en Aarhus.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Arla Foods",
-   "url": "https://en.wikipedia.org/wiki/Arla_Foods"
+   "url": "https://en.wikipedia.org/wiki/Arla_Foods",
+   "ahorro": false
   },
   "loc_the_co_operative_group": {
    "empresa": "The Co-operative Group",
@@ -3768,7 +4081,8 @@
    "nota": "Marca propia y supermercados Co-op Food del Reino Unido.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Co-op Food",
-   "url": "https://en.wikipedia.org/wiki/Co-op_Food"
+   "url": "https://en.wikipedia.org/wiki/Co-op_Food",
+   "ahorro": false
   },
   "loc_capsa_food": {
    "empresa": "Capsa Food",
@@ -3780,7 +4094,8 @@
    "nota": "El resto del capital de Capsa no pudo confirmarse en la fuente.",
    "confianza": "Alta",
    "fuente": "Central Lechera Asturiana: noticia corporativa",
-   "url": "https://www.centrallecheraasturiana.es/en/?p=102577"
+   "url": "https://www.centrallecheraasturiana.es/en/?p=102577",
+   "ahorro": false
   },
   "loc_covap_sociedad_cooperativa_and": {
    "empresa": "COVAP, Sociedad Cooperativa Andaluza",
@@ -3792,7 +4107,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Agronews Castilla y León: ALBA y COVAP",
-   "url": "https://www.agronewscastillayleon.com/las-cooperativas-alba-y-covap-se-unen-para-gestionar-el-88-de-la-leche-de-vaca-andaluza"
+   "url": "https://www.agronewscastillayleon.com/las-cooperativas-alba-y-covap-se-unen-para-gestionar-el-88-de-la-leche-de-vaca-andaluza",
+   "ahorro": false
   },
   "loc_eroski_s_coop": {
    "empresa": "Eroski S. Coop.",
@@ -3804,7 +4120,8 @@
    "nota": "Cooperativa mixta: unos 450.000 consumidores socios y más de 36.000 trabajadores socios.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Eroski",
-   "url": "https://es.wikipedia.org/wiki/Eroski"
+   "url": "https://es.wikipedia.org/wiki/Eroski",
+   "ahorro": false
   },
   "loc_hijos_de_rivera_s_a": {
    "empresa": "Hijos de Rivera S.A.",
@@ -3816,7 +4133,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Hijos de Rivera",
-   "url": "https://es.wikipedia.org/wiki/Hijos_de_Rivera"
+   "url": "https://es.wikipedia.org/wiki/Hijos_de_Rivera",
+   "ahorro": false
   },
   "loc_chocolates_valor_s_a": {
    "empresa": "Chocolates Valor S.A.",
@@ -3828,7 +4146,8 @@
    "nota": "No se halló una fuente que detalle el reparto accionarial; se describe como empresa familiar.",
    "confianza": "Alta",
    "fuente": "The Objective / Instituto de la Empresa Familiar",
-   "url": "https://theobjective.com/further/branded-content/2025-12-09/fuerza-invisible-chocolate-140-anos-endulzando-espana/"
+   "url": "https://theobjective.com/further/branded-content/2025-12-09/fuerza-invisible-chocolate-140-anos-endulzando-espana/",
+   "ahorro": false
   },
   "loc_camper_s_l": {
    "empresa": "Camper S.L.",
@@ -3840,7 +4159,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Modaes: Camper alcanza 240 millones en 2024",
-   "url": "https://www.modaes.com/empresas/camper-alcanza-240-millones-en-2024-y-estrena-en-paris-su-plan-de-expansion-para-2025"
+   "url": "https://www.modaes.com/empresas/camper-alcanza-240-millones-en-2024-y-estrena-en-paris-su-plan-de-expansion-para-2025",
+   "ahorro": false
   },
   "loc_sodiaal_international": {
    "empresa": "Sodiaal International (Sodiaal Union)",
@@ -3852,7 +4172,8 @@
    "nota": "Solo vale para Europa/Francia y Canadá: en EE.UU. Yoplait pertenece a Lactalis desde jun. 2025.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Yoplait",
-   "url": "https://en.wikipedia.org/wiki/Yoplait"
+   "url": "https://en.wikipedia.org/wiki/Yoplait",
+   "ahorro": false
   },
   "loc_andros": {
    "empresa": "Andros (Groupe Andros)",
@@ -3864,7 +4185,8 @@
    "nota": "Fuente secundaria; el origen familiar es de conocimiento público.",
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "Synonyme-du-mot: Qui possède Andros",
-   "url": "https://www.synonyme-du-mot.com/les-articles/qui-possede-andros"
+   "url": "https://www.synonyme-du-mot.com/les-articles/qui-possede-andros",
+   "ahorro": false
   },
   "loc_granarolo_s_p_a": {
    "empresa": "Granarolo S.p.A.",
@@ -3876,7 +4198,8 @@
    "nota": "Los minoritarios son un fondo público (CDP) y un ente previsional agrícola, no capital privado extranjero.",
    "confianza": "Alta",
    "fuente": "BeBeez: aumento de capital de Granarolo",
-   "url": "https://bebeez.it/ma-e-corporate-finance/granarolo-aumento-di-capitale-da-160-mln-euro-entrano-il-fondo-nazionale-strategico-cdp-ed-enpaia-mentre-granlatte-resta-al-comando-con-il-65-circa-dal-775/"
+   "url": "https://bebeez.it/ma-e-corporate-finance/granarolo-aumento-di-capitale-da-160-mln-euro-entrano-il-fondo-nazionale-strategico-cdp-ed-enpaia-mentre-granlatte-resta-al-comando-con-il-65-circa-dal-775/",
+   "ahorro": false
   },
   "loc_mutti_s_p_a": {
    "empresa": "Mutti S.p.A.",
@@ -3888,7 +4211,8 @@
    "nota": "La fuente no detalla accionistas; confirma carácter familiar.",
    "confianza": "Alta",
    "fuente": "AGI: addio a Marcello Mutti",
-   "url": "https://www.agi.it/economia/news/2024-10-11/addio-a-marcello-mutti-re-della-passata-di-pomodoro-28228521/"
+   "url": "https://www.agi.it/economia/news/2024-10-11/addio-a-marcello-mutti-re-della-passata-di-pomodoro-28228521/",
+   "ahorro": false
   },
   "loc_pastificio_rummo_s_p_a": {
    "empresa": "Pastificio Rummo S.p.A.",
@@ -3900,7 +4224,8 @@
    "nota": "La fuente no detalla la estructura accionarial formal.",
    "confianza": "Alta",
    "fuente": "Assolombarda: scheda Rummo",
-   "url": "https://assolombarda.it/le-imprese/filiere/aziende/rummo/scheda-rummo"
+   "url": "https://assolombarda.it/le-imprese/filiere/aziende/rummo/scheda-rummo",
+   "ahorro": false
   },
   "loc_f_lli_de_cecco_di_filippo_fara": {
    "empresa": "F.lli De Cecco di Filippo Fara San Martino S.p.A.",
@@ -3912,7 +4237,8 @@
    "nota": "No se pudo verificar el reparto accionarial en la fuente.",
    "confianza": "Alta",
    "fuente": "QuiFinanza: Filippo Antonio De Cecco",
-   "url": "https://quifinanza.it/economia/filippo-antonio-de-cecco-fatturato-pasta/877953/"
+   "url": "https://quifinanza.it/economia/filippo-antonio-de-cecco-fatturato-pasta/877953/",
+   "ahorro": false
   },
   "loc_ehrmann_se": {
    "empresa": "Ehrmann SE",
@@ -3924,7 +4250,8 @@
    "nota": "",
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "UAMR: Wem gehört Ehrmann?",
-   "url": "https://www.uamr.de/?p=5615"
+   "url": "https://www.uamr.de/?p=5615",
+   "ahorro": false
   },
   "loc_alfred_ritter_gmbh_co_kg": {
    "empresa": "Alfred Ritter GmbH & Co. KG",
@@ -3936,7 +4263,8 @@
    "nota": "La fuente no da el porcentaje exacto.",
    "confianza": "Alta",
    "fuente": "Stuttgarter Zeitung: Unternehmerfamilie Ritter",
-   "url": "https://www.stuttgarter-zeitung.de/wirtschaft/unternehmerfamilie-ritter-generationswechsel-bei-ritter-sport-79031186.html"
+   "url": "https://www.stuttgarter-zeitung.de/wirtschaft/unternehmerfamilie-ritter-generationswechsel-bei-ritter-sport-79031186.html",
+   "ahorro": false
   },
   "loc_werner_mertz_gmbh": {
    "empresa": "Werner & Mertz GmbH",
@@ -3948,7 +4276,8 @@
    "nota": "",
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "Austria-Forum: Werner & Mertz",
-   "url": "https://austria-forum.org/af/AustriaWiki/Werner_%26_Mertz"
+   "url": "https://austria-forum.org/af/AustriaWiki/Werner_%26_Mertz",
+   "ahorro": false
   },
   "loc_japanese_consumers_co_operativ": {
    "empresa": "Japanese Consumers' Co-operative Union (JCCU)",
@@ -3960,7 +4289,8 @@
    "nota": "Marca propia CO-OP de las cooperativas de consumidores japonesas.",
    "confianza": "Alta",
    "fuente": "JCCU: sitio oficial",
-   "url": "https://jccu.coop/eng/"
+   "url": "https://jccu.coop/eng/",
+   "ahorro": false
   },
   "loc_seoul_dairy_cooperative": {
    "empresa": "Seoul Dairy Cooperative",
@@ -3972,7 +4302,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Wikipedia: Seoul Milk",
-   "url": "https://en.wikipedia.org/wiki/Seoul_Milk"
+   "url": "https://en.wikipedia.org/wiki/Seoul_Milk",
+   "ahorro": false
   },
   "loc_binggrae_co_ltd": {
    "empresa": "Binggrae Co., Ltd.",
@@ -3984,7 +4315,8 @@
    "nota": "Cotizada pero con control familiar claro (Kim Ho-yeon, presidente del consejo); la fuente no lo califica explícitamente de familiar.",
    "confianza": "Alta",
    "fuente": "Wikipedia: Binggrae",
-   "url": "https://en.wikipedia.org/wiki/Binggrae"
+   "url": "https://en.wikipedia.org/wiki/Binggrae",
+   "ahorro": false
   },
   "loc_karnataka_milk_federation": {
    "empresa": "Karnataka Milk Federation (KMF)",
@@ -3996,7 +4328,8 @@
    "nota": "Wikipedia lista al gobierno de Karnataka como propietario por su respaldo estatal; la estructura es cooperativa.",
    "confianza": "Alta",
    "fuente": "KMF Nandini: Acerca de",
-   "url": "https://www.kmfnandini.coop/en/about-us"
+   "url": "https://www.kmfnandini.coop/en/about-us",
+   "ahorro": false
   },
   "loc_haldiram_snacks_foods_pvt_ltd": {
    "empresa": "Haldiram Snacks Foods Pvt Ltd",
@@ -4008,7 +4341,8 @@
    "nota": "Control familiar vigente; la salida a bolsa aún no se presenta (DRHP pendiente a jun. 2026). Los fondos son minoritarios (menos de 20% en total). Vigilar si cambia el control.",
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "IPO Market: Haldiram's IPO 2026",
-   "url": "https://www.ipomarket.in/news/haldirams-ipo-2026-date-price-band-gmp-review"
+   "url": "https://www.ipomarket.in/news/haldirams-ipo-2026-date-price-band-gmp-review",
+   "ahorro": false
   },
   "loc_ntuc_fairprice_co_operative_li": {
    "empresa": "NTUC FairPrice Co-operative Limited",
@@ -4020,7 +4354,8 @@
    "nota": "La fuente no menciona participación de Temasek.",
    "confianza": "Alta",
    "fuente": "Wikipedia: NTUC FairPrice",
-   "url": "https://en.wikipedia.org/wiki/NTUC_FairPrice"
+   "url": "https://en.wikipedia.org/wiki/NTUC_FairPrice",
+   "ahorro": false
   },
   "loc_sancor_cooperativas_unidas": {
    "empresa": "SanCor Cooperativas Unidas Limitada",
@@ -4032,7 +4367,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "SanCor: Historia institucional",
-   "url": "https://www.sancor.com/historia"
+   "url": "https://www.sancor.com/historia",
+   "ahorro": false
   },
   "loc_cooperativa_obrera_ltda": {
    "empresa": "Cooperativa Obrera Limitada",
@@ -4044,7 +4380,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Cooperativa Obrera: Quiénes somos",
-   "url": "https://www.cooperativaobrera.coop/quienes-somos/"
+   "url": "https://www.cooperativaobrera.coop/quienes-somos/",
+   "ahorro": false
   },
   "loc_cooperativa_agricola_liebig": {
    "empresa": "Cooperativa Agrícola de la Colonia Liebig",
@@ -4056,7 +4393,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Liebig: Sitio oficial",
-   "url": "https://www.coestliebig.com.ar/"
+   "url": "https://www.coestliebig.com.ar/",
+   "ahorro": false
   },
   "loc_colanta_cooperativa": {
    "empresa": "Colanta (Cooperativa Lechera de Antioquia)",
@@ -4068,7 +4406,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Colanta: Nuestra historia",
-   "url": "https://www.colanta.com/historia/"
+   "url": "https://www.colanta.com/historia/",
+   "ahorro": false
   },
   "loc_gran_cafe_de_la_parroquia": {
    "empresa": "Gran Café de La Parroquia",
@@ -4080,7 +4419,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Sitio oficial La Parroquia",
-   "url": "https://laparroquia.com/"
+   "url": "https://laparroquia.com/",
+   "ahorro": false
   },
   "loc_industrias_guacamaya": {
    "empresa": "Industrias Guacamaya",
@@ -4092,7 +4432,8 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "La Guacamaya: Historia",
-   "url": "https://laguacamaya.mx/"
+   "url": "https://laguacamaya.mx/",
+   "ahorro": false
   },
   "loc_laboratorios_grisi": {
    "empresa": "Laboratorios Grisi",
@@ -4101,10 +4442,11 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial.",
+   "nota": "Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial a precio accesible.",
    "confianza": "Alta",
    "fuente": "Expansión: Grisi, 160 años de historia",
-   "url": "https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia"
+   "url": "https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia",
+   "ahorro": true
   },
   "loc_genomma_lab": {
    "empresa": "Genomma Lab (Cuidado Facial)",
@@ -4113,10 +4455,37 @@
    "tipo": "Fundador + fondos",
    "fondos": "",
    "gobierno": "",
-   "nota": "Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica.",
+   "nota": "Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica accesible de farmacia.",
    "confianza": "Alta",
    "fuente": "Reporte anual Genomma Lab (BMV)",
-   "url": "https://www.genommalab.com"
+   "url": "https://www.genommalab.com",
+   "ahorro": true
+  },
+  "loc_farmacias_similares": {
+   "empresa": "Grupo Por Un País Mejor (Farmacias Similares)",
+   "controlador": "Familia González Torres (Víctor González Herrera y familia); empresa 100% mexicana privada.",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Líder en productos farmacéuticos y dermocosméticos accesibles (Eternal Secret, SimiCrema, SimiSolar) con ahorro de hasta 80%.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial Farmacias Similares",
+   "url": "https://farmaciassimilares.com",
+   "ahorro": true
+  },
+  "loc_jaloma": {
+   "empresa": "Laboratorios Jaloma",
+   "controlador": "Familia López Morales; empresa 100% mexicana fundada en 1941 en Guadalajara, Jalisco.",
+   "pais": "México",
+   "tipo": "Familia",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Cuidado personal y dermatológico básico (agua de rosas, aceites corporales puros, vaselina) a costo de gran ahorro.",
+   "confianza": "Alta",
+   "fuente": "Sitio oficial Jaloma",
+   "url": "https://jaloma.com.mx",
+   "ahorro": true
   },
   "loc_sesderma": {
    "empresa": "Laboratorios Sesderma",
@@ -4128,7 +4497,8 @@
    "nota": "Pioneros españoles en nanotecnología dermatológica y cuidado facial con vitamina C.",
    "confianza": "Alta",
    "fuente": "Sitio oficial de Sesderma",
-   "url": "https://www.sesderma.com"
+   "url": "https://www.sesderma.com",
+   "ahorro": false
   },
   "loc_cantabria_labs": {
    "empresa": "Cantabria Labs",
@@ -4140,7 +4510,8 @@
    "nota": "Dermocosmética española y fotoprotección dermatológica.",
    "confianza": "Alta",
    "fuente": "Sitio oficial Cantabria Labs",
-   "url": "https://www.cantabrialabs.com"
+   "url": "https://www.cantabrialabs.com",
+   "ahorro": false
   },
   "loc_vanicream": {
    "empresa": "Vanicream (Pharmaceutical Specialties, Inc.)",
@@ -4152,7 +4523,8 @@
    "nota": "Dermocosmética para piel sensible y dermatitis, libre de fragancias, tintes y parabenos.",
    "confianza": "Alta",
    "fuente": "Sitio oficial Vanicream",
-   "url": "https://www.vanicream.com"
+   "url": "https://www.vanicream.com",
+   "ahorro": false
   },
   "loc_naos": {
    "empresa": "NAOS (Bioderma, Institut Esthederm)",
@@ -4164,7 +4536,8 @@
    "nota": "Ecocosmética y dermocosmética francesa sin accionistas especulativos.",
    "confianza": "Alta",
    "fuente": "Sitio oficial NAOS",
-   "url": "https://naos.com"
+   "url": "https://naos.com",
+   "ahorro": false
   }
  },
  "marcas": [
@@ -7547,6 +7920,22 @@
    "g": "loc_f_brica_de_jab_n_la_corona_s_a"
   },
   {
+   "n": "Foca",
+   "g": "loc_f_brica_de_jab_n_la_corona_s_a"
+  },
+  {
+   "n": "Detergente Foca",
+   "g": "loc_f_brica_de_jab_n_la_corona_s_a"
+  },
+  {
+   "n": "Jabón Tepeyac",
+   "g": "loc_f_brica_de_jab_n_la_corona_s_a"
+  },
+  {
+   "n": "Carisma",
+   "g": "loc_f_brica_de_jab_n_la_corona_s_a"
+  },
+  {
    "n": "Dondé",
    "g": "loc_galletas_dond"
   },
@@ -8061,6 +8450,10 @@
    "g": "loc_laboratorios_grisi"
   },
   {
+   "n": "Cero",
+   "g": "loc_laboratorios_grisi"
+  },
+  {
    "n": "Cicatricure",
    "g": "loc_genomma_lab"
   },
@@ -8071,6 +8464,42 @@
   {
    "n": "Teatrical",
    "g": "loc_genomma_lab"
+  },
+  {
+   "n": "Goicoechea",
+   "g": "loc_genomma_lab"
+  },
+  {
+   "n": "Eternal Secret",
+   "g": "loc_farmacias_similares"
+  },
+  {
+   "n": "SimiCrema",
+   "g": "loc_farmacias_similares"
+  },
+  {
+   "n": "SimiSolar",
+   "g": "loc_farmacias_similares"
+  },
+  {
+   "n": "Dr. Simi",
+   "g": "loc_farmacias_similares"
+  },
+  {
+   "n": "Simi",
+   "g": "loc_farmacias_similares"
+  },
+  {
+   "n": "Jaloma",
+   "g": "loc_jaloma"
+  },
+  {
+   "n": "Aceite Jaloma",
+   "g": "loc_jaloma"
+  },
+  {
+   "n": "Agua de Rosas Jaloma",
+   "g": "loc_jaloma"
   },
   {
    "n": "Sesderma",
@@ -10388,6 +10817,8 @@
     "Zote",
     "Roma",
     "Blanca Nieves",
+    "Foca",
+    "Carisma",
     "Ypê",
     "Frosch"
    ]
@@ -10442,7 +10873,13 @@
     "Syoss",
     "Godrej",
     "Cinthol",
-    "Dr. Bronner's"
+    "Jabón Tepeyac",
+    "Dr. Bronner's",
+    "Cero",
+    "Goicoechea",
+    "Dr. Simi",
+    "Simi",
+    "Aceite Jaloma"
    ]
   },
   "skincare_cosmetica": {
@@ -10533,6 +10970,11 @@
     "Cicatricure",
     "Asepxia",
     "Teatrical",
+    "Eternal Secret",
+    "SimiCrema",
+    "SimiSolar",
+    "Jaloma",
+    "Agua de Rosas Jaloma",
     "Sesderma",
     "Babé",
     "Heliocare",

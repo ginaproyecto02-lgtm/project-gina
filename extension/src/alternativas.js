@@ -112,12 +112,13 @@
 
       return Object.assign(a, {
         motivo: INDEP[a.group.tipo].label, prio: INDEP[a.group.tipo].prio, rep: repVal, nivel: sc && !sc.parcial ? sc.nivel : "",
-        capital: GENTILICIO[pais] ? `capital ${GENTILICIO[pais]}` : `capital de ${pais}`
+        capital: GENTILICIO[pais] ? `capital ${GENTILICIO[pais]}` : `capital de ${pais}`,
+        esEconomica: !!(a.group && a.group.ahorro)
       });
     });
     // Primero cooperativas y de empleados; luego mejor reputación (sin historial cuenta como neutral, 80).
     out.sort((x, y) => y.prio - x.prio || (y.rep == null ? 80 : y.rep) - (x.rep == null ? 80 : x.rep) || x.marcas[0].localeCompare(y.marcas[0]));
-    return out.slice(0, limit || 3);
+    return out.slice(0, limit || 5);
   }
 
 

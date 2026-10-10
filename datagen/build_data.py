@@ -142,7 +142,7 @@ m["browser_specific_settings"] = {"gecko": {
 }}
 cs = m["content_scripts"][0]
 cs["matches"] = patterns
-cs["js"] = ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/card.js", "src/content.js"]
+cs["js"] = ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/i18n.js", "src/card.js", "src/content.js"]
 # En web_accessible_resources Chrome solo admite patrones con ruta «/*».
 war = []
 for e in S:

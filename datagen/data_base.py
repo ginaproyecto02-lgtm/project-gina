@@ -4,9 +4,9 @@ A, V, OK = "Alta", "Verificar", "Verificado"
 P = "Vanguard, BlackRock y otros fondos indexados (pasivos)"
 NC = "No cotiza en bolsa"
 G = {}
-def g(id, empresa, controlador, pais, tipo, fondos="", gobierno="", nota="", confianza=A, fuente="", url=""):
+def g(id, empresa, controlador, pais, tipo, fondos="", gobierno="", nota="", confianza=A, fuente="", url="", ahorro=False):
     G[id] = dict(empresa=empresa, controlador=controlador, pais=pais, tipo=tipo, fondos=fondos,
-                 gobierno=gobierno, nota=nota, confianza=confianza, fuente=fuente, url=url)
+                 gobierno=gobierno, nota=nota, confianza=confianza, fuente=fuente, url=url, ahorro=ahorro)
 
 # ---- Marcas propias de tiendas
 g("walmart","Walmart Inc. (marca propia)","Familia Walton (~45% de Walmart)","EE.UU.","Familia",P,"","En México opera Walmex, ~70% de Walmart Inc.",A,"Informe 10-K de Walmart")

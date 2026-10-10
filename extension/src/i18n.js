@@ -721,12 +721,44 @@
       ja: "⚠️ サードパーティ出品者：購入前に最近の評価と配送予定日を確認することをおすすめします。"
     },
     alt_saver_tip: {
-      es: "💡 Las alternativas de capital local reinvierten su valor en el país y evitan sobreprecios de monopolio.",
-      en: "💡 Locally-owned alternatives reinvest value in the community and avoid corporate monopoly markups.",
-      de: "💡 Lokale Alternativen reinvestieren Wert vor Ort und vermeiden überhöhte Monopolaufschläge.",
-      fr: "💡 Les alternatives locales réinvestissent la valeur dans le pays et évitent les surcoûts monopolistiques.",
-      it: "💡 Le alternative a capitale locale reinvestono valore nel territorio ed evitano sovrapprezzi monopolistici.",
-      ja: "💡 地域資本の代替品は国内経済に価値を還元し、独占による価格上乗せを回避します。"
+      es: "💡 Las alternativas de ahorro y capital local ofrecen formulaciones equivalentes con hasta un 50%-80% de ahorro frente a marcas multinacionales importadas.",
+      en: "💡 Locally-owned and budget alternatives offer equivalent quality with up to 50%-80% savings vs imported multinational brands.",
+      de: "💡 Lokale und preiswerte Alternativen bieten vergleichbare Qualität mit bis zu 50%-80% Ersparnis gegenüber multinationalen Importmarken.",
+      fr: "💡 Les alternatives locales et économiques offrent une qualité équivalente avec jusqu'à 50%-80% d'économies par rapport aux marques importées.",
+      it: "💡 Le alternative locali ed economiche offrono qualità equivalente con un risparmio stimato fino al 50%-80% rispetto ai marchi importati.",
+      ja: "💡 地域資本・お手頃な選択肢は、輸入多国籍ブランドと比べて最大50%〜80%の節約効果と安心の品質を両立します。"
+    },
+    alt_filter_all: {
+      es: "Todas las locales",
+      en: "All local options",
+      de: "Alle lokalen Optionen",
+      fr: "Toutes les options locales",
+      it: "Tutte le opzioni locali",
+      ja: "すべての地域選択肢"
+    },
+    alt_filter_budget: {
+      es: "🏷️ Más económicas / Ahorro",
+      en: "🏷️ Budget / High savings",
+      de: "🏷️ Günstiger / Spartipp",
+      fr: "🏷️ Plus économiques / Économies",
+      it: "🏷️ Più economiche / Risparmio",
+      ja: "🏷️ お手頃・高コスパ"
+    },
+    alt_badge_budget: {
+      es: "Opción económica",
+      en: "Budget option",
+      de: "Günstige Option",
+      fr: "Option économique",
+      it: "Opzione economica",
+      ja: "お手頃選択肢"
+    },
+    alt_no_budget_items: {
+      es: "No hay marcas catalogadas específicamente de bajo costo en esta lista; todas las mostradas son de capital local independiente.",
+      en: "No specific budget-tier brands found in this list; all displayed options are locally-owned.",
+      de: "Keine speziellen Niedrigpreis-Marken gefunden; alle gezeigten Optionen sind lokal geführt.",
+      fr: "Aucune marque spécifiquement économique répertoriée ici ; toutes sont locales et indépendantes.",
+      it: "Nessun marchio specificamente economico in questo elenco; tutti quelli mostrati sono a capitale locale.",
+      ja: "この一覧には格安特化ブランドはありません。表示されているものはすべて地域資本です。"
     },
     alt_options_count: {
       es: "opciones locales",
@@ -741,7 +773,7 @@
       en: "No locally-owned alternatives registered for this product category yet.",
       de: "Noch keine lokalen Alternativen für diese Produktkategorie erfasst.",
       fr: "Aucune alternative locale enregistrée pour cette catégorie de produit pour le moment.",
-      it: "Nessuna alternativa locale ancora registrata per questa categoria di prodotto.",
+      it: "Nessuna alternativa locale ancora registrata per questa categoria di producto.",
       ja: "この商品カテゴリの地域資本の選択肢はまだ登録されていません。"
     },
 

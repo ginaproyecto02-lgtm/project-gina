@@ -70,7 +70,7 @@
     const cat = QED.ALT.category(alt, brand, title);
     if (!cat) return res;
     const custom = Object.values(prefs.values || {}).some((v) => v !== 1 && v != null);
-    const items = QED.ALT.suggest(alt, cat, entry.pais, res.group && res.group.id, custom ? prefs.values : null, 3, title);
+    const items = QED.ALT.suggest(alt, cat, entry.pais, res.group && res.group.id, custom ? prefs.values : null, 5, title);
     res.alternativas = { cat, label: alt.cats[cat].label, pais: entry.pais, items, actualEsLocal: !!(res.group && QED.ALT.INDEP[res.group.tipo] && QED.ALT.countries(res.group.pais).includes(entry.pais)) };
     return res;
   }

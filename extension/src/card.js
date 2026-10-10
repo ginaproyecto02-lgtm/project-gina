@@ -119,9 +119,16 @@
   /* Alternativas & Mercado */
   .alt-content { font-size: 12px; }
   .alt-lead { font-size: 11px; text-transform: uppercase; letter-spacing: .4px; color: #3d6b2c; font-weight: 600; margin-bottom: 6px; }
-  .alt-content .it { margin-top: 6px; padding: 6px 8px; background: #f6fbf4; border-radius: 7px; border: 1px solid #e1efe0; line-height: 1.35; }
+  .alt-filters { display: flex; gap: 4px; margin: 4px 0 8px; }
+  .alt-filt { font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: #eef3ec; color: #2e5922; border: 1px solid #d2e3ce; cursor: pointer; transition: all .15s ease; }
+  .alt-filt:hover { background: #dfedd8; }
+  .alt-filt.active { background: #2b611e; color: #fff; border-color: #2b611e; }
+  .alt-content .it { margin-top: 6px; padding: 6px 8px; background: #f6fbf4; border-radius: 7px; border: 1px solid #e1efe0; line-height: 1.35; transition: all .15s ease; }
+  .alt-content .it.is-budget { border-color: #b7e0aa; background: #f0f9ed; }
   .alt-content .it b { font-size: 12.5px; }
   .alt-content .why { display: inline-block; font-size: 10px; padding: 0 6px; border-radius: 999px; background: #d9eecf; color: #2d5a1b; margin-left: 2px; }
+  .alt-content .why.budget { background: #cef0c2; color: #1e5c12; font-weight: 600; }
+  .alt-budget-empty { display: none; padding: 6px 8px; font-size: 11px; color: #5a6478; background: #fbfbfb; border-radius: 6px; border: 1px dashed #d5d9e0; margin-top: 6px; }
   .alt-tip { margin-top: 8px; padding: 7px 9px; border-radius: 7px; font-size: 11.5px; line-height: 1.35; background: #f2f8ee; border-left: 3px solid #4a8b30; color: #254d16; }
   .alt-empty { padding: 4px 0; }
   .also-loc { color: #2d5a1b; font-weight: normal; font-size: 11px; }
@@ -345,16 +352,28 @@
 
     const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, a.label.toLowerCase()) : a.label.toLowerCase();
     const alsoLocal = a.actualEsLocal ? ` <span class="also-loc">${t("alt_also_local")}</span>` : "";
+    const hasBudget = a.items.some((it) => it.esEconomica);
 
     return `
       <div class="alt-content">
         <div class="alt-lead">${t("alt_header", { cat: esc(catLabel), pais: esc(a.pais) })}${alsoLocal}</div>
-        ${a.items.map((it) => `
-          <div class="it">
-            <b>${esc(it.marcas.join(", "))}</b> <span class="why">${esc(it.motivo)}</span> <small>· ${esc(it.capital)}</small>
-            <br><small><b>${esc(it.group.empresa)}</b>${it.group.nota ? ` · ${esc(it.group.nota)}` : ""}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small>
+        ${hasBudget ? `
+          <div class="alt-filters">
+            <button class="alt-filt active" data-alt-filter="all">${t("alt_filter_all")}</button>
+            <button class="alt-filt" data-alt-filter="budget">${t("alt_filter_budget")}</button>
           </div>
-        `).join("")}
+        ` : ""}
+        <div class="alt-items-list">
+          ${a.items.map((it) => `
+            <div class="it ${it.esEconomica ? "is-budget" : ""}">
+              <b>${esc(it.marcas.join(", "))}</b> 
+              ${it.esEconomica ? `<span class="why budget" title="${esc(t("alt_badge_budget"))}">🏷️ ${esc(t("alt_badge_budget"))}</span>` : ""}
+              <span class="why">${esc(it.motivo)}</span> <small>· ${esc(it.capital)}</small>
+              <br><small><b>${esc(it.group.empresa)}</b>${it.group.nota ? ` · ${esc(it.group.nota)}` : ""}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small>
+            </div>
+          `).join("")}
+        </div>
+        <div class="alt-budget-empty">${t("alt_no_budget_items")}</div>
         <div class="alt-tip">${t("alt_saver_tip")}</div>
         <div class="method">${t("alt_disclaimer")}</div>
       </div>
@@ -532,6 +551,29 @@
           el.open = true;
           el.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
+      };
+    });
+
+    // Handler para sub-filtro de alternativas de ahorro / económicas
+    shadow.querySelectorAll(".alt-filt").forEach((btn) => {
+      btn.onclick = () => {
+        const mode = btn.getAttribute("data-alt-filter");
+        shadow.querySelectorAll(".alt-filt").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const items = shadow.querySelectorAll(".alt-items-list .it");
+        let visibleCount = 0;
+        items.forEach((it) => {
+          if (mode === "budget") {
+            const isBudget = it.classList.contains("is-budget");
+            it.style.display = isBudget ? "block" : "none";
+            if (isBudget) visibleCount++;
+          } else {
+            it.style.display = "block";
+            visibleCount++;
+          }
+        });
+        const emptyMsg = shadow.querySelector(".alt-budget-empty");
+        if (emptyMsg) emptyMsg.style.display = visibleCount === 0 ? "block" : "none";
       };
     });
 

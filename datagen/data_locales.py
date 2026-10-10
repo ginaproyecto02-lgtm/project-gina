@@ -4,26 +4,30 @@ from data_base import g, b, A, V
 
 CAT = {}  # marca → categoría
 
-g('loc_sociedad_cooperativa_trabajado', 'Sociedad Cooperativa Trabajadores de Pascual S.C.L.', 'Pertenece a más de 4,000 trabajadores que eligen democráticamente su consejo de administración.', 'México', 'Cooperativa', "", "", '', 'Alta', 'Expansión: ¿Quién es el dueño de Pascual?', 'https://expansion.mx/empresas/2025/07/04/quien-es-el-dueno-de-pascual')
+g('loc_sociedad_cooperativa_trabajado', 'Sociedad Cooperativa Trabajadores de Pascual S.C.L.', 'Pertenece a más de 4,000 trabajadores que eligen democráticamente su consejo de administración.', 'México', 'Cooperativa', "", "", '', 'Alta', 'Expansión: ¿Quién es el dueño de Pascual?', 'https://expansion.mx/empresas/2025/07/04/quien-es-el-dueno-de-pascual', ahorro=True)
 b('loc_sociedad_cooperativa_trabajado', '!Pascual', 'Boing', 'Boing!', 'Pascual Boing')
 CAT['Pascual'] = 'bebidas'
 g('loc_grupo_jumex', 'Grupo Jumex', 'Familia López: Eugenio López Alonso, único heredero del fundador Eugenio López Rodea y presidente del consejo; no cotiza en bolsa.', 'México', 'Familia', "", "", 'La familia es López (no Fernández). Sin desglose accionario público.', 'Verificar (fuente secundaria)', 'Tus Buenas Noticias: ¿Quién es el dueño de Jumex?', 'https://www.tusbuenasnoticias.com/noticias/economia/2026/01/31/56280-quien-es-el-dueno-de-jumex-y-cual-es-su-fortuna')
 b('loc_grupo_jumex', 'Jumex')
 CAT['Jumex'] = 'bebidas'
-g('loc_grupo_la_moderna', 'Grupo La Moderna', 'Las familias Monroy Carrillo y Monroy Saint Martín poseen cerca de 95% del capital; dirige Carlos Alejandro Monroy Carrillo.', 'México', 'Familia', "", "", 'Una sola fuente periodística; cotiza en la BMV.', 'Verificar (fuente secundaria)', 'Tus Buenas Noticias: ¿Quién es el dueño de La Moderna?', 'https://www.tusbuenasnoticias.com/noticias/economia/2026/04/13/58915-quien-es-el-dueno-de-sopas-la-moderna')
+g('loc_grupo_la_moderna', 'Grupo La Moderna', 'Las familias Monroy Carrillo y Monroy Saint Martín poseen cerca de 95% del capital; dirige Carlos Alejandro Monroy Carrillo.', 'México', 'Familia', "", "", 'Una sola fuente periodística; cotiza en la BMV.', 'Verificar (fuente secundaria)', 'Tus Buenas Noticias: ¿Quién es el dueño de La Moderna?', 'https://www.tusbuenasnoticias.com/noticias/economia/2026/04/13/58915-quien-es-el-dueno-de-sopas-la-moderna', ahorro=True)
 b('loc_grupo_la_moderna', 'La Moderna', 'Sopas La Moderna', 'Pastas La Moderna')
 CAT['La Moderna'] = 'abarrotes'
 g('loc_chocolatera_de_jalisco_s_a_de_', 'Chocolatera de Jalisco, S.A. de C.V.', 'Empresa fundada en 1925 por la familia Gómez Ibarra; la dirige la cuarta generación (Armando Gómez Ibarra).', 'México', 'Familia', "", "", 'No se halló estructura accionaria detallada, ni adquisiciones.', 'Verificar (fuente secundaria)', 'Players of Life: Chocolate Ibarra y su centenario', 'https://playersoflife.com/gourmet/historia-chocolate-ibarra-el-sabor-tapatio-que-va-por-su-centenario/')
 b('loc_chocolatera_de_jalisco_s_a_de_', 'Chocolate Ibarra', '!Ibarra')
 CAT['Chocolate Ibarra'] = 'chocolate_dulces'
-g('loc_f_brica_de_jab_n_la_corona_s_a', 'Fábrica de Jabón La Corona, S.A. de C.V.', 'Empresa fundada por la familia González en Tepatitlán, Jalisco; sin venta a extranjeros reportada.', 'México', 'Familia', "", "", 'Control familiar actual inferido de la fuente (no hay cifras accionarias).', 'Alta', 'El CEO: Zote, cómo surgió y quién es el dueño', 'https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/')
+g('loc_f_brica_de_jab_n_la_corona_s_a', 'Fábrica de Jabón La Corona, S.A. de C.V.', 'Empresa fundada por la familia González en Tepatitlán, Jalisco; sin venta a extranjeros reportada.', 'México', 'Familia', "", "", 'Líder mexicano en detergentes y jabones de máxima accesibilidad y rendimiento (Zote, Roma, Blanca Nieves, Foca).', 'Alta', 'El CEO: Zote, cómo surgió y quién es el dueño', 'https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/', ahorro=True)
 b('loc_f_brica_de_jab_n_la_corona_s_a', 'Zote', 'Jabón Zote')
 CAT['Zote'] = 'limpieza'
 b('loc_f_brica_de_jab_n_la_corona_s_a', '!Roma', 'Detergente Roma')
 CAT['Roma'] = 'limpieza'
 b('loc_f_brica_de_jab_n_la_corona_s_a', 'Blanca Nieves', 'Detergente Blanca Nieves')
 CAT['Blanca Nieves'] = 'limpieza'
-g('loc_galletas_dond', 'Galletas Dondé', 'Fundada en Mérida en 1905 por Luis Dondé; pasó a la familia Gómory.', 'México', 'Familia', "", "", 'Control familiar actual no confirmado con fuente reciente.', 'Alta', 'Diario de Yucatán: Galletas Dondé, 115 años', 'https://www.yucatan.com.mx/merida/2021/05/05/galletas-donde-115-anos-en-el-mercado.html')
+b('loc_f_brica_de_jab_n_la_corona_s_a', 'Foca', 'Detergente Foca', 'Jabón Tepeyac', 'Carisma')
+CAT['Foca'] = 'limpieza'
+CAT['Carisma'] = 'limpieza'
+CAT['Jabón Tepeyac'] = 'cuidado_personal'
+g('loc_galletas_dond', 'Galletas Dondé', 'Fundada en Mérida en 1905 por Luis Dondé; pasó a la familia Gómory.', 'México', 'Familia', "", "", 'Control familiar actual no confirmado con fuente reciente.', 'Alta', 'Diario de Yucatán: Galletas Dondé, 115 años', 'https://www.yucatan.com.mx/merida/2021/05/05/galletas-donde-115-anos-en-el-mercado.html', ahorro=True)
 b('loc_galletas_dond', 'Dondé', 'Galletas Dondé')
 CAT['Dondé'] = 'botanas_galletas'
 g('loc_grupo_flexi', 'Grupo Flexi (Flexi)', 'Familia Plascencia: fundador Roberto Plascencia Gutiérrez; hoy dirige la tercera generación (Roberto Plascencia Torres).', 'México', 'Familia', "", "", 'Escrito también Plasencia.', 'Alta', 'El CEO: ¿Quién es el dueño de Flexi?', 'https://elceo.com/negocios/quien-es-el-dueno-de-la-marca-flexi/')
@@ -189,19 +193,35 @@ b('loc_industrias_guacamaya', 'La Guacamaya', 'Salsa La Guacamaya')
 CAT['La Guacamaya'] = 'abarrotes'
 
 # ---- Cuidado de la piel y dermocosmética local
-g('loc_laboratorios_grisi', 'Laboratorios Grisi', 'Familia Grisi: empresa familiar mexicana fundada en 1863, especializada en dermocosmética y cuidado de la piel.', 'México', 'Familia', "", "", 'Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial.', 'Alta', 'Expansión: Grisi, 160 años de historia', 'https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia')
-b('loc_laboratorios_grisi', 'Grisi Dermocosmética', 'Jabón Neutro Grisi', 'Concha Nácar Grisi', 'Grisi Facial', 'Grisi')
+g('loc_laboratorios_grisi', 'Laboratorios Grisi', 'Familia Grisi: empresa familiar mexicana fundada en 1863, especializada en dermocosmética y cuidado de la piel.', 'México', 'Familia', "", "", 'Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial a precio accesible.', 'Alta', 'Expansión: Grisi, 160 años de historia', 'https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia', ahorro=True)
+b('loc_laboratorios_grisi', 'Grisi Dermocosmética', 'Jabón Neutro Grisi', 'Concha Nácar Grisi', 'Grisi Facial', 'Grisi', 'Cero')
 CAT['Grisi Dermocosmética'] = 'skincare_cosmetica'
 CAT['Jabón Neutro Grisi'] = 'skincare_cosmetica'
 CAT['Concha Nácar Grisi'] = 'skincare_cosmetica'
 CAT['Grisi Facial'] = 'skincare_cosmetica'
 CAT['Grisi'] = 'skincare_cosmetica'
+CAT['Cero'] = 'cuidado_personal'
 
-g('loc_genomma_lab', 'Genomma Lab (Cuidado Facial)', 'Rodrigo Herrera (fundador mexicano) y accionistas en la BMV; marcas de cuidado facial.', 'México', 'Fundador + fondos', "", "", 'Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica.', 'Alta', 'Reporte anual Genomma Lab (BMV)', 'https://www.genommalab.com')
-b('loc_genomma_lab', 'Cicatricure', 'Asepxia', 'Teatrical')
+g('loc_genomma_lab', 'Genomma Lab (Cuidado Facial)', 'Rodrigo Herrera (fundador mexicano) y accionistas en la BMV; marcas de cuidado facial.', 'México', 'Fundador + fondos', "", "", 'Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica accesible de farmacia.', 'Alta', 'Reporte anual Genomma Lab (BMV)', 'https://www.genommalab.com', ahorro=True)
+b('loc_genomma_lab', 'Cicatricure', 'Asepxia', 'Teatrical', 'Goicoechea')
 CAT['Cicatricure'] = 'skincare_cosmetica'
 CAT['Asepxia'] = 'skincare_cosmetica'
 CAT['Teatrical'] = 'skincare_cosmetica'
+CAT['Goicoechea'] = 'cuidado_personal'
+
+g('loc_farmacias_similares', 'Grupo Por Un País Mejor (Farmacias Similares)', 'Familia González Torres (Víctor González Herrera y familia); empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Líder en productos farmacéuticos y dermocosméticos accesibles (Eternal Secret, SimiCrema, SimiSolar) con ahorro de hasta 80%.', 'Alta', 'Sitio oficial Farmacias Similares', 'https://farmaciassimilares.com', ahorro=True)
+b('loc_farmacias_similares', 'Eternal Secret', 'SimiCrema', 'SimiSolar', 'Dr. Simi', 'Simi')
+CAT['Eternal Secret'] = 'skincare_cosmetica'
+CAT['SimiCrema'] = 'skincare_cosmetica'
+CAT['SimiSolar'] = 'skincare_cosmetica'
+CAT['Dr. Simi'] = 'cuidado_personal'
+CAT['Simi'] = 'cuidado_personal'
+
+g('loc_jaloma', 'Laboratorios Jaloma', 'Familia López Morales; empresa 100% mexicana fundada en 1941 en Guadalajara, Jalisco.', 'México', 'Familia', "", "", 'Cuidado personal y dermatológico básico (agua de rosas, aceites corporales puros, vaselina) a costo de gran ahorro.', 'Alta', 'Sitio oficial Jaloma', 'https://jaloma.com.mx', ahorro=True)
+b('loc_jaloma', 'Jaloma', 'Aceite Jaloma', 'Agua de Rosas Jaloma')
+CAT['Jaloma'] = 'skincare_cosmetica'
+CAT['Agua de Rosas Jaloma'] = 'skincare_cosmetica'
+CAT['Aceite Jaloma'] = 'cuidado_personal'
 
 g('loc_sesderma', 'Laboratorios Sesderma', 'Dr. Gabriel Serrano y familia; laboratorio dermocosmético español fundado en 1989.', 'España', 'Familia', "", "", 'Pioneros españoles en nanotecnología dermatológica y cuidado facial con vitamina C.', 'Alta', 'Sitio oficial de Sesderma', 'https://www.sesderma.com')
 b('loc_sesderma', 'Sesderma', 'Babé')
