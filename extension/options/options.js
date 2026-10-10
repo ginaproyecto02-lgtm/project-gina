@@ -296,9 +296,15 @@ $("#sendPending").addEventListener("click", async () => {
   const items = Object.values(pending).filter((p) => ["por_investigar", "por_verificar", "reintentar", "sin_fuentes"].includes(p.status) && (p.brand || p.title))
     .sort((a, b) => (b.count || 0) - (a.count || 0)).slice(0, 30).map((p) => ({ marca: p.brand, tienda: p.site, producto: p.title }));
   if (!items.length) { msg("msg_proj", "No hay marcas pendientes por sugerir.", ""); return; }
-  const url = QED.ALT.suggestionLink(PROJ, "marca", items);
-  if (url) { api.tabs.create({ url }); msg("msg_proj", `Se abrió una sugerencia con ${items.length} marcas. Revísala y envíala.`, "ok"); }
+  const textList = items.map((it) => `- Marca: ${it.marca || ""} | Tienda: ${it.tienda || ""} | Producto: ${it.producto || ""}`).join("\n");
+  try { await navigator.clipboard.writeText(textList); } catch (e) {}
+  const subj = encodeURIComponent(`Sugerencia de ${items.length} marcas para Project Gina`);
+  const body = encodeURIComponent(`Hola equipo de Project Gina,\n\nAquí comparto las marcas pendientes encontradas en mis compras:\n\n${textList}\n\nGracias.`);
+  const mailtoUrl = `mailto:${PROJ.contacto || "gina.proyecto02@gmail.com"}?subject=${subj}&body=${body}`;
+  api.tabs.create({ url: mailtoUrl });
+  msg("msg_proj", `Se abrió el correo con ${items.length} marcas para ${PROJ.contacto || "el equipo"} (también se copiaron al portapapeles).`, "ok");
 });
+
 // Tus valores se guardan al momento (no necesitan permisos).
 document.addEventListener("change", async (e) => {
   const t = e.target;

@@ -974,6 +974,30 @@
    "fuente": "Informe anual de Prada (HKEX)",
    "url": ""
   },
+  "purefishing": {
+   "empresa": "Pure Fishing (Penn, Abu Garcia, Berkley)",
+   "controlador": "Sycamore Partners (capital privado)",
+   "pais": "EE.UU.",
+   "tipo": "Capital privado",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",
+   "confianza": "Verificado",
+   "fuente": "Sycamore Partners",
+   "url": "https://www.sycamorepartners.com"
+  },
+  "shimano": {
+   "empresa": "Shimano Inc.",
+   "controlador": "Familia fundadora Shimano y fondos institucionales",
+   "pais": "Otros (Japón)",
+   "tipo": "Familia + fondos",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "gobierno": "",
+   "nota": "Fabricante líder de componentes de ciclismo y equipos de pesca.",
+   "confianza": "Alta",
+   "fuente": "Informe anual de Shimano (TSE)",
+   "url": ""
+  },
   "amazon_tienda": {
    "empresa": "Amazon.com Inc.",
    "controlador": "Jeff Bezos (fundador) y fondos; sin accionista de control",
@@ -6100,6 +6124,50 @@
    "g": "prada"
   },
   {
+   "n": "Penn",
+   "g": "purefishing"
+  },
+  {
+   "n": "Penn Fishing",
+   "g": "purefishing"
+  },
+  {
+   "n": "Abu Garcia",
+   "g": "purefishing"
+  },
+  {
+   "n": "Berkley",
+   "g": "purefishing"
+  },
+  {
+   "n": "Ugly Stik",
+   "g": "purefishing"
+  },
+  {
+   "n": "Fenwick",
+   "g": "purefishing"
+  },
+  {
+   "n": "Savage Gear",
+   "g": "purefishing"
+  },
+  {
+   "n": "Hardy",
+   "g": "purefishing"
+  },
+  {
+   "n": "Shakespeare",
+   "g": "purefishing"
+  },
+  {
+   "n": "Pflueger",
+   "g": "purefishing"
+  },
+  {
+   "n": "Shimano",
+   "g": "shimano"
+  },
+  {
    "n": "Zara",
    "g": "inditex"
   },
@@ -10236,6 +10304,45 @@
     "Flexi",
     "Patagonia",
     "Camper"
+   ]
+  },
+  "deportes_outdoor": {
+   "label": "Deportes, pesca y aire libre",
+   "kw": [
+    "angeln",
+    "anzuelo",
+    "bicicleta",
+    "bicycle",
+    "bike",
+    "camping",
+    "cana de pescar",
+    "carrete",
+    "ciclismo",
+    "fischen",
+    "fishing",
+    "lure",
+    "moulinet",
+    "peche",
+    "pesca",
+    "reel",
+    "rod",
+    "rolle",
+    "rute",
+    "senuelo",
+    "tackle",
+    "tent",
+    "tienda de campana"
+   ],
+   "marcas": [
+    "Penn",
+    "Penn Fishing",
+    "Abu Garcia",
+    "Berkley",
+    "Ugly Stik",
+    "Fenwick",
+    "Hardy",
+    "Shakespeare",
+    "Shimano"
    ]
   }
  }

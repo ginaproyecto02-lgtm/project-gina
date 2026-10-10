@@ -1,7 +1,7 @@
 // Gina — service worker (Chrome/Edge) o página de eventos (Firefox):
 // memoria (caché, pendientes, verificados), clasificación con IA y job semanal de investigación.
 // En Chrome se cargan las dependencias con importScripts; en Firefox ya vienen en background.scripts del manifiesto.
-if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "ai.js");
+if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "i18n.js", "ai.js");
 const QED = globalThis.QED, AI = globalThis.QEDAI;
 const api = chrome;
 const IS_FIREFOX = typeof browser !== "undefined" && !!(browser.runtime && browser.runtime.getBrowserInfo);
@@ -306,9 +306,50 @@ api.alarms.onAlarm.addListener(async (a) => {
   if ((s.jobEnabled || (await remoteUrlOf(s))) && Date.now() - (jobState.lastRun || 0) >= 7 * DAY) runJob("semanal");
 });
 
+async function recordBrandSuggestion(brand, title, site) {
+  const key = keyFor(brand, title);
+  await locked(async () => {
+    const { pending = {}, userSuggestions = [] } = await get(["pending", "userSuggestions"]);
+    const p = pending[key] || { brand: brand || "", title: title || "", site: site || "", firstSeen: Date.now(), count: 0, tries: 0, status: "por_investigar" };
+    p.count = (p.count || 0) + 5;
+    p.lastSeen = Date.now();
+    p.userSuggested = true;
+    p.status = "por_investigar";
+    if (site) p.site = site;
+    if (title && !p.title) p.title = title;
+    pending[key] = p;
+
+    const entry = { brand: brand || "", title: title || "", site: site || "", date: Date.now() };
+    const filtered = userSuggestions.filter((x) => x.brand !== brand || x.title !== title);
+    filtered.unshift(entry);
+
+    await set({ pending, userSuggestions: filtered.slice(0, 100) });
+  });
+  await updateBadge();
+  return { ok: true };
+}
+
+async function recordAlternativeSuggestion(alt) {
+  await locked(async () => {
+    const { suggestedAlternatives = [] } = await get("suggestedAlternatives");
+    const entry = Object.assign({ date: Date.now() }, alt || {});
+    suggestedAlternatives.unshift(entry);
+    await set({ suggestedAlternatives: suggestedAlternatives.slice(0, 100) });
+  });
+  return { ok: true };
+}
+
 api.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (!msg || !msg.type) return false;
   if (msg.type === "qed:resolve") { resolve(msg).then(reply, (e) => reply({ status: "error", error: String(e) })); return true; }
+  if (msg.type === "qed:suggest_brand") {
+    recordBrandSuggestion(msg.brand, msg.title, msg.site).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    return true;
+  }
+  if (msg.type === "qed:suggest_alternative") {
+    recordAlternativeSuggestion(msg.alternative).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    return true;
+  }
   if (msg.type === "qed:runJob") { runJob("manual").catch(() => {}); reply({ started: true }); return false; }
   if (msg.type === "qed:testKey") {
     settings().then(async (s) => {
@@ -323,3 +364,4 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg.type === "qed:badge") { updateBadge().then(() => reply({ ok: true })); return true; }
   return false;
 });
+

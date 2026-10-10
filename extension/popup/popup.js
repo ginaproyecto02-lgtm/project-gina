@@ -5,17 +5,29 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 let proj = {}, pageRes = null;
 let db, index, custom = [], extra = { verified: {}, patches: {} }, registry = { sitios: [] }, corpus = [];
 
-function card(brand, g, extra) {
-  const src = /^https?:\/\//i.test(g.url || "") ? `<a href="${esc(g.url)}" target="_blank" rel="noopener noreferrer">${esc(g.fuente || "Ver fuente")}</a>` : esc(g.fuente || "");
+const I18N = () => QED.I18N || {
+  t: (k, p) => k,
+  tipoLabel: (t) => t,
+  tipoInfo: () => "",
+  estadoLabel: (s) => s,
+  temaLabel: (t) => t,
+  repLevel: (i) => i >= 75 ? "Pocas controversias registradas" : i >= 50 ? "Controversias moderadas" : i >= 25 ? "Controversias relevantes" : "Historial de sanciones serio",
+  getLang: () => "es"
+};
+const t = (k, p) => I18N().t(k, p);
+
+function card(brand, g, extraLabel) {
+  const src = /^https?:\/\//i.test(g.url || "") ? `<a href="${esc(g.url)}" target="_blank" rel="noopener noreferrer">${esc(g.fuente || t("view_source"))}</a>` : esc(g.fuente || "");
+  const tipoLbl = g.tipo ? I18N().tipoLabel(g.tipo) : "";
   return `<div class="res">
-    <div class="k">Marca</div><div><b>${esc(brand)}</b>${extra ? ` <span class="small">${esc(extra)}</span>` : ""}</div>
+    <div class="k">${t("brand_detected")}</div><div><b>${esc(brand)}</b>${extraLabel ? ` <span class="small">${esc(extraLabel)}</span>` : ""}</div>
     <div class="emp">${esc(g.empresa)}</div>
-    <div class="k">Quién la controla</div><div>${esc(g.controlador || "—")}</div>
-    ${g.pais ? `<span class="chip">🌎 ${esc(g.pais)}</span>` : ""}${g.tipo ? `<span class="chip">${esc(g.tipo)}</span>` : ""}${g.confianza ? `<span class="chip">${esc(g.confianza)}</span>` : ""}
-    ${g.fondos ? `<div class="k">Grandes fondos</div><div>${esc(g.fondos)}</div>` : ""}
-    ${g.gobierno ? `<div class="k">Relación con gobiernos</div><div>${esc(g.gobierno)}</div>` : ""}
+    <div class="k">${t("who_controls")}</div><div>${esc(g.controlador || "—")}</div>
+    ${g.pais ? `<span class="chip">🌎 ${esc(g.pais)}</span>` : ""}${tipoLbl ? `<span class="chip">${esc(tipoLbl)}</span>` : ""}${g.confianza ? `<span class="chip">${esc(g.confianza)}</span>` : ""}
+    ${g.fondos ? `<div class="k">${t("major_funds")}</div><div>${esc(g.fondos)}</div>` : ""}
+    ${g.gobierno ? `<div class="k">${t("gov_ties")}</div><div>${esc(g.gobierno)}</div>` : ""}
     ${g.nota ? `<div class="note">${esc(g.nota)}</div>` : ""}
-    ${src ? `<div class="k">Fuente</div><div>${src}</div>` : ""}
+    ${src ? `<div class="k">${t("source")}</div><div>${src}</div>` : ""}
     ${repLine(g.rep)}
   </div>`;
 }
@@ -24,16 +36,36 @@ function card(brand, g, extra) {
 function repLine(rec, title) {
   if (!rec || !QED.REP) return "";
   const sc = QED.REP.score(rec);
-  const top = sc.eventos.slice(0, 2).map((e) => `<div class="small">${esc((QED.REP.TEMAS[e.tema] || {}).icon || "•")} ${esc(e.titulo)} · ${esc((QED.REP.ESTADOS[e.estado] || {}).label || e.estado)} ${esc(e.anio || "")} · <a href="${/^https?:\/\//i.test(e.url || "") ? esc(e.url) : "#"}" target="_blank" rel="noopener noreferrer">fuente</a></div>`).join("");
-  return `<div class="k">${esc(title || "Reputación")}</div><div>${sc.parcial ? "En investigación" : `<b>${sc.indice}/100</b> · ${esc(sc.nivel)} (${sc.n} hechos con fuente)`}</div>${top}`;
+  const factWord = sc.n === 1 ? t("fact_singular") : t("fact_plural");
+  const factsText = t("rep_facts_with_source", { n: sc.n, facts: factWord });
+  const top = sc.eventos.slice(0, 2).map((e) => {
+    const rawTema = (QED.REP.TEMAS[e.tema] || { icon: "•", label: e.tema });
+    const stLbl = I18N().estadoLabel(e.estado) || e.estado;
+    return `<div class="small">${esc(rawTema.icon)} ${esc(e.titulo)} · ${esc(stLbl)} ${esc(e.anio || "")} · <a href="${/^https?:\/\//i.test(e.url || "") ? esc(e.url) : "#"}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a></div>`;
+  }).join("");
+  const lvlText = I18N().repLevel(sc.indice);
+  return `<div class="k">${esc(title || t("rep_general"))}</div><div>${sc.parcial ? t("rep_investigating") : `<b>${sc.indice}/100</b> · ${esc(lvlText)} (${factsText})`}</div>${top}`;
 }
+
 function fundCard(id) {
   const rec = index.rep && index.rep[id];
   const f = QED.REP.FONDOS.find((x) => x.id === id);
-  return `<div class="res"><div class="k">Fondo de inversión</div><div class="emp">${esc(f ? f.nombre : id)}</div>${rec ? repLine(rec) : "<div class='small'>Aún sin historial.</div>"}</div>`;
+  return `<div class="res"><div class="k">${t("funds_reputation")}</div><div class="emp">${esc(f ? f.nombre : id)}</div>${rec ? repLine(rec) : "<div class='small'>Aún sin historial.</div>"}</div>`;
+}
+
+function applyI18nLabels() {
+  const bPage = $('[data-tab="page"]'); if (bPage) bPage.textContent = t("tab_page");
+  const bSearch = $('[data-tab="search"]'); if (bSearch) bSearch.textContent = t("tab_search");
+  const bAdd = $('[data-tab="add"]'); if (bAdd) bAdd.textContent = t("tab_add");
+  const q = $("#q"); if (q) q.placeholder = t("search_placeholder");
+  const showCard = $("#showCard"); if (showCard) showCard.textContent = t("show_card_btn");
+  const sug = $("#suggest"); if (sug) sug.textContent = t("suggest_btn");
+  const opt = $("#openOptions"); if (opt) opt.textContent = t("btn_options");
+  const foot = $("footer"); if (foot) foot.textContent = t("foot_disclaimer");
 }
 
 async function init() {
+  applyI18nLabels();
   db = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
   const st = await api.storage.local.get(["customBrands", "enabled", "remoteBase", "verified", "groupPatches", "pending", "repPatches"]);
   custom = st.customBrands || [];
@@ -46,7 +78,7 @@ async function init() {
   $("#altSuggest").hidden = !(proj.issuesUrl || proj.contacto);
   buildCorpus();
   const pend = Object.values(st.pending || {}).filter((x) => ["por_investigar", "por_verificar", "reintentar", "sin_fuentes"].includes(x.status)).length;
-  $("#aiInfo").textContent = `${Object.keys(extra.verified).length} marcas verificadas por la investigación · ${pend} pendientes`;
+  $("#aiInfo").textContent = `${Object.keys(extra.verified).length} marcas verificadas · ${pend} pendientes`;
   $("#count").textContent = `${db.marcas.length + custom.length} marcas · ${Object.keys(db.grupos).length} grupos · base ${db.version}`;
   $("#enabled").checked = st.enabled !== false;
   renderCustom();
@@ -77,16 +109,21 @@ async function activeTab() {
 
 function travelHtml(res) {
   let h = "";
-  if (res.mode === "hospedaje" && res.agency) return card(res.agency.nombre, res.agency.group, "Plataforma de hospedaje");
-  if (res.airline) h += card(res.airline.nombre, res.airline.group, "Aerolínea de este sitio");
-  if (res.agency) h += card(res.agency.nombre, res.agency.group, "Agencia / buscador");
-  for (const a of res.airlines || []) h += card(a.n, a.group, `Aerolínea · aparece ${a.count} ${a.count === 1 ? "vez" : "veces"}`);
+  if (res.mode === "hospedaje" && res.agency) return card(res.agency.nombre, res.agency.group, "Hospedaje");
+  if (res.airline) h += card(res.airline.nombre, res.airline.group, "Aerolínea");
+  if (res.agency) h += card(res.agency.nombre, res.agency.group, "Agencia");
+  for (const a of res.airlines || []) {
+    const timeWord = a.count === 1 ? t("time_singular") : t("time_plural");
+    const seenText = t("times_seen", { count: a.count, times: timeWord });
+    h += card(a.n, a.group, `Aerolínea · ${seenText}`);
+  }
   return h || "Aún no se detectan aerolíneas en esta página.";
 }
 
 function altHtml(a) {
   if (!a || !a.items || !a.items.length) return "";
-  return `<div class="res"><div class="k">🌱 Alternativas con dueño local en ${esc(a.pais)}</div>${a.items.map((it) =>
+  const head = t("alt_header", { cat: esc(a.label.toLowerCase()), pais: esc(a.pais) });
+  return `<div class="res"><div class="k">${head}</div>${a.items.map((it) =>
     `<div><b>${esc(it.marcas.join(", "))}</b> <span class="small">· ${esc(it.motivo)} · ${esc(it.group.empresa)}</span></div>`).join("")}</div>`;
 }
 
@@ -99,11 +136,11 @@ async function loadPage() {
     const res = r.result;
     pageRes = Object.assign({ site: r.site }, res);
     if (res.mode) { $("#pageOut").innerHTML = travelHtml(res); return; }
-    $("#suggest").hidden = !(!res.found && (res.brandText || res.title) && (proj.issuesUrl || proj.contacto));
-    const storeLine = res.store && res.store.group ? `<div class="note">🏬 Compras en <b>${esc(res.store.nombre)}</b> → ${esc(res.store.group.empresa)} · ${esc(res.store.group.controlador)}</div>` : "";
+    $("#suggest").hidden = !(!res.found && (res.brandText || res.title));
+    const storeLine = res.store && res.store.group ? `<div class="note">${t("shopping_at", { store: esc(res.store.nombre), empresa: esc(res.store.group.empresa), controlador: esc(res.store.group.controlador) })}</div>` : "";
     $("#pageOut").innerHTML = (res.found
       ? card(res.brand, res.group, `(${res.source})`)
-      : `<div class="emp">Marca no encontrada</div><div>${res.brandText ? `La página indica <b>${esc(res.brandText)}</b>. Puedes agregarla en «Agregar una marca».` : "No se pudo leer la marca."}</div>`) + altHtml(res.alternativas) + storeLine;
+      : `<div class="emp">${t("not_found_title")}</div><div>${res.brandText ? t("not_found_desc", { brand: esc(res.brandText) }) : t("not_found_unreadable")}</div>`) + altHtml(res.alternativas) + storeLine;
     if (!res.found && res.brandText) $("#addForm").marca.value = res.brandText;
   } catch (e) {
     $("#pageOut").textContent = "Abre un producto en una tienda, o una búsqueda de vuelos u hospedaje (si ya está abierta, recarga la página).";
@@ -141,6 +178,7 @@ document.querySelectorAll("nav button").forEach((b) => b.onclick = () => {
 $("#q").addEventListener("input", (e) => search(e.target.value));
 $("#enabled").addEventListener("change", (e) => api.storage.local.set({ enabled: e.target.checked }));
 $("#showCard").onclick = async () => { const t = await activeTab(); try { await api.tabs.sendMessage(t.id, { type: "qed:show" }); window.close(); } catch (e) {} };
+
 $("#addForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = new FormData(e.target);
@@ -152,17 +190,61 @@ $("#addForm").addEventListener("submit", async (e) => {
   index = QED.buildIndex(db, custom, extra.verified, extra.patches, extra.rep || {});
   e.target.reset(); renderCustom();
 });
-$("#suggest").onclick = () => {
+
+// Sugerencia de marca: 1 clic sin forzar inicio de sesión en GitHub
+$("#suggest").onclick = async () => {
   if (!pageRes) return;
+  const brand = pageRes.brandText || "";
+  const title = pageRes.title || "";
   const site = pageRes.site ? `${pageRes.site.nombre} (${pageRes.site.pais})` : "";
-  const url = QED.ALT.suggestionLink(proj, "marca", [{ marca: pageRes.brandText, tienda: site, producto: pageRes.title }]);
-  if (url) api.tabs.create({ url });
+  
+  await api.runtime.sendMessage({
+    type: "qed:suggest_brand",
+    brand: brand,
+    title: title,
+    site: site
+  });
+  
+  $("#suggest").hidden = true;
+  const fb = $("#suggestFeedback");
+  fb.hidden = false;
+  
+  const subj = encodeURIComponent(`Sugerencia de marca: ${brand}`);
+  const body = encodeURIComponent(`Marca: ${brand}\nTienda: ${site}\nProducto: ${title}\n`);
+  const mailto = `mailto:${proj.contacto || "gina.proyecto02@gmail.com"}?subject=${subj}&body=${body}`;
+  const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]) : "";
+  
+  fb.innerHTML = `
+    <div><b>${t("suggest_success")}</b></div>
+    <div style="margin-top:6px;font-size:11px;color:#5a6478;">
+      <a href="${mailto}" target="_blank">✉ ${t("suggest_email_opt")}</a>
+      ${ghUrl ? ` · <a href="${ghUrl}" target="_blank">GitHub</a>` : ""}
+    </div>`;
 };
-$("#altForm").addEventListener("submit", (e) => {
+
+// Sugerencia de alternativa local: 1 clic sin forzar GitHub
+$("#altForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target).entries());
-  const url = QED.ALT.suggestionLink(proj, "alternativa", [f]);
-  if (url) { api.tabs.create({ url }); e.target.reset(); }
+  await api.runtime.sendMessage({
+    type: "qed:suggest_alternative",
+    alternative: f
+  });
+  e.target.reset();
+  const fb = $("#altFeedback");
+  fb.hidden = false;
+  const subj = encodeURIComponent(`Alternativa local sugerida: ${f.marca}`);
+  const body = encodeURIComponent(`Alternativa: ${f.marca}\nCategoría: ${f.categoria || ""}\nPaís: ${f.pais || ""}\nDueño: ${f.dueno || ""}\nFuente: ${f.fuente || ""}\n`);
+  const mailto = `mailto:${proj.contacto || "gina.proyecto02@gmail.com"}?subject=${subj}&body=${body}`;
+  const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "alternativa", [f]) : "";
+  
+  fb.innerHTML = `
+    <div><b>✔ ¡Gracias! Alternativa registrada para verificarla e incluirla en la base.</b></div>
+    <div style="margin-top:6px;font-size:11px;color:#5a6478;">
+      <a href="${mailto}" target="_blank">✉ Enviar por correo al equipo</a>
+      ${ghUrl ? ` · <a href="${ghUrl}" target="_blank">GitHub</a>` : ""}
+    </div>`;
 });
+
 $("#openOptions").onclick = () => api.runtime.openOptionsPage();
 init();

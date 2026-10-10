@@ -25,4 +25,7 @@ CATS = {
     "marcas": ["Dove", "Rexona", "Axe", "Sedal", "Pond's", "Vasenol", "Clear", "TRESemmé", "Head & Shoulders", "Pantene", "Herbal Essences", "Colgate", "Palmolive", "Protex", "Crest", "Oral-B", "Nivea", "Eucerin", "Neutrogena", "Johnson's", "Lux", "Lifebuoy", "Natura", "Avon", "O Boticário", "Schwarzkopf", "Syoss", "Godrej", "Cinthol"]},
   "ropa_calzado": {"label": "Ropa y calzado", "kw": ["tenis", "zapatos", "zapatillas", "botas", "sandalias", "playera", "camiseta", "pantalon", "jeans", "chamarra", "chaqueta", "sudadera", "sneakers", "shoes", "boots", "jacket", "hoodie", "t-shirt", "sapato", "tenis", "chaussures", "veste", "scarpe", "giacca", "schuhe", "jacke"],
     "marcas": ["Nike", "Jordan", "Converse", "Adidas", "Puma", "Skechers", "Reebok", "Under Armour", "New Balance", "Levi's", "Dockers", "Calvin Klein", "Tommy Hilfiger", "Vans", "The North Face", "Timberland", "Crocs", "Lacoste", "Zara", "Massimo Dutti", "Bershka", "Pull&Bear", "Uniqlo", "GU", "Havaianas", "ASICS", "Onitsuka Tiger", "Primark"]},
+  "deportes_outdoor": {"label": "Deportes, pesca y aire libre", "kw": ["pesca", "carrete", "cana de pescar", "anzuelo", "senuelo", "fishing", "rod", "reel", "lure", "tackle", "camping", "tienda de campana", "tent", "ciclismo", "bicicleta", "bike", "bicycle", "peche", "moulinet", "angeln", "fischen", "rute", "rolle"],
+    "marcas": ["Penn", "Penn Fishing", "Abu Garcia", "Berkley", "Ugly Stik", "Fenwick", "Hardy", "Shakespeare", "Shimano"]}
 }
+

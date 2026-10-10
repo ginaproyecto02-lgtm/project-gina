@@ -95,6 +95,10 @@ g("beiersdorf","Beiersdorf","Familia Herz (vía maxingvest, ~50%)","Otros (Alema
 g("hermes","Hermès","Familias Hermès (~66%)","Francia","Familia",P,"","",A,"Informe anual de Hermès (AMF)")
 g("kering","Kering","Familia Pinault (Artémis, ~42%)","Francia","Familia",P,"","",A,"Informe anual de Kering (AMF)")
 g("prada","Prada","Familia Prada-Bertelli (~80%)","Italia","Familia",P,"","Compró Versace en 2025.",A,"Informe anual de Prada (HKEX)")
+# ---- Deportes, actividades al aire libre y pesca
+g("purefishing","Pure Fishing (Penn, Abu Garcia, Berkley)","Sycamore Partners (capital privado)","EE.UU.","Capital privado",NC,"","Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",OK,"Sycamore Partners","https://www.sycamorepartners.com")
+g("shimano","Shimano Inc.","Familia fundadora Shimano y fondos institucionales","Otros (Japón)","Familia + fondos",P,"","Fabricante líder de componentes de ciclismo y equipos de pesca.",A,"Informe anual de Shimano (TSE)")
+
 
 B = []  # (marca, grupo, alias..., ) ; un "!" delante = solo cuenta si viene del campo «marca», no del título
 def b(grupo, *names): 
@@ -181,4 +185,7 @@ b("beiersdorf","Nivea","Eucerin","La Prairie","Labello")
 b("hermes","Hermès","Hermes")
 b("kering","Gucci","Saint Laurent","Balenciaga","Bottega Veneta","Alexander McQueen")
 b("prada","Prada","Miu Miu","Versace")
+b("purefishing","Penn","Penn Fishing","Abu Garcia","Berkley","Ugly Stik","Fenwick","Savage Gear","Hardy","Shakespeare","Pflueger")
+b("shimano","Shimano")
+
 

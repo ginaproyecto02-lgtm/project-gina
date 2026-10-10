@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Gina : Sachez qui votre argent soutient"
+  },
+  "extShortName": {
+    "message": "Gina"
+  },
+  "extDescription": {
+    "message": "Découvrez quelle entreprise, famille, fonds ou État se cache derrière vos achats, leur historique et leur lobbying. Votez à chaque achat."
+  },
+  "actionTitle": {
+    "message": "Gina : qui votre argent soutient-il ?"
+  }
+}

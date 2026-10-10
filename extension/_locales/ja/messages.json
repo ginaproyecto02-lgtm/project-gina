@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "Gina：あなたのお金が支える企業を知る"
+  },
+  "extShortName": {
+    "message": "Gina"
+  },
+  "extDescription": {
+    "message": "購入する商品の背後にある企業、創業家、投資ファンド、国家、さらに過去の不祥事やロビー活動の実態を可視化します。"
+  },
+  "actionTitle": {
+    "message": "Gina：あなたのお金は誰を支えていますか？"
+  }
+}

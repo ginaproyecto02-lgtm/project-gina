@@ -22,6 +22,7 @@
     <div id="pageOut" class="out">Abre un producto en una tienda, o una búsqueda de vuelos u hospedaje.</div>
     <button id="showCard" class="btn ghost">Mostrar la tarjeta en la página</button>
     <button id="suggest" class="btn ghost" hidden>💡 Sugerir esta marca al proyecto</button>
+    <div id="suggestFeedback" class="sug-feedback" hidden></div>
   </section>
 
   <section id="search" class="tab">
@@ -40,6 +41,7 @@
         <input name="fuente" placeholder="Enlace donde se confirma (https://…)">
         <button class="btn" type="submit">Sugerir alternativa</button>
       </form>
+      <div id="altFeedback" class="sug-feedback" hidden></div>
       <hr>
     </div>
     <p class="small">Las marcas que agregues se guardan solo en este navegador y tienen prioridad sobre la base.</p>
@@ -67,6 +69,7 @@
   <script src="../src/matcher.js"></script>
   <script src="../src/reputation.js"></script>
   <script src="../src/alternativas.js"></script>
+  <script src="../src/i18n.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
