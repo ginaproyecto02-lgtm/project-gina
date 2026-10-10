@@ -1,11 +1,35 @@
-name: Project Gina — generar paquete
+# Project Gina: pruebas automáticas y paquete para las tiendas.
+# - En cada push o pull request que toque la extensión, los datos o las pruebas: regenera y corre las pruebas.
+# - Al ejecutarlo a mano (Actions → «Run workflow»): además arma el zip con la versión del manifest
+#   y, si la base cambió de verdad (no solo la fecha), la sube al repositorio.
+# - Al empujar una etiqueta vX.Y.Z (igual a la versión del manifest): crea un Release con el zip.
+name: Project Gina — pruebas y paquete
 
 on:
-  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths: ["extension/**", "datagen/**", "test/**", ".github/workflows/generar-paquete.yml"]
+    tags: ["v*"]
+  pull_request:
+    paths: ["extension/**", "datagen/**", "test/**", ".github/workflows/generar-paquete.yml"]
+  workflow_dispatch:
+    inputs:
+      guardar_base:
+        description: "Subir al repositorio la base regenerada si cambió"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
 
 jobs:
-  empaquetar:
+  pruebas-y-paquete:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Misma cola que el robot: nunca publican la base al mismo tiempo.
+    concurrency:
+      group: gina-investigacion
+      cancel-in-progress: false
     steps:
       - name: Descargar repositorio
         uses: actions/checkout@v4
@@ -15,18 +39,96 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Regenerar base de datos y manifiesto
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: test/package-lock.json
+
+      - name: Regenerar base, sitios, manifest y traducciones
         run: python3 datagen/build_data.py
 
-      - name: Crear archivo zip para las tiendas
+      - name: Instalar dependencias de las pruebas
+        run: npm install --prefix test jsdom@24 --no-audit --no-fund
+
+      - name: Pruebas de la extensión (matcher, tarjeta, extractores…)
+        run: node test/run.js
+
+      - name: Pruebas del background y del robot
+        run: node test/background.test.js
+
+      - name: Leer versiones
+        id: v
+        run: |
+          VERSION=$(node -p "require('./extension/manifest.json').version")
+          BASE=$(node -p "require('./extension/data/brands.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+          echo "Extensión $VERSION · base $BASE"
+          if [[ "$GITHUB_REF" == refs/tags/v* && "${GITHUB_REF_NAME#v}" != "$VERSION" ]]; then
+            echo "::error::La etiqueta $GITHUB_REF_NAME no coincide con la versión del manifest ($VERSION)"; exit 1
+          fi
+
+      - name: ¿La base cambió de verdad? (sin contar la fecha de versión)
+        id: cambios
+        run: |
+          node -e '
+            const { execSync } = require("child_process"), fs = require("fs");
+            const files = ["extension/data/brands.json", "extension/data/sites.json"];
+            const sinVersion = (t) => { const o = JSON.parse(t); delete o.version; return JSON.stringify(o); };
+            const cambio = files.some((f) => {
+              let antes = "";
+              try { antes = execSync(`git show HEAD:${f}`, { maxBuffer: 1e9 }).toString(); } catch (e) { return true; }
+              return sinVersion(antes) !== sinVersion(fs.readFileSync(f, "utf8"));
+            });
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `real=${cambio ? 1 : 0}\n`);
+            console.log(cambio ? "La base cambió." : "Solo cambió la fecha: se conserva la base del repositorio.");
+          '
+          git add -A extension
+          if ! git diff --cached --quiet -- extension ':!extension/data'; then echo "manifest=1" >> "$GITHUB_OUTPUT"; fi
+          git reset -q
+
+      - name: Conservar la base del repositorio si solo cambió la fecha
+        if: steps.cambios.outputs.real == '0'
+        run: git checkout -- extension/data
+
+      - name: Crear zip para las tiendas
+        if: github.event_name != 'pull_request' && (github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v'))
+        id: zip
         run: |
           mkdir -p dist
-          cd extension
-          zip -r ../dist/gina-extension-3.1.0.zip . -x "README.md"
+          ZIP="gina-extension-${{ steps.v.outputs.version }}.zip"
+          (cd extension && zip -r -X "../dist/$ZIP" . -x "README.md" -x "*.DS_Store")
+          (cd dist && sha256sum "$ZIP" > "$ZIP.sha256" && cat "$ZIP.sha256")
+          echo "zip=dist/$ZIP" >> "$GITHUB_OUTPUT"
 
       - name: Guardar paquete como artefacto de descarga
+        if: steps.zip.outputs.zip
         uses: actions/upload-artifact@v4
         with:
-          name: gina-extension-3.1.0
-          path: dist/gina-extension-3.1.0.zip
+          name: gina-extension-${{ steps.v.outputs.version }}
+          path: |
+            ${{ steps.zip.outputs.zip }}
+            ${{ steps.zip.outputs.zip }}.sha256
           retention-days: 90
+
+      - name: Subir la base regenerada
+        if: github.event_name == 'workflow_dispatch' && inputs.guardar_base && (steps.cambios.outputs.real == '1' || steps.cambios.outputs.manifest == '1')
+        run: |
+          git config user.name "gina-bot"
+          git config user.email "gina-bot@users.noreply.github.com"
+          git add extension docs store
+          if git diff --cached --quiet; then echo "Sin cambios que subir."; exit 0; fi
+          git commit -m "Paquete ${{ steps.v.outputs.version }}: base ${{ steps.v.outputs.base }} regenerada"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Crear Release con el zip
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "${{ steps.zip.outputs.zip }}" "${{ steps.zip.outputs.zip }}.sha256" \
+            --title "Gina ${{ steps.v.outputs.version }}" \
+            --notes "Paquete para Chrome Web Store, Edge Add-ons y Firefox AMO. Base de datos ${{ steps.v.outputs.base }}. Ver PUBLICAR.md."

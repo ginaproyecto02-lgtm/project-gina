@@ -179,14 +179,17 @@
       ? g.fuentes.slice(1, 4).map((f) => `<br><a href="${esc(safe(f.url))}" target="_blank" rel="noopener noreferrer">${esc(f.titulo || f.url)}</a>`).join("") : "";
     const tipoExpl = I18N().tipoInfo(g.tipo);
     const tipoLbl = I18N().tipoLabel(g.tipo);
+    const isEn = I18N().getLang && I18N().getLang() !== "es";
+    const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
+    const nota = (isEn && g.nota_en) ? g.nota_en : g.nota;
     return `
       <div class="emp">${esc(g.empresa)}</div>
-      <div class="row"><div class="k">${t("who_controls")}</div><div class="v">${esc(g.controlador)}</div></div>
+      <div class="row"><div class="k">${t("who_controls")}</div><div class="v">${esc(ctrl)}</div></div>
       <div class="chips">${g.pais ? `<span class="chip">🌎 ${esc(g.pais)}</span>` : ""}${g.tipo ? `<span class="chip">${esc(tipoLbl)}</span>` : ""}${confChip(g.confianza)}${repPill(g)}</div>
       ${!compact && tipoExpl ? `<div class="hint">${esc(tipoExpl)}</div>` : ""}
       ${g.fondos ? `<div class="row"><div class="k">${t("major_funds")}</div><div class="v">${esc(g.fondos)}</div></div>` : ""}
       ${g.gobierno ? `<div class="row"><div class="k">${t("gov_ties")}</div><div class="v">${esc(g.gobierno)}</div></div>` : ""}
-      ${g.nota ? `<div class="note">${esc(g.nota)}</div>` : ""}
+      ${nota ? `<div class="note">${esc(nota)}</div>` : ""}
       <div class="row"><div class="k">${t("source")}</div><div class="v">${fuente}${more}</div></div>`;
   }
 
@@ -274,7 +277,9 @@
   function storeBlock(store) {
     if (!store || !store.group) return "";
     const g = store.group;
-    const storeLine = t("shopping_at", { store: esc(store.nombre), empresa: esc(g.empresa), controlador: esc(g.controlador) });
+    const isEn = I18N().getLang && I18N().getLang() !== "es";
+    const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
+    const storeLine = t("shopping_at", { store: esc(store.nombre), empresa: esc(g.empresa), controlador: esc(ctrl) });
     return `<div class="store">${storeLine}${g.pais ? ` · ${esc(g.pais)}` : ""} ${confChip(g.confianza)}${repChip(g)}</div>`;
   }
 
@@ -373,7 +378,7 @@
               <b>${esc(it.marcas.join(", "))}</b> 
               ${it.esEconomica ? `<span class="why budget" title="${esc(t("alt_badge_budget"))}">🏷️ ${esc(t("alt_badge_budget"))}</span>` : ""}
               <span class="why">${esc(it.motivo)}</span> <small>· ${esc(it.capital)}</small>
-              <br><small><b>${esc(it.group.empresa)}</b>${it.group.nota ? ` · ${esc(it.group.nota)}` : ""}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small>
+              <br><small><b>${esc(it.group.empresa)}</b>${((I18N().getLang && I18N().getLang() !== "es" && it.group.nota_en) ? it.group.nota_en : it.group.nota) ? ` · ${esc((I18N().getLang && I18N().getLang() !== "es" && it.group.nota_en) ? it.group.nota_en : it.group.nota)}` : ""}${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}${it.group.url ? ` · <a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : ""}</small>
             </div>
           `).join("")}
         </div>
@@ -426,7 +431,9 @@
     }
     if (res.agency && res.agency.group) {
       const g = res.agency.group;
-      const agencyLine = t("shopping_at", { store: esc(res.agency.nombre), empresa: esc(g.empresa), controlador: esc(g.controlador) });
+      const isEn = I18N().getLang && I18N().getLang() !== "es";
+      const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
+      const agencyLine = t("shopping_at", { store: esc(res.agency.nombre), empresa: esc(g.empresa), controlador: esc(ctrl) });
       h += `<div class="store">${agencyLine}${g.pais ? ` · ${esc(g.pais)}` : ""} ${confChip(g.confianza)}${repChip(g)}</div>`;
     }
     return h;

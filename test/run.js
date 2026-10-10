@@ -252,6 +252,15 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const rel = w.QED.extractReliability(w.document, "mercadolibre");
   check("Mercado Libre: sin «Compra Protegida» si la página no la menciona", !rel.returnPolicy && !rel.warranty);
 }
+{
+  const url = "https://www.amazon.com/dp/B001";
+  const w = env(`<h1>Nestle Toll House Morsels</h1>${ld({ "@type": "Product", name: "Nestle Morsels", brand: "Nestlé" })}`, url);
+  w.QED.I18N.setLang("en");
+  analyze(w, url);
+  const ownT = w.document.getElementById("gina-tarjeta").shadowRoot.querySelector("#sec-own").textContent;
+  check("Tarjeta en inglés usa controlador_en y no texto en español", ownT.includes("Dispersed institutional funds") && !ownT.includes("Sin accionista de control"), ownT);
+}
 
 console.log(`\n${pass}/${total} pruebas correctas`);
 process.exit(pass === total ? 0 : 1);
+
