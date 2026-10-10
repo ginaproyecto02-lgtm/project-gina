@@ -211,7 +211,7 @@ $("#suggest").onclick = async () => {
   
   const subj = encodeURIComponent(`Sugerencia de marca: ${brand}`);
   const body = encodeURIComponent(`Marca: ${brand}\nTienda: ${site}\nProducto: ${title}\n`);
-  const mailto = `mailto:${proj.contacto || "gina.proyecto02@gmail.com"}?subject=${subj}&body=${body}`;
+  const mailto = `mailto:${proj.contacto || ""}?subject=${subj}&body=${body}`;
   const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]) : "";
   
   fb.innerHTML = `
@@ -235,7 +235,7 @@ $("#altForm").addEventListener("submit", async (e) => {
   fb.hidden = false;
   const subj = encodeURIComponent(`Alternativa local sugerida: ${f.marca}`);
   const body = encodeURIComponent(`Alternativa: ${f.marca}\nCategoría: ${f.categoria || ""}\nPaís: ${f.pais || ""}\nDueño: ${f.dueno || ""}\nFuente: ${f.fuente || ""}\n`);
-  const mailto = `mailto:${proj.contacto || "gina.proyecto02@gmail.com"}?subject=${subj}&body=${body}`;
+  const mailto = `mailto:${proj.contacto || ""}?subject=${subj}&body=${body}`;
   const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "alternativa", [f]) : "";
   
   fb.innerHTML = `

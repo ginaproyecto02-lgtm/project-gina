@@ -1,5 +1,5 @@
 {
- "version": "2026-10-08",
+ "version": "2026-10-10T0317",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
  "grupos": {
   "walmart": {
@@ -725,7 +725,7 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "Contratos hospitalarios y de salud pública",
    "nota": "Cuidado personal, salud materna (Avent, Sonicare) y tecnología médica. Pequeño electrodoméstico opera bajo licencia por Versuni.",
-   "confianza": "Alta",
+   "confianza": "Verificar",
    "fuente": "Informe anual de Philips; folletos de Exor N.V.",
    "url": "",
    "ahorro": false
@@ -738,22 +738,22 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Fabricante de pequeños electrodomésticos de cocina (Ninja) y aspiración/cuidado del hogar (Shark).",
-   "confianza": "Alta",
+   "confianza": "Verificar",
    "fuente": "Informe 10-K de SharkNinja (SEC)",
    "url": "",
    "ahorro": false
   },
   "creality": {
    "empresa": "Shenzhen Creality 3D Technology Co., Ltd.",
-   "controlador": "Chen Chun, Liu Huilin y socios fundadores (empresa privada)",
+   "controlador": "Sus fundadores (Chen Chun y socios) y accionistas desde su salida a la Bolsa de Hong Kong (3388.HK, 29-may-2026)",
    "pais": "China",
-   "tipo": "Fundador",
-   "fondos": "No cotiza en bolsa",
+   "tipo": "Fundador + fondos",
+   "fondos": "",
    "gobierno": "",
-   "nota": "Líder mundial en impresoras 3D domésticas de código abierto (Ender, K1, CR-10).",
-   "confianza": "Alta",
-   "fuente": "Sitio oficial y registros mercantiles de Creality 3D",
-   "url": "",
+   "nota": "Fabricante de impresoras 3D domésticas (Ender, K1, CR-10).",
+   "confianza": "Verificado",
+   "fuente": "J-Stories: Creality debuta en la Bolsa de Hong Kong (29-may-2026)",
+   "url": "https://jstories.media/?p=21676",
    "ahorro": false
   },
   "nike": {
@@ -959,7 +959,7 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Mayor fabricante de equipaje y maletas del mundo; dueña también de American Tourister y Tumi.",
-   "confianza": "Alta",
+   "confianza": "Verificar",
    "fuente": "Informe anual de Samsonite (HKEX)",
    "url": "",
    "ahorro": false
@@ -1108,16 +1108,16 @@
    "ahorro": false
   },
   "galderma": {
-   "empresa": "Galderma (Cetaphil)",
-   "controlador": "EQT (capital privado sueco) y accionistas en la bolsa suiza (SIX)",
+   "empresa": "Galderma Group AG (Cetaphil)",
+   "controlador": "L'Oréal (~20%, mayor accionista tras su compra anunciada en dic-2025) y el consorcio de EQT (<25%); cotiza en la bolsa suiza (SIX) desde 2024",
    "pais": "Otros (Suiza)",
-   "tipo": "Capital privado",
-   "fondos": "No cotiza en bolsa",
+   "tipo": "Corporación + capital privado",
+   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
-   "nota": "Antigua filial dermatológica de Nestlé y L'Oréal, vendida a EQT en 2019.",
-   "confianza": "Alta",
-   "fuente": "Informe anual de Galderma (SIX)",
-   "url": "",
+   "nota": "Antigua filial dermatológica de Nestlé, vendida a un consorcio liderado por EQT en 2019.",
+   "confianza": "Verificado",
+   "fuente": "blue News: Galderma gana a L'Oréal como principal accionista (8-dic-2025)",
+   "url": "https://www.bluewin.ch/en/news/galderma-gains-a-new-majority-shareholder-in-loreal-2998641.html",
    "ahorro": false
   },
   "pierrefabre": {
@@ -1128,7 +1128,7 @@
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
    "nota": "La fundación apoya el acceso a la salud en países del Sur.",
-   "confianza": "Alta",
+   "confianza": "Verificar",
    "fuente": "Sitio oficial de Laboratoires Pierre Fabre",
    "url": "",
    "ahorro": false
@@ -1141,7 +1141,7 @@
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
    "nota": "Líder español en fotoprotección y cuidado dermatológico.",
-   "confianza": "Alta",
+   "confianza": "Verificar",
    "fuente": "Memoria de ISDIN",
    "url": "",
    "ahorro": false
@@ -1155,8 +1155,8 @@
    "gobierno": "",
    "nota": "Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",
    "confianza": "Verificado",
-   "fuente": "Sycamore Partners",
-   "url": "https://www.sycamorepartners.com",
+   "fuente": "Jones Day: Newell Brands vende Pure Fishing a Sycamore Partners",
+   "url": "https://jonesday.com/de/practices/experience/2018/12/newell-brands-sells-pure-fishing-to-sycamore-partn",
    "ahorro": false
   },
   "shimano": {
@@ -1167,22 +1167,22 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Fabricante líder de componentes de ciclismo y equipos de pesca.",
-   "confianza": "Alta",
+   "confianza": "Verificar",
    "fuente": "Informe anual de Shimano (TSE)",
    "url": "",
    "ahorro": false
   },
   "implus": {
-   "empresa": "Implus Footcare (Potable Aqua)",
-   "controlador": "Berkshire Partners (capital privado estadounidense)",
+   "empresa": "Wisconsin Pharmacal Company (Potable Aqua)",
+   "controlador": "Empresa privada estadounidense; dueño actual por confirmar",
    "pais": "EE.UU.",
-   "tipo": "Capital privado",
+   "tipo": "Privada",
    "fondos": "No cotiza en bolsa",
-   "gobierno": "Contratos con fuerzas armadas y protección civil",
-   "nota": "Dueña de Potable Aqua, pastillas purificadoras de agua para emergencias y campismo.",
-   "confianza": "Alta",
-   "fuente": "Sitio oficial Implus Footcare / Wisconsin Pharmacal",
-   "url": "",
+   "gobierno": "",
+   "nota": "Fabrica las pastillas purificadoras Potable Aqua. Farragut Capital le otorgó deuda subordinada en 2018.",
+   "confianza": "Verificar",
+   "fuente": "Farragut Capital Partners: inversión en Wisconsin Pharmacal (2018)",
+   "url": "https://www.farragutcapitalpartners.com/news-list/2018/9/27/farragut-invests-in-leading-over-the-counter-healthcare-amp-consumer-products-company",
    "ahorro": false
   },
   "amazon_tienda": {
@@ -3818,7 +3818,7 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Líder mexicano en detergentes y jabones de máxima accesibilidad y rendimiento (Zote, Roma, Blanca Nieves, Foca).",
+   "nota": "Detergentes y jabones (Zote, Roma, Blanca Nieves, Foca). Control familiar actual inferido de la fuente (no hay cifras accionarias).",
    "confianza": "Alta",
    "fuente": "El CEO: Zote, cómo surgió y quién es el dueño",
    "url": "https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/",
@@ -4507,7 +4507,7 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial a precio accesible.",
+   "nota": "Dermocosmética, jabón neutro, concha nácar y cuidado facial.",
    "confianza": "Alta",
    "fuente": "Expansión: Grisi, 160 años de historia",
    "url": "https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia",
@@ -4520,8 +4520,8 @@
    "tipo": "Fundador + fondos",
    "fondos": "",
    "gobierno": "",
-   "nota": "Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica accesible de farmacia.",
-   "confianza": "Alta",
+   "nota": "Cuidado facial, cremas antiedad e higiene dermatológica de farmacia. Cotiza en la BMV.",
+   "confianza": "Verificar (fuente: sitio oficial, sin datos de propiedad)",
    "fuente": "Reporte anual Genomma Lab (BMV)",
    "url": "https://www.genommalab.com",
    "ahorro": true
@@ -4533,8 +4533,8 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Líder en productos farmacéuticos y dermocosméticos accesibles (Eternal Secret, SimiCrema, SimiSolar) con ahorro de hasta 80%.",
-   "confianza": "Alta",
+   "nota": "Productos farmacéuticos y dermocosméticos (Eternal Secret, SimiCrema, SimiSolar).",
+   "confianza": "Verificar (fuente: sitio oficial, sin datos de propiedad)",
    "fuente": "Sitio oficial Farmacias Similares",
    "url": "https://farmaciassimilares.com",
    "ahorro": true
@@ -4546,8 +4546,8 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Cuidado personal y dermatológico básico (agua de rosas, aceites corporales puros, vaselina) a costo de gran ahorro.",
-   "confianza": "Alta",
+   "nota": "Cuidado personal básico (agua de rosas, aceites corporales, vaselina).",
+   "confianza": "Verificar (fuente: sitio oficial, sin datos de propiedad)",
    "fuente": "Sitio oficial Jaloma",
    "url": "https://jaloma.com.mx",
    "ahorro": true
@@ -4559,8 +4559,8 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Pioneros españoles en nanotecnología dermatológica y cuidado facial con vitamina C.",
-   "confianza": "Alta",
+   "nota": "Dermocosmética y cuidado facial.",
+   "confianza": "Verificar (fuente: sitio oficial, sin datos de propiedad)",
    "fuente": "Sitio oficial de Sesderma",
    "url": "https://www.sesderma.com",
    "ahorro": false
@@ -4573,7 +4573,7 @@
    "fondos": "",
    "gobierno": "",
    "nota": "Dermocosmética española y fotoprotección dermatológica.",
-   "confianza": "Alta",
+   "confianza": "Verificar (fuente: sitio oficial, sin datos de propiedad)",
    "fuente": "Sitio oficial Cantabria Labs",
    "url": "https://www.cantabrialabs.com",
    "ahorro": false
@@ -4586,7 +4586,7 @@
    "fondos": "",
    "gobierno": "",
    "nota": "Dermocosmética para piel sensible y dermatitis, libre de fragancias, tintes y parabenos.",
-   "confianza": "Alta",
+   "confianza": "Verificar (fuente: sitio oficial, sin datos de propiedad)",
    "fuente": "Sitio oficial Vanicream",
    "url": "https://www.vanicream.com",
    "ahorro": false
@@ -4598,8 +4598,8 @@
    "tipo": "Fideicomiso",
    "fondos": "",
    "gobierno": "",
-   "nota": "Ecocosmética y dermocosmética francesa sin accionistas especulativos.",
-   "confianza": "Alta",
+   "nota": "Dermocosmética francesa (Bioderma, Institut Esthederm).",
+   "confianza": "Verificar (fuente: sitio oficial, sin datos de propiedad)",
    "fuente": "Sitio oficial NAOS",
    "url": "https://naos.com",
    "ahorro": false
@@ -6671,7 +6671,8 @@
   },
   {
    "n": "Penn",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Penn Fishing",
@@ -6683,35 +6684,43 @@
   },
   {
    "n": "Berkley",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Ugly Stik",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Fenwick",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Savage Gear",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Hardy",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Shakespeare",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Pflueger",
-   "g": "purefishing"
+   "g": "purefishing",
+   "s": 1
   },
   {
    "n": "Shimano",
-   "g": "shimano"
+   "g": "shimano",
+   "s": 1
   },
   {
    "n": "Cetaphil",
@@ -6723,11 +6732,13 @@
   },
   {
    "n": "Ducray",
-   "g": "pierrefabre"
+   "g": "pierrefabre",
+   "s": 1
   },
   {
    "n": "Klorane",
-   "g": "pierrefabre"
+   "g": "pierrefabre",
+   "s": 1
   },
   {
    "n": "ISDIN",
@@ -6747,7 +6758,8 @@
   },
   {
    "n": "Avent",
-   "g": "philips"
+   "g": "philips",
+   "s": 1
   },
   {
    "n": "Sonicare",
@@ -6755,7 +6767,8 @@
   },
   {
    "n": "Norelco",
-   "g": "philips"
+   "g": "philips",
+   "s": 1
   },
   {
    "n": "Philips Sonicare",
@@ -6767,11 +6780,13 @@
   },
   {
    "n": "Ninja",
-   "g": "sharkninja"
+   "g": "sharkninja",
+   "s": 1
   },
   {
    "n": "Shark",
-   "g": "sharkninja"
+   "g": "sharkninja",
+   "s": 1
   },
   {
    "n": "Ninja Foodi",
@@ -6795,7 +6810,8 @@
   },
   {
    "n": "Ender",
-   "g": "creality"
+   "g": "creality",
+   "s": 1
   },
   {
    "n": "Ender 3",
@@ -6815,7 +6831,8 @@
   },
   {
    "n": "Tumi",
-   "g": "samsonite"
+   "g": "samsonite",
+   "s": 1
   },
   {
    "n": "Potable Aqua",
@@ -8074,7 +8091,8 @@
   },
   {
    "n": "Foca",
-   "g": "loc_f_brica_de_jab_n_la_corona_s_a"
+   "g": "loc_f_brica_de_jab_n_la_corona_s_a",
+   "s": 1
   },
   {
    "n": "Detergente Foca",
@@ -8086,7 +8104,8 @@
   },
   {
    "n": "Carisma",
-   "g": "loc_f_brica_de_jab_n_la_corona_s_a"
+   "g": "loc_f_brica_de_jab_n_la_corona_s_a",
+   "s": 1
   },
   {
    "n": "Dondé",
@@ -8604,7 +8623,8 @@
   },
   {
    "n": "Cero",
-   "g": "loc_laboratorios_grisi"
+   "g": "loc_laboratorios_grisi",
+   "s": 1
   },
   {
    "n": "Cicatricure",
@@ -8616,11 +8636,13 @@
   },
   {
    "n": "Teatrical",
-   "g": "loc_genomma_lab"
+   "g": "loc_genomma_lab",
+   "s": 1
   },
   {
    "n": "Goicoechea",
-   "g": "loc_genomma_lab"
+   "g": "loc_genomma_lab",
+   "s": 1
   },
   {
    "n": "Eternal Secret",
@@ -8640,7 +8662,8 @@
   },
   {
    "n": "Simi",
-   "g": "loc_farmacias_similares"
+   "g": "loc_farmacias_similares",
+   "s": 1
   },
   {
    "n": "Jaloma",
@@ -8660,7 +8683,8 @@
   },
   {
    "n": "Babé",
-   "g": "loc_sesderma"
+   "g": "loc_sesderma",
+   "s": 1
   },
   {
    "n": "Heliocare",

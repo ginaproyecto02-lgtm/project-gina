@@ -174,7 +174,7 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
   for (let i = 0; i < 50 && !(g.store.jobState && g.store.jobState.lastRun); i++) await new Promise((res) => setTimeout(res, 20));
   const gv = (g.store.verified || {})["b:jumex"];
   check("Gemini: investigación con Google Search verifica por dominio", gv && gv.fuentes.some((f) => f.url === "https://www.jumex.com/historia") && !gv.fuentes.some((f) => /otro-sitio/.test(f.url)), gv && gv.fuentes.map((f) => f.url).join(" | "));
-  check("Gemini: la petición de investigación lleva google_search", g.calls.some((c) => c.body.tools && c.body.tools[0].google_search));
+  check("Gemini: la petición de investigación lleva google_search", g.calls.some((c) => c.body && c.body.tools && c.body.tools[0].google_search));
 
   const bad = makeEnv(async () => ({ status: 401, body: { error: { message: "invalid x-api-key" } } }));
   bad.store.settings = { aiEnabled: true, classify: { provider: "anthropic", key: "mala", model: "claude-haiku-5-5" } };

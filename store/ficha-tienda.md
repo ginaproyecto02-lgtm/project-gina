@@ -1,7 +1,7 @@
 # Gina (Project Gina) — store listing texts
 
-Copy each block into the store form. Replace `CONTACT_EMAIL` and `PRIVACY_URL` before submitting.
-The listing is **English first**, with Spanish as a second language. The extension name and short description are already localized in `_locales/en` and `_locales/es`. The in-page interface is still in Spanish: say so in the listing until the UI is translated.
+Copy each block into the store form. Your contact e-mail and privacy policy URL are already filled in from `datagen/proyecto.json`.
+The listing is **English first**, with Spanish as a second language. The extension name and short description are already localized in `_locales/en` and `_locales/es`. The interface is available in Spanish, English, German, French, Italian and Japanese; company data (owners, notes, reputation) is in Spanish.
 
 ---
 
@@ -13,10 +13,10 @@ The listing is **English first**, with Spanish as a second language. The extensi
 | Short name | Gina |
 | Version | 3.1.0 |
 | Category | Chrome: **Shopping** · Edge: **Shopping** · Firefox: **Shopping** |
-| Listing languages | English (default), Spanish |
+| Listing languages | English (default), Spanish (the interface also has German, French, Italian and Japanese) |
 | Price | Free |
-| Website / support | Your repository or site · `CONTACT_EMAIL` |
-| Privacy policy | `PRIVACY_URL` (publish `docs/privacidad.html`) |
+| Website / support | Your repository or site · `gina.proyecto02@gmail.com` |
+| Privacy policy | `https://ginaproyecto02-lgtm.github.io/project-gina/privacidad.html` (publish `docs/privacidad.html`) |
 
 ## 2. Summary (≤132 characters, already in the manifest)
 
@@ -55,8 +55,8 @@ PRIVATE BY DESIGN
 • Everything stays in your browser. No developer servers, analytics, ads or affiliate links.
 • Only if you turn on AI are the brand name, product title and store name sent to the provider you choose.
 
-Note: the in-page interface is currently in Spanish.
-Information is indicative and based on public sources; it can change. It is not purchase or investment advice. Spotted an error about a company? Write to CONTACT_EMAIL and we will review and correct it.
+The interface is available in 6 languages; company details are shown in Spanish.
+Information is indicative and based on public sources; it can change. It is not purchase or investment advice. Spotted an error about a company? Write to gina.proyecto02@gmail.com and we will review and correct it.
 ```
 
 ## 3b. Descripción — español (segundo idioma)
@@ -87,7 +87,7 @@ Opcional y avanzado: conecta tu propia clave de IA (Claude, Gemini, Groq o xAI) 
 PRIVACIDAD
 Sin cuenta ni clave obligatoria. Todo se guarda en tu navegador. Sin servidores del desarrollador, analítica, publicidad ni enlaces de afiliado.
 
-Información orientativa basada en fuentes públicas. No es una recomendación de compra ni de inversión. ¿Un dato incorrecto sobre una empresa? Escríbenos a CONTACT_EMAIL.
+Información orientativa basada en fuentes públicas. No es una recomendación de compra ni de inversión. ¿Un dato incorrecto sobre una empresa? Escríbenos a gina.proyecto02@gmail.com.
 ```
 
 ## 4. Screenshot captions (store/imagenes/)
@@ -132,10 +132,10 @@ Show shoppers who owns the brands, stores, airlines and travel platforms they se
 
 - Single purpose and permission justifications: same as block 5.
 - Remote code: No.
-- Personal data: website content, only when the user turns on AI (same text as block 5). Privacy policy URL: `PRIVACY_URL`.
+- Personal data: website content, only when the user turns on AI (same text as block 5). Privacy policy URL: `https://ginaproyecto02-lgtm.github.io/project-gina/privacidad.html`.
 - **Notes for certification:**
 ```
-Works without an account or key: open any product page on walmart.com, amazon.com, bestbuy.com or mercadolibre.com.mx, or a search on google.com/travel/flights, and the card appears at the bottom right with ownership and a sourced reputation record. AI is optional and needs the user's own key (Anthropic, Gemini, Groq or xAI); there is no developer account or server. No remote code. The interface is in Spanish.
+Works without an account or key: open any product page on walmart.com, amazon.com, bestbuy.com or mercadolibre.com.mx, or a search on google.com/travel/flights, and the card appears at the bottom right with ownership and a sourced reputation record. AI is optional and needs the user's own key (Anthropic, Gemini, Groq or xAI); there is no developer account or server. No remote code. The interface follows the browser language (6 languages).
 ```
 
 ## 7. Firefox Add-ons (AMO)
@@ -152,7 +152,7 @@ No build step: the uploaded files are the source. The innerHTML warnings are tem
 - Each fact links to its source (a regulator, a court, a company filing or a news outlet) and states its status. A settlement without admission of liability is labeled as such.
 - The score formula is public, shown on the card and in the README. It measures documented record only, not company size or opinions.
 - Lobbying is shown as declared amounts or donation splits by party, never as ideology.
-- Corrections: `CONTACT_EMAIL`. Commit to answering within a few days and fixing errors in the next data update. The weekly server job can publish the fix without a new extension release.
+- Corrections: `gina.proyecto02@gmail.com`. Commit to answering within a few days and fixing errors in the next data update. The weekly server job can publish the fix without a new extension release.
 
 ## 9. Local alternatives: editorial notes
 

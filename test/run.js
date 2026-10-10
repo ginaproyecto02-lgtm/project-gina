@@ -7,7 +7,8 @@ const registry = JSON.parse(fs.readFileSync(path.join(EXT, "data/sites.json"), "
 
 function env(html, url) {
   const dom = new JSDOM(`<!doctype html><html><head></head><body>${html}</body></html>`, { url, runScripts: "outside-only" });
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  if (dom.window.QED.I18N) dom.window.QED.I18N.setLang("es"); // las pruebas verifican los textos en español
   return dom.window;
 }
 const ld = (o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`;
@@ -224,6 +225,32 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const body = decodeURIComponent(link.split("body=")[1]);
   const mail = w.QED.ALT.suggestionLink({ contacto: "hola@ejemplo.org" }, "alternativa", [{ marca: "Pascual", categoria: "bebidas", pais: "México" }]);
   check("Enlace de sugerencia (issue prellenado o correo)", link.startsWith("https://github.com/u/project-gina/issues/new?title=") && body.includes("gina:sugerencia v1 tipo=marca") && body.includes("- marca: Truper | tienda: Amazon (México) | producto: Martillo 16 oz") && mail.startsWith("mailto:hola@ejemplo.org?subject=") && w.QED.ALT.suggestionLink({}, "marca", [{ marca: "x" }]) === "");
+}
+
+// ---------------------------------------------------------------- Falsos positivos y afirmaciones sin verificar
+{
+  const w = env("", "https://example.com/");
+  const idx = w.QED.buildIndex(db, [], {}, {});
+  const titles = ["Bebida energética cero azúcar 473 ml", "Hamlet de William Shakespeare", "Peluche de foca bebé", "Calcomanías Kawasaki Ninja 400", "El juego de Ender, Orson Scott Card", "Gorra Ed Hardy", "Vaso Shark Tank", "Sudadera Penn State"];
+  const wrong = titles.filter((t) => w.QED.match(idx, [], t).found);
+  check("Marcas con nombre común no se reconocen desde el título", !wrong.length, wrong.join(" | ") || "ninguna");
+  const r = w.QED.match(idx, [{ text: "Ninja", source: "marca" }], "Freidora de aire 5.5 L");
+  check("…pero sí desde el campo «marca»", r.found && r.group.empresa === "SharkNinja, Inc.");
+}
+{
+  const url = "https://www.walmart.com.mx/ip/crema/1";
+  const w = env(`<h1>Crema facial hidratante</h1><div class="vendor">Vendido y enviado por Tienda Genérica SA</div>${ld({ "@type": "Product", name: "Crema", brand: "Nivea" })}`, url);
+  analyze(w, url);
+  const rel = w.QED.evaluateReliability(w.QED.extractReliability(w.document, "walmart"), null, "skincare_cosmetica", "Crema facial", "México");
+  const t = w.document.getElementById("gina-tarjeta").shadowRoot.querySelector(".body").textContent.replace(/\s+/g, " ");
+  check("Walmart: vendedor no leído ≠ «vendido por Walmart»", rel.sellerType !== "direct" && rel.level === "check" && !rel.returnPolicy, `${rel.sellerType} / ${rel.level}`);
+  check("La tarjeta no promete devolución ni garantía que la página no indica", !/Compra Protegida|30 días|hasta un 50|asegurado/.test(t) && t.includes("La página no lo indica"));
+  check("Se abre primero la pestaña del dueño", w.document.getElementById("gina-tarjeta").shadowRoot.querySelector("details[open]").id === "sec-own");
+}
+{
+  const w = env(`<h1 class="ui-pdp-title">Crema</h1><div class="ui-pdp-seller__link-trigger">VendedorNuevo123</div>`, "https://articulo.mercadolibre.com.mx/MLM-1");
+  const rel = w.QED.extractReliability(w.document, "mercadolibre");
+  check("Mercado Libre: sin «Compra Protegida» si la página no la menciona", !rel.returnPolicy && !rel.warranty);
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

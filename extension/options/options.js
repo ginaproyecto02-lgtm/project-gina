@@ -300,7 +300,7 @@ $("#sendPending").addEventListener("click", async () => {
   try { await navigator.clipboard.writeText(textList); } catch (e) {}
   const subj = encodeURIComponent(`Sugerencia de ${items.length} marcas para Project Gina`);
   const body = encodeURIComponent(`Hola equipo de Project Gina,\n\nAquí comparto las marcas pendientes encontradas en mis compras:\n\n${textList}\n\nGracias.`);
-  const mailtoUrl = `mailto:${PROJ.contacto || "gina.proyecto02@gmail.com"}?subject=${subj}&body=${body}`;
+  const mailtoUrl = `mailto:${PROJ.contacto || ""}?subject=${subj}&body=${body}`;
   api.tabs.create({ url: mailtoUrl });
   msg("msg_proj", `Se abrió el correo con ${items.length} marcas para ${PROJ.contacto || "el equipo"} (también se copiaron al portapapeles).`, "ok");
 });

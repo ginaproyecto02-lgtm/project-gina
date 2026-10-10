@@ -289,7 +289,10 @@
     else if (rel.sellerType === "verified") sellerBadgeText = t("seller_verified");
     else sellerBadgeText = t("seller_third_party");
 
-    const shipText = rel.isFulfilledByPlatform ? t("ship_platform_fulfilled") : t("ship_seller_fulfilled");
+    // Solo lo que la página dice; si no se pudo leer, se dice así.
+    const notStated = t("rel_not_stated");
+    const shipText = rel.isFulfilledByPlatform ? t("ship_platform_fulfilled") : (rel.shipper ? rel.shipper : notStated);
+    const policyText = [rel.returnPolicy, rel.warranty].filter(Boolean).join(" · ");
     const tipKey = rel.level === "high" ? "rel_tip_high" : rel.level === "standard" ? "rel_tip_standard" : "rel_tip_check";
 
     const normsHtml = (rel.norms || []).map((n) => {
@@ -303,7 +306,7 @@
           <div class="rel-ic">🏬</div>
           <div class="rel-info">
             <div class="k">${t("rel_seller_label")}</div>
-            <div class="rel-val"><b>${esc(rel.sellerName || rel.storeName || "—")}</b> <span class="rel-tag ${esc(rel.sellerType)}">${esc(sellerBadgeText)}</span></div>
+            <div class="rel-val"><b>${esc(rel.sellerName || notStated)}</b> <span class="rel-tag ${esc(rel.sellerType)}">${esc(sellerBadgeText)}</span></div>
             ${rel.sellerRating ? `<div class="rel-sub">${esc(rel.sellerRating)}</div>` : ""}
           </div>
         </div>
@@ -320,7 +323,7 @@
           <div class="rel-ic">🔄</div>
           <div class="rel-info">
             <div class="k">${t("rel_warranty_label")}</div>
-            <div class="rel-val"><b>${t("warranty_protected_30d")}</b></div>
+            <div class="rel-val">${policyText ? esc(policyText) : esc(notStated)}</div>
             <div class="rel-sub">${t("warranty_factory_note")}</div>
           </div>
         </div>
@@ -329,6 +332,7 @@
           <div class="rel-ic">🛡️</div>
           <div class="rel-info">
             <div class="k">${t("rel_norms_label")}</div>
+            <div class="rel-sub">${t("norms_note")}</div>
             ${normsHtml}
           </div>
         </div>
@@ -441,7 +445,8 @@
     const storeName = res.store ? res.store.nombre : "";
     const emailSubject = encodeURIComponent(`Sugerencia de marca: ${brandName}`);
     const emailBody = encodeURIComponent(`Marca: ${brandName}\nTienda: ${storeName}\nProducto: ${res.title || ""}\n`);
-    const mailtoUrl = `mailto:gina.proyecto02@gmail.com?subject=${emailSubject}&body=${emailBody}`;
+    const contact = (QED.PROJECT && QED.PROJECT.contacto) || "";
+    const mailtoUrl = contact ? `mailto:${contact}?subject=${emailSubject}&body=${emailBody}` : "";
 
     // Parámetros de insignia para cada sección
     const rel = res.reliabilityEval || (QED.evaluateReliability ? QED.evaluateReliability({}, res.group, null, res.title) : { level: "standard" });
@@ -464,24 +469,24 @@
         <div class="hint">${t("not_found_pending_hint")}</div>
         <button id="card-suggest-btn" class="btn-sug">${t("suggest_btn")}</button>
         <div id="card-suggest-ok" class="sug-ok">${t("suggest_success")}
-          <div class="sug-links"><a href="${mailtoUrl}" target="_blank">${t("suggest_email_opt")}</a></div>
+          ${mailtoUrl ? `<div class="sug-links"><a href="${esc(mailtoUrl)}" target="_blank" rel="noopener noreferrer">${t("suggest_email_opt")}</a></div>` : ""}
         </div>
       ` : ""}
 
       <div class="sec-tabs">
-        <button class="tab-btn active" data-target="sec-rel">${t("tab_smart")}</button>
+        <button class="tab-btn active" data-target="sec-own">${t("tab_conscious")}</button>
         <button class="tab-btn" data-target="sec-alt">${t("tab_saver")}</button>
-        <button class="tab-btn" data-target="sec-own">${t("tab_conscious")}</button>
+        <button class="tab-btn" data-target="sec-rel">${t("tab_smart")}</button>
       </div>
 
-      <!-- SECCIÓN 1: Consumidor Inteligente (Confiabilidad) -->
-      <details id="sec-rel" class="sec-acc" open>
+      <!-- SECCIÓN 3: Consumidor Consciente (¿A qué bicho le compras?) -->
+      <details id="sec-own" class="sec-acc" open>
         <summary>
-          <span class="sec-acc-title">🛡️ ${t("sec_reliability_title")} <span class="sec-acc-persona">${t("persona_smart")}</span></span>
-          <span class="sec-acc-badge ${esc(rel.level)}">${esc(relBadgeText)}</span>
+          <span class="sec-acc-title">🏢 ${t("sec_ownership_title")} <span class="sec-acc-persona">${t("persona_conscious")}</span></span>
+          ${corpBadgeText ? `<span class="sec-acc-badge corp">${corpBadgeText}</span>` : ""}
         </summary>
         <div class="sec-acc-content">
-          ${reliabilityBlock(res)}
+          ${ownershipSection(res, opts)}
         </div>
       </details>
 
@@ -496,14 +501,14 @@
         </div>
       </details>
 
-      <!-- SECCIÓN 3: Consumidor Consciente (¿A qué bicho le compras?) -->
-      <details id="sec-own" class="sec-acc">
+      <!-- SECCIÓN 1: Consumidor Inteligente (Confiabilidad) -->
+      <details id="sec-rel" class="sec-acc">
         <summary>
-          <span class="sec-acc-title">🏢 ${t("sec_ownership_title")} <span class="sec-acc-persona">${t("persona_conscious")}</span></span>
-          ${corpBadgeText ? `<span class="sec-acc-badge corp">${corpBadgeText}</span>` : ""}
+          <span class="sec-acc-title">🛡️ ${t("sec_reliability_title")} <span class="sec-acc-persona">${t("persona_smart")}</span></span>
+          <span class="sec-acc-badge ${esc(rel.level)}">${esc(relBadgeText)}</span>
         </summary>
         <div class="sec-acc-content">
-          ${ownershipSection(res, opts)}
+          ${reliabilityBlock(res)}
         </div>
       </details>
     `;

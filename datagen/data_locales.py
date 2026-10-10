@@ -16,7 +16,7 @@ CAT['La Moderna'] = 'abarrotes'
 g('loc_chocolatera_de_jalisco_s_a_de_', 'Chocolatera de Jalisco, S.A. de C.V.', 'Empresa fundada en 1925 por la familia Gómez Ibarra; la dirige la cuarta generación (Armando Gómez Ibarra).', 'México', 'Familia', "", "", 'No se halló estructura accionaria detallada, ni adquisiciones.', 'Verificar (fuente secundaria)', 'Players of Life: Chocolate Ibarra y su centenario', 'https://playersoflife.com/gourmet/historia-chocolate-ibarra-el-sabor-tapatio-que-va-por-su-centenario/')
 b('loc_chocolatera_de_jalisco_s_a_de_', 'Chocolate Ibarra', '!Ibarra')
 CAT['Chocolate Ibarra'] = 'chocolate_dulces'
-g('loc_f_brica_de_jab_n_la_corona_s_a', 'Fábrica de Jabón La Corona, S.A. de C.V.', 'Empresa fundada por la familia González en Tepatitlán, Jalisco; sin venta a extranjeros reportada.', 'México', 'Familia', "", "", 'Líder mexicano en detergentes y jabones de máxima accesibilidad y rendimiento (Zote, Roma, Blanca Nieves, Foca).', 'Alta', 'El CEO: Zote, cómo surgió y quién es el dueño', 'https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/', ahorro=True)
+g('loc_f_brica_de_jab_n_la_corona_s_a', 'Fábrica de Jabón La Corona, S.A. de C.V.', 'Empresa fundada por la familia González en Tepatitlán, Jalisco; sin venta a extranjeros reportada.', 'México', 'Familia', "", "", 'Detergentes y jabones (Zote, Roma, Blanca Nieves, Foca). Control familiar actual inferido de la fuente (no hay cifras accionarias).', 'Alta', 'El CEO: Zote, cómo surgió y quién es el dueño', 'https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/', ahorro=True)
 b('loc_f_brica_de_jab_n_la_corona_s_a', 'Zote', 'Jabón Zote')
 CAT['Zote'] = 'limpieza'
 b('loc_f_brica_de_jab_n_la_corona_s_a', '!Roma', 'Detergente Roma')
@@ -193,7 +193,7 @@ b('loc_industrias_guacamaya', 'La Guacamaya', 'Salsa La Guacamaya')
 CAT['La Guacamaya'] = 'abarrotes'
 
 # ---- Cuidado de la piel y dermocosmética local
-g('loc_laboratorios_grisi', 'Laboratorios Grisi', 'Familia Grisi: empresa familiar mexicana fundada en 1863, especializada en dermocosmética y cuidado de la piel.', 'México', 'Familia', "", "", 'Especialistas mexicanos en dermocosmética, jabón neutro dermatológico, concha nácar y cuidado facial a precio accesible.', 'Alta', 'Expansión: Grisi, 160 años de historia', 'https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia', ahorro=True)
+g('loc_laboratorios_grisi', 'Laboratorios Grisi', 'Familia Grisi: empresa familiar mexicana fundada en 1863, especializada en dermocosmética y cuidado de la piel.', 'México', 'Familia', "", "", 'Dermocosmética, jabón neutro, concha nácar y cuidado facial.', 'Alta', 'Expansión: Grisi, 160 años de historia', 'https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia', ahorro=True)
 b('loc_laboratorios_grisi', 'Grisi Dermocosmética', 'Jabón Neutro Grisi', 'Concha Nácar Grisi', 'Grisi Facial', 'Grisi', 'Cero')
 CAT['Grisi Dermocosmética'] = 'skincare_cosmetica'
 CAT['Jabón Neutro Grisi'] = 'skincare_cosmetica'
@@ -202,14 +202,14 @@ CAT['Grisi Facial'] = 'skincare_cosmetica'
 CAT['Grisi'] = 'skincare_cosmetica'
 CAT['Cero'] = 'cuidado_personal'
 
-g('loc_genomma_lab', 'Genomma Lab (Cuidado Facial)', 'Rodrigo Herrera (fundador mexicano) y accionistas en la BMV; marcas de cuidado facial.', 'México', 'Fundador + fondos', "", "", 'Líneas mexicanas de cuidado facial, cremas antiedad e higiene dermatológica accesible de farmacia.', 'Alta', 'Reporte anual Genomma Lab (BMV)', 'https://www.genommalab.com', ahorro=True)
+g('loc_genomma_lab', 'Genomma Lab (Cuidado Facial)', 'Rodrigo Herrera (fundador mexicano) y accionistas en la BMV; marcas de cuidado facial.', 'México', 'Fundador + fondos', "", "", 'Cuidado facial, cremas antiedad e higiene dermatológica de farmacia. Cotiza en la BMV.', 'Verificar (fuente: sitio oficial, sin datos de propiedad)', 'Reporte anual Genomma Lab (BMV)', 'https://www.genommalab.com', ahorro=True)
 b('loc_genomma_lab', 'Cicatricure', 'Asepxia', 'Teatrical', 'Goicoechea')
 CAT['Cicatricure'] = 'skincare_cosmetica'
 CAT['Asepxia'] = 'skincare_cosmetica'
 CAT['Teatrical'] = 'skincare_cosmetica'
 CAT['Goicoechea'] = 'cuidado_personal'
 
-g('loc_farmacias_similares', 'Grupo Por Un País Mejor (Farmacias Similares)', 'Familia González Torres (Víctor González Herrera y familia); empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Líder en productos farmacéuticos y dermocosméticos accesibles (Eternal Secret, SimiCrema, SimiSolar) con ahorro de hasta 80%.', 'Alta', 'Sitio oficial Farmacias Similares', 'https://farmaciassimilares.com', ahorro=True)
+g('loc_farmacias_similares', 'Grupo Por Un País Mejor (Farmacias Similares)', 'Familia González Torres (Víctor González Herrera y familia); empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Productos farmacéuticos y dermocosméticos (Eternal Secret, SimiCrema, SimiSolar).', 'Verificar (fuente: sitio oficial, sin datos de propiedad)', 'Sitio oficial Farmacias Similares', 'https://farmaciassimilares.com', ahorro=True)
 b('loc_farmacias_similares', 'Eternal Secret', 'SimiCrema', 'SimiSolar', 'Dr. Simi', 'Simi')
 CAT['Eternal Secret'] = 'skincare_cosmetica'
 CAT['SimiCrema'] = 'skincare_cosmetica'
@@ -217,28 +217,28 @@ CAT['SimiSolar'] = 'skincare_cosmetica'
 CAT['Dr. Simi'] = 'cuidado_personal'
 CAT['Simi'] = 'cuidado_personal'
 
-g('loc_jaloma', 'Laboratorios Jaloma', 'Familia López Morales; empresa 100% mexicana fundada en 1941 en Guadalajara, Jalisco.', 'México', 'Familia', "", "", 'Cuidado personal y dermatológico básico (agua de rosas, aceites corporales puros, vaselina) a costo de gran ahorro.', 'Alta', 'Sitio oficial Jaloma', 'https://jaloma.com.mx', ahorro=True)
+g('loc_jaloma', 'Laboratorios Jaloma', 'Familia López Morales; empresa 100% mexicana fundada en 1941 en Guadalajara, Jalisco.', 'México', 'Familia', "", "", 'Cuidado personal básico (agua de rosas, aceites corporales, vaselina).', 'Verificar (fuente: sitio oficial, sin datos de propiedad)', 'Sitio oficial Jaloma', 'https://jaloma.com.mx', ahorro=True)
 b('loc_jaloma', 'Jaloma', 'Aceite Jaloma', 'Agua de Rosas Jaloma')
 CAT['Jaloma'] = 'skincare_cosmetica'
 CAT['Agua de Rosas Jaloma'] = 'skincare_cosmetica'
 CAT['Aceite Jaloma'] = 'cuidado_personal'
 
-g('loc_sesderma', 'Laboratorios Sesderma', 'Dr. Gabriel Serrano y familia; laboratorio dermocosmético español fundado en 1989.', 'España', 'Familia', "", "", 'Pioneros españoles en nanotecnología dermatológica y cuidado facial con vitamina C.', 'Alta', 'Sitio oficial de Sesderma', 'https://www.sesderma.com')
+g('loc_sesderma', 'Laboratorios Sesderma', 'Dr. Gabriel Serrano y familia; laboratorio dermocosmético español fundado en 1989.', 'España', 'Familia', "", "", 'Dermocosmética y cuidado facial.', 'Verificar (fuente: sitio oficial, sin datos de propiedad)', 'Sitio oficial de Sesderma', 'https://www.sesderma.com')
 b('loc_sesderma', 'Sesderma', 'Babé')
 CAT['Sesderma'] = 'skincare_cosmetica'
 CAT['Babé'] = 'skincare_cosmetica'
 
-g('loc_cantabria_labs', 'Cantabria Labs', 'Familia Matji; laboratorio dermatológico español fundado en 1989.', 'España', 'Familia', "", "", 'Dermocosmética española y fotoprotección dermatológica.', 'Alta', 'Sitio oficial Cantabria Labs', 'https://www.cantabrialabs.com')
+g('loc_cantabria_labs', 'Cantabria Labs', 'Familia Matji; laboratorio dermatológico español fundado en 1989.', 'España', 'Familia', "", "", 'Dermocosmética española y fotoprotección dermatológica.', 'Verificar (fuente: sitio oficial, sin datos de propiedad)', 'Sitio oficial Cantabria Labs', 'https://www.cantabrialabs.com')
 b('loc_cantabria_labs', 'Heliocare', 'Endocare', 'Neoretin')
 CAT['Heliocare'] = 'skincare_cosmetica'
 CAT['Endocare'] = 'skincare_cosmetica'
 CAT['Neoretin'] = 'skincare_cosmetica'
 
-g('loc_vanicream', 'Vanicream (Pharmaceutical Specialties, Inc.)', 'Farmacéuticos fundadores independientes en Rochester, Minnesota.', 'EE.UU.', 'Privada', "", "", 'Dermocosmética para piel sensible y dermatitis, libre de fragancias, tintes y parabenos.', 'Alta', 'Sitio oficial Vanicream', 'https://www.vanicream.com')
+g('loc_vanicream', 'Vanicream (Pharmaceutical Specialties, Inc.)', 'Farmacéuticos fundadores independientes en Rochester, Minnesota.', 'EE.UU.', 'Privada', "", "", 'Dermocosmética para piel sensible y dermatitis, libre de fragancias, tintes y parabenos.', 'Verificar (fuente: sitio oficial, sin datos de propiedad)', 'Sitio oficial Vanicream', 'https://www.vanicream.com')
 b('loc_vanicream', 'Vanicream')
 CAT['Vanicream'] = 'skincare_cosmetica'
 
-g('loc_naos', 'NAOS (Bioderma, Institut Esthederm)', 'Controlada por el fondo de dotación / fundación Jean-Noël Thorel con fin de utilidad pública.', 'Francia', 'Fideicomiso', "", "", 'Ecocosmética y dermocosmética francesa sin accionistas especulativos.', 'Alta', 'Sitio oficial NAOS', 'https://naos.com')
+g('loc_naos', 'NAOS (Bioderma, Institut Esthederm)', 'Controlada por el fondo de dotación / fundación Jean-Noël Thorel con fin de utilidad pública.', 'Francia', 'Fideicomiso', "", "", 'Dermocosmética francesa (Bioderma, Institut Esthederm).', 'Verificar (fuente: sitio oficial, sin datos de propiedad)', 'Sitio oficial NAOS', 'https://naos.com')
 b('loc_naos', 'Bioderma', 'Institut Esthederm')
 CAT['Bioderma'] = 'skincare_cosmetica'
 CAT['Institut Esthederm'] = 'skincare_cosmetica'

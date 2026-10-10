@@ -1,8 +1,8 @@
 node_modules/
 test/node_modules/
 *.zip
+paquete/
 __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
-

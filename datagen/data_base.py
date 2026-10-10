@@ -67,9 +67,9 @@ g("whirlpool","Whirlpool","Sin accionista de control","EE.UU.","Fondos dispersos
 g("microsoft","Microsoft","Sin accionista de control","EE.UU.","Fondos dispersos",P,"Grandes contratos de nube con el Pentágono","",A,"Informe 10-K de Microsoft")
 g("nintendo","Nintendo","Sin accionista de control","Otros (Japón)","Fondos dispersos","","","",A,"Informe anual de Nintendo")
 g("bose","Bose Corporation","El MIT tiene la mayoría de las acciones (sin voto)","EE.UU.","Privada",NC,"","",A,"Conocimiento del modelo")
-g("philips","Koninklijke Philips N.V. (Royal Philips)","Exor (familia Agnelli, ~17.5%) y fondos cotizados en Euronext","Países Bajos / Italia","Corporación",P,"Contratos hospitalarios y de salud pública","Cuidado personal, salud materna (Avent, Sonicare) y tecnología médica. Pequeño electrodoméstico opera bajo licencia por Versuni.",A,"Informe anual de Philips; folletos de Exor N.V.")
-g("sharkninja","SharkNinja, Inc.","Cotizada en NYSE; Mark Barrocas (CEO) y JS Global Lifestyle","EE.UU. / China","Corporación",P,"","Fabricante de pequeños electrodomésticos de cocina (Ninja) y aspiración/cuidado del hogar (Shark).",A,"Informe 10-K de SharkNinja (SEC)")
-g("creality","Shenzhen Creality 3D Technology Co., Ltd.","Chen Chun, Liu Huilin y socios fundadores (empresa privada)","China","Fundador",NC,"","Líder mundial en impresoras 3D domésticas de código abierto (Ender, K1, CR-10).",A,"Sitio oficial y registros mercantiles de Creality 3D")
+g("philips","Koninklijke Philips N.V. (Royal Philips)","Exor (familia Agnelli, ~17.5%) y fondos cotizados en Euronext","Países Bajos / Italia","Corporación",P,"Contratos hospitalarios y de salud pública","Cuidado personal, salud materna (Avent, Sonicare) y tecnología médica. Pequeño electrodoméstico opera bajo licencia por Versuni.",V,"Informe anual de Philips; folletos de Exor N.V.")
+g("sharkninja","SharkNinja, Inc.","Cotizada en NYSE; Mark Barrocas (CEO) y JS Global Lifestyle","EE.UU. / China","Corporación",P,"","Fabricante de pequeños electrodomésticos de cocina (Ninja) y aspiración/cuidado del hogar (Shark).",V,"Informe 10-K de SharkNinja (SEC)")
+g("creality","Shenzhen Creality 3D Technology Co., Ltd.","Sus fundadores (Chen Chun y socios) y accionistas desde su salida a la Bolsa de Hong Kong (3388.HK, 29-may-2026)","China","Fundador + fondos","","","Fabricante de impresoras 3D domésticas (Ender, K1, CR-10).",OK,"J-Stories: Creality debuta en la Bolsa de Hong Kong (29-may-2026)","https://jstories.media/?p=21676")
 # ---- Moda, calzado y equipaje
 g("nike","Nike Inc.","Familia de Phil Knight (control por voto vía Swoosh LLC)","EE.UU.","Familia + fondos",P,"","Incluye Jordan y Converse.",A,"Informe 10-K de Nike")
 g("adidas","Adidas AG","Sin accionista de control","Otros (Alemania)","Fondos dispersos",P,"","",A,"Informe anual de Adidas")
@@ -86,7 +86,7 @@ g("tapestry","Tapestry","Sin accionista de control","EE.UU.","Fondos dispersos",
 g("vf","VF Corporation","Sin accionista de control","EE.UU.","Fondos dispersos",P,"","",A,"Informe 10-K de VF")
 g("crocs","Crocs Inc.","Sin accionista de control","EE.UU.","Fondos dispersos",P,"","",A,"Informe 10-K de Crocs")
 g("lacoste","Lacoste (Maus Frères)","Familia Maus","Otros (Suiza)","Familia",NC,"","",A,"Conocimiento del modelo")
-g("samsonite","Samsonite International S.A.","Cotizada en la Bolsa de Hong Kong (HKEX); fondos institucionales globales","Otros (Luxemburgo)","Fondos dispersos",P,"","Mayor fabricante de equipaje y maletas del mundo; dueña también de American Tourister y Tumi.",A,"Informe anual de Samsonite (HKEX)")
+g("samsonite","Samsonite International S.A.","Cotizada en la Bolsa de Hong Kong (HKEX); fondos institucionales globales","Otros (Luxemburgo)","Fondos dispersos",P,"","Mayor fabricante de equipaje y maletas del mundo; dueña también de American Tourister y Tumi.",V,"Informe anual de Samsonite (HKEX)")
 # ---- Belleza y perfume
 g("loreal","L'Oréal","Familia Bettencourt (~34%) y Nestlé (~20%)","Francia","Familia + corporación",P,"","Acordó comprar Kering Beauté y los derechos de Creed (oct-2025).",A,"Informe anual de L'Oréal (AMF)")
 g("estee","The Estée Lauder Companies","Familia Lauder (control por voto)","EE.UU.","Familia + fondos",P,"","",A,"Informe 10-K de Estée Lauder")
@@ -100,13 +100,13 @@ g("hermes","Hermès","Familias Hermès (~66%)","Francia","Familia",P,"","",A,"In
 g("kering","Kering","Familia Pinault (Artémis, ~42%)","Francia","Familia",P,"","",A,"Informe anual de Kering (AMF)")
 g("prada","Prada","Familia Prada-Bertelli (~80%)","Italia","Familia",P,"","Compró Versace en 2025.",A,"Informe anual de Prada (HKEX)")
 # ---- Dermocosmética multinacional
-g("galderma","Galderma (Cetaphil)","EQT (capital privado sueco) y accionistas en la bolsa suiza (SIX)","Otros (Suiza)","Capital privado",NC,"","Antigua filial dermatológica de Nestlé y L'Oréal, vendida a EQT en 2019.",A,"Informe anual de Galderma (SIX)")
-g("pierrefabre","Laboratoires Pierre Fabre (Avène)","Fundación Pierre Fabre (fideicomiso público, 86%) y empleados (9%)","Francia","Fideicomiso",NC,"","La fundación apoya el acceso a la salud en países del Sur.",A,"Sitio oficial de Laboratoires Pierre Fabre")
-g("isdin","ISDIN","Familias Puig y Esteve (50% / 50%)","España","Familia",NC,"","Líder español en fotoprotección y cuidado dermatológico.",A,"Memoria de ISDIN")
+g("galderma","Galderma Group AG (Cetaphil)","L'Oréal (~20%, mayor accionista tras su compra anunciada en dic-2025) y el consorcio de EQT (<25%); cotiza en la bolsa suiza (SIX) desde 2024","Otros (Suiza)","Corporación + capital privado",P,"","Antigua filial dermatológica de Nestlé, vendida a un consorcio liderado por EQT en 2019.",OK,"blue News: Galderma gana a L'Oréal como principal accionista (8-dic-2025)","https://www.bluewin.ch/en/news/galderma-gains-a-new-majority-shareholder-in-loreal-2998641.html")
+g("pierrefabre","Laboratoires Pierre Fabre (Avène)","Fundación Pierre Fabre (fideicomiso público, 86%) y empleados (9%)","Francia","Fideicomiso",NC,"","La fundación apoya el acceso a la salud en países del Sur.",V,"Sitio oficial de Laboratoires Pierre Fabre")
+g("isdin","ISDIN","Familias Puig y Esteve (50% / 50%)","España","Familia",NC,"","Líder español en fotoprotección y cuidado dermatológico.",V,"Memoria de ISDIN")
 # ---- Deportes, actividades al aire libre y pesca
-g("purefishing","Pure Fishing (Penn, Abu Garcia, Berkley)","Sycamore Partners (capital privado)","EE.UU.","Capital privado",NC,"","Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",OK,"Sycamore Partners","https://www.sycamorepartners.com")
-g("shimano","Shimano Inc.","Familia fundadora Shimano y fondos institucionales","Otros (Japón)","Familia + fondos",P,"","Fabricante líder de componentes de ciclismo y equipos de pesca.",A,"Informe anual de Shimano (TSE)")
-g("implus","Implus Footcare (Potable Aqua)","Berkshire Partners (capital privado estadounidense)","EE.UU.","Capital privado",NC,"Contratos con fuerzas armadas y protección civil","Dueña de Potable Aqua, pastillas purificadoras de agua para emergencias y campismo.",A,"Sitio oficial Implus Footcare / Wisconsin Pharmacal")
+g("purefishing","Pure Fishing (Penn, Abu Garcia, Berkley)","Sycamore Partners (capital privado)","EE.UU.","Capital privado",NC,"","Comprada por el fondo Sycamore Partners a Newell Brands en 2018.",OK,"Jones Day: Newell Brands vende Pure Fishing a Sycamore Partners","https://jonesday.com/de/practices/experience/2018/12/newell-brands-sells-pure-fishing-to-sycamore-partn")
+g("shimano","Shimano Inc.","Familia fundadora Shimano y fondos institucionales","Otros (Japón)","Familia + fondos",P,"","Fabricante líder de componentes de ciclismo y equipos de pesca.",V,"Informe anual de Shimano (TSE)")
+g("implus","Wisconsin Pharmacal Company (Potable Aqua)","Empresa privada estadounidense; dueño actual por confirmar","EE.UU.","Privada",NC,"","Fabrica las pastillas purificadoras Potable Aqua. Farragut Capital le otorgó deuda subordinada en 2018.",V,"Farragut Capital Partners: inversión en Wisconsin Pharmacal (2018)","https://www.farragutcapitalpartners.com/news-list/2018/9/27/farragut-invests-in-leading-over-the-counter-healthcare-amp-consumer-products-company")
 
 
 B = []  # (marca, grupo, alias..., ) ; un "!" delante = solo cuenta si viene del campo «marca», no del título

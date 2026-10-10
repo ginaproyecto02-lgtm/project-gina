@@ -8,13 +8,19 @@ from categorias import CATS
 from sites_data import S
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "extension")
-VERSION = "2026-10-08"
+import datetime
+# Versión de la base = fecha y hora de generación (misma forma que usa el job). Las extensiones usan la base remota
+# solo si es más nueva que la incluida, así que la versión nunca debe ir hacia atrás.
+VERSION = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H%M")
 
 AMBIG = {x.lower() for x in ["Mi","Poco","Sol","Indio","Victoria","Corona","Modelo","Extra","Crunch","Clear","Scott","Candy","Echo","Ring","Blink",
  "Lara","León","Estrella","Superior","Martini","Boost","Galaxy","Jordan","Coach","Supreme","Mars","Natura","Matrix","Origins","Benefit",
  "Surface","Kraft","Silk","Venus","Bounty","Orbit","Miller","1800","UNO","Fire TV","Fresca","Wonder","Emperador","Mamut","Guerrero",
  "Salvo","Vick","Kirkland","Hoover","Acros","Kindle","Presto!","Mainstays","Equate","Avon","Prada","Chanel","Hermes","Tiffany","Tang","Halls","Kinder","Clight","Ritz","Lala",
- "Theory","GU","Titan","Honor","Vivo","Elite","Swift","Lux","HIT","Sharp","Canon","Siemens","Persil","Wheel"]}
+ "Theory","GU","Titan","Honor","Vivo","Elite","Swift","Lux","HIT","Sharp","Canon","Siemens","Persil","Wheel",
+ # Palabras comunes, nombres propios o títulos de obras: solo cuentan desde el campo «marca» de la página
+ "Cero","Simi","Shark","Ninja","Penn","Hardy","Shakespeare","Ender","Foca","Carisma","Babé","Berkley","Fenwick","Avent",
+ "Savage Gear","Pflueger","Ugly Stik","Shimano","Klorane","Ducray","Teatrical","Goicoechea","Tumi","Hue","Norelco"]}
 
 def entries(pairs, kind):
     out, seen = [], set()
@@ -75,7 +81,34 @@ brands = {
     "categorias": categorias,
 }
 os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
-json.dump(brands, open(os.path.join(ROOT, "data", "brands.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+# ---- Conservar lo que agregó el job del proyecto (marcas, grupos, reputación y alternativas investigadas).
+# El job escribe directo en extension/data/brands.json; regenerar desde datagen/ no debe borrarlo.
+prev_path = os.path.join(ROOT, "data", "brands.json")
+kept = {"grupos": 0, "marcas": 0, "reputacion": 0, "categorias": 0}
+if os.path.exists(prev_path):
+    prev = json.load(open(prev_path, encoding="utf-8"))
+    norm = lambda x: nkw(x)
+    for gid, g in prev.get("grupos", {}).items():
+        if gid not in brands["grupos"]:
+            if g.get("investigado"):   # solo grupos creados por el job; lo que borraste en datagen/ no regresa
+                brands["grupos"][gid] = g; kept["grupos"] += 1
+        elif g.get("investigado") and g.get("investigado", "") > brands["grupos"][gid].get("investigado", ""):
+            brands["grupos"][gid] = g; kept["grupos"] += 1   # revalidado por el job después de la última edición
+    names = {norm(m["n"]) for m in brands["marcas"]}
+    for m in prev.get("marcas", []):
+        if m.get("job") and norm(m["n"]) not in names and m.get("g") in brands["grupos"]:
+            brands["marcas"].append(m); names.add(norm(m["n"])); kept["marcas"] += 1
+    for rid, r in prev.get("reputacion", {}).items():
+        cur = brands["reputacion"].get(rid)
+        if "semanal" in str(r.get("origen", "")) and (not cur or str(r.get("revisado", "")) > str(cur.get("revisado", ""))):
+            brands["reputacion"][rid] = r; kept["reputacion"] += 1
+    for cid, c in prev.get("categorias", {}).items():
+        if cid in brands["categorias"]:
+            extra = [m for m in c.get("marcas", []) if norm(m) in names and m not in brands["categorias"][cid]["marcas"]]
+            brands["categorias"][cid]["marcas"] += extra; kept["categorias"] += len(extra)
+    brands["version"] = max(VERSION, str(prev.get("version", "")))  # nunca hacia atrás
+json.dump(brands, open(prev_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+print("conservado del job:", kept)
 json.dump({"version": VERSION, "sitios": S}, open(os.path.join(ROOT, "data", "sites.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 # ---- Proyecto: de dónde descargan todos la base actualizada (gratis, sin claves) y a dónde se sugieren marcas
@@ -89,18 +122,25 @@ json.dump({
     "issuesUrl": f"https://github.com/{repo}/issues/new" if repo else "",
     "repoUrl": f"https://github.com/{repo}" if repo else ""
 }, open(os.path.join(ROOT, "data", "proyecto.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-# El correo de correcciones también aparece en la página de opciones y en la política de privacidad
+# El correo de correcciones también aparece en la página de opciones
 opt = os.path.join(ROOT, "options", "options.html")
 html = open(opt, encoding="utf-8").read()
 html = re.sub(r'(<span id="contacto">).*?(</span>)', lambda mm: mm.group(1) + (f'<a href="mailto:{contacto}">{contacto}</a>' if contacto else "el repositorio del proyecto") + mm.group(2), html)
 open(opt, "w", encoding="utf-8").write(html)
-priv = os.path.join(os.path.dirname(__file__), "..", "docs", "privacidad.html")
-if os.path.exists(priv) and contacto:
-    phtml = open(priv, encoding="utf-8").read()
-    phtml = re.sub(r'mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|mailto:CORREO_DE_CONTACTO', f'mailto:{contacto}', phtml)
-    phtml = re.sub(r'>[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}<|>CORREO_DE_CONTACTO<', f'>{contacto}<', phtml)
-    open(priv, "w", encoding="utf-8").write(phtml)
-
+# Política de privacidad y textos de la tienda: el correo y la URL de la política salen de proyecto.json
+if contacto:
+    pol = os.path.join(os.path.dirname(__file__), "..", "docs", "privacidad.html")
+    t = open(pol, encoding="utf-8").read()
+    t = t.replace("CORREO_DE_CONTACTO", contacto)
+    t = re.sub(r'href="mailto:[^"]*">[^<]*</a>', f'href="mailto:{contacto}">{contacto}</a>', t)
+    open(pol, "w", encoding="utf-8").write(t)
+if repo:
+    owner, name = repo.split("/")
+    ficha = os.path.join(os.path.dirname(__file__), "..", "store", "ficha-tienda.md")
+    t = open(ficha, encoding="utf-8").read()
+    t = t.replace("PRIVACY_URL", f"https://{owner.lower()}.github.io/{name}/privacidad.html")
+    if contacto: t = t.replace("CONTACT_EMAIL", contacto)
+    open(ficha, "w", encoding="utf-8").write(t)
 
 # ---- Manifiesto: patrones de coincidencia a partir del registro de sitios
 patterns = []

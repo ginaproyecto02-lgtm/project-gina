@@ -14,6 +14,7 @@
   async function load() {
     if (!packaged) packaged = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
     if (!registry) registry = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
+    if (!QED.PROJECT) { try { QED.PROJECT = await (await fetch(api.runtime.getURL("data/proyecto.json"))).json(); } catch (e) { QED.PROJECT = {}; } }
     const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches"]);
     prefs.enabled = st.enabled !== false;
     prefs.minimized = !!st.minimized;

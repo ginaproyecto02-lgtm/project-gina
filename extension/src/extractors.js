@@ -115,8 +115,6 @@
       if (mSold) seller = mSold[1].trim();
       else if (/enviado y vendido por|ships from and sold by|expédié et vendu par/i.test(merchantInfo)) {
         seller = "Amazon";
-      } else {
-        seller = merchantInfo;
       }
     }
 
@@ -154,7 +152,7 @@
 
     const benefitsText = txt(q(doc, ".ui-pdp-promotions-pill-label, .ui-pdp-benefits, [class*='protection']"));
     const warranty = txt(q(doc, ".ui-pdp-warranty, .ui-pdp-specs__table tr:last-child"));
-    const hasProtection = /compra protegida|compra garantida|devoluci[oó]n gratis|devolu[cç][aã]o gr[aá]tis/i.test(benefitsText) || true;
+    const hasProtection = /compra protegida|compra garantida|devoluci[oó]n gratis|devolu[cç][aã]o gr[aá]tis/i.test(benefitsText);
 
     return {
       storeName: "Mercado Libre",
@@ -163,26 +161,26 @@
       isOfficialStore: isOfficialStore,
       isDirectPlatform: false,
       isFulfilledByPlatform: hasFull,
-      sellerRating: repBadge || (isOfficialStore ? "Tienda Oficial" : ""),
-      returnPolicy: hasProtection ? "Compra Protegida (devolución sin costo 30 días)" : "",
-      warranty: warranty || "Garantía con el vendedor / Compra Protegida"
+      sellerRating: repBadge || "",
+      returnPolicy: hasProtection ? benefitsText.slice(0, 120) : "",
+      warranty: warranty || ""
     };
   }
 
   function extractWalmartReliability(doc) {
     const sellerEl = q(doc, "[data-testid='seller-name'], a[link-identifier='sellerName'], .seller-info, [data-testid='fulfillment-shipping-text']");
     const sellerText = txt(sellerEl);
-    const isDirect = /walmart/i.test(sellerText) || !sellerText;
-    const isFulfilled = /enviado por walmart|shipped by walmart/i.test(sellerText) || isDirect;
+    const isDirect = /(vendido|sold)( y enviado| and shipped)? por walmart|(sold|shipped)( and shipped)? by walmart|^walmart(\.com)?$/i.test(sellerText.trim());
+    const isFulfilled = /enviado por walmart|shipped by walmart|fulfilled by walmart/i.test(sellerText);
 
     return {
       storeName: "Walmart",
-      seller: sellerText || "Walmart",
+      seller: sellerText || "",
       shipper: isFulfilled ? "Walmart" : "",
       isOfficialStore: false,
       isDirectPlatform: isDirect,
       isFulfilledByPlatform: isFulfilled,
-      returnPolicy: "Devoluciones hasta 30 días con comprobante",
+      returnPolicy: "",
       warranty: ""
     };
   }
@@ -295,13 +293,7 @@
       });
     }
 
-    if (brandGroup && brandGroup.empresa) {
-      norms.push({
-        key: "norm_registered_brand",
-        code: "Fabricante registrado: " + brandGroup.empresa,
-        descKey: "norm_registered_brand_desc"
-      });
-    }
+    // (Se quitó «Fabricante registrado»: Gina no verifica registros; el dueño se muestra en la pestaña de propiedad.)
 
     return norms;
   }
@@ -312,7 +304,7 @@
     title = String(title || "").toLowerCase();
     category = String(category || "").toLowerCase();
 
-    let score = 70;
+    let score = 50;
     let sellerType = "third_party";
     const sellerName = rel.seller || rel.storeName || "";
 
@@ -334,13 +326,9 @@
     }
 
     let level = "standard";
-    if (score >= 85 || rel.isOfficialStore || rel.isDirectPlatform) {
-      level = "high";
-    } else if (score >= 60) {
-      level = "standard";
-    } else {
-      level = "check";
-    }
+    if (rel.isOfficialStore || rel.isDirectPlatform) level = "high";
+    else if (sellerType === "verified" || rel.isFulfilledByPlatform) level = "standard";
+    else level = "check";   // vendedor externo o no se pudo leer: revisar antes de pagar
 
     const norms = getApplicableNorms(category, brandGroup, title, country);
 
@@ -354,8 +342,8 @@
       isDirectPlatform: !!rel.isDirectPlatform,
       isFulfilledByPlatform: !!rel.isFulfilledByPlatform,
       shipper: rel.shipper || "",
-      returnPolicy: rel.returnPolicy || "30 días de devolución · Compra Protegida",
-      warranty: rel.warranty || "Garantía de compra y fabricante aplicable",
+      returnPolicy: rel.returnPolicy || "",   // vacío = la página no lo indica (la tarjeta lo dice así)
+      warranty: rel.warranty || "",
       storeName: rel.storeName || "",
       brandVerified: !!(brandGroup && brandGroup.empresa),
       brandEmpresa: brandGroup ? brandGroup.empresa : "",

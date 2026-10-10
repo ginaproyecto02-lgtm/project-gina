@@ -186,7 +186,7 @@ async function main() {
         const hit = owners.map((o) => Object.assign({ gid: groupForOwner(db, o.owner) }, o)).find((o) => o.gid);
         if (hit) {
           const nombre = QED.displayBrand(p.brand);
-          if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: hit.gid, s: 1, fuente: "Wikidata", url: hit.item.replace("http://", "https://") });
+          if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: hit.gid, s: 1, job: 1, fuente: "Wikidata", url: hit.item.replace("http://", "https://") });
           state.marcas[p.key] = { estado: "verificada", grupo: hit.gid, via: "wikidata", ultimo: new Date().toISOString(), intentos: 0 };
           report.wikidata.push(`${nombre} → ${db.grupos[hit.gid].empresa} (Wikidata: ${hit.owner}) · ${hit.item}`);
           changed = true;
@@ -217,7 +217,7 @@ async function main() {
             };
           }
         }
-        if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: gid, s: 1 });
+        if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: gid, s: 1, job: 1 });
         st.estado = "verificada"; st.grupo = gid;
         report.verificadas.push(`${nombre} → ${db.grupos[gid].empresa} (${db.grupos[gid].controlador}) · ${n.fuentes[0].url}`);
         changed = true;
@@ -310,7 +310,7 @@ async function main() {
           confianza: "Verificado (investigación IA con fuentes)", fuente: n.fuentes[0].titulo, url: n.fuentes[0].url, fuentes: n.fuentes, investigado: new Date().toISOString().slice(0, 10) };
       }
       const nombre = n.marca || it.marca;
-      if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: gid, s: 1 });
+      if (!db.marcas.some((m) => QED.norm(m.n) === QED.norm(nombre))) db.marcas.push({ n: nombre, g: gid, s: 1, job: 1 });
       db.categorias[cat].marcas = Array.from(new Set([...(db.categorias[cat].marcas || []), nombre]));
       report.alternativas.push(`${nombre} → ${n.empresa} (${n.tipo}, ${n.pais}) en «${db.categorias[cat].label}» · ${n.fuentes[0].url} (issue #${is.number})`);
       changed = true;
