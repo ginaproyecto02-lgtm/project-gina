@@ -652,11 +652,12 @@
     try {
       const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
       if (api && api.storage && api.storage.local) {
-        api.storage.local.get(["gina_user_profile", "gina_sec_" + siteKey], (data) => {
+        api.storage.local.get(["gina_user_profile", "gina_lang", "gina_sec_" + siteKey], (data) => {
           if (!data) return cb(null);
-          if (data.gina_user_profile === "smart") return cb("rel");
-          if (data.gina_user_profile === "saver") return cb("mkt");
-          if (data.gina_user_profile === "conscious") return cb("own");
+          if (data.gina_lang && QED.I18N && QED.I18N.setLang) QED.I18N.setLang(data.gina_lang);
+          if (["smart", "inteligente"].includes(data.gina_user_profile)) return cb("rel");
+          if (["saver", "ahorrador"].includes(data.gina_user_profile)) return cb("mkt");
+          if (["conscious", "consciente"].includes(data.gina_user_profile)) return cb("own");
           cb(data["gina_sec_" + siteKey] || null);
         });
         return;

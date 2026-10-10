@@ -362,6 +362,23 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const todosTienenHistorial = lote1.every((id) => db.reputacion[id] && db.reputacion[id].eventos && db.reputacion[id].eventos.length >= 2);
   check("Lote 1 de reputación completo (grupos prioritarios con eventos verificados)", todosTienenHistorial, lote1.filter(id => !db.reputacion[id] || (db.reputacion[id].eventos || []).length < 2).join(", ") || "todos completos");
 }
+{
+  const optHtml = fs.readFileSync(path.join(EXT, "options/options.html"), "utf8");
+  const hasProfileSec = optHtml.includes('id="sec_profile"');
+  const hasLangSelect = optHtml.includes('id="lang_select"');
+  const hasRadios = ["ninguno", "inteligente", "ahorrador", "consciente"].every((val) => optHtml.includes(`value="${val}"`));
+  check("options.html contiene selector de idioma y sección de perfil con 4 opciones", hasProfileSec && hasLangSelect && hasRadios);
+}
+{
+  const w = env("", "https://example.com/");
+  const langs = ["es", "en", "de", "fr", "it", "ja"];
+  const keys = ["opt_sec_profile", "prof_opt_smart", "prof_opt_saver", "prof_opt_conscious", "opt_header_title"];
+  const okLangs = langs.every((l) => keys.every((k) => {
+    const val = w.QED.I18N.t(k, {}, l);
+    return val && val !== k;
+  }));
+  check("I18N contiene traducciones completas de opciones y perfiles en 6 idiomas", okLangs);
+}
 
 console.log(`\n${pass}/${total} pruebas correctas`);
 process.exit(pass === total ? 0 : 1);

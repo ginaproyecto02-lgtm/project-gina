@@ -994,6 +994,984 @@
       fr: "⚙ Paramètres & valeurs",
       it: "⚙ Impostazioni e valori",
       ja: "⚙ 設定と価値観"
+    },
+
+    // Options page UI
+    opt_page_title: {
+      es: "Gina — tus valores y opciones",
+      en: "Gina — your values and settings",
+      de: "Gina — deine Werte und Einstellungen",
+      fr: "Gina — vos valeurs et paramètres",
+      it: "Gina — i tuoi valori e impostazioni",
+      ja: "Gina — あなたの価値観と設定"
+    },
+    opt_header_title: {
+      es: "Gina — tus valores y opciones",
+      en: "Gina — your values and settings",
+      de: "Gina — deine Werte und Einstellungen",
+      fr: "Gina — vos valeurs et paramètres",
+      it: "Gina — i tuoi valori e impostazioni",
+      ja: "Gina — あなたの価値観と設定"
+    },
+    opt_header_desc: {
+      es: "Gina te muestra a quién apoya tu dinero: quién es dueño de cada marca, su historial público y su lobbying, para que cada compra vaya a donde tú quieras. Así decide quién es el dueño: <b>1)</b> tus marcas → <b>2)</b> marcas verificadas por la investigación → <b>3)</b> base (local o remota) → <b>4)</b> caché de IA → <b>5)</b> consulta en vivo al modelo pequeño. Lo que no se sabe queda en <b>pendientes</b> para el job semanal.",
+      en: "Gina shows who your money backs: who owns each brand, their public record, and their lobbying, so every purchase goes where you choose. How it determines ownership: <b>1)</b> your custom brands → <b>2)</b> research-verified brands → <b>3)</b> base catalog (local or remote) → <b>4)</b> AI cache → <b>5)</b> live query to small model. What remains unknown is saved to <b>pending</b> for the weekly job.",
+      de: "Gina zeigt dir, wen dein Geld unterstützt: wem jede Marke gehört, deren öffentliche Vorgeschichte und Lobbying, damit jeder Einkauf dorthin fließt, wo du möchtest. So wird der Eigentümer ermittelt: <b>1)</b> deine Marken → <b>2)</b> durch Recherche verifizierte Marken → <b>3)</b> Basisdaten (lokal oder remote) → <b>4)</b> KI-Cache → <b>5)</b> Live-Abfrage an das kleine Modell. Unbekanntes verbleibt in <b>ausstehend</b> für den wöchentlichen Job.",
+      fr: "Gina vous montre qui votre argent soutient : qui possède chaque marque, son historique public et son lobbying, pour que chaque achat aille là où vous le décidez. Détermination du propriétaire : <b>1)</b> vos marques → <b>2)</b> marques vérifiées par recherche → <b>3)</b> base (locale ou distante) → <b>4)</b> cache IA → <b>5)</b> requête directe au petit modèle. Les inconnues restent en <b>attente</b> pour la recherche hebdomadaire.",
+      it: "Gina ti mostra chi sostiene il tuo denaro: chi possiede ogni marchio, la sua reputazione pubblica e il lobbying, così ogni acquisto va dove preferisci. Come determina il proprietario: <b>1)</b> i tuoi marchi → <b>2)</b> marchi verificati dalla ricerca → <b>3)</b> database (locale o remoto) → <b>4)</b> cache IA → <b>5)</b> interrogazione diretta al modello leggero. Ciò che non è noto resta in <b>in sospeso</b> per il lavoro settimanale.",
+      ja: "Ginaはあなたの支出が誰を支えているかを可視化します：各ブランドの所有者、公的記録、ロビー活動。所有者の判定順：<b>1)</b> カスタム登録 → <b>2)</b> 調査で検証済みのブランド → <b>3)</b> ベースDB（ローカルまたはリモート） → <b>4)</b> AIキャッシュ → <b>5)</b> 小型モデルへの即時照会。未判定のものは週次ジョブ用の<b>保留中</b>に記録されます。"
+    },
+    opt_language: {
+      es: "Idioma",
+      en: "Language",
+      de: "Sprache",
+      fr: "Langue",
+      it: "Lingua",
+      ja: "言語"
+    },
+    opt_sec_profile: {
+      es: "Tu perfil de compra",
+      en: "Your shopping profile",
+      de: "Dein Einkaufsprofil",
+      fr: "Votre profil d'achat",
+      it: "Il tuo profilo di acquisto",
+      ja: "あなたの購入プロフィール"
+    },
+    opt_tag_profile: {
+      es: "qué sección abre primero",
+      en: "which section opens first",
+      de: "welcher Bereich zuerst öffnet",
+      fr: "quelle section s'ouvre en premier",
+      it: "quale sezione si apre per prima",
+      ja: "最初に開くセクション"
+    },
+    opt_help_profile: {
+      es: "Esto solo elige qué sección ves primero. No oculta nada; siempre puedes tocar cualquier sección para verla.",
+      en: "This only chooses which section opens first. It does not hide anything; you can always tap any section to view it.",
+      de: "Dies bestimmt nur, welcher Bereich zuerst geöffnet ist. Es blendet nichts aus; du kannst jederzeit jeden Bereich anklicken.",
+      fr: "Ceci choisit uniquement la section qui s'ouvre en premier. Rien n'est masqué ; vous pouvez toujours cliquer sur n'importe quelle section.",
+      it: "Questo decide solo quale sezione si apre per prima. Non nasconde nulla; puoi sempre cliccare su qualsiasi sezione per vederla.",
+      ja: "最初にどのセクションを開くかを設定します。情報は何も隠されず、いつでも各セクションをタップして確認できます。"
+    },
+    prof_opt_none: {
+      es: "Ninguno (por defecto)",
+      en: "None (default)",
+      de: "Keines (Standard)",
+      fr: "Aucun (par défaut)",
+      it: "Nessuno (predefinito)",
+      ja: "指定なし（デフォルト）"
+    },
+    prof_desc_none: {
+      es: "La tarjeta empieza cerrada y compacta. Tú decides qué sección abrir cuando te interese.",
+      en: "The card starts closed and compact. You decide which section to open when interested.",
+      de: "Die Karte startet geschlossen und kompakt. Du entscheidest, welcher Bereich dich interessiert.",
+      fr: "La fiche commence fermée et compacte. Vous choisissez quand ouvrir une section.",
+      it: "La scheda parte chiusa e compatta. Decidi tu quale sezione aprire quando ti interessa.",
+      ja: "カードは閉じたコンパクトな状態で表示されます。必要なときにセクションを開きます。"
+    },
+    prof_opt_smart: {
+      es: "Consumidor inteligente",
+      en: "Smart shopper",
+      de: "Kluger Käufer",
+      fr: "Consommateur malin",
+      it: "Consumatore intelligente",
+      ja: "スマート消費者"
+    },
+    prof_desc_smart: {
+      es: "Abre primero «Confiabilidad de compra» (vendedor directo o externo, garantías legales y normas aplicables).",
+      en: "Opens “Purchase Reliability” first (direct or third-party seller, legal warranty, and applicable standards).",
+      de: "Öffnet zuerst „Kaufsicherheit“ (Direkt- oder Drittanbieter, gesetzliche Gewährleistung und anwendbare Normen).",
+      fr: "Ouvre d'abord « Fiabilité d'achat » (vendeur direct ou tiers, garanties légales et normes applicables).",
+      it: "Apre prima «Affidabilità dell'acquisto» (venditore diretto o terzo, garanzie legali e norme applicabili).",
+      ja: "「購入の信頼性」（直接・外部出品者、法定保証、適用基準）を最初に開きます。"
+    },
+    prof_opt_saver: {
+      es: "Consumidor ahorrador",
+      en: "Value shopper",
+      de: "Sparbewusster Käufer",
+      fr: "Consommateur économe",
+      it: "Consumatore attento al risparmio",
+      ja: "節約志向の消費者"
+    },
+    prof_desc_saver: {
+      es: "Abre primero «Mercado y alternativas» (marcas del mismo grupo y alternativas con dueño local o línea económica).",
+      en: "Opens “Market and alternatives” first (same-owner brands and local or budget alternatives).",
+      de: "Öffnet zuerst „Markt und Alternativen“ (Marken desselben Eigentümers und lokale oder preiswerte Alternativen).",
+      fr: "Ouvre d'abord « Marché et alternatives » (marques du même groupe et alternatives locales ou économiques).",
+      it: "Apre prima «Mercato e alternative» (marchi dello stesso gruppo e alternative locali o economiche).",
+      ja: "「市場と代替案」（同一所有者の他ブランド、地域資本やお手頃ラインの選択肢）を最初に開きます。"
+    },
+    prof_opt_conscious: {
+      es: "Consumidor consciente",
+      en: "Conscious shopper",
+      de: "Bewusster Käufer",
+      fr: "Consommateur engagé",
+      it: "Consumatore consapevole",
+      ja: "エシカル消費者"
+    },
+    prof_desc_conscious: {
+      es: "Abre primero «¿A quién le compras?» (controlador, tipo de dueño, país del capital y reputación pública).",
+      en: "Opens “Who are you buying from?” first (controlling entity, owner type, capital origin, and public reputation).",
+      de: "Öffnet zuerst „Von wem kaufst du?“ (Kontrollierende Einheit, Eigentümertyp, Kapitalland und öffentliche Reputation).",
+      fr: "Ouvre d'abord « À qui achetez-vous ? » (contrôleur, type de propriétaire, pays du capital et réputation publique).",
+      it: "Apre prima «A chi compri?» (soggetto controllante, tipo di proprietà, paese del capitale e reputazione pubblica).",
+      ja: "「実質的に誰から買っていますか？」（実質支配者、所有形態、資本国、公的評価）を最初に開きます。"
+    },
+    msg_profile_saved: {
+      es: "Perfil guardado. Las tarjetas se abrirán según tu preferencia.",
+      en: "Profile saved. Cards will open according to your preference.",
+      de: "Profil gespeichert. Die Karten öffnen sich nun nach deiner Präferenz.",
+      fr: "Profil enregistré. Les fiches s'ouvriront selon votre préférence.",
+      it: "Profilo salvato. Le schede si apriranno in base alla tua preferenza.",
+      ja: "プロフィールを保存しました。カードは設定に合わせて開きます。"
+    },
+    opt_sec_values: {
+      es: "Tus valores",
+      en: "Your values",
+      de: "Deine Werte",
+      fr: "Vos valeurs",
+      it: "I tuoi valori",
+      ja: "あなたの価値観"
+    },
+    opt_tag_instant: {
+      es: "se guardan al momento",
+      en: "saved instantly",
+      de: "sofort gespeichert",
+      fr: "enregistré instantanément",
+      it: "salvati all'istante",
+      ja: "即時保存"
+    },
+    opt_help_values: {
+      es: "Elige qué temas te importan. Cada tarjeta muestra el <b>índice de reputación</b> (igual para todos: resume solo hechos públicos con fuente) y, además, <b>qué tan alineada está con tus valores</b>. Si un tema es «Muy importante», Gina te avisa cuando la empresa tiene multas, acuerdos o condenas recientes en ese tema.",
+      en: "Choose which topics matter to you. Each card shows the <b>reputation index</b> (identical for everyone: summarizes sourced public records) plus <b>how aligned it is with your values</b>. If a topic is “Very important”, Gina alerts you when the company has recent fines, settlements, or convictions in that area.",
+      de: "Wähle Themen, die dir wichtig sind. Jede Karte zeigt den <b>Reputationsindex</b> (für alle gleich: belegte öffentliche Fakten) und <b>wie gut sie zu deinen Werten passt</b>. Bei „Sehr wichtig“ warnt Gina bei aktuellen Bußgeldern, Vergleichen oder Verurteilungen.",
+      fr: "Choisissez les thèmes qui vous importent. Chaque fiche affiche <b>l'indice de réputation</b> (identique pour tous : faits publics vérifiés) et <b>son alignement avec vos valeurs</b>. Si un sujet est « Très important », Gina vous alerte en cas d'amende, d'accord ou de condamnation récente.",
+      it: "Scegli i temi che ti stanno a cuore. Ogni scheda mostra <b>l'indice di reputazione</b> (uguale per tutti: riassume fatti pubblici documentati) e <b>la conformità ai tuoi valori</b>. Se un tema è «Molto importante», Gina ti avvisa di recenti sanzioni, accordi o condanne.",
+      ja: "関心のあるテーマを選択してください。各カードには<b>評価指数</b>（出典付き公的記録の客観的要約）と<b>あなたの価値観との一致度</b>が表示されます。「非常に重要」に設定したテーマで最近の罰金や判決がある場合、Ginaが警告を表示します。"
+    },
+    opt_val_0: {
+      es: "No me importa",
+      en: "Not important",
+      de: "Nicht wichtig",
+      fr: "Pas important",
+      it: "Non mi interessa",
+      ja: "関心なし"
+    },
+    opt_val_1: {
+      es: "Normal",
+      en: "Normal",
+      de: "Normal",
+      fr: "Normal",
+      it: "Normale",
+      ja: "普通"
+    },
+    opt_val_2: {
+      es: "Muy importante",
+      en: "Very important",
+      de: "Sehr wichtig",
+      fr: "Très important",
+      it: "Molto importante",
+      ja: "非常に重要"
+    },
+    opt_chk_lobbying: {
+      es: "Mostrar el lobbying y las donaciones políticas declaradas (dato público, sin etiquetas ideológicas)",
+      en: "Show declared lobbying and political donations (public record, non-ideological)",
+      de: "Offizielles Lobbying und Parteispenden anzeigen (öffentliche Angabe, neutral)",
+      fr: "Afficher le lobbying et les dons politiques déclarés (données publiques, neutres)",
+      it: "Mostra lobbying e donazioni politiche dichiarate (dato pubblico, neutrale)",
+      ja: "公式に申告されたロビー活動・政治献金を表示（客観的な公的データ）"
+    },
+    opt_chk_alternatives: {
+      es: "Sugerir alternativas con dueño local (cooperativas, de empleados, familiares) para el tipo de producto que ves",
+      en: "Suggest locally owned alternatives (co-ops, employee-owned, family-owned) for the product you view",
+      de: "Lokale Alternativen vorschlagen (Genossenschaften, Mitarbeiter- oder Familienbetriebe)",
+      fr: "Suggérer des alternatives locales (coopératives, salariés, familiales) pour le produit consulté",
+      it: "Suggerisci alternative a proprietà locale (cooperative, dipendenti, familiari) per il prodotto visualizzato",
+      ja: "閲覧中の商品に対して地域資本の代替案（協同組合・従業員所有・同族企業）を提案"
+    },
+    msg_values_saved: {
+      es: "Guardado. Las tarjetas ya usan tus valores.",
+      en: "Saved. Cards are now aligned with your values.",
+      de: "Gespeichert. Karten nutzen jetzt deine Werte.",
+      fr: "Enregistré. Les fiches utilisent vos valeurs.",
+      it: "Salvato. Le schede ora usano i tuoi valori.",
+      ja: "保存完了。カードにあなたの価値観が反映されます。"
+    },
+    opt_sec_project: {
+      es: "Base del proyecto",
+      en: "Project database",
+      de: "Projektdatenbank",
+      fr: "Base du projet",
+      it: "Database del progetto",
+      ja: "プロジェクトデータベース"
+    },
+    opt_tag_free: {
+      es: "gratis, sin claves",
+      en: "free, no keys required",
+      de: "kostenlos, ohne API-Key",
+      fr: "gratuit, sans clés",
+      it: "gratuito, senza chiavi",
+      ja: "完全無料・APIキー不要"
+    },
+    opt_help_project: {
+      es: "Gina funciona sin cuenta ni clave de IA. La base de dueños, reputación y alternativas la mantiene <b id=\"projName\">Project Gina</b>: una investigación automática la actualiza cada una o dos semanas y tu navegador la descarga sola, sin enviar nada tuyo.",
+      en: "Gina works without accounts or AI keys. The database of owners, reputation, and alternatives is maintained by <b id=\"projName\">Project Gina</b>: automated research updates it every 1–2 weeks and your browser downloads it automatically without sending personal data.",
+      de: "Gina funktioniert ohne Konto oder KI-Schlüssel. Die Datenbank für Eigentümer, Reputation und Alternativen wird von <b id=\"projName\">Project Gina</b> gepflegt: Eine automatisierte Recherche aktualisiert sie alle 1–2 Wochen, und dein Browser lädt sie herunter, ohne private Daten zu übertragen.",
+      fr: "Gina fonctionne sans compte ni clé IA. La base de propriétaires, réputation et alternatives est gérée par <b id=\"projName\">Project Gina</b> : une recherche automatisée la met à jour toutes les 1–2 semaines et votre navigateur la télécharge sans envoyer vos données.",
+      it: "Gina funziona senza account né chiavi IA. Il database di proprietari, reputazione e alternative è curato da <b id=\"projName\">Project Gina</b>: una ricerca automatica lo aggiorna ogni 1-2 settimane e il browser lo scarica senza inviare dati personali.",
+      ja: "GinaはアカウントやAIキーなしで動作します。所有者・公的評価・代替案のデータベースは<b id=\"projName\">Project Gina</b>によって維持され、定期的な自動調査により更新され、個人情報を送信することなくブラウザに自動同期されます。"
+    },
+    opt_btn_suggest_pending: {
+      es: "💡 Sugerir al proyecto las marcas que no encontró Gina",
+      en: "💡 Suggest missing brands to the project",
+      de: "💡 Fehlende Marken an das Projekt melden",
+      fr: "💡 Suggérer au projet les marques introuvables",
+      it: "💡 Suggerisci al progetto i marchi non trovati",
+      ja: "💡 未登録ブランドをプロジェクトに提案"
+    },
+    proj_status_no_repo: {
+      es: "Esta copia no tiene configurado el repositorio del proyecto: la base se actualiza solo con nuevas versiones de la extensión.",
+      en: "No project repository configured in this build: database updates only via extension releases.",
+      de: "Kein Repository konfiguriert: Updates nur über neue Erweiterungsversionen.",
+      fr: "Aucun dépôt configuré : base mise à jour uniquement via les versions de l'extension.",
+      it: "Nessun repository configurato: aggiornamento solo con nuove versioni dell'estensione.",
+      ja: "リポジトリが設定されていません。拡張機能のアップデート時のみ更新されます。"
+    },
+    proj_status_fetched: {
+      es: "Base del proyecto descargada: {date} · versión {version}.",
+      en: "Project database downloaded: {date} · version {version}.",
+      de: "Projektdatenbank heruntergeladen: {date} · Version {version}.",
+      fr: "Base du projet téléchargée : {date} · version {version}.",
+      it: "Database scaricato: {date} · versione {version}.",
+      ja: "プロジェクトDBダウンロード完了：{date} · バージョン {version}。"
+    },
+    proj_status_err: {
+      es: "No se pudo descargar la base del proyecto ({err}); se reintentará.",
+      en: "Could not download project database ({err}); will retry.",
+      de: "Projektdatenbank konnte nicht geladen werden ({err}); erneuter Versuch folgt.",
+      fr: "Impossible de télécharger la base ({err}) ; nouvelle tentative prévue.",
+      it: "Impossibile scaricare il database ({err}); nuovo tentativo in corso.",
+      ja: "プロジェクトDBをダウンロードできませんでした（{err}）。再試行します。"
+    },
+    proj_status_queued: {
+      es: "La base del proyecto se descargará en el próximo minuto o al abrir el navegador.",
+      en: "Project database will download in the next minute or on browser startup.",
+      de: "Projektdatenbank wird in Kürze oder beim nächsten Browserstart heruntergeladen.",
+      fr: "La base sera téléchargée dans la minute ou au démarrage du navigateur.",
+      it: "Il database verrà scaricato nel prossimo minuto o all'avvio del browser.",
+      ja: "プロジェクトDBは間もなく、またはブラウザ起動時にダウンロードされます。"
+    },
+    msg_proj_none: {
+      es: "No hay marcas pendientes por sugerir.",
+      en: "No pending brands to suggest.",
+      de: "Keine ausstehenden Marken zum Vorschlagen.",
+      fr: "Aucune marque en attente à suggérer.",
+      it: "Nessun marchio in sospeso da suggerire.",
+      ja: "提案対象の保留中ブランドはありません。"
+    },
+    msg_proj_sent: {
+      es: "Se abrió el correo con {n} marcas para {to} (también se copiaron al portapapeles).",
+      en: "Email draft opened with {n} brands for {to} (also copied to clipboard).",
+      de: "E-Mail-Entwurf mit {n} Marken für {to} geöffnet (in Zwischenablage kopiert).",
+      fr: "Courriel ouvert avec {n} marques pour {to} (copié dans le presse-papiers).",
+      it: "Email aperta con {n} marchi per {to} (anche copiati negli appunti).",
+      ja: "{to}宛てに{n}件のブランドを含むメールを作成しました（クリップボードにもコピー済み）。"
+    },
+    opt_advanced_title: {
+      es: "Avanzado: tu propia IA",
+      en: "Advanced: bring your own AI",
+      de: "Erweitert: Eigene KI anbinden",
+      fr: "Avancé : votre propre IA",
+      it: "Avanzato: la tua IA personale",
+      ja: "高度な設定：独自のAIキーを使用"
+    },
+    opt_tag_optional: {
+      es: "opcional",
+      en: "optional",
+      de: "optional",
+      fr: "facultatif",
+      it: "opzionale",
+      ja: "任意"
+    },
+    opt_advanced_help: {
+      es: "Solo si quieres respuestas al momento para marcas que aún no están en la base, o investigar por tu cuenta. Necesita tu propia clave de API (tiene costo en tu cuenta del proveedor).",
+      en: "Only if you want instant answers for brands not yet in the database, or to run your own research. Requires your own API key (billed to your provider account).",
+      de: "Nur wenn du Sofortantworten für unbekannte Marken wünschst oder selbst recherchieren möchtest. Erfordert eigenen API-Schlüssel (Kosten beim Anbieter).",
+      fr: "Uniquement pour des réponses instantanées sur les marques inconnues ou pour rechercher vous-même. Nécessite une clé API payante auprès du fournisseur.",
+      it: "Solo se desideri risposte istantanee per marchi non ancora registrati o per ricerche personali. Richiede una tua chiave API (costi a carico tuo).",
+      ja: "未登録ブランドに対して即時判定を行いたい場合や、独自に調査を実行したい場合のみ設定してください。プロバイダーのアカウントでAPIキーの発行（有料）が必要です。"
+    },
+    opt_sec_live: {
+      es: "1. Consulta en vivo",
+      en: "1. Live lookup",
+      de: "1. Live-Abfrage",
+      fr: "1. Consultation directe",
+      it: "1. Consultazione in tempo reale",
+      ja: "1. 即時照会"
+    },
+    opt_tag_cheap: {
+      es: "modelo pequeño y barato",
+      en: "small, lightweight model",
+      de: "kleines, günstiges Modell",
+      fr: "modèle léger et économique",
+      it: "modello leggero ed economico",
+      ja: "小型・安価なモデル"
+    },
+    opt_help_live: {
+      es: "Se usa solo cuando la marca no está en la memoria. Recomendado: Claude Haiku, Gemini Flash-Lite o un modelo pequeño en Groq/xAI.",
+      en: "Used only when the brand is not in local memory. Recommended: Claude Haiku, Gemini Flash-Lite, or a small model on Groq/xAI.",
+      de: "Wird nur genutzt, wenn die Marke nicht lokal gespeichert ist. Empfohlen: Claude Haiku, Gemini Flash-Lite oder ein kleines Modell auf Groq/xAI.",
+      fr: "Utilisé uniquement si la marque est absente de la mémoire. Recommandé : Claude Haiku, Gemini Flash-Lite ou un modèle léger sur Groq/xAI.",
+      it: "Usato solo se il marchio non è in memoria. Consigliato: Claude Haiku, Gemini Flash-Lite o un modello leggero su Groq/xAI.",
+      ja: "ブランドが未登録の場合にのみ使用されます。推奨：Claude Haiku、Gemini Flash-Lite、Groq/xAIの小型モデル。"
+    },
+    opt_chk_ai_enabled: {
+      es: "Activar la clasificación con IA en las tiendas",
+      en: "Enable AI classification on store pages",
+      de: "KI-Klassifizierung in Onlineshops aktivieren",
+      fr: "Activer la classification par IA sur les boutiques",
+      it: "Attiva la classificazione IA nei negozi",
+      ja: "ショッピングサイトでのAI分類を有効化"
+    },
+    opt_lbl_provider: {
+      es: "Proveedor",
+      en: "Provider",
+      de: "Anbieter",
+      fr: "Fournisseur",
+      it: "Fornitore",
+      ja: "プロバイダー"
+    },
+    opt_lbl_model: {
+      es: "Modelo",
+      en: "Model",
+      de: "Modell",
+      fr: "Modèle",
+      it: "Modello",
+      ja: "モデル"
+    },
+    opt_ph_model: {
+      es: "nombre del modelo",
+      en: "model name",
+      de: "Modellname",
+      fr: "nom du modèle",
+      it: "nome del modello",
+      ja: "モデル名"
+    },
+    opt_lbl_key: {
+      es: "Clave de API",
+      en: "API Key",
+      de: "API-Schlüssel",
+      fr: "Clé API",
+      it: "Chiave API",
+      ja: "APIキー"
+    },
+    opt_ph_key: {
+      es: "pega aquí tu clave",
+      en: "paste your key here",
+      de: "Schlüssel hier einfügen",
+      fr: "collez votre clé ici",
+      it: "incolla qui la chiave",
+      ja: "キーをここに貼り付け"
+    },
+    opt_lbl_base: {
+      es: "URL base (compatible con OpenAI)",
+      en: "Base URL (OpenAI-compatible)",
+      de: "Basis-URL (OpenAI-kompatibel)",
+      fr: "URL de base (compatible OpenAI)",
+      it: "URL di base (compatibile OpenAI)",
+      ja: "ベースURL（OpenAI互換）"
+    },
+    opt_lbl_daily_limit: {
+      es: "Límite de consultas por día",
+      en: "Daily query limit",
+      de: "Tägliches Abfragelimit",
+      fr: "Limite de requêtes par jour",
+      it: "Limite di richieste giornaliere",
+      ja: "1日の最大照会回数"
+    },
+    opt_lbl_cache_days: {
+      es: "Días que dura la caché",
+      en: "Cache duration (days)",
+      de: "Cache-Dauer (Tage)",
+      fr: "Durée du cache (jours)",
+      it: "Durata cache (giorni)",
+      ja: "キャッシュ保持日数"
+    },
+    opt_btn_test_key: {
+      es: "Probar clave",
+      en: "Test key",
+      de: "Schlüssel testen",
+      fr: "Tester la clé",
+      it: "Verifica chiave",
+      ja: "キーをテスト"
+    },
+    opt_privacy_note: {
+      es: "Privacidad: a la IA se envía solo el nombre de la marca, el título del producto y el nombre de la tienda. No se envían tu historial, tu sesión ni la URL.",
+      en: "Privacy: only brand name, product title, and store name are sent to the AI. Browsing history, session cookies, and URLs are never sent.",
+      de: "Datenschutz: Nur Markenname, Produkttitel und Shopname werden an die KI gesendet. Kein Browserverlauf, keine Session und keine URLs.",
+      fr: "Vie privée : seuls le nom de la marque, le titre du produit et le nom de la boutique sont envoyés à l'IA. Jamais votre historique, session ou URL.",
+      it: "Privacy: all'IA vengono inviati solo nome del marchio, titolo del prodotto e negozio. Nessuna cronologia, sessione o URL.",
+      ja: "プライバシー：ブランド名、商品タイトル、店舗名のみがAIに送信されます。閲覧履歴、セッション、URLは一切送信されません。"
+    },
+    opt_sec_research: {
+      es: "2. Investigación semanal",
+      en: "2. Weekly research",
+      de: "2. Wöchentliche Recherche",
+      fr: "2. Recherche hebdomadaire",
+      it: "2. Ricerca settimanale",
+      ja: "2. 週次調査"
+    },
+    opt_tag_search: {
+      es: "modelo grande con búsqueda web",
+      en: "large model with web search",
+      de: "großes Modell mit Websuche",
+      fr: "grand modèle avec recherche web",
+      it: "modello avanzato con ricerca web",
+      ja: "ウェブ検索対応の大型モデル"
+    },
+    opt_help_research: {
+      es: "Una vez por semana investiga las marcas pendientes (las más vistas primero), revalida los datos de la base marcados «Verificar» e investiga la reputación (controversias, lobbying) de las empresas y fondos que más ves. Solo se guardan hechos cuya fuente salió de la búsqueda real. Un dato solo queda como <b>Verificado</b> si las fuentes salen de la búsqueda real del proveedor. Claude (búsqueda web) y Gemini (Google Search) lo permiten; los compatibles con OpenAI no.",
+      en: "Once a week researches pending brands (most-viewed first), revalidates database entries flagged “Verify”, and gathers public reputation records (controversies, lobbying) for companies you see most. Only events sourced from real live search are retained. A record only reaches <b>Verified</b> status if grounded in live search results. Claude (web search) and Gemini (Google Search) support this; generic OpenAI-compatible endpoints do not.",
+      de: "Recherchiert einmal wöchentlich ausstehende Marken (häufigste zuerst), revalidiert Einträge mit Status „Prüfen“ und analysiert Reputation und Lobbying. Nur belegte Quellen aus realer Websuche werden gespeichert. Status <b>Verifiziert</b> erfordert Live-Suchergebnisse (unterstützt von Claude und Gemini).",
+      fr: "Recherche hebdomadaire des marques en attente, revalidation des données à vérifier et analyse de réputation. Seuls les faits issus d'une recherche web réelle sont conservés avec le statut <b>Vérifié</b> (supporté par Claude et Gemini).",
+      it: "Una volta a settimana analizza i marchi in sospeso, rivaluta i dati da verificare e approfondisce reputazione e lobbying. Solo i fatti con fonti da ricerca reale ottengono lo stato <b>Verificato</b> (supportato da Claude e Gemini).",
+      ja: "週に1回、未登録ブランドを調査し、確認待ちデータを再検証し、頻出企業の公的記録を収集します。実際のウェブ検索結果で裏付けられた事実のみが<b>検証済み</b>として記録されます（ClaudeおよびGeminiが対応）。"
+    },
+    opt_chk_job_enabled: {
+      es: "Ejecutar la investigación cada semana",
+      en: "Run weekly research automatically",
+      de: "Recherche wöchentlich automatisch ausführen",
+      fr: "Exécuter la recherche chaque semaine",
+      it: "Esegui la ricerca ogni settimana",
+      ja: "週次調査を自動実行"
+    },
+    opt_lbl_r_key: {
+      es: "Clave de API (puede ser otra cuenta o proyecto)",
+      en: "API Key (can be separate account/project)",
+      de: "API-Schlüssel (kann separates Projekt sein)",
+      fr: "Clé API (peut être un autre compte)",
+      it: "Chiave API (può essere un altro account)",
+      ja: "APIキー（別プロジェクト・アカウントも可）"
+    },
+    opt_chk_use_classify_key: {
+      es: "Usar la misma clave de la consulta en vivo (si es el mismo proveedor)",
+      en: "Use same key as live lookup (if same provider)",
+      de: "Gleichen Schlüssel wie für Live-Abfrage nutzen",
+      fr: "Utiliser la même clé que pour la consultation directe",
+      it: "Usa la stessa chiave della consultazione directa",
+      ja: "即時照会と同じキーを使用（同プロバイダーの場合）"
+    },
+    opt_lbl_weekly_limit: {
+      es: "Marcas investigadas por semana",
+      en: "Brands researched per week",
+      de: "Recherchierte Marken pro Woche",
+      fr: "Marques recherchées par semaine",
+      it: "Marchi analizzati a settimana",
+      ja: "週ごとの調査対象ブランド数"
+    },
+    opt_lbl_reval_limit: {
+      es: "Grupos revalidados por semana",
+      en: "Groups revalidated per week",
+      de: "Revalidierte Gruppen pro Woche",
+      fr: "Groupes revalidés par semaine",
+      it: "Gruppi rivalutati a settimana",
+      ja: "週ごとの再検証グループ数"
+    },
+    opt_lbl_rep_limit: {
+      es: "Historiales de reputación por semana",
+      en: "Reputation records per week",
+      de: "Reputationshistorien pro Woche",
+      fr: "Dossiers de réputation par semaine",
+      it: "Storici di reputazione a settimana",
+      ja: "週ごとの公的評価調査数"
+    },
+    opt_btn_run_now: {
+      es: "▶ Ejecutar ahora",
+      en: "▶ Run now",
+      de: "▶ Jetzt ausführen",
+      fr: "▶ Lancer maintenant",
+      it: "▶ Esegui ora",
+      ja: "▶ 今すぐ実行"
+    },
+    msg_research_running: {
+      es: "Investigación en curso. Puedes cerrar esta pestaña; el resultado aparecerá en la bitácora.",
+      en: "Research in progress. You can close this tab; results will appear in the log.",
+      de: "Recherche läuft. Du kannst diesen Tab schließen; Ergebnisse erscheinen im Protokoll.",
+      fr: "Recherche en cours. Vous pouvez fermer cet onglet ; les résultats apparaîtront dans le journal.",
+      it: "Ricerca in corso. Puoi chiudere questa scheda; i risultati appariranno nel registro.",
+      ja: "調査を実行中です。このタブを閉じても処理は継続し、結果はログに記録されます。"
+    },
+    msg_provider_no_search: {
+      es: "Este proveedor no tiene búsqueda web: sus resultados quedarán «sin fuentes» (no verificados).",
+      en: "This provider lacks web search: findings will remain “unsourced” (unverified).",
+      de: "Dieser Anbieter bietet keine Websuche: Ergebnisse bleiben „ohne Quellen“ (nicht verifiziert).",
+      fr: "Ce fournisseur ne propose pas de recherche web : les résultats resteront « sans sources » (non vérifiés).",
+      it: "Questo fornitore non supporta la ricerca web: i risultati rimarranno «senza fonti» (non verificati).",
+      ja: "このプロバイダーはウェブ検索に未対応です。結果は「情報源なし」（未検証）となります。"
+    },
+    opt_sec_custom_remote: {
+      es: "3. Otra base remota",
+      en: "3. Custom remote database",
+      de: "3. Eigene Remote-Datenbank",
+      fr: "3. Autre base distante",
+      it: "3. Altro database remoto",
+      ja: "3. カスタムリモートDB"
+    },
+    opt_help_custom_remote: {
+      es: "Déjalo vacío para usar la base del proyecto. Solo si mantienes tu propia copia (por ejemplo, con el job de <code>job/</code> en tu GitHub), pon aquí la URL de tu <code>brands.json</code>.",
+      en: "Leave blank to use the official project database. Only enter a URL if you maintain your own <code>brands.json</code> copy (e.g., via GitHub Actions).",
+      de: "Leer lassen für die offizielle Projektdatenbank. Nur ausfüllen, wenn du eine eigene Kopie von <code>brands.json</code> betreibst.",
+      fr: "Laissez vide pour utiliser la base officielle. Renseignez l'URL uniquement si vous maintenez votre propre <code>brands.json</code>.",
+      it: "Lascia vuoto per usare il database del progetto. Inserisci l'URL solo se gestisci un tuo <code>brands.json</code>.",
+      ja: "公式プロジェクトDBを使用する場合は空欄にしてください。独自に<code>brands.json</code>をホストしている場合のみURLを入力してください。"
+    },
+    opt_lbl_remote_url: {
+      es: "URL del brands.json",
+      en: "brands.json URL",
+      de: "URL zu brands.json",
+      fr: "URL du brands.json",
+      it: "URL di brands.json",
+      ja: "brands.jsonのURL"
+    },
+    remote_status_none: {
+      es: "Sin base remota descargada.",
+      en: "No remote database downloaded.",
+      de: "Keine Remote-Datenbank geladen.",
+      fr: "Aucune base distante téléchargée.",
+      it: "Nessun database remoto scaricato.",
+      ja: "リモートDBはダウンロードされていません。"
+    },
+    remote_status_fetched: {
+      es: "Última descarga: {date} · versión {version} · {count} marcas",
+      en: "Last fetch: {date} · version {version} · {count} brands",
+      de: "Letzter Download: {date} · Version {version} · {count} Marken",
+      fr: "Dernier téléchargement : {date} · version {version} · {count} marques",
+      it: "Ultimo download: {date} · versione {version} · {count} marchi",
+      ja: "最終ダウンロード：{date} · バージョン {version} · {count}ブランド"
+    },
+    btn_save_settings: {
+      es: "Guardar configuración",
+      en: "Save settings",
+      de: "Einstellungen speichern",
+      fr: "Enregistrer la configuration",
+      it: "Salva impostazioni",
+      ja: "設定を保存"
+    },
+    msg_save_ok: {
+      es: "Configuración guardada.",
+      en: "Settings saved.",
+      de: "Einstellungen gespeichert.",
+      fr: "Configuration enregistrée.",
+      it: "Configurazione salvata.",
+      ja: "設定を保存しました。"
+    },
+    msg_save_no_perms: {
+      es: "Guardada, pero no diste permiso de acceso al proveedor: las consultas pueden fallar.",
+      en: "Saved, but host permission was not granted: provider queries may fail.",
+      de: "Gespeichert, jedoch ohne Anbieterberechtigung: Abfragen könnten fehlschlagen.",
+      fr: "Enregistré, mais les autorisations d'accès n'ont pas été accordées : les requêtes peuvent échouer.",
+      it: "Salvato, ma non sono stati concessi i permessi per il provider: le richieste potrebbero fallire.",
+      ja: "保存されましたが、プロバイダーへのアクセス権限が付与されていないため照会が失敗する可能性があります。"
+    },
+    opt_sec_memory: {
+      es: "4. Memoria",
+      en: "4. Local Memory",
+      de: "4. Lokaler Speicher",
+      fr: "4. Mémoire locale",
+      it: "4. Memoria locale",
+      ja: "4. ローカルメモリ"
+    },
+    stat_ai_cache: {
+      es: "en caché de IA",
+      en: "in AI cache",
+      de: "im KI-Cache",
+      fr: "en cache IA",
+      it: "nella cache IA",
+      ja: "AIキャッシュ内"
+    },
+    stat_pending: {
+      es: "pendientes de análisis",
+      en: "pending analysis",
+      de: "ausstehende Analysen",
+      fr: "en attente d'analyse",
+      it: "in attesa di analisi",
+      ja: "分析保留中"
+    },
+    stat_verified: {
+      es: "verificadas por investigación",
+      en: "verified by research",
+      de: "durch Recherche verifiziert",
+      fr: "vérifiées par recherche",
+      it: "verificati dalla ricerca",
+      ja: "調査により検証済み"
+    },
+    stat_revalidated: {
+      es: "grupos revalidados",
+      en: "revalidated groups",
+      de: "revalidierte Gruppen",
+      fr: "groupes revalidés",
+      it: "gruppi rivalutati",
+      ja: "再検証済みグループ"
+    },
+    stat_queries_today: {
+      es: "consultas hoy ({in} / {out} tokens)",
+      en: "queries today ({in} / {out} tokens)",
+      de: "Abfragen heute ({in} / {out} Tokens)",
+      fr: "requêtes aujourd'hui ({in} / {out} tokens)",
+      it: "richieste oggi ({in} / {out} token)",
+      ja: "本日の照会 ({in} / {out} トークン)"
+    },
+    stat_rep_researched: {
+      es: "historiales de reputación investigados",
+      en: "reputation records researched",
+      de: "recherchierte Reputationsdossiers",
+      fr: "dossiers de réputation analysés",
+      it: "storici di reputazione analizzati",
+      ja: "調査済み公的評価記録"
+    },
+    stat_custom_brands: {
+      es: "marcas agregadas por ti",
+      en: "brands added by you",
+      de: "von dir hinzugefügte Marken",
+      fr: "marques ajoutées par vous",
+      it: "marchi aggiunti da te",
+      ja: "あなたが追加したブランド"
+    },
+    opt_sub_pending: {
+      es: "Pendientes de análisis",
+      en: "Pending analysis",
+      de: "Ausstehende Analysen",
+      fr: "En attente d'analyse",
+      it: "In attesa di analisi",
+      ja: "分析保留中"
+    },
+    th_brand_product: {
+      es: "Marca / producto",
+      en: "Brand / product",
+      de: "Marke / Produkt",
+      fr: "Marque / produit",
+      it: "Marchio / prodotto",
+      ja: "ブランド / 商品"
+    },
+    th_store: {
+      es: "Tienda",
+      en: "Store",
+      de: "Shop",
+      fr: "Boutique",
+      it: "Negozio",
+      ja: "店舗"
+    },
+    th_times_seen: {
+      es: "Veces vista",
+      en: "Times seen",
+      de: "Aufrufe",
+      fr: "Vues",
+      it: "Visualizzazioni",
+      ja: "閲覧回数"
+    },
+    th_status: {
+      es: "Estado",
+      en: "Status",
+      de: "Status",
+      fr: "Statut",
+      it: "Stato",
+      ja: "状態"
+    },
+    th_last_try: {
+      es: "Último intento",
+      en: "Last attempt",
+      de: "Letzter Versuch",
+      fr: "Dernier essai",
+      it: "Ultimo tentativo",
+      ja: "最終試行"
+    },
+    opt_sub_verified: {
+      es: "Marcas verificadas por la investigación",
+      en: "Research-verified brands",
+      de: "Durch Recherche verifizierte Marken",
+      fr: "Marques vérifiées par recherche",
+      it: "Marchi verificati dalla ricerca",
+      ja: "調査により検証済みのブランド"
+    },
+    th_brand: {
+      es: "Marca",
+      en: "Brand",
+      de: "Marke",
+      fr: "Marque",
+      it: "Marchio",
+      ja: "ブランド"
+    },
+    th_company: {
+      es: "Empresa",
+      en: "Company",
+      de: "Unternehmen",
+      fr: "Entreprise",
+      it: "Azienda",
+      ja: "企業"
+    },
+    th_controller: {
+      es: "Controlador",
+      en: "Controller",
+      de: "Kontrolliert von",
+      fr: "Contrôleur",
+      it: "Controllore",
+      ja: "実質支配者"
+    },
+    th_source: {
+      es: "Fuente",
+      en: "Source",
+      de: "Quelle",
+      fr: "Source",
+      it: "Fonte",
+      ja: "出典"
+    },
+    th_date: {
+      es: "Fecha",
+      en: "Date",
+      de: "Datum",
+      fr: "Date",
+      it: "Data",
+      ja: "日付"
+    },
+    opt_sub_log: {
+      es: "Bitácora de ejecuciones",
+      en: "Execution log",
+      de: "Ausführungsprotokoll",
+      fr: "Journal d'exécution",
+      it: "Registro esecuzioni",
+      ja: "実行ログ"
+    },
+    th_log_date: {
+      es: "Fecha",
+      en: "Date",
+      de: "Datum",
+      fr: "Date",
+      it: "Data",
+      ja: "日時"
+    },
+    th_log_origin: {
+      es: "Origen",
+      en: "Origin",
+      de: "Auslöser",
+      fr: "Origine",
+      it: "Origine",
+      ja: "トリガー"
+    },
+    th_log_researched: {
+      es: "Investigadas",
+      en: "Researched",
+      de: "Recherchiert",
+      fr: "Recherchées",
+      it: "Analizzati",
+      ja: "調査数"
+    },
+    th_log_verified: {
+      es: "Verificadas",
+      en: "Verified",
+      de: "Verifiziert",
+      fr: "Vérifiées",
+      it: "Verificati",
+      ja: "検証数"
+    },
+    th_log_unsourced: {
+      es: "Sin fuentes",
+      en: "Unsourced",
+      de: "Ohne Quellen",
+      fr: "Sans sources",
+      it: "Senza fonti",
+      ja: "情報源なし"
+    },
+    th_log_not_found: {
+      es: "No encontradas",
+      en: "Not found",
+      de: "Nicht gefunden",
+      fr: "Non trouvées",
+      it: "Non trovati",
+      ja: "未発見"
+    },
+    th_log_revalidated: {
+      es: "Revalidadas",
+      en: "Revalidated",
+      de: "Revalidiert",
+      fr: "Revalidées",
+      it: "Rivalutati",
+      ja: "再検証数"
+    },
+    th_log_tokens: {
+      es: "Tokens (ent./sal.)",
+      en: "Tokens (in/out)",
+      de: "Tokens (ein/aus)",
+      fr: "Tokens (ent./sort.)",
+      it: "Token (in/out)",
+      ja: "トークン (入/出)"
+    },
+    th_log_changes: {
+      es: "Cambios y errores",
+      en: "Changes & errors",
+      de: "Änderungen & Fehler",
+      fr: "Changements & erreurs",
+      it: "Modifiche ed errori",
+      ja: "変更およびエラー"
+    },
+    opt_btn_export_mem: {
+      es: "⬇ Exportar memoria (JSON)",
+      en: "⬇ Export memory (JSON)",
+      de: "⬇ Speicher exportieren (JSON)",
+      fr: "⬇ Exporter la mémoire (JSON)",
+      it: "⬇ Esporta memoria (JSON)",
+      ja: "⬇ メモリをエクスポート (JSON)"
+    },
+    opt_btn_import_mem: {
+      es: "⬆ Importar memoria",
+      en: "⬆ Import memory",
+      de: "⬆ Speicher importieren",
+      fr: "⬆ Importer la mémoire",
+      it: "⬆ Importa memoria",
+      ja: "⬆ メモリをインポート"
+    },
+    opt_btn_export_pending: {
+      es: "⬇ Exportar pendientes para el job de servidor",
+      en: "⬇ Export pending for server job",
+      de: "⬇ Ausstehende für Server-Job exportieren",
+      fr: "⬇ Exporter les éléments en attente",
+      it: "⬇ Esporta in sospeso per server",
+      ja: "⬇ サーバー用保留中データをエクスポート"
+    },
+    opt_btn_clear_cache: {
+      es: "Vaciar caché de IA",
+      en: "Clear AI cache",
+      de: "KI-Cache leeren",
+      fr: "Vider le cache IA",
+      it: "Svuota cache IA",
+      ja: "AIキャッシュを消去"
+    },
+    msg_no_pending: {
+      es: "No hay pendientes. Las marcas que no estén en la base aparecerán aquí.",
+      en: "No pending brands. Missing brands will appear here.",
+      de: "Keine ausstehenden Marken. Unbekannte Marken erscheinen hier.",
+      fr: "Aucune marque en attente. Les nouvelles marques apparaîtront ici.",
+      it: "Nessun marchio in sospeso. I nuovi marchi appariranno qui.",
+      ja: "保留中のブランドはありません。未登録ブランドはここに表示されます。"
+    },
+    msg_no_verified: {
+      es: "Todavía no hay marcas verificadas por la investigación semanal.",
+      en: "No brands verified by weekly research yet.",
+      de: "Noch keine Marken durch die wöchentliche Recherche verifiziert.",
+      fr: "Aucune marque vérifiée par la recherche pour le moment.",
+      it: "Nessun marchio ancora verificato dalla ricerca settimanale.",
+      ja: "週次調査で検証されたブランドはまだありません。"
+    },
+    msg_no_logs: {
+      es: "Aún no hay ejecuciones.",
+      en: "No runs yet.",
+      de: "Noch keine Ausführungen protokolliert.",
+      fr: "Aucune exécution pour le moment.",
+      it: "Nessuna esecuzione ancora.",
+      ja: "実行記録はまだありません。"
+    },
+    msg_mem_exported: {
+      es: "Memoria exportada (no incluye tus claves).",
+      en: "Memory exported (keys excluded).",
+      de: "Speicher exportiert (ohne API-Schlüssel).",
+      fr: "Mémoire exportée (clés exclues).",
+      it: "Memoria esportata (chiavi escluse).",
+      ja: "メモリをエクスポートしました（キーは除外されます）。"
+    },
+    msg_pending_exported: {
+      es: "{count} pendientes exportados. Súbelos a la carpeta job/pendientes/ de tu repositorio.",
+      en: "{count} pending items exported. Upload them to job/pendientes/ in your repo.",
+      de: "{count} Einträge exportiert. Lade sie in job/pendientes/ deines Repositories hoch.",
+      fr: "{count} éléments exportés. Déposez-les dans job/pendientes/ de votre dépôt.",
+      it: "{count} elementi in sospeso esportati. Caricali nella cartella job/pendientes/ del repository.",
+      ja: "{count}件の保留中項目をエクスポートしました。リポジトリのjob/pendientes/に配置してください。"
+    },
+    msg_cache_cleared: {
+      es: "Caché de IA vaciada. Las marcas se volverán a consultar cuando aparezcan.",
+      en: "AI cache cleared. Brands will be queried again when encountered.",
+      de: "KI-Cache geleert. Marken werden beim nächsten Auftreten neu angefragt.",
+      fr: "Cache IA vidé. Les marques seront réinterrogées lors de leur apparition.",
+      it: "Cache IA svuotata. I marchi verranno ricontrollati quando rilevati.",
+      ja: "AIキャッシュを消去しました。再訪時に再照会されます。"
+    },
+    msg_mem_imported: {
+      es: "Importado: {n1} en caché, {n2} pendientes, {n3} verificadas, {n4} grupos revalidados, {n5} historiales de reputación.",
+      en: "Imported: {n1} cached, {n2} pending, {n3} verified, {n4} revalidated groups, {n5} reputation records.",
+      de: "Importiert: {n1} im Cache, {n2} ausstehend, {n3} verifiziert, {n4} revalidierte Gruppen, {n5} Reputationsdossiers.",
+      fr: "Importé : {n1} en cache, {n2} en attente, {n3} vérifiées, {n4} groupes revalidés, {n5} dossiers de réputation.",
+      it: "Importato: {n1} in cache, {n2} in sospeso, {n3} verificati, {n4} gruppi rivalutati, {n5} storici di reputazione.",
+      ja: "インポート完了：キャッシュ {n1}件、保留中 {n2}件、検証済み {n3}件、再検証グループ {n4}件、公的評価記録 {n5}件。"
+    },
+    status_por_investigar: {
+      es: "Por investigar",
+      en: "To research",
+      de: "Zu recherchieren",
+      fr: "À rechercher",
+      it: "Da verificare",
+      ja: "調査待ち"
+    },
+    status_por_verificar: {
+      es: "Clasificada por IA · por verificar",
+      en: "AI classified · to verify",
+      de: "KI-klassifiziert · zu prüfen",
+      fr: "Classé par IA · à vérifier",
+      it: "Classificato da IA · da verificare",
+      ja: "AI分類済み · 検証待ち"
+    },
+    status_reintentar: {
+      es: "Reintentar",
+      en: "Retry",
+      de: "Wiederholen",
+      fr: "Réessayer",
+      it: "Riprova",
+      ja: "再試行"
+    },
+    status_sin_fuentes: {
+      es: "Sin fuentes",
+      en: "No sources",
+      de: "Ohne Quellen",
+      fr: "Sans sources",
+      it: "Senza fonti",
+      ja: "情報源なし"
+    },
+    status_verificada: {
+      es: "Verificada",
+      en: "Verified",
+      de: "Verifiziert",
+      fr: "Vérifiée",
+      it: "Verificato",
+      ja: "検証済み"
+    },
+    status_no_encontrada: {
+      es: "No encontrada",
+      en: "Not found",
+      de: "Nicht gefunden",
+      fr: "Non trouvée",
+      it: "Non trovato",
+      ja: "未発見"
+    },
+    btn_retry_title: {
+      es: "Volver a intentar",
+      en: "Retry",
+      de: "Erneut versuchen",
+      fr: "Réessayer",
+      it: "Riprova",
+      ja: "再試行"
+    },
+    btn_remove_title: {
+      es: "Quitar",
+      en: "Remove",
+      de: "Entfernen",
+      fr: "Supprimer",
+      it: "Rimuovi",
+      ja: "削除"
+    },
+    opt_footer: {
+      es: "¿Encontraste un dato incorrecto sobre una empresa? Escríbenos para corregirlo: {contacto}. Las claves se guardan solo en este navegador (almacenamiento local de la extensión) y se envían únicamente al proveedor que elijas. Recomendación: crea claves con límite de gasto. Información orientativa; no es una recomendación de compra ni de inversión.",
+      en: "Found incorrect company data? Contact us to fix it: {contacto}. API keys are stored only in this browser (extension local storage) and sent only to your chosen provider. Tip: create keys with spending limits. Orientational information; not a purchase or investment recommendation.",
+      de: "Fehlerhafte Angaben gefunden? Schreib uns: {contacto}. API-Schlüssel werden ausschließlich lokal in diesem Browser gespeichert und nur an den gewählten Anbieter gesendet. Tipp: Limits einrichten. Nur zur Orientierung; keine Kauf- oder Anlageempfehlung.",
+      fr: "Une information inexacte ? Écrivez-nous : {contacto}. Les clés sont stockées uniquement dans ce navigateur et transmises seulement au fournisseur choisi. Conseil : définissez des plafonds. À titre indicatif ; pas une recommandation d'achat ou d'investissement.",
+      it: "Hai trovato un dato errato? Contattaci: {contacto}. Le chiavi sono salvate solo in questo browser e trasmesse solo al fornitore scelto. Consiglio: imposta un limite di spesa. Informazioni orientative; non costituiscono consiglio di acquisto o investimento.",
+      ja: "企業情報に誤りを見つけましたか？修正依頼はこちら：{contacto}。APIキーはこのブラウザのローカルストレージにのみ保存され、選択したプロバイダーにのみ送信されます。利用限度額の設定を推奨します。参考情報であり、購入や投資の推奨ではありません。"
     }
   };
 
