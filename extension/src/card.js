@@ -172,23 +172,27 @@
   // Bloque con los datos de un grupo dueño (empresa, controlador, país, tipo, fondos, gobierno, nota, fuente).
   function groupBlock(g, compact) {
     g = g || {};
+    const isEn = I18N().getLang && I18N().getLang() !== "es";
+    const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
+    const nota = (isEn && g.nota_en) ? g.nota_en : g.nota;
+    const fondos = (isEn && g.fondos_en) ? g.fondos_en : g.fondos;
+    const gobierno = (isEn && g.gobierno_en) ? g.gobierno_en : g.gobierno;
+    const fuenteLbl = (isEn && g.fuente_en) ? g.fuente_en : (g.fuente || t("view_source"));
     const fuente = g.url
-      ? `<a href="${esc(safe(g.url))}" target="_blank" rel="noopener noreferrer">${esc(g.fuente || t("view_source"))}</a>`
-      : esc(g.fuente || t("no_source"));
+      ? `<a href="${esc(safe(g.url))}" target="_blank" rel="noopener noreferrer">${esc(fuenteLbl)}</a>`
+      : esc(fuenteLbl || t("no_source"));
     const more = Array.isArray(g.fuentes) && g.fuentes.length > 1
       ? g.fuentes.slice(1, 4).map((f) => `<br><a href="${esc(safe(f.url))}" target="_blank" rel="noopener noreferrer">${esc(f.titulo || f.url)}</a>`).join("") : "";
     const tipoExpl = I18N().tipoInfo(g.tipo);
     const tipoLbl = I18N().tipoLabel(g.tipo);
-    const isEn = I18N().getLang && I18N().getLang() !== "es";
-    const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
-    const nota = (isEn && g.nota_en) ? g.nota_en : g.nota;
+    const countryLbl = (I18N().paisLabel ? I18N().paisLabel(g.pais) : g.pais);
     return `
       <div class="emp">${esc(g.empresa)}</div>
       <div class="row"><div class="k">${t("who_controls")}</div><div class="v">${esc(ctrl)}</div></div>
-      <div class="chips">${g.pais ? `<span class="chip">🌎 ${esc(g.pais)}</span>` : ""}${g.tipo ? `<span class="chip">${esc(tipoLbl)}</span>` : ""}${confChip(g.confianza)}${repPill(g)}</div>
+      <div class="chips">${g.pais ? `<span class="chip">🌎 ${esc(countryLbl)}</span>` : ""}${g.tipo ? `<span class="chip">${esc(tipoLbl)}</span>` : ""}${confChip(g.confianza)}${repPill(g)}</div>
       ${!compact && tipoExpl ? `<div class="hint">${esc(tipoExpl)}</div>` : ""}
-      ${g.fondos ? `<div class="row"><div class="k">${t("major_funds")}</div><div class="v">${esc(g.fondos)}</div></div>` : ""}
-      ${g.gobierno ? `<div class="row"><div class="k">${t("gov_ties")}</div><div class="v">${esc(g.gobierno)}</div></div>` : ""}
+      ${fondos ? `<div class="row"><div class="k">${t("major_funds")}</div><div class="v">${esc(fondos)}</div></div>` : ""}
+      ${gobierno ? `<div class="row"><div class="k">${t("gov_ties")}</div><div class="v">${esc(gobierno)}</div></div>` : ""}
       ${nota ? `<div class="note">${esc(nota)}</div>` : ""}
       <div class="row"><div class="k">${t("source")}</div><div class="v">${fuente}${more}</div></div>`;
   }
@@ -200,7 +204,7 @@
     const tLabel = I18N().temaLabel(e.tema) || rawTema.label;
     const stLabel = I18N().estadoLabel(e.estado) || ((REP().ESTADOS[e.estado] || {}).label || e.estado);
     return `<div class="ev"><span class="ic" title="${esc(tLabel)}">${rawTema.icon}</span><span class="tx">${esc(e.titulo)}
-      <span class="st ${esc(e.estado)}">${esc(stLabel)}</span> <small>${esc(e.anio || "")}${e.pais ? " · " + esc(e.pais) : ""}${e.monto ? " · " + esc(e.monto) : ""}</small>
+      <span class="st ${esc(e.estado)}">${esc(stLabel)}</span> <small>${esc(e.anio || "")}${e.pais ? " · " + esc(I18N().paisLabel ? I18N().paisLabel(e.pais) : e.pais) : ""}${e.monto ? " · " + esc(e.monto) : ""}</small>
       ${full && e.resumen ? `<div class="sum">${esc(e.resumen)}</div>` : ""}
       <a href="${esc(safe(e.url))}" target="_blank" rel="noopener noreferrer"><small>${esc(e.fuente || t("source").toLowerCase())}</small></a></span></div>`;
   }
@@ -225,7 +229,7 @@
     return `<details class="more"><summary>${summaryText}</summary>
       ${evs.map((e) => evRow(e, true)).join("")}
       ${pos.length ? `<div class="sec">${t("positive_facts")}</div>${pos.map((e) => `<div class="ev"><span class="ic">✅</span><span class="tx">${esc(e.titulo)} <small>${esc(e.anio || "")}</small> <a href="${esc(safe(e.url))}" target="_blank" rel="noopener noreferrer"><small>${esc(e.fuente || t("source").toLowerCase())}</small></a></span></div>`).join("")}` : ""}
-      ${lob.length ? `<div class="sec">${t("lobbying_donations")}</div>${lob.map((l) => `<div class="ev"><span class="ic">🏛️</span><span class="tx"><b>${esc(l.dato)}</b> <small>${esc(l.pais)} · ${esc(l.anio || "")}</small>${l.detalle ? `<div class="sum">${esc(l.detalle)}</div>` : ""}<a href="${esc(safe(l.url))}" target="_blank" rel="noopener noreferrer"><small>${esc(l.fuente || t("source").toLowerCase())}</small></a></span></div>`).join("")}` : ""}
+      ${lob.length ? `<div class="sec">${t("lobbying_donations")}</div>${lob.map((l) => `<div class="ev"><span class="ic">🏛️</span><span class="tx"><b>${esc(l.dato)}</b> <small>${esc(I18N().paisLabel ? I18N().paisLabel(l.pais) : l.pais)} · ${esc(l.anio || "")}</small>${l.detalle ? `<div class="sum">${esc(l.detalle)}</div>` : ""}<a href="${esc(safe(l.url))}" target="_blank" rel="noopener noreferrer"><small>${esc(l.fuente || t("source").toLowerCase())}</small></a></span></div>`).join("")}` : ""}
       <div class="method">${t("method_disclaimer")}
       ${rec.desdeMatriz ? " " : ""} ${rec.revisado ? " · " + esc(rec.revisado) : ""}${rec.origen ? " · " + esc(rec.origen) : ""}.</div>
     </details>`;
@@ -280,7 +284,8 @@
     const isEn = I18N().getLang && I18N().getLang() !== "es";
     const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
     const storeLine = t("shopping_at", { store: esc(store.nombre), empresa: esc(g.empresa), controlador: esc(ctrl) });
-    return `<div class="store">${storeLine}${g.pais ? ` · ${esc(g.pais)}` : ""} ${confChip(g.confianza)}${repChip(g)}</div>`;
+    const countryLbl = I18N().paisLabel ? I18N().paisLabel(g.pais) : g.pais;
+    return `<div class="store">${storeLine}${g.pais ? ` · ${esc(countryLbl)}` : ""} ${confChip(g.confianza)}${repChip(g)}</div>`;
   }
 
   // ---------------------------------------------------------------- SECCIÓN 1: Confiabilidad de compra (Consumidor Inteligente)
@@ -363,9 +368,10 @@
     const alsoLocal = a.actualEsLocal ? ` <span class="also-loc">${t("alt_also_local")}</span>` : "";
     const hasBudget = a.items.some((it) => it.esEconomica);
 
+    const countryLbl = I18N().paisLabel ? I18N().paisLabel(a.pais) : a.pais;
     return `
       <div class="alt-content">
-        <div class="alt-lead">${t("alt_header", { cat: esc(catLabel), pais: esc(a.pais) })}${alsoLocal}</div>
+        <div class="alt-lead">${t("alt_header", { cat: esc(catLabel), pais: esc(countryLbl) })}${alsoLocal}</div>
         ${hasBudget ? `
           <div class="alt-filters">
             <button class="alt-filt active" data-alt-filter="all">${t("alt_filter_all")}</button>
@@ -426,7 +432,8 @@
       h += list.map((a, i) => {
         const timeWord = a.count === 1 ? t("time_singular") : t("time_plural");
         const seenText = t("times_seen", { count: a.count, times: timeWord });
-        return `<details class="air"${i === 0 && !res.airline ? " open" : ""}><summary>${esc(a.n)} <small>· ${esc((a.group || {}).empresa)} · ${esc((a.group || {}).pais)} · ${seenText}</small></summary>${groupBlock(a.group, true)}${repBlock(a.group, opts, true)}</details>`;
+        const airCountryLbl = I18N().paisLabel ? I18N().paisLabel((a.group || {}).pais) : ((a.group || {}).pais);
+        return `<details class="air"${i === 0 && !res.airline ? " open" : ""}><summary>${esc(a.n)} <small>· ${esc((a.group || {}).empresa)} · ${esc(airCountryLbl)} · ${seenText}</small></summary>${groupBlock(a.group, true)}${repBlock(a.group, opts, true)}</details>`;
       }).join("");
     }
     if (res.agency && res.agency.group) {
@@ -434,7 +441,8 @@
       const isEn = I18N().getLang && I18N().getLang() !== "es";
       const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
       const agencyLine = t("shopping_at", { store: esc(res.agency.nombre), empresa: esc(g.empresa), controlador: esc(ctrl) });
-      h += `<div class="store">${agencyLine}${g.pais ? ` · ${esc(g.pais)}` : ""} ${confChip(g.confianza)}${repChip(g)}</div>`;
+      const agencyCountryLbl = I18N().paisLabel ? I18N().paisLabel(g.pais) : g.pais;
+      h += `<div class="store">${agencyLine}${g.pais ? ` · ${esc(agencyCountryLbl)}` : ""} ${confChip(g.confianza)}${repChip(g)}</div>`;
     }
     return h;
   }

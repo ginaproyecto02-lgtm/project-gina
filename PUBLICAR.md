@@ -21,13 +21,18 @@ Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirm
 
 ---
 
+> [!IMPORTANT]
+> **Archivo para subir a las tiendas (ojo con los Artifacts de GitHub Actions):**
+> - Si descargas el paquete desde los **Releases** de GitHub (etiqueta `v*`): el archivo `.zip` (`gina-extension-3.1.0.zip`) se sube tal cual.
+> - Si descargas el paquete desde los **Artifacts** del flujo de GitHub Actions: GitHub siempre envuelve los artefactos dentro de otro archivo `.zip` (zip dentro de zip). Las tiendas rechazan ese archivo anidado. **Descomprime una vez el archivo descargado de Artifacts; sube el `gina-extension-X.Y.Z.zip` de adentro.**
+
 ## 1. Chrome Web Store (también cubre Brave, Opera y otros navegadores basados en Chromium)
 
 **Costo:** pago único de registro (históricamente US$5; el monto se muestra al registrarte). **Revisión:** normalmente de unos días a un par de semanas. Los permisos amplios de sitios suelen alargarla.
 
 1. Entra en el **Chrome Developer Dashboard** con una cuenta de Google y paga el registro.
 2. Completa la cuenta: nombre del editor (*publisher name*), correo verificado y la declaración de **comerciante o no comerciante**. Si te declaras comerciante (requisito de la Ley de Servicios Digitales de la UE), debes dar dirección, teléfono (verificado por SMS) y nombre legal, y se muestran públicamente en la ficha.
-3. **Nuevo elemento** → sube `gina-extension-3.1.0.zip`.
+3. **Nuevo elemento** → sube `gina-extension-3.1.0.zip` (si lo descargaste de GitHub Actions Artifacts, descomprime primero una vez para extraer el zip interno; no subas el zip contenedor).
 4. Pestaña **Ficha de la tienda**: descripción larga, categoría *Compras*, idioma, ícono 128, mosaico promocional pequeño 440×280 (obligatorio), marquesina 1400×560 (opcional) y de 1 a 5 capturas de 1280×800.
 5. Pestaña **Prácticas de privacidad**: propósito único, justificación de cada permiso, «no usa código remoto», casilla de *Contenido del sitio web*, las tres certificaciones y la URL de la política (todo en el bloque 5 de `store/ficha-tienda.md`).
 6. Pestaña **Distribución**: gratis; visibilidad *Pública* (o *No listada* para probar con amigos primero); países: todos, o al menos los 17 que cubre.
@@ -39,7 +44,7 @@ Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirm
 
 1. Entra en **Partner Center** con una **cuenta Microsoft personal** (Outlook/Hotmail; no una cuenta del trabajo o la escuela) y regístrate en el programa *Microsoft Edge*.
 2. Elige **Individual** o **Empresa** (no se puede cambiar) y completa los datos de contacto.
-3. **Crear nueva extensión** → sube el mismo zip.
+3. **Crear nueva extensión** → sube el mismo zip (`gina-extension-3.1.0.zip`, descomprimido una vez si vino de Artifacts).
 4. **Disponibilidad:** pública, en todos los mercados.
 5. **Propiedades:** categoría *Compras*, URL de la política, sitio web y correo de soporte.
 6. **Ficha de la tienda** (por idioma): descripción (de 250 a 10.000 caracteres; la larga cumple), logotipo 300×300 (`logo-300.png`), hasta 6 capturas, mosaico pequeño 440×280 opcional.
@@ -51,7 +56,7 @@ Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirm
 **Costo:** gratis. **Requisito:** Firefox 140 o superior (ya está en el manifest). **Revisión:** automática al subir, más una revisión manual que puede tardar más con permisos amplios.
 
 1. Crea una cuenta en **addons.mozilla.org** → *Developer Hub* → **Submit a New Add-on** → *On this site*.
-2. Sube el mismo zip. La validación automática debe dar **0 errores**. Hoy da 0 errores y 14 avisos esperados (`service_worker` no lo usa Firefox; los `innerHTML` pasan por una función de escape).
+2. Sube el mismo zip (`gina-extension-3.1.0.zip`, descomprimido una vez si vino de Artifacts). La validación automática debe dar **0 errores**. Hoy da 0 errores y 14 avisos esperados (`service_worker` no lo usa Firefox; los `innerHTML` pasan por una función de escape).
 3. Si pregunta por el código fuente: no hay paso de compilación ni minificación, así que responde que no hace falta.
 4. Completa la ficha (puedes reutilizar los textos), elige la licencia y pega las notas para revisores del bloque 7.
 5. El ID del complemento ya está fijado: `gina-who-your-money-backs@extension`. No lo cambies después de publicar.

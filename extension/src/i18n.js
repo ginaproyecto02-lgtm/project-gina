@@ -1109,6 +1109,57 @@
     return (CATEGORIAS_MAP[catId] && (CATEGORIAS_MAP[catId][l] || CATEGORIAS_MAP[catId]["es"])) || (defaultLabel || catId);
   }
 
+  // Traducción de países a los 6 idiomas
+  const PAISES_MAP = {
+    "Alemania": { es: "Alemania", en: "Germany", de: "Deutschland", fr: "Allemagne", it: "Germania", ja: "ドイツ" },
+    "Argentina": { es: "Argentina", en: "Argentina", de: "Argentinien", fr: "Argentine", it: "Argentina", ja: "アルゼンチン" },
+    "Austria": { es: "Austria", en: "Austria", de: "Österreich", fr: "Autriche", it: "Austria", ja: "オーストリア" },
+    "Bélgica": { es: "Bélgica", en: "Belgium", de: "Belgien", fr: "Belgique", it: "Belgio", ja: "ベルギー" },
+    "Bermudas": { es: "Bermudas", en: "Bermuda", de: "Bermuda", fr: "Bermudes", it: "Bermuda", ja: "バミューダ" },
+    "Brasil": { es: "Brasil", en: "Brazil", de: "Brasilien", fr: "Brésil", it: "Brasile", ja: "ブラジル" },
+    "Canadá": { es: "Canadá", en: "Canada", de: "Kanada", fr: "Canada", it: "Canada", ja: "カナダ" },
+    "Chile": { es: "Chile", en: "Chile", de: "Chile", fr: "Chili", it: "Cile", ja: "チリ" },
+    "China": { es: "China", en: "China", de: "China", fr: "Chine", it: "Cina", ja: "中国" },
+    "Colombia": { es: "Colombia", en: "Colombia", de: "Kolumbien", fr: "Colombie", it: "Colombia", ja: "コロンビア" },
+    "Corea del Sur": { es: "Corea del Sur", en: "South Korea", de: "Südkorea", fr: "Corée du Sud", it: "Corea del Sud", ja: "韓国" },
+    "Dinamarca": { es: "Dinamarca", en: "Denmark", de: "Dänemark", fr: "Danemark", it: "Danimarca", ja: "デンマーク" },
+    "EE.UU.": { es: "EE.UU.", en: "USA", de: "USA", fr: "États-Unis", it: "USA", ja: "米国" },
+    "Emiratos": { es: "Emiratos", en: "UAE", de: "VAE", fr: "Émirats", it: "Emirati", ja: "UAE" },
+    "España": { es: "España", en: "Spain", de: "Spanien", fr: "Espagne", it: "Spagna", ja: "スペイン" },
+    "Francia": { es: "Francia", en: "France", de: "Frankreich", fr: "France", it: "Francia", ja: "フランス" },
+    "Global": { es: "Global", en: "Global", de: "Global", fr: "Mondial", it: "Globale", ja: "グローバル" },
+    "Hong Kong": { es: "Hong Kong", en: "Hong Kong", de: "Hongkong", fr: "Hong Kong", it: "Hong Kong", ja: "香港" },
+    "India": { es: "India", en: "India", de: "Indien", fr: "Inde", it: "India", ja: "インド" },
+    "Irlanda": { es: "Irlanda", en: "Ireland", de: "Irland", fr: "Irlande", it: "Irlanda", ja: "アイルランド" },
+    "Israel": { es: "Israel", en: "Israel", de: "Israel", fr: "Israël", it: "Israele", ja: "イスラエル" },
+    "Italia": { es: "Italia", en: "Italy", de: "Italien", fr: "Italie", it: "Italia", ja: "イタリア" },
+    "Japón": { es: "Japón", en: "Japan", de: "Japan", fr: "Japon", it: "Giappone", ja: "日本" },
+    "Luxemburgo": { es: "Luxemburgo", en: "Luxembourg", de: "Luxemburg", fr: "Luxembourg", it: "Lussemburgo", ja: "ルクセンブルク" },
+    "México": { es: "México", en: "Mexico", de: "Mexiko", fr: "Mexique", it: "Messico", ja: "メキシコ" },
+    "Países Bajos": { es: "Países Bajos", en: "Netherlands", de: "Niederlande", fr: "Pays-Bas", it: "Paesi Bassi", ja: "オランダ" },
+    "Panamá": { es: "Panamá", en: "Panama", de: "Panama", fr: "Panama", it: "Panama", ja: "パナマ" },
+    "Qatar": { es: "Qatar", en: "Qatar", de: "Katar", fr: "Qatar", it: "Qatar", ja: "カタール" },
+    "Reino Unido": { es: "Reino Unido", en: "United Kingdom", de: "Vereinigtes Königreich", fr: "Royaume-Uni", it: "Regno Unito", ja: "英国" },
+    "Singapur": { es: "Singapur", en: "Singapore", de: "Singapur", fr: "Singapour", it: "Singapore", ja: "シンガポール" },
+    "Suiza": { es: "Suiza", en: "Switzerland", de: "Schweiz", fr: "Suisse", it: "Svizzera", ja: "スイス" },
+    "Turquía": { es: "Turquía", en: "Turkey", de: "Türkei", fr: "Turquie", it: "Turchia", ja: "トルコ" }
+  };
+
+  function paisLabel(p, lang) {
+    if (!p) return "";
+    const l = lang || getLang();
+    if (p.includes("/")) {
+      return p.split("/").map((part) => paisLabel(part.trim(), l)).join(" / ");
+    }
+    const cleanP = p.replace(/^Otros\s*\((.*)\)$/i, "$1").trim();
+    const entry = PAISES_MAP[cleanP] || PAISES_MAP[p];
+    if (entry) {
+      const translated = entry[l] || entry["en"] || entry["es"];
+      return p.startsWith("Otros (") ? (l === "es" ? p : translated) : translated;
+    }
+    return p;
+  }
+
   QED.I18N = {
     SUPPORTED,
     detectLang,
@@ -1120,7 +1171,8 @@
     estadoLabel,
     temaLabel,
     repLevel,
-    catLabel
+    catLabel,
+    paisLabel
   };
 
 })(typeof globalThis !== "undefined" ? globalThis : this);

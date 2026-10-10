@@ -258,7 +258,14 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   w.QED.I18N.setLang("en");
   analyze(w, url);
   const ownT = w.document.getElementById("gina-tarjeta").shadowRoot.querySelector("#sec-own").textContent;
-  check("Tarjeta en inglés usa controlador_en y no texto en español", ownT.includes("Dispersed institutional funds") && !ownT.includes("Sin accionista de control"), ownT);
+  const okEn = ownT.includes("Dispersed institutional funds") &&
+               !ownT.includes("Sin accionista de control") &&
+               ownT.includes("Switzerland") &&
+               !ownT.includes("Suiza") &&
+               ownT.includes("Norges Bank, BlackRock and others") &&
+               ownT.includes("Water extraction concessions") &&
+               ownT.includes("Nestlé Annual Report (SIX)");
+  check("Tarjeta en inglés: controlador_en, fondos_en, gobierno_en, fuente_en y país traducido", okEn, "Nestlé S.A. (EN card translated)");
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

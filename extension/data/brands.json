@@ -1,5 +1,5 @@
 {
- "version": "2026-10-10T0441",
+ "version": "2026-10-10T0612",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
  "grupos": {
   "walmart": {
@@ -10,13 +10,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "En México opera Walmex, ~70% de Walmart Inc.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Walmart (SEC)",
    "url": "https://stock.walmart.com/financials/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Walton family (~45% voting ownership)",
-   "nota_en": "World's largest retailer; in Mexico operates Walmex (~70% Walmart Inc.)."
+   "nota_en": "World's largest retailer; in Mexico operates Walmex (~70% Walmart Inc.).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Walmart Form 10-K (SEC)"
   },
   "amazon": {
    "empresa": "Amazon.com Inc. (marca propia)",
@@ -26,13 +29,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "AWS tiene contratos de nube con gobiernos",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Amazon (SEC)",
    "url": "https://ir.aboutamazon.com/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Jeff Bezos (founder) and institutional funds; no single controlling shareholder",
-   "nota_en": "Own retail and private labels (Amazon Basics)."
+   "nota_en": "Own retail and private labels (Amazon Basics).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "AWS holds major government cloud computing contracts",
+   "fuente_en": "Amazon Form 10-K (SEC)"
   },
   "costco": {
    "empresa": "Costco Wholesale (marca propia)",
@@ -42,13 +48,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Costco (SEC)",
    "url": "https://investor.costco.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (Vanguard, BlackRock; no controlling owner)",
-   "nota_en": "Membership warehouse club chain; owner of Kirkland Signature."
+   "nota_en": "Membership warehouse club chain; owner of Kirkland Signature.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Costco Form 10-K (SEC)"
   },
   "herdez": {
    "empresa": "Grupo Herdez",
@@ -64,7 +73,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Hernández-Pons family (68.9%)",
-   "nota_en": "Leading Mexican packaged foods manufacturer."
+   "nota_en": "Leading Mexican packaged foods manufacturer.",
+   "fondos_en": "GBM Administradora de Activos (6%)",
+   "gobierno_en": "",
+   "fuente_en": "Public records and press (June 2026)"
   },
   "herdezfuerte": {
    "empresa": "Herdez Del Fuerte (50% Grupo Herdez / 50% Grupo KUO)",
@@ -80,7 +92,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Hernández-Pons (Herdez) and Senderos (KUO) families",
-   "nota_en": "Joint venture owner of Del Fuerte tomato products."
+   "nota_en": "Joint venture owner of Del Fuerte tomato products.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": "Grupo KUO Corporate"
   },
   "mccormickmx": {
    "empresa": "McCormick de México (75% McCormick & Co. / 25% Grupo Herdez)",
@@ -96,7 +111,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "McCormick & Company (US), no controlling shareholder",
-   "nota_en": "McCormick increased its stake from 50% to 75% in Jan 2026."
+   "nota_en": "McCormick increased its stake from 50% to 75% in Jan 2026.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Grupo Herdez Press Release"
   },
   "bimbo": {
    "empresa": "Grupo Bimbo",
@@ -106,13 +124,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Mayor panificadora del mundo.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Reporte anual de Grupo Bimbo (BMV)",
    "url": "https://www.grupobimbo.com/es/inversionistas/reportes-anuales",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Servitje family and founding partners",
-   "nota_en": "World's largest baking company."
+   "nota_en": "World's largest baking company.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Grupo Bimbo Annual Report (BMV)"
   },
   "lala": {
    "empresa": "Grupo Lala",
@@ -128,23 +149,29 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Tricio family",
-   "nota_en": "Major Mexican dairy company; delisted from BMV in 2022."
+   "nota_en": "Major Mexican dairy company; delisted from BMV in 2022.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "El CEO: Who owns Grupo Lala?"
   },
   "alpura": {
-   "empresa": "Alpura",
-   "controlador": "Cooperativa de ganaderos productores de leche",
+   "empresa": "Ganaderos Productores de Leche Pura (Alpura)",
+   "controlador": "Socios ganaderos mexicanos (Ganaderos Productores de Leche Pura, S.A.P.I. de C.V.)",
    "pais": "México",
-   "tipo": "Cooperativa",
+   "tipo": "Privada",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "",
+   "nota": "Constituida como Ganaderos Productores de Leche Pura, S.A.P.I. de C.V., propiedad de más de un centenar de socios ganaderos mexicanos (142 ranchos); no es cooperativa formal sino sociedad promotora de inversión.",
    "confianza": "Verificado",
-   "fuente": "Sitio oficial Alpura: Ganaderos 100% dueños",
-   "url": "https://alpura.com/nosotros/",
+   "fuente": "El CEO: ¿Quién es el dueño de Alpura? (2023)",
+   "url": "https://elceo.com/negocios/quien-es-el-dueno-de-alpura/",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "Dairy farmers cooperative",
-   "nota_en": "Mexican dairy cooperative owned by over 100 dairy farms."
+   "controlador_en": "Mexican dairy farmer shareholders (Ganaderos Productores de Leche Pura, S.A.P.I. de C.V.)",
+   "nota_en": "Owned by over 100 Mexican dairy farmer partners; operates as an investment promotion corporation (SAPI), not a formal cooperative.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "El CEO: Who owns Alpura? (2023)"
   },
   "costena": {
    "empresa": "Grupo La Costeña",
@@ -160,7 +187,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "López Flores founding family",
-   "nota_en": "Mexican canned foods and sauces producer."
+   "nota_en": "Mexican canned foods and sauces producer.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "El CEO: Who owns La Costeña?"
   },
   "gruma": {
    "empresa": "Gruma",
@@ -170,13 +200,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Mayor productora de harina de maíz y tortillas del mundo.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Reporte anual de Gruma (BMV)",
    "url": "https://www.gruma.com/es/inversionistas/reportes-financieros/reportes-anuales.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "González Moreno family",
-   "nota_en": "World's largest corn flour and tortilla producer (Maseca, Mission)."
+   "nota_en": "World's largest corn flour and tortilla producer (Maseca, Mission).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Gruma Annual Report (BMV)"
   },
   "sigma": {
    "empresa": "Sigma Foods (antes Alfa)",
@@ -186,13 +219,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "También dueña de Campofrío (España) y Bar-S (EE.UU.).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Reporte anual de Sigma Alimentos (BMV)",
    "url": "https://www.sigma-alimentos.com/inversionistas/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Alfa founding families (Garza, Sada) and public funds",
-   "nota_en": "Packaged meats and dairy producer; owner of FUD, San Rafael, Campofrío."
+   "nota_en": "Packaged meats and dairy producer; owner of FUD, San Rafael, Campofrío.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Sigma Alimentos Annual Report (BMV)"
   },
   "pisa": {
    "empresa": "Grupo Pisa",
@@ -208,7 +244,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Álvarez Bermejillo founding family",
-   "nota_en": "Pharmaceutical and beverage manufacturer (Electrolit)."
+   "nota_en": "Pharmaceutical and beverage manufacturer (Electrolit).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "Major supplier of pharmaceuticals to public healthcare systems",
+   "fuente_en": "El CEO: Who owns Grupo PiSA?"
   },
   "becle": {
    "empresa": "Becle (José Cuervo)",
@@ -218,13 +257,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Reporte anual de Becle (BMV)",
    "url": "https://cuervo.com.mx/inversionistas/reportes-anuales/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Beckmann family",
-   "nota_en": "World's largest tequila producer (Jose Cuervo, 1800, Dobel)."
+   "nota_en": "World's largest tequila producer (Jose Cuervo, 1800, Dobel).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Becle Annual Report (BMV)"
   },
   "coca": {
    "empresa": "The Coca-Cola Company",
@@ -234,13 +276,16 @@
    "fondos": "Berkshire Hathaway, Vanguard, BlackRock",
    "gobierno": "En México la embotella Coca-Cola FEMSA, con concesiones de agua de CONAGUA",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Coca-Cola (SEC)",
    "url": "https://investors.coca-colacompany.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds; Berkshire Hathaway (~9%) largest shareholder",
-   "nota_en": "World's largest nonalcoholic beverage company."
+   "nota_en": "World's largest nonalcoholic beverage company.",
+   "fondos_en": "Berkshire Hathaway, Vanguard, BlackRock",
+   "gobierno_en": "Bottled in Mexico by Coca-Cola FEMSA, holds water extraction concessions from CONAGUA",
+   "fuente_en": "Coca-Cola Form 10-K (SEC)"
   },
   "pepsico": {
    "empresa": "PepsiCo",
@@ -250,13 +295,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de PepsiCo (SEC)",
    "url": "https://www.pepsico.com/investors/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Owner of Pepsi, Lay's/Sabritas, Quaker and Gatorade."
+   "nota_en": "Owner of Pepsi, Lay's/Sabritas, Quaker and Gatorade.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "PepsiCo Form 10-K (SEC)"
   },
   "nestle": {
    "empresa": "Nestlé S.A.",
@@ -266,13 +314,16 @@
    "fondos": "Norges Bank, BlackRock y otros",
    "gobierno": "Concesiones de agua en varios países",
    "nota": "Nestlé también tiene ~20% de L'Oréal.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Nestlé (SIX)",
    "url": "https://www.nestle.com/investors/annual-report",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "World's largest food and beverage group."
+   "nota_en": "World's largest food and beverage group.",
+   "fondos_en": "Norges Bank, BlackRock and others",
+   "gobierno_en": "Water extraction concessions in multiple countries",
+   "fuente_en": "Nestlé Annual Report (SIX)"
   },
   "unilever": {
    "empresa": "Unilever plc",
@@ -282,13 +333,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Unilever (LSE)",
    "url": "https://www.unilever.com/investor-relations/annual-reports-and-accounts/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Global consumer goods company (Dove, Knorr, Rexona)."
+   "nota_en": "Global consumer goods company (Dove, Knorr, Rexona).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Unilever Annual Report (LSE)"
   },
   "pg": {
    "empresa": "Procter & Gamble",
@@ -298,13 +352,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de P&G (SEC)",
    "url": "https://www.pginvestor.com/financial-reporting/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Global consumer goods and personal care leader (Ariel, Gillette, Pampers, Oral-B)."
+   "nota_en": "Global consumer goods and personal care leader (Ariel, Gillette, Pampers, Oral-B).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "P&G Form 10-K (SEC)"
   },
   "colgate": {
    "empresa": "Colgate-Palmolive",
@@ -314,13 +371,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Colgate-Palmolive (SEC)",
    "url": "https://investor.colgatepalmolive.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Oral care, personal hygiene and pet nutrition leader."
+   "nota_en": "Oral care, personal hygiene and pet nutrition leader.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Colgate-Palmolive Form 10-K (SEC)"
   },
   "kcm": {
    "empresa": "Kimberly-Clark (en México: Kimberly-Clark de México)",
@@ -330,13 +390,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Higiene y papel tisú (Kleenex, Pétalo, Huggies).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Kimberly-Clark / BMV KCM",
    "url": "https://investor.kimberly-clark.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Kimberly-Clark Corp. (US) and Mexican investors via BMV",
-   "nota_en": "Personal care and tissue paper products (Kleenex, Pétalo, Huggies)."
+   "nota_en": "Personal care and tissue paper products (Kleenex, Pétalo, Huggies).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Kimberly-Clark Form 10-K / BMV KCM"
   },
   "kenvue": {
    "empresa": "Kenvue (antes consumo de Johnson & Johnson)",
@@ -346,13 +409,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Marcas de autocuidado de la salud (Tylenol, Listerine, Neutrogena).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Kenvue (SEC)",
    "url": "https://investors.kenvue.com/financials/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Consumer health leader spun off from Johnson & Johnson."
+   "nota_en": "Consumer health leader spun off from Johnson & Johnson.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Kenvue Form 10-K (SEC)"
   },
   "mars": {
    "empresa": "Mars, Incorporated",
@@ -361,30 +427,36 @@
    "tipo": "Familia",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "Empresa privada familiar; acordó la compra de Kellanova en 2024.",
-   "confianza": "Verificado",
+   "nota": "Empresa privada familiar; adquirió Kellanova en dic-2025.",
+   "confianza": "Alta",
    "fuente": "Forbes: America's Largest Private Companies (Mars Inc.)",
    "url": "https://www.forbes.com/companies/mars/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Mars family (100%)",
-   "nota_en": "100% family-owned private company; agreed to acquire Kellanova."
+   "nota_en": "100% family-owned private company; completed acquisition of Kellanova in Dec 2025.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Forbes: America's Largest Private Companies (Mars Inc.)"
   },
   "kellanova": {
-   "empresa": "Kellanova (en adquisición por Mars)",
-   "controlador": "Mars, Incorporated (acuerdo definitivo de adquisición)",
+   "empresa": "Kellanova (Mars)",
+   "controlador": "Mars, Incorporated (familia Mars), desde dic-2025",
    "pais": "EE.UU.",
-   "tipo": "Corporación",
-   "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
+   "tipo": "Familia",
+   "fondos": "No cotiza en bolsa (deslistada tras la compra)",
    "gobierno": "",
-   "nota": "Antigua división de snacks de Kellogg's (Pringles, Cheez-It, Pop-Tarts).",
+   "nota": "Antigua división de snacks de Kellogg's (Pringles, Cheez-It, Pop-Tarts). Adquirida por Mars en dic-2025.",
    "confianza": "Verificado",
-   "fuente": "SEC EDGAR / Mars Press: Acquisition of Kellanova",
-   "url": "https://www.mars.com/news-and-stories/press-releases-statements/mars-to-acquire-kellanova",
+   "fuente": "Simpson Thacher (comunicado de cierre de adquisición, 2025)",
+   "url": "https://www.stblaw.com/about-us/news/view/2025/12/12/mars-completes-acquisition-of-kellanova",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "Mars, Incorporated (acquisition agreement)",
-   "nota_en": "Snacks division spun off from Kellogg (Pringles, Cheez-It)."
+   "controlador_en": "Mars, Incorporated (Mars family), since Dec 2025",
+   "nota_en": "Acquired by Mars, Incorporated in Dec 2025; delisted from NYSE.",
+   "fondos_en": "Not publicly traded (delisted following acquisition)",
+   "gobierno_en": "",
+   "fuente_en": "Simpson Thacher (closing announcement, 2025)"
   },
   "mondelez": {
    "empresa": "Mondelez International",
@@ -394,13 +466,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Dueña de Oreo, Trident, Tang, Halls, Cadbury y Milka.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Mondelez (SEC)",
    "url": "https://ir.mondelezinternational.com/financials/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Global snacks and confectionery leader (Oreo, Cadbury, Milka)."
+   "nota_en": "Global snacks and confectionery leader (Oreo, Cadbury, Milka).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Mondelez Form 10-K (SEC)"
   },
   "ferrero": {
    "empresa": "Grupo Ferrero",
@@ -416,7 +491,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Ferrero family (100%)",
-   "nota_en": "100% family-owned confectionery leader (Nutella, Kinder, Ferrero Rocher)."
+   "nota_en": "100% family-owned confectionery leader (Nutella, Kinder, Ferrero Rocher).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Ferrero Corporate Governance"
   },
   "kraftheinz": {
    "empresa": "Kraft Heinz",
@@ -426,13 +504,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Alimentos y condimentos procesados (Heinz, Kraft, Philadelphia).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Kraft Heinz (SEC)",
    "url": "https://ir.kraftheinzcompany.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Berkshire Hathaway (~27%) largest shareholder, alongside public institutional funds",
-   "nota_en": "Processed foods and condiments (Heinz, Kraft, Philadelphia)."
+   "nota_en": "Processed foods and condiments (Heinz, Kraft, Philadelphia).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Kraft Heinz Form 10-K (SEC)"
   },
   "danone": {
    "empresa": "Danone",
@@ -442,13 +523,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "Concesiones de agua (Bonafont, Evian)",
    "nota": "Líder en lácteos frescos, nutrición especializada y agua.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Document d'enregistrement universel de Danone (AMF)",
    "url": "https://www.danone.com/investor-relations/publications-events/annual-reports.html",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Dairy, plant-based products, and bottled water leader (Bonafont, Activia)."
+   "nota_en": "Dairy, plant-based products, and bottled water leader (Bonafont, Activia).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "Water extraction concessions (Bonafont, Evian)",
+   "fuente_en": "Danone Universal Registration Document (AMF)"
   },
   "abinbev": {
    "empresa": "AB InBev (en México: Grupo Modelo)",
@@ -458,13 +542,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "Concesiones de agua",
    "nota": "Mayor cervecera del mundo (Corona, Modelo, Budweiser, Stella Artois).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de AB InBev (Euronext)",
    "url": "https://www.ab-inbev.com/investors/annual-results/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Belgian founding families and 3G Capital",
-   "nota_en": "World's largest brewer (Corona, Modelo, Budweiser, Stella Artois)."
+   "nota_en": "World's largest brewer (Corona, Modelo, Budweiser, Stella Artois).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "Water extraction concessions",
+   "fuente_en": "AB InBev Annual Report (Euronext)"
   },
   "heineken": {
    "empresa": "Heineken (en México: Cuauhtémoc Moctezuma)",
@@ -474,13 +561,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "Concesiones de agua",
    "nota": "Segunda mayor cervecera mundial (Heineken, Tecate, Dos Equis).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Heineken (Euronext)",
    "url": "https://www.theheinekencompany.com/investors/results-reports",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Heineken family (via Heineken Holding)",
-   "nota_en": "Second largest global brewer (Heineken, Tecate, Dos Equis)."
+   "nota_en": "Second largest global brewer (Heineken, Tecate, Dos Equis).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "Water extraction concessions",
+   "fuente_en": "Heineken Annual Report (Euronext)"
   },
   "diageo": {
    "empresa": "Diageo",
@@ -492,11 +582,14 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe anual de Diageo",
-   "url": "",
+   "url": "https://www.diageo.com/en/investors/annual-report",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
+   "nota_en": "Global alcoholic beverages producer (Johnnie Walker, Smirnoff, Guinness).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Diageo Annual Report (LSE)"
   },
   "bacardi": {
    "empresa": "Bacardi Limited",
@@ -508,11 +601,14 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Conocimiento del modelo",
-   "url": "",
+   "url": "https://www.bacardilimited.com",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Bacardi family (100% privately held)",
+   "nota_en": "Family-owned spirits company (Bacardi, Bombay Sapphire, Grey Goose, Patrón).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Corporate records"
   },
   "toyo": {
    "empresa": "Toyo Suisan (Maruchan)",
@@ -528,7 +624,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "nissin": {
    "empresa": "Nissin Foods",
@@ -544,7 +643,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "duracell": {
    "empresa": "Duracell (100% Berkshire Hathaway)",
@@ -560,7 +662,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "energizer": {
    "empresa": "Energizer Holdings",
@@ -576,7 +681,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lego": {
    "empresa": "Grupo LEGO",
@@ -592,7 +700,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "mattel": {
    "empresa": "Mattel",
@@ -604,11 +715,14 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Mattel",
-   "url": "",
+   "url": "https://investor.mattel.com/",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
+   "nota_en": "Toy and entertainment company (Barbie, Hot Wheels, Fisher-Price).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Mattel Form 10-K (SEC)"
   },
   "hasbro": {
    "empresa": "Hasbro",
@@ -620,11 +734,14 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "Informe 10-K de Hasbro",
-   "url": "",
+   "url": "https://investor.hasbro.com/",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
+   "nota_en": "Toy and board game company (Monopoly, Nerf, Transformers).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Hasbro Form 10-K (SEC)"
   },
   "apple": {
    "empresa": "Apple Inc.",
@@ -636,11 +753,14 @@
    "nota": "",
    "confianza": "Alta",
    "fuente": "13F de la SEC; informe 10-K de Apple",
-   "url": "",
+   "url": "https://investor.apple.com/sec-filings/",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds; Vanguard, BlackRock, Berkshire Hathaway largest shareholders",
+   "nota_en": "Consumer technology and electronics leader (iPhone, Mac, iPad).",
+   "fondos_en": "Vanguard, BlackRock, Berkshire Hathaway",
+   "gobierno_en": "",
+   "fuente_en": "SEC Form 13F; Apple Form 10-K"
   },
   "samsung": {
    "empresa": "Samsung Electronics",
@@ -652,11 +772,14 @@
    "nota": "Samsung compró Harman (JBL, Harman Kardon) en 2017.",
    "confianza": "Alta",
    "fuente": "Informe anual de Samsung Electronics",
-   "url": "",
+   "url": "https://www.samsung.com/global/ir/",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Lee family (cross-shareholdings within Samsung Group) and institutional funds",
+   "nota_en": "Consumer electronics, semiconductors and mobile devices; acquired Harman in 2017.",
+   "fondos_en": "National Pension Service of Korea, BlackRock",
+   "gobierno_en": "",
+   "fuente_en": "Samsung Electronics Annual Report"
   },
   "xiaomi": {
    "empresa": "Xiaomi",
@@ -672,7 +795,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "huawei": {
    "empresa": "Huawei",
@@ -688,7 +814,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lenovo": {
    "empresa": "Lenovo (incluye Motorola)",
@@ -704,7 +833,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sony": {
    "empresa": "Sony Group",
@@ -720,7 +852,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lg": {
    "empresa": "LG Electronics",
@@ -736,7 +871,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "hp": {
    "empresa": "HP Inc.",
@@ -752,7 +890,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "dell": {
    "empresa": "Dell Technologies",
@@ -768,7 +909,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "hisense": {
    "empresa": "Hisense",
@@ -784,7 +928,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "tcl": {
    "empresa": "TCL",
@@ -800,7 +947,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "haier": {
    "empresa": "Haier",
@@ -816,7 +966,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "whirlpool": {
    "empresa": "Whirlpool",
@@ -832,7 +985,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "microsoft": {
    "empresa": "Microsoft",
@@ -848,7 +1004,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "nintendo": {
    "empresa": "Nintendo",
@@ -864,7 +1023,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "bose": {
    "empresa": "Bose Corporation",
@@ -880,7 +1042,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "philips": {
    "empresa": "Koninklijke Philips N.V. (Royal Philips)",
@@ -896,7 +1061,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Exor (Agnelli family, ~19-22%) and funds listed on Euronext",
-   "nota_en": "Personal care, maternal health (Avent, Sonicare) and medical technology."
+   "nota_en": "Personal care, maternal health (Avent, Sonicare) and medical technology.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "Hospital and public healthcare technology contracts",
+   "fuente_en": "Philips & Exor: Relationship Agreement Update / Euronext"
   },
   "sharkninja": {
    "empresa": "SharkNinja, Inc.",
@@ -906,13 +1074,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Fabricante de pequeños electrodomésticos de cocina (Ninja) y aspiración/cuidado del hogar (Shark).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "SEC EDGAR: Form 10-K y Schedule 13G de SharkNinja, Inc.",
    "url": "https://ir.sharkninja.com/financials/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Wang Xuning (majority voting control ~49%) and NYSE listed (SN)",
-   "nota_en": "Small kitchen appliances (Ninja) and home care / vacuums (Shark)."
+   "nota_en": "Small kitchen appliances (Ninja) and home care / vacuums (Shark).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "SharkNinja Form 10-K (SEC)"
   },
   "creality": {
    "empresa": "Shenzhen Creality 3D Technology Co., Ltd.",
@@ -928,7 +1099,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Founders (Chen Chun & partners) and public shareholders on HKEX (3388.HK)",
-   "nota_en": "Consumer 3D printer manufacturer (Ender, K1, CR-10)."
+   "nota_en": "Consumer 3D printer manufacturer (Ender, K1, CR-10).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": "J-Stories: Creality Debuts on HKEX (May 2026)"
   },
   "nike": {
    "empresa": "Nike Inc.",
@@ -938,13 +1112,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Incluye Jordan y Converse.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Nike (SEC)",
    "url": "https://investors.nike.com/investors/financial-reports-and-filings/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Phil Knight family (voting control via Swoosh LLC)",
-   "nota_en": "Footwear and athletic apparel (includes Jordan and Converse)."
+   "nota_en": "Footwear and athletic apparel (includes Jordan and Converse).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Nike Form 10-K (SEC)"
   },
   "adidas": {
    "empresa": "Adidas AG",
@@ -954,13 +1131,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Adidas",
    "url": "https://www.adidas-group.com/en/investors/financial-reports/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Global athletic footwear and apparel company."
+   "nota_en": "Global athletic footwear and apparel company.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Adidas Annual Report"
   },
   "puma": {
    "empresa": "Puma SE",
@@ -971,12 +1151,15 @@
    "gobierno": "",
    "nota": "Anta Sports (China) firmó en ene-2026 la compra del 29,06% a Artémis; cierre previsto antes de fin de 2026.",
    "confianza": "Verificado",
-   "fuente": "FashionUnited",
+   "fuente": "FashionUnited: Anta Sports becomes largest shareholder in Puma",
    "url": "https://fashionunited.uk/news/business/anta-sports-becomes-largest-shareholder-in-puma/2026012785939",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Artémis (Pinault family, ~29%; Anta Sports agreed purchase in Jan 2026)",
-   "nota_en": "Global sports apparel brand."
+   "nota_en": "Global sports apparel brand.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "FashionUnited: Anta Sports becomes largest shareholder in Puma"
   },
   "skechers": {
    "empresa": "Skechers",
@@ -987,12 +1170,15 @@
    "gobierno": "",
    "nota": "Dejó la bolsa al ser comprada por 3G en 2025 (~US$9.400 M).",
    "confianza": "Verificado",
-   "fuente": "Conocimiento del modelo",
-   "url": "https://www.skechers.com",
+   "fuente": "Latham & Watkins: 3G Capital Completes Acquisition of Skechers (sep-2025)",
+   "url": "https://www.lw.com/en/news/latham-represents-skechers-in-us94-billion-acquisition-by-3g-capital",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "3G Capital (Jorge Paulo Lemann), taken private in 2025",
-   "nota_en": "Footwear and lifestyle apparel."
+   "nota_en": "Footwear and lifestyle apparel; taken private by 3G Capital in 2025.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Latham & Watkins: 3G Capital Completes Acquisition of Skechers (Sep 2025)"
   },
   "reebok": {
    "empresa": "Reebok (Authentic Brands Group)",
@@ -1002,13 +1188,16 @@
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
    "nota": "Adidas la vendió en 2022.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Authentic Brands Group Corporate Portfolio",
    "url": "https://corporate.authentic.com/brands",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Authentic Brands Group (private equity funds)",
-   "nota_en": "Footwear and sportswear (sold by Adidas in 2022)."
+   "nota_en": "Footwear and sportswear (sold by Adidas in 2022).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Authentic Brands Group Portfolio"
   },
   "underarmour": {
    "empresa": "Under Armour",
@@ -1018,13 +1207,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Under Armour (SEC)",
    "url": "https://about.underarmour.com/investor-relations/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Kevin Plank (voting control)",
-   "nota_en": "Performance athletic apparel and footwear."
+   "nota_en": "Performance athletic apparel and footwear.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Under Armour Form 10-K (SEC)"
   },
   "newbalance": {
    "empresa": "New Balance",
@@ -1034,13 +1226,16 @@
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Forbes: America's Richest Families (Davis family / New Balance)",
    "url": "https://www.forbes.com/profile/jim-davis/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Davis family",
-   "nota_en": "Privately held athletic footwear and apparel."
+   "nota_en": "Privately held athletic footwear and apparel.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Forbes: America's Richest Families (Davis family / New Balance)"
   },
   "levis": {
    "empresa": "Levi Strauss & Co.",
@@ -1050,13 +1245,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Levi's (SEC)",
    "url": "https://investors.levistrauss.com/financials/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Haas family (founding family)",
-   "nota_en": "Denim and casual wear (Levi's, Dockers)."
+   "nota_en": "Denim and casual wear (Levi's, Dockers).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Levi's Form 10-K (SEC)"
   },
   "pvh": {
    "empresa": "PVH Corp.",
@@ -1066,13 +1264,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "La ropa es de PVH; los perfumes Calvin Klein se fabrican bajo licencia (Coty).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de PVH (SEC)",
    "url": "https://www.pvh.com/investor-relations/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Apparel company owning Calvin Klein and Tommy Hilfiger."
+   "nota_en": "Apparel company owning Calvin Klein and Tommy Hilfiger.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "PVH Form 10-K (SEC)"
   },
   "essilux": {
    "empresa": "EssilorLuxottica",
@@ -1082,13 +1283,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de EssilorLuxottica",
    "url": "https://www.essilorluxottica.com/en/investors/annual-reports/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Delfin (Del Vecchio family, ~32%)",
-   "nota_en": "World's largest eyewear company (Ray-Ban, Oakley, Persol)."
+   "nota_en": "World's largest eyewear company (Ray-Ban, Oakley, Persol).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "EssilorLuxottica Annual Report"
   },
   "capri": {
    "empresa": "Capri Holdings",
@@ -1098,13 +1302,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Vendió Versace a Prada en 2025.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Capri (SEC)",
    "url": "https://www.capriholdings.com/investors/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Luxury fashion group (Michael Kors, Jimmy Choo)."
+   "nota_en": "Luxury fashion group (Michael Kors, Jimmy Choo).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Capri Holdings Form 10-K (SEC)"
   },
   "tapestry": {
    "empresa": "Tapestry",
@@ -1114,13 +1321,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Tapestry (SEC)",
    "url": "https://www.tapestry.com/investors/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Luxury fashion holding (Coach, Kate Spade, Stuart Weitzman)."
+   "nota_en": "Luxury fashion holding (Coach, Kate Spade, Stuart Weitzman).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Tapestry Form 10-K (SEC)"
   },
   "vf": {
    "empresa": "VF Corporation",
@@ -1130,13 +1340,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de VF (SEC)",
    "url": "https://www.vfc.com/investors/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Apparel and footwear (Vans, The North Face, Timberland)."
+   "nota_en": "Apparel and footwear (Vans, The North Face, Timberland).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "VF Corp Form 10-K (SEC)"
   },
   "crocs": {
    "empresa": "Crocs Inc.",
@@ -1146,13 +1359,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Crocs (SEC)",
    "url": "https://investors.crocs.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "Footwear company (Crocs, HeyDude)."
+   "nota_en": "Footwear company (Crocs, HeyDude).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Crocs Form 10-K (SEC)"
   },
   "lacoste": {
    "empresa": "Lacoste (Maus Frères)",
@@ -1163,12 +1379,15 @@
    "gobierno": "",
    "nota": "",
    "confianza": "Verificado",
-   "fuente": "Maus Frères SA Corporate",
-   "url": "https://www.maus.ch",
+   "fuente": "Maus Frères: portafolio de marcas (Lacoste)",
+   "url": "https://maus.ch/landmark-brands/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Maus family (Maus Frères SA)",
-   "nota_en": "Swiss family holding owning Lacoste and Gant."
+   "nota_en": "Swiss family holding owning Lacoste and Gant.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Maus Frères: Landmark Brands Portfolio (Lacoste)"
   },
   "samsonite": {
    "empresa": "Samsonite International S.A.",
@@ -1178,13 +1397,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Mayor fabricante de equipaje y maletas del mundo; dueña también de American Tourister y Tumi.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Samsonite IR / HKEXnews",
    "url": "https://corporate.samsonite.com/en/investors",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Global institutional funds (HKEX: 1910)",
-   "nota_en": "World's largest luggage manufacturer; also owns American Tourister and Tumi."
+   "nota_en": "World's largest luggage manufacturer; also owns American Tourister and Tumi.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Samsonite Annual Report (HKEX)"
   },
   "loreal": {
    "empresa": "L'Oréal",
@@ -1194,13 +1416,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Acordó comprar Kering Beauté y los derechos de Creed (oct-2025).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de L'Oréal (AMF)",
    "url": "https://www.loreal-finance.com/fr/rapport-annuel",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Bettencourt family (~34%) and Nestlé (~20%)",
-   "nota_en": "Global cosmetics leader; agreed to acquire Kering Beauté in Oct 2025."
+   "nota_en": "Global cosmetics leader; agreed to acquire Kering Beauté in Oct 2025.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "L'Oréal Annual Report (AMF)"
   },
   "estee": {
    "empresa": "The Estée Lauder Companies",
@@ -1210,13 +1435,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Cosméticos y fragancias de prestigio (Clinique, MAC, Bobbi Brown).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Estée Lauder (SEC)",
    "url": "https://www.elcompanies.com/en/investors",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Lauder family (majority voting control)",
-   "nota_en": "Prestige cosmetics and fragrances leader (Clinique, MAC, Bobbi Brown)."
+   "nota_en": "Prestige cosmetics and fragrances leader (Clinique, MAC, Bobbi Brown).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Estée Lauder Form 10-K (SEC)"
   },
   "puig": {
    "empresa": "Puig",
@@ -1226,13 +1454,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Salió a bolsa en 2024.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Folleto y hechos relevantes CNMV / Puig IR",
    "url": "https://www.puig.com/es/inversores",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Puig family (majority voting control)",
-   "nota_en": "Spanish luxury fashion and beauty group; went public in 2024."
+   "nota_en": "Spanish luxury fashion and beauty group; went public in 2024.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Puig Prospectus (CNMV)"
   },
   "lvmh": {
    "empresa": "LVMH",
@@ -1242,13 +1473,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Mayor conglomerado de lujo del mundo (Dior, Sephora, Louis Vuitton).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de LVMH (AMF)",
    "url": "https://www.lvmh.com/investisseurs/rapports-et-publications/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Arnault family (~49% equity, ~64% voting)",
-   "nota_en": "World's largest luxury conglomerate (Louis Vuitton, Dior, Sephora)."
+   "nota_en": "World's largest luxury conglomerate (Louis Vuitton, Dior, Sephora).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "LVMH Annual Report (AMF)"
   },
   "chanel": {
    "empresa": "Chanel",
@@ -1264,7 +1498,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Alain and Gérard Wertheimer (100%)",
-   "nota_en": "100% privately owned luxury fashion and fragrance house."
+   "nota_en": "100% privately owned luxury fashion and fragrance house.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Companies House UK Filing"
   },
   "coty": {
    "empresa": "Coty",
@@ -1274,13 +1511,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Fabrica perfumes bajo licencia (Hugo Boss, Burberry, Calvin Klein, entre otros).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Coty (SEC)",
    "url": "https://investors.coty.com/financials/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "JAB Holding (Reimann family, ~50%)",
-   "nota_en": "Fragrance and beauty licensee for Hugo Boss, Burberry, Calvin Klein."
+   "nota_en": "Fragrance and beauty licensee for Hugo Boss, Burberry, Calvin Klein.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Coty Form 10-K (SEC)"
   },
   "natura": {
    "empresa": "Natura &Co",
@@ -1290,13 +1530,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Natura (CVM)",
    "url": "https://ri.naturaeco.com",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Brazilian founding partners and public funds",
-   "nota_en": "Brazilian cosmetics group; owner of Natura and Avon."
+   "nota_en": "Brazilian cosmetics group; owner of Natura and Avon.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Natura Annual Report (CVM)"
   },
   "beiersdorf": {
    "empresa": "Beiersdorf",
@@ -1306,13 +1549,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Beiersdorf",
    "url": "https://www.beiersdorf.com/investors/financial-reports",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Herz family (via maxingvest, ~50%)",
-   "nota_en": "Skincare manufacturer (Nivea, Eucerin, La Prairie)."
+   "nota_en": "Skincare manufacturer (Nivea, Eucerin, La Prairie).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Beiersdorf Annual Report"
   },
   "hermes": {
    "empresa": "Hermès",
@@ -1322,13 +1568,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Hermès (AMF)",
    "url": "https://finance.hermes.com/en/publications/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Hermès families (~66%)",
-   "nota_en": "French luxury design house."
+   "nota_en": "French luxury design house.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Hermès Annual Report (AMF)"
   },
   "kering": {
    "empresa": "Kering",
@@ -1338,13 +1587,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Kering (AMF)",
    "url": "https://www.kering.com/en/finance/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Pinault family (Artémis, ~42% equity, ~59% voting)",
-   "nota_en": "Luxury group owning Gucci, Saint Laurent, Balenciaga."
+   "nota_en": "Luxury group owning Gucci, Saint Laurent, Balenciaga.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Kering Annual Report (AMF)"
   },
   "prada": {
    "empresa": "Prada",
@@ -1354,13 +1606,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Compró Versace en 2025.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual de Prada (HKEX)",
    "url": "https://www.pradagroup.com/en/investors.html",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Prada-Bertelli family (~80%)",
-   "nota_en": "Italian luxury fashion group (Prada, Miu Miu; acquired Versace in 2025)."
+   "nota_en": "Italian luxury fashion group (Prada, Miu Miu; acquired Versace in 2025).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Prada Annual Report (HKEX)"
   },
   "galderma": {
    "empresa": "Galderma Group AG (Cetaphil)",
@@ -1376,7 +1631,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "L'Oréal (~20% anchor shareholder since Dec 2025) and EQT consortium; SIX Swiss listed",
-   "nota_en": "Dermatology leader (Cetaphil); former Nestlé unit."
+   "nota_en": "Dermatology leader (Cetaphil); former Nestlé unit.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "blue News: Galderma gains L'Oréal as anchor shareholder (Dec 2025)"
   },
   "pierrefabre": {
    "empresa": "Laboratoires Pierre Fabre (Avène)",
@@ -1392,23 +1650,29 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Pierre Fabre Foundation (public utility trust, 86.3%) and employees (9.8%)",
-   "nota_en": "The foundation supports access to healthcare in Southern hemisphere countries."
+   "nota_en": "The foundation supports access to healthcare in Southern hemisphere countries.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Laboratoires Pierre Fabre Official Ownership Model"
   },
   "isdin": {
    "empresa": "ISDIN",
-   "controlador": "Familias Puig y Esteve (50% / 50%; Puig acordó compra del 100% en sep-2026)",
+   "controlador": "Familias Puig y Esteve (50% / 50%; Puig acordó compra del 100% en sep-2024/2026)",
    "pais": "España",
    "tipo": "Familia",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
    "nota": "Líder español en fotoprotección y cuidado dermatológico.",
    "confianza": "Verificado",
-   "fuente": "Hecho relevante CNMV / Puig News",
-   "url": "https://www.puig.com/es/noticias",
+   "fuente": "Cinco Días: Puig acuerda comprar a Esteve el 50% de Isdin por 1.200 M€ (sep-2024)",
+   "url": "https://cincodias.elpais.com/companias/2024-09-16/puig-acuerda-comprar-a-esteve-el-50-de-isdin-por-1200-millones.html",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "Puig and Esteve families (50% / 50%; Puig agreed to acquire 100% in Sep 2026)",
-   "nota_en": "Spanish leader in photoprotection and dermatological skincare."
+   "controlador_en": "Puig and Esteve families (50% / 50%; Puig agreed to acquire 100% for €1.2B)",
+   "nota_en": "Spanish leader in photoprotection and dermatological skincare.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Cinco Días: Puig agrees to acquire 50% of Isdin from Esteve for €1.2B"
   },
   "purefishing": {
    "empresa": "Pure Fishing (Penn, Abu Garcia, Berkley)",
@@ -1424,7 +1688,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Sycamore Partners (private equity)",
-   "nota_en": "Fishing tackle manufacturer (Penn, Abu Garcia, Berkley)."
+   "nota_en": "Fishing tackle manufacturer (Penn, Abu Garcia, Berkley).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Jones Day: Sycamore Partners acquires Pure Fishing"
   },
   "shimano": {
    "empresa": "Shimano Inc.",
@@ -1434,13 +1701,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Fabricante líder de componentes de ciclismo y equipos de pesca.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe anual y gobierno corporativo de Shimano (TSE)",
    "url": "https://www.shimano.com/en/ir/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Founding Shimano family (~9.4% via Minato Kosan) and institutional funds (TSE: 7309)",
-   "nota_en": "Leading manufacturer of cycling components and fishing tackle."
+   "nota_en": "Leading manufacturer of cycling components and fishing tackle.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Shimano Annual Report (TSE)"
   },
   "implus": {
    "empresa": "Wisconsin Pharmacal (Potable Aqua)",
@@ -1456,7 +1726,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Gardner Standard LLC (US private equity, majority since Sep 2020)",
-   "nota_en": "Manufacturer and owner of Potable Aqua water purification tablets."
+   "nota_en": "Manufacturer and owner of Potable Aqua water purification tablets.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "amazon_tienda": {
    "empresa": "Amazon.com Inc.",
@@ -1466,13 +1739,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "AWS tiene contratos de nube con gobiernos",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Amazon (SEC)",
    "url": "https://ir.aboutamazon.com/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Jeff Bezos (founder) and institutional funds; no single controlling shareholder",
-   "nota_en": "Global e-commerce and cloud computing provider."
+   "nota_en": "Global e-commerce and cloud computing provider.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Amazon Form 10-K (SEC)"
   },
   "walmart_tienda": {
    "empresa": "Walmart Inc.",
@@ -1482,13 +1758,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Opera también Walmart Canadá, Líder (Chile) y Flipkart (India).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Walmart (SEC)",
    "url": "https://stock.walmart.com/financials/sec-filings/default.aspx",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Walton family (~45%)",
-   "nota_en": "World's largest retailer; operates Walmart US, Canada, Lider and Flipkart."
+   "nota_en": "World's largest retailer; operates Walmart US, Canada, Lider and Flipkart.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Walmart Form 10-K (SEC)"
   },
   "walmex": {
    "empresa": "Walmart de México (Walmex)",
@@ -1498,13 +1777,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "Incluye Walmart, Bodega Aurrera, Sam's Club y Walmart Express.",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Reporte anual de Walmex (BMV)",
    "url": "https://inversionistas.walmex.mx/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Walmart Inc. (~70%) → Walton family",
-   "nota_en": "Operates Walmart, Bodega Aurrera, Sam's Club in Mexico."
+   "nota_en": "Operates Walmart, Bodega Aurrera, Sam's Club in Mexico.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Walmex Annual Report (BMV)"
   },
   "costco_tienda": {
    "empresa": "Costco Wholesale",
@@ -1514,13 +1796,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Costco (SEC)",
    "url": "https://investor.costco.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (Vanguard, BlackRock)",
-   "nota_en": "Membership warehouse club chain."
+   "nota_en": "Membership warehouse club chain.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Costco Form 10-K (SEC)"
   },
   "mercadolibre": {
    "empresa": "MercadoLibre Inc.",
@@ -1536,7 +1821,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Marcos Galperin (Galperin Trust, ~7%) and institutional funds",
-   "nota_en": "Latin America's leading e-commerce and fintech ecosystem."
+   "nota_en": "Latin America's leading e-commerce and fintech ecosystem.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "target": {
    "empresa": "Target Corporation",
@@ -1546,13 +1834,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Target (SEC)",
    "url": "https://investors.target.com/financial-information/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "American retail corporation."
+   "nota_en": "American retail corporation.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Target Form 10-K (SEC)"
   },
   "bestbuy": {
    "empresa": "Best Buy",
@@ -1562,13 +1853,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Best Buy (SEC)",
    "url": "https://corporate.bestbuy.com/sec-filings/",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (founder Richard Schulze retains a stake)",
-   "nota_en": "Consumer electronics retailer."
+   "nota_en": "Consumer electronics retailer.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Best Buy Form 10-K (SEC)"
   },
   "homedepot": {
    "empresa": "The Home Depot",
@@ -1578,13 +1872,16 @@
    "fondos": "Vanguard, BlackRock y otros fondos indexados (pasivos)",
    "gobierno": "",
    "nota": "En México invierte US$1.300 M en Altamira (Tamaulipas).",
-   "confianza": "Verificado",
+   "confianza": "Alta",
    "fuente": "Informe 10-K de Home Depot (SEC)",
    "url": "https://ir.homedepot.com/financial-reports/sec-filings",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
-   "nota_en": "World's largest home improvement retailer."
+   "nota_en": "World's largest home improvement retailer.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "The Home Depot Form 10-K (SEC)"
   },
   "lowes": {
    "empresa": "Lowe's",
@@ -1600,7 +1897,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ebay": {
    "empresa": "eBay Inc.",
@@ -1616,7 +1916,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "etsy": {
    "empresa": "Etsy",
@@ -1632,7 +1935,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "kroger": {
    "empresa": "Kroger",
@@ -1648,7 +1954,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "cvs": {
    "empresa": "CVS Health",
@@ -1664,7 +1973,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "walgreens": {
    "empresa": "Walgreens Boots Alliance (Walgreens, Boots)",
@@ -1680,7 +1992,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "macys": {
    "empresa": "Macy's",
@@ -1696,7 +2011,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "pdd": {
    "empresa": "PDD Holdings (Temu, Pinduoduo)",
@@ -1712,7 +2030,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "shein": {
    "empresa": "Shein",
@@ -1728,7 +2049,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "alibaba": {
    "empresa": "Alibaba Group (AliExpress, Taobao, Tmall, Lazada)",
@@ -1744,7 +2068,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "liverpool": {
    "empresa": "El Puerto de Liverpool (Liverpool, Suburbia)",
@@ -1760,7 +2087,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "coppel": {
    "empresa": "Grupo Coppel (Coppel, BanCoppel)",
@@ -1776,7 +2106,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "elektra": {
    "empresa": "Grupo Elektra (Elektra, Banco Azteca)",
@@ -1792,7 +2125,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "soriana": {
    "empresa": "Organización Soriana",
@@ -1808,7 +2144,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "chedraui": {
    "empresa": "Grupo Comercial Chedraui",
@@ -1824,7 +2163,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sanborns": {
    "empresa": "Grupo Sanborns (Sanborns, Sears México, Claro Shop)",
@@ -1840,7 +2182,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "palacio": {
    "empresa": "El Palacio de Hierro",
@@ -1856,7 +2201,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "canadiantire": {
    "empresa": "Canadian Tire Corporation",
@@ -1872,7 +2220,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loblaw": {
    "empresa": "Loblaw (Loblaws, Real Canadian Superstore, Shoppers Drug Mart)",
@@ -1888,7 +2239,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "magalu": {
    "empresa": "Magazine Luiza (Magalu, Netshoes)",
@@ -1904,7 +2258,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "casasbahia": {
    "empresa": "Grupo Casas Bahia",
@@ -1920,7 +2277,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "americanas": {
    "empresa": "Americanas",
@@ -1936,7 +2296,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sea": {
    "empresa": "Sea Limited (Shopee)",
@@ -1952,7 +2315,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "carrefour": {
    "empresa": "Carrefour S.A.",
@@ -1968,7 +2334,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "coto": {
    "empresa": "Coto",
@@ -1984,7 +2353,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "falabella": {
    "empresa": "Falabella (Falabella, Sodimac, Tottus)",
@@ -2000,7 +2372,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ripley": {
    "empresa": "Ripley Corp",
@@ -2016,7 +2391,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "cencosud": {
    "empresa": "Cencosud (Jumbo, Paris, Santa Isabel, Easy)",
@@ -2032,7 +2410,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "tesco": {
    "empresa": "Tesco plc",
@@ -2048,7 +2429,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sainsburys": {
    "empresa": "J Sainsbury plc (Sainsbury's, Argos)",
@@ -2064,7 +2448,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "asda": {
    "empresa": "Asda",
@@ -2080,7 +2467,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "johnlewis": {
    "empresa": "John Lewis Partnership (John Lewis, Waitrose)",
@@ -2096,7 +2486,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "currys": {
    "empresa": "Currys plc",
@@ -2112,7 +2505,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "asos": {
    "empresa": "ASOS",
@@ -2128,7 +2524,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "next": {
    "empresa": "Next plc",
@@ -2144,7 +2543,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ocado": {
    "empresa": "Ocado Group",
@@ -2160,7 +2562,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "marks": {
    "empresa": "Marks & Spencer",
@@ -2176,7 +2581,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "otto": {
    "empresa": "Otto Group",
@@ -2192,7 +2600,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "zalando": {
    "empresa": "Zalando SE",
@@ -2208,7 +2619,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ceconomy": {
    "empresa": "Ceconomy (MediaMarkt, Saturn, MediaWorld)",
@@ -2224,7 +2638,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "schwarz": {
    "empresa": "Grupo Schwarz (Lidl, Kaufland)",
@@ -2240,7 +2657,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "aldi": {
    "empresa": "Aldi (Aldi Nord y Aldi Süd)",
@@ -2256,7 +2676,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "dm": {
    "empresa": "dm-drogerie markt",
@@ -2272,7 +2695,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "rossmann": {
    "empresa": "Rossmann",
@@ -2288,7 +2714,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "casino": {
    "empresa": "Groupe Casino (Cdiscount)",
@@ -2304,7 +2733,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "fnac": {
    "empresa": "Fnac Darty (Fnac, Darty, Unieuro)",
@@ -2320,7 +2752,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "leclerc": {
    "empresa": "E.Leclerc",
@@ -2336,7 +2771,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "mulliez": {
    "empresa": "Asociación Familiar Mulliez (Auchan, Decathlon, Boulanger, Leroy Merlin)",
@@ -2352,7 +2790,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "inditex": {
    "empresa": "Inditex (Zara)",
@@ -2367,8 +2808,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Amancio Ortega (~59%)",
+   "nota_en": "World's largest fast fashion group (Zara, Massimo Dutti, Bershka, Pull&Bear).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Inditex Annual Accounts (CNMV)"
   },
   "elcorteingles": {
    "empresa": "El Corte Inglés",
@@ -2384,7 +2828,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "mercadona": {
    "empresa": "Mercadona",
@@ -2400,7 +2847,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "esselunga": {
    "empresa": "Esselunga",
@@ -2416,7 +2866,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "coop_it": {
    "empresa": "Coop Italia",
@@ -2432,7 +2885,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "jd": {
    "empresa": "JD.com",
@@ -2448,7 +2904,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "bytedance": {
    "empresa": "ByteDance (Douyin, TikTok Shop)",
@@ -2464,7 +2923,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "suning": {
    "empresa": "Suning.com",
@@ -2480,7 +2942,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "rakuten": {
    "empresa": "Rakuten Group",
@@ -2496,7 +2961,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lycorp": {
    "empresa": "LY Corporation (Yahoo! Shopping, LINE)",
@@ -2512,7 +2980,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "mercari": {
    "empresa": "Mercari",
@@ -2528,7 +2999,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "fastretailing": {
    "empresa": "Fast Retailing (Uniqlo, GU, Theory)",
@@ -2544,7 +3018,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "yodobashi": {
    "empresa": "Yodobashi Camera",
@@ -2560,7 +3037,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "aeon": {
    "empresa": "Aeon Group",
@@ -2576,7 +3056,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "coupang": {
    "empresa": "Coupang Inc.",
@@ -2592,7 +3075,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "naver": {
    "empresa": "Naver Corporation",
@@ -2608,7 +3094,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "gmarket": {
    "empresa": "Gmarket",
@@ -2624,7 +3113,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "shinsegae": {
    "empresa": "Shinsegae / E-mart (SSG.com)",
@@ -2640,7 +3132,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lotte": {
    "empresa": "Grupo Lotte (Lotte ON, Lotte Mart)",
@@ -2656,7 +3151,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "elevenst": {
    "empresa": "11st",
@@ -2672,7 +3170,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "fairprice": {
    "empresa": "NTUC FairPrice",
@@ -2688,7 +3189,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "shufersal": {
    "empresa": "Shufersal",
@@ -2704,7 +3208,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ramilevy": {
    "empresa": "Rami Levy Hashikma",
@@ -2720,7 +3227,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "flipkart": {
    "empresa": "Flipkart (Flipkart, Myntra, Cleartrip)",
@@ -2736,7 +3246,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "reliance_retail": {
    "empresa": "Reliance Retail (JioMart, Ajio)",
@@ -2752,7 +3265,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "nykaa": {
    "empresa": "FSN E-Commerce (Nykaa)",
@@ -2768,7 +3284,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "meesho": {
    "empresa": "Meesho",
@@ -2784,7 +3303,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "tata_digital": {
    "empresa": "Tata Digital (BigBasket, Tata CLiQ, Croma)",
@@ -2800,7 +3322,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "eternal": {
    "empresa": "Eternal (Zomato, Blinkit)",
@@ -2816,7 +3341,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "expedia": {
    "empresa": "Expedia Group (Expedia, Hotels.com, Vrbo, Trivago)",
@@ -2832,7 +3360,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "booking": {
    "empresa": "Booking Holdings (Booking.com, Kayak, Priceline, Agoda, Momondo)",
@@ -2848,7 +3379,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "despegar": {
    "empresa": "Despegar (Decolar, Best Day)",
@@ -2864,7 +3398,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "tripcom": {
    "empresa": "Trip.com Group (Trip.com, Ctrip, Skyscanner, Qunar)",
@@ -2880,7 +3417,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "google_travel": {
    "empresa": "Alphabet (Google Vuelos)",
@@ -2896,7 +3436,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "edreams": {
    "empresa": "eDreams ODIGEO (eDreams, Opodo, GO Voyages)",
@@ -2912,7 +3455,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "kiwi": {
    "empresa": "Kiwi.com",
@@ -2928,7 +3474,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "hopper": {
    "empresa": "Hopper",
@@ -2944,7 +3493,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "makemytrip": {
    "empresa": "MakeMyTrip (MakeMyTrip, Goibibo)",
@@ -2960,7 +3512,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "airbnb": {
    "empresa": "Airbnb, Inc.",
@@ -2976,7 +3531,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "aeromexico": {
    "empresa": "Grupo Aeroméxico",
@@ -2992,7 +3550,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "volaris": {
    "empresa": "Volaris",
@@ -3008,7 +3569,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "viva": {
    "empresa": "Viva Aerobus",
@@ -3024,7 +3588,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "american": {
    "empresa": "American Airlines Group",
@@ -3040,7 +3607,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "delta": {
    "empresa": "Delta Air Lines",
@@ -3056,7 +3626,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "united": {
    "empresa": "United Airlines Holdings",
@@ -3072,7 +3645,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "southwest": {
    "empresa": "Southwest Airlines",
@@ -3088,7 +3664,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "jetblue": {
    "empresa": "JetBlue Airways",
@@ -3104,7 +3683,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "alaska": {
    "empresa": "Alaska Air Group (Alaska Airlines, Hawaiian Airlines)",
@@ -3120,7 +3702,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "spirit": {
    "empresa": "Spirit Airlines",
@@ -3136,7 +3721,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "frontier": {
    "empresa": "Frontier Group",
@@ -3152,7 +3740,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "aircanada": {
    "empresa": "Air Canada",
@@ -3168,7 +3759,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "westjet": {
    "empresa": "WestJet",
@@ -3184,7 +3778,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "porter": {
    "empresa": "Porter Airlines",
@@ -3200,7 +3797,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "latam": {
    "empresa": "LATAM Airlines Group",
@@ -3216,7 +3816,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "azul": {
    "empresa": "Azul Linhas Aéreas",
@@ -3232,7 +3835,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "abra": {
    "empresa": "Abra Group (GOL, Avianca)",
@@ -3248,7 +3854,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "aerolineas_ar": {
    "empresa": "Aerolíneas Argentinas",
@@ -3264,7 +3873,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "flybondi": {
    "empresa": "Flybondi",
@@ -3280,7 +3892,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "jetsmart": {
    "empresa": "JetSMART",
@@ -3296,7 +3911,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sky_cl": {
    "empresa": "Sky Airline",
@@ -3312,7 +3930,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "copa": {
    "empresa": "Copa Holdings",
@@ -3328,7 +3949,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "iag": {
    "empresa": "IAG (British Airways, Iberia, Vueling, Aer Lingus, Level)",
@@ -3344,7 +3968,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "easyjet": {
    "empresa": "easyJet",
@@ -3360,7 +3987,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ryanair": {
    "empresa": "Ryanair Holdings",
@@ -3376,7 +4006,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "virgin": {
    "empresa": "Virgin Atlantic",
@@ -3392,7 +4025,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lufthansa": {
    "empresa": "Lufthansa Group (Lufthansa, SWISS, Austrian, Brussels, Eurowings)",
@@ -3408,7 +4044,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "condor": {
    "empresa": "Condor",
@@ -3424,7 +4063,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "afklm": {
    "empresa": "Air France-KLM (Air France, KLM, Transavia)",
@@ -3440,7 +4082,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ita": {
    "empresa": "ITA Airways",
@@ -3456,7 +4101,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "airchina": {
    "empresa": "Air China",
@@ -3472,7 +4120,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "chinaeastern": {
    "empresa": "China Eastern Airlines",
@@ -3488,7 +4139,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "chinasouthern": {
    "empresa": "China Southern Airlines",
@@ -3504,7 +4158,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "hainan": {
    "empresa": "Hainan Airlines",
@@ -3520,7 +4177,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "jal": {
    "empresa": "Japan Airlines",
@@ -3536,7 +4196,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "ana": {
    "empresa": "ANA Holdings",
@@ -3552,7 +4215,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "korean": {
    "empresa": "Korean Air (incluye Asiana)",
@@ -3568,7 +4234,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sia": {
    "empresa": "Singapore Airlines (incluye Scoot)",
@@ -3584,7 +4253,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "elal": {
    "empresa": "El Al Israel Airlines",
@@ -3600,7 +4272,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "airindia": {
    "empresa": "Air India (incluye Air India Express)",
@@ -3616,7 +4291,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "indigo_in": {
    "empresa": "IndiGo (InterGlobe Aviation)",
@@ -3632,7 +4310,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "emirates": {
    "empresa": "Emirates",
@@ -3648,7 +4329,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "qatar": {
    "empresa": "Qatar Airways",
@@ -3664,7 +4348,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "turkish": {
    "empresa": "Turkish Airlines",
@@ -3680,7 +4367,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "cathay": {
    "empresa": "Cathay Pacific",
@@ -3696,7 +4386,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "panasonic": {
    "empresa": "Panasonic Holdings",
@@ -3712,7 +4405,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "canon": {
    "empresa": "Canon Inc.",
@@ -3728,7 +4424,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "nikon": {
    "empresa": "Nikon",
@@ -3744,7 +4443,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "casio": {
    "empresa": "Casio",
@@ -3760,7 +4462,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sharp": {
    "empresa": "Sharp",
@@ -3776,7 +4481,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "shiseido": {
    "empresa": "Shiseido",
@@ -3792,7 +4500,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "kao": {
    "empresa": "Kao Corporation (Bioré, Jergens, John Frieda)",
@@ -3807,8 +4518,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
+   "nota_en": "Japanese chemical and cosmetics company (Bioré, Jergens, John Frieda, Curél).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": "Kao Corporation Annual Report"
   },
   "asics": {
    "empresa": "ASICS",
@@ -3824,7 +4538,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "muji": {
    "empresa": "Ryohin Keikaku (Muji)",
@@ -3840,7 +4557,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "amore": {
    "empresa": "Amorepacific",
@@ -3855,8 +4575,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Suh family (Suh Kyung-bae) and institutional funds",
+   "nota_en": "South Korean beauty and cosmetics conglomerate (Sulwhasoo, Laneige, Innisfree).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": "Amorepacific Annual Report"
   },
   "nongshim": {
    "empresa": "Nongshim",
@@ -3872,7 +4595,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "cj": {
    "empresa": "CJ CheilJedang (Bibigo)",
@@ -3888,7 +4614,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "bbk": {
    "empresa": "BBK Electronics (Oppo, Vivo, OnePlus, Realme)",
@@ -3904,7 +4633,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "anker": {
    "empresa": "Anker Innovations",
@@ -3920,7 +4652,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "dji": {
    "empresa": "DJI",
@@ -3936,7 +4671,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "midea": {
    "empresa": "Midea Group",
@@ -3952,7 +4690,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "honor": {
    "empresa": "Honor Device",
@@ -3968,7 +4709,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "tata_consumer": {
    "empresa": "Tata Consumer Products (Tata Tea, Tetley, Tata Salt)",
@@ -3984,7 +4728,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "titan": {
    "empresa": "Titan Company (Titan, Tanishq, Fastrack)",
@@ -4000,7 +4747,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "amul": {
    "empresa": "Amul (GCMMF)",
@@ -4016,7 +4766,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "hul": {
    "empresa": "Hindustan Unilever",
@@ -4031,8 +4784,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Unilever (~62%)",
+   "nota_en": "Indian consumer goods subsidiary of Unilever (Surf Excel, Lifebuoy, Horlicks).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Hindustan Unilever Annual Report"
   },
   "itc": {
    "empresa": "ITC Limited",
@@ -4047,8 +4803,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds; British American Tobacco (~29%) and state insurers (LIC) are major shareholders",
+   "nota_en": "Indian multi-business conglomerate (packaged food, agribusiness, paperboards).",
+   "fondos_en": "",
+   "gobierno_en": "State-owned Life Insurance Corporation of India (LIC) is a major institutional shareholder",
+   "fuente_en": "ITC Limited Annual Report"
   },
   "dabur": {
    "empresa": "Dabur",
@@ -4064,7 +4823,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "britannia": {
    "empresa": "Britannia Industries",
@@ -4080,7 +4842,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "parle": {
    "empresa": "Parle Products",
@@ -4096,7 +4861,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "godrej": {
    "empresa": "Godrej Consumer Products",
@@ -4112,7 +4880,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "patanjali": {
    "empresa": "Patanjali Ayurved",
@@ -4128,7 +4899,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "strauss": {
    "empresa": "Strauss Group (Elite, Strauss)",
@@ -4144,7 +4918,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "osem": {
    "empresa": "Osem",
@@ -4160,7 +4937,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "tnuva": {
    "empresa": "Tnuva",
@@ -4176,7 +4956,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "sodastream": {
    "empresa": "SodaStream",
@@ -4192,7 +4975,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "brf": {
    "empresa": "BRF / MBRF (Sadia, Perdigão)",
@@ -4208,7 +4994,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "jbs": {
    "empresa": "JBS (Friboi, Seara, Swift, Pilgrim's)",
@@ -4223,8 +5012,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Batista family (J&F Investimentos)",
+   "nota_en": "World's largest meat processing company (Friboi, Seara, Swift, Pilgrim's). Also listed on NYSE since 2025.",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "JBS SEC & CVM Filings"
   },
   "alpargatas": {
    "empresa": "Alpargatas (Havaianas)",
@@ -4240,7 +5032,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "boticario": {
    "empresa": "Grupo Boticário (O Boticário, Eudora, Quem Disse Berenice?)",
@@ -4256,7 +5051,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "arcor": {
    "empresa": "Grupo Arcor (Arcor, Bagley, La Campagnola)",
@@ -4271,8 +5069,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Pagani family",
+   "nota_en": "Argentine multinational confectionery and food company (Arcor, Bagley, Bon o Bon).",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Company Profile and Corporate Model"
   },
   "ccu": {
    "empresa": "CCU (Cristal, Escudo, Kunstmann)",
@@ -4287,8 +5088,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Luksic Group and Heineken (joint controlling holding IRSA)",
+   "nota_en": "Chilean beverage producer and distributor (Cristal, Escudo, Kunstmann).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "CCU Annual Report (CMF)"
   },
   "conchaytoro": {
    "empresa": "Viña Concha y Toro",
@@ -4304,7 +5108,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "carozzi": {
    "empresa": "Carozzi",
@@ -4320,7 +5127,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "henkel": {
    "empresa": "Henkel (Persil, Schwarzkopf, Pritt)",
@@ -4335,8 +5145,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Henkel family (shareholders' agreement pool holding >60% voting shares)",
+   "nota_en": "German chemical and consumer goods manufacturer (Persil, Schwarzkopf, Loctite, Pritt).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Henkel Annual Report"
   },
   "haribo": {
    "empresa": "Haribo",
@@ -4352,7 +5165,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "bosch": {
    "empresa": "Bosch (incluye BSH: Bosch, Siemens electrodomésticos)",
@@ -4368,7 +5184,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "miele": {
    "empresa": "Miele",
@@ -4384,7 +5203,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "oetker": {
    "empresa": "Dr. Oetker",
@@ -4400,7 +5222,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "melitta": {
    "empresa": "Melitta",
@@ -4416,7 +5241,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lactalis": {
    "empresa": "Lactalis (Président, Galbani, Parmalat)",
@@ -4432,7 +5260,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "seb": {
    "empresa": "Groupe SEB (T-fal, Rowenta, Moulinex, Krups)",
@@ -4447,8 +5278,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Lescure family and founder families (controlling concert agreement)",
+   "nota_en": "French small domestic appliances and cookware conglomerate (T-fal/Tefal, Rowenta, Moulinex, Krups, WMF).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Groupe SEB Annual Report (AMF)"
   },
   "michelin": {
    "empresa": "Michelin",
@@ -4464,7 +5298,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "barilla": {
    "empresa": "Barilla",
@@ -4480,7 +5317,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "lavazza": {
    "empresa": "Lavazza",
@@ -4496,7 +5336,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "delonghi": {
    "empresa": "De'Longhi (De'Longhi, Kenwood, Braun electrodomésticos)",
@@ -4512,7 +5355,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "illy": {
    "empresa": "illycaffè",
@@ -4528,7 +5374,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "mahou": {
    "empresa": "Mahou San Miguel",
@@ -4544,7 +5393,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "damm": {
    "empresa": "Damm (Estrella Damm)",
@@ -4560,7 +5412,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "idilia": {
    "empresa": "Idilia Foods (Cola Cao, Nocilla)",
@@ -4576,7 +5431,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "abf": {
    "empresa": "Associated British Foods (Primark, Twinings, Ovomaltine)",
@@ -4591,8 +5449,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Weston family (Wittington Investments, ~55%)",
+   "nota_en": "British multinational food processing and retailing company (Primark, Twinings, Ovaltine).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Associated British Foods Annual Report"
   },
   "reckitt": {
    "empresa": "Reckitt (Lysol, Vanish, Durex, Finish)",
@@ -4607,8 +5468,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds (no controlling shareholder)",
+   "nota_en": "British multinational consumer health and hygiene company (Lysol, Vanish, Durex, Finish, Dettol, Strepsils).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Reckitt Benckiser Annual Report"
   },
   "haleon": {
    "empresa": "Haleon (Sensodyne, Advil, Centrum)",
@@ -4623,8 +5487,11 @@
    "url": "",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": ""
+   "controlador_en": "Dispersed institutional funds (spinned off from GSK and Pfizer; no controlling shareholder)",
+   "nota_en": "British consumer healthcare company (Sensodyne, Advil, Centrum, Voltaren, Panadol).",
+   "fondos_en": "Vanguard, BlackRock and other passive index funds",
+   "gobierno_en": "",
+   "fuente_en": "Haleon Annual Report"
   },
   "loc_sociedad_cooperativa_trabajado": {
    "empresa": "Sociedad Cooperativa Trabajadores de Pascual S.C.L.",
@@ -4637,10 +5504,13 @@
    "confianza": "Alta",
    "fuente": "Expansión: ¿Quién es el dueño de Pascual?",
    "url": "https://expansion.mx/empresas/2025/07/04/quien-es-el-dueno-de-pascual",
-   "ahorro": true,
-   "ahorro_fuente": "Línea de bebidas de consumo popular a precio accesible",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "Worker-owned cooperative with over 4,000 members electing management",
-   "nota_en": "Mexican beverage cooperative (Boing, Pascual)."
+   "nota_en": "Mexican beverage cooperative (Boing, Pascual).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_grupo_jumex": {
    "empresa": "Grupo Jumex",
@@ -4656,7 +5526,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "López family (Eugenio López Alonso, sole heir to founder Eugenio López Rodea)",
-   "nota_en": "Mexican juice and beverage company."
+   "nota_en": "Mexican juice and beverage company.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_grupo_la_moderna": {
    "empresa": "Grupo La Moderna",
@@ -4669,10 +5542,13 @@
    "confianza": "Verificar (fuente secundaria)",
    "fuente": "Tus Buenas Noticias: ¿Quién es el dueño de La Moderna?",
    "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/04/13/58915-quien-es-el-dueno-de-sopas-la-moderna",
-   "ahorro": true,
-   "ahorro_fuente": "Canasta básica alimentaria de consumo popular (INEGI/PROFECO)",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "Monroy Carrillo and Monroy Saint Martín families (~95%)",
-   "nota_en": "Mexican pasta and wheat food products leader."
+   "nota_en": "Mexican pasta and wheat food products leader.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_chocolatera_de_jalisco_s_a_de_": {
    "empresa": "Chocolatera de Jalisco, S.A. de C.V.",
@@ -4688,7 +5564,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Gómez Ibarra family (fourth generation management)",
-   "nota_en": "Historic Mexican table chocolate producer (Chocolate Ibarra)."
+   "nota_en": "Historic Mexican table chocolate producer (Chocolate Ibarra).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_f_brica_de_jab_n_la_corona_s_a": {
    "empresa": "Fábrica de Jabón La Corona, S.A. de C.V.",
@@ -4701,10 +5580,13 @@
    "confianza": "Alta",
    "fuente": "El CEO: Zote, cómo surgió y quién es el dueño",
    "url": "https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/",
-   "ahorro": true,
-   "ahorro_fuente": "PROFECO: Estudios de calidad y precio en Revista del Consumidor",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "González family (Mexican family-owned manufacturer founded in 1920)",
-   "nota_en": "Detergents and laundry soaps of high yield and affordability (Zote, Roma, Blanca Nieves, Foca)."
+   "nota_en": "Detergents and laundry soaps (Zote, Roma, Blanca Nieves, Foca).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_galletas_dond": {
    "empresa": "Galletas Dondé",
@@ -4717,10 +5599,13 @@
    "confianza": "Alta",
    "fuente": "Diario de Yucatán: Galletas Dondé, 115 años",
    "url": "https://www.yucatan.com.mx/merida/2021/05/05/galletas-donde-115-anos-en-el-mercado.html",
-   "ahorro": true,
-   "ahorro_fuente": "Línea de galletas de consumo popular regional",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "Gómory family (Yucatan, Mexico)",
-   "nota_en": "Regional Mexican cookie and cracker producer founded in 1905."
+   "nota_en": "Regional Mexican cookie and cracker producer founded in 1905.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_grupo_flexi": {
    "empresa": "Grupo Flexi (Flexi)",
@@ -4736,7 +5621,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_land_o_lakes_inc": {
    "empresa": "Land O'Lakes, Inc.",
@@ -4752,7 +5640,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_cropp_cooperative": {
    "empresa": "CROPP Cooperative",
@@ -4768,7 +5659,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_cabot_creamery_cooperative": {
    "empresa": "Cabot Creamery Cooperative (subsidiaria de Agri-Mark)",
@@ -4784,7 +5678,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_tillamook_county_creamery_asso": {
    "empresa": "Tillamook County Creamery Association",
@@ -4800,7 +5697,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_ocean_spray_cranberries_inc": {
    "empresa": "Ocean Spray Cranberries, Inc.",
@@ -4816,7 +5716,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_welch_s": {
    "empresa": "Welch's / National Grape Cooperative Association",
@@ -4832,7 +5735,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_bob_s_red_mill_natural_foods": {
    "empresa": "Bob's Red Mill Natural Foods",
@@ -4848,7 +5754,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_king_arthur_baking_company_inc": {
    "empresa": "King Arthur Baking Company, Inc.",
@@ -4864,7 +5773,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_patagonia_inc": {
    "empresa": "Patagonia, Inc.",
@@ -4880,7 +5792,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_dr_bronner_s_magic_soaps": {
    "empresa": "Dr. Bronner's Magic Soaps",
@@ -4896,7 +5811,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_the_hershey_company": {
    "empresa": "The Hershey Company",
@@ -4912,7 +5830,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_d_g_yuengling_son": {
    "empresa": "D.G. Yuengling & Son",
@@ -4928,7 +5849,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_sierra_nevada_brewing_co": {
    "empresa": "Sierra Nevada Brewing Co.",
@@ -4944,7 +5868,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_the_boston_beer_company": {
    "empresa": "The Boston Beer Company",
@@ -4960,7 +5887,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_agropur_coop_rative": {
    "empresa": "Agropur Coopérative",
@@ -4976,7 +5906,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_gay_lea_foods_co_operative_lim": {
    "empresa": "Gay Lea Foods Co-operative Limited",
@@ -4992,7 +5925,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_cooperativa_central_aurora_ali": {
    "empresa": "Cooperativa Central Aurora Alimentos",
@@ -5008,7 +5944,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_latic_nios_bela_vista_s_a": {
    "empresa": "Laticínios Bela Vista S.A.",
@@ -5024,7 +5963,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_qu_mica_amparo_ltda": {
    "empresa": "Química Amparo Ltda.",
@@ -5040,7 +5982,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_cooperativa_agr_cola_y_lechera": {
    "empresa": "Cooperativa Agrícola y Lechera de La Unión Ltda.",
@@ -5056,7 +6001,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_procafecol_s_a": {
    "empresa": "Procafecol S.A. / Federación Nacional de Cafeteros de Colombia",
@@ -5072,7 +6020,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_arla_foods_amba": {
    "empresa": "Arla Foods amba",
@@ -5088,7 +6039,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_the_co_operative_group": {
    "empresa": "The Co-operative Group",
@@ -5104,7 +6058,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_capsa_food": {
    "empresa": "Capsa Food",
@@ -5120,7 +6077,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_covap_sociedad_cooperativa_and": {
    "empresa": "COVAP, Sociedad Cooperativa Andaluza",
@@ -5136,7 +6096,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_eroski_s_coop": {
    "empresa": "Eroski S. Coop.",
@@ -5152,7 +6115,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_hijos_de_rivera_s_a": {
    "empresa": "Hijos de Rivera S.A.",
@@ -5168,7 +6134,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_chocolates_valor_s_a": {
    "empresa": "Chocolates Valor S.A.",
@@ -5184,7 +6153,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_camper_s_l": {
    "empresa": "Camper S.L.",
@@ -5200,7 +6172,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_sodiaal_international": {
    "empresa": "Sodiaal International (Sodiaal Union)",
@@ -5216,7 +6191,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_andros": {
    "empresa": "Andros (Groupe Andros)",
@@ -5232,7 +6210,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_granarolo_s_p_a": {
    "empresa": "Granarolo S.p.A.",
@@ -5248,7 +6229,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_mutti_s_p_a": {
    "empresa": "Mutti S.p.A.",
@@ -5264,7 +6248,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_pastificio_rummo_s_p_a": {
    "empresa": "Pastificio Rummo S.p.A.",
@@ -5280,7 +6267,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_f_lli_de_cecco_di_filippo_fara": {
    "empresa": "F.lli De Cecco di Filippo Fara San Martino S.p.A.",
@@ -5296,7 +6286,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_ehrmann_se": {
    "empresa": "Ehrmann SE",
@@ -5312,7 +6305,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_alfred_ritter_gmbh_co_kg": {
    "empresa": "Alfred Ritter GmbH & Co. KG",
@@ -5328,7 +6324,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_werner_mertz_gmbh": {
    "empresa": "Werner & Mertz GmbH",
@@ -5344,7 +6343,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_japanese_consumers_co_operativ": {
    "empresa": "Japanese Consumers' Co-operative Union (JCCU)",
@@ -5360,7 +6362,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_seoul_dairy_cooperative": {
    "empresa": "Seoul Dairy Cooperative",
@@ -5376,7 +6381,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_binggrae_co_ltd": {
    "empresa": "Binggrae Co., Ltd.",
@@ -5392,7 +6400,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_karnataka_milk_federation": {
    "empresa": "Karnataka Milk Federation (KMF)",
@@ -5408,7 +6419,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_haldiram_snacks_foods_pvt_ltd": {
    "empresa": "Haldiram Snacks Foods Pvt Ltd",
@@ -5424,7 +6438,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_ntuc_fairprice_co_operative_li": {
    "empresa": "NTUC FairPrice Co-operative Limited",
@@ -5440,7 +6457,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_sancor_cooperativas_unidas": {
    "empresa": "SanCor Cooperativas Unidas Limitada",
@@ -5456,7 +6476,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_cooperativa_obrera_ltda": {
    "empresa": "Cooperativa Obrera Limitada",
@@ -5472,7 +6495,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_cooperativa_agricola_liebig": {
    "empresa": "Cooperativa Agrícola de la Colonia Liebig",
@@ -5488,7 +6514,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_colanta_cooperativa": {
    "empresa": "Colanta (Cooperativa Lechera de Antioquia)",
@@ -5504,7 +6533,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_gran_cafe_de_la_parroquia": {
    "empresa": "Gran Café de La Parroquia",
@@ -5520,7 +6552,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_industrias_guacamaya": {
    "empresa": "Industrias Guacamaya",
@@ -5536,7 +6571,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "",
-   "nota_en": ""
+   "nota_en": "",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_laboratorios_grisi": {
    "empresa": "Laboratorios Grisi",
@@ -5549,10 +6587,13 @@
    "confianza": "Alta",
    "fuente": "Expansión: Grisi, 160 años de historia",
    "url": "https://expansion.mx/empresas/2023/05/23/grisi-160-anos-historia",
-   "ahorro": true,
-   "ahorro_fuente": "Línea dermatológica y jabón neutro de precio accesible en farmacia",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "Grisi family (100% Mexican family-owned pharmaceutical group founded in 1863)",
-   "nota_en": "Dermatological skincare, neutral soap, mother of pearl and facial care."
+   "nota_en": "Dermatological skincare, neutral soap, mother of pearl and facial care.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_genomma_lab": {
    "empresa": "Genomma Lab (Cuidado Facial)",
@@ -5565,10 +6606,13 @@
    "confianza": "Alta",
    "fuente": "Relación con Inversionistas Genomma Lab (BMV)",
    "url": "https://inversionistas.genommalab.com/",
-   "ahorro": true,
-   "ahorro_fuente": "Líneas de cuidado facial de venta masiva en farmacias",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "Rodrigo Herrera (founder) and public shareholders on BMV (LABB)",
-   "nota_en": "Facial skincare, anti-aging creams and accessible pharmacy derma care."
+   "nota_en": "Facial skincare, anti-aging creams and pharmacy derma care.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_farmacias_similares": {
    "empresa": "Grupo Por Un País Mejor (Farmacias Similares)",
@@ -5577,14 +6621,17 @@
    "tipo": "Familia",
    "fondos": "",
    "gobierno": "",
-   "nota": "Productos farmacéuticos y dermocosméticos accesibles (Eternal Secret, SimiCrema, SimiSolar).",
+   "nota": "Productos farmacéuticos y dermocosméticos (Eternal Secret, SimiCrema, SimiSolar).",
    "confianza": "Alta",
    "fuente": "El CEO: Quién es el dueño de Farmacias Similares / Grupo Por Un País Mejor",
    "url": "https://elceo.com/negocios/quien-es-el-dueno-de-farmacias-similares-y-por-que-se-le-llama-dr-simi/",
-   "ahorro": true,
-   "ahorro_fuente": "Modelo comercial de medicamentos genéricos y dermocosmética a precio popular",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "González Torres family (Víctor González Torres founder, Víctor González Herrera executive president and CEO)",
-   "nota_en": "Accessible pharmaceuticals and skincare (Eternal Secret, SimiCrema, SimiSolar)."
+   "nota_en": "Pharmaceuticals and skincare (Eternal Secret, SimiCrema, SimiSolar).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_jaloma": {
    "empresa": "Laboratorios Jaloma",
@@ -5597,26 +6644,32 @@
    "confianza": "Alta",
    "fuente": "Revista Abasto: Jaloma celebra 80 años",
    "url": "https://abasto.com/noticias/laboratorios-jaloma-celebran-80-anos/",
-   "ahorro": true,
-   "ahorro_fuente": "Cuidado de la piel e insumos de botiquín de costo básico popular",
+   "ahorro": false,
+   "ahorro_fuente": "",
    "controlador_en": "López family (founded in 1940 by Esteban López Chávez, Javier López Macías and descendants)",
-   "nota_en": "Basic personal care and first aid essentials (rose water, body oils, petroleum jelly)."
+   "nota_en": "Basic personal care and first aid essentials (rose water, body oils, petroleum jelly).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_sesderma": {
    "empresa": "Laboratorios Sesderma",
    "controlador": "JB Capital (Javier Botín, 50%) y Dr. Gabriel Serrano y familia (50%).",
    "pais": "España",
-   "tipo": "Familia + fondos",
+   "tipo": "Familia + capital privado",
    "fondos": "",
    "gobierno": "",
-   "nota": "Laboratorio dermocosmético español fundado en 1989; JB Capital adquirió el 50% en julio de 2026.",
+   "nota": "Laboratorio dermocosmético fundado en 1989; el fondo de capital privado JB Capital adquirió el 50% en 2026 y el Dr. Gabriel Serrano conserva el otro 50%. Al tener 50% en capital privado, no clasifica como alternativa familiar independiente.",
    "confianza": "Alta",
    "fuente": "El Economista: JB Capital entra en Sesderma con el 50%",
    "url": "https://www.eleconomista.es/salud-farmacia/noticias/12918804/07/26/jb-capital-entra-en-el-capital-de-sesderma-con-el-50-para-impulsar-su-crecimiento.html",
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "JB Capital (Javier Botín, 50%) and Dr. Gabriel Serrano & family (50%)",
-   "nota_en": "Spanish dermatological laboratory founded in 1989; JB Capital acquired 50% in July 2026."
+   "nota_en": "Spanish dermatological laboratory founded in 1989; private equity firm JB Capital acquired 50% in 2026 alongside founder Dr. Gabriel Serrano (50%).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_cantabria_labs": {
    "empresa": "Cantabria Labs",
@@ -5632,7 +6685,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Matji family (Matji de Arroquia siblings; Juan Matji, president)",
-   "nota_en": "Spanish dermatological skincare and photoprotection (Heliocare, Endocare)."
+   "nota_en": "Spanish dermatological skincare and photoprotection (Heliocare, Endocare).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_vanicream": {
    "empresa": "Vanicream (Pharmaceutical Specialties, Inc.)",
@@ -5648,7 +6704,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Conrad Thompson, Ed Mansfield and founding partners in Rochester, MN",
-   "nota_en": "Skincare for sensitive skin and dermatitis, free of dyes, fragrance and parabens."
+   "nota_en": "Skincare for sensitive skin and dermatitis, free of dyes, fragrance and parabens.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   },
   "loc_naos": {
    "empresa": "NAOS (Bioderma, Institut Esthederm)",
@@ -5664,7 +6723,10 @@
    "ahorro": false,
    "ahorro_fuente": "",
    "controlador_en": "Jean-Noël Thorel Foundation (100% philanthropic endowment fund)",
-   "nota_en": "French ecobiology and skincare group (Bioderma, Institut Esthederm, Etat Pur)."
+   "nota_en": "French ecobiology and skincare group (Bioderma, Institut Esthederm, Etat Pur).",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
   }
  },
  "marcas": [
