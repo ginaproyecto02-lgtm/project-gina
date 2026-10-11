@@ -1,0 +1,24 @@
+[
+  {
+    "id": "cofepris-philips-bipap-2024",
+    "marca": "Philips",
+    "grupo": "philips",
+    "modelo": "BiPAP",
+    "lote": "",
+    "autoridad": "COFEPRIS",
+    "titulo": "Alerta sanitaria sobre equipos BiPAP y CPAP",
+    "url": "https://www.gob.mx/cofepris/articulos/alertas-sanitarias",
+    "fecha": "2024"
+  },
+  {
+    "id": "profeco-purina-mascotas-2024",
+    "marca": "Purina",
+    "grupo": "nestle",
+    "modelo": "Pro Plan Alimento Húmedo",
+    "lote": "LOTE-2024-X",
+    "autoridad": "PROFECO",
+    "titulo": "Llamado a revisión de lote específico de alimento para mascotas",
+    "url": "https://www.gob.mx/profeco",
+    "fecha": "2024"
+  }
+]

@@ -85,6 +85,12 @@ dominios_path = os.path.join(os.path.dirname(__file__), "dominios.json")
 assert os.path.exists(dominios_path), f"Falta el archivo de dominios: {dominios_path}"
 DOMINIOS = json.load(open(dominios_path, encoding="utf-8"))
 
+aditivos_path = os.path.join(os.path.dirname(__file__), "aditivos.json")
+ADITIVOS = json.load(open(aditivos_path, encoding="utf-8")) if os.path.exists(aditivos_path) else []
+
+alertas_path = os.path.join(os.path.dirname(__file__), "alertas.json")
+ALERTAS = json.load(open(alertas_path, encoding="utf-8")) if os.path.exists(alertas_path) else []
+
 brands = {
     "version": VERSION,
     "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -95,6 +101,8 @@ brands = {
     "categorias": categorias,
     "categorias_tienda": categorias_tienda,
     "dominios": DOMINIOS,
+    "aditivos": ADITIVOS,
+    "alertas": ALERTAS,
 }
 os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
 # ---- Conservar lo que agregó el job del proyecto (marcas, grupos, reputación y alternativas investigadas).
@@ -179,6 +187,10 @@ if os.path.exists(cat_tienda_path):
     shutil.copyfile(cat_tienda_path, os.path.join(ROOT, "data", "categorias_tienda.json"))
 if os.path.exists(dominios_path):
     shutil.copyfile(dominios_path, os.path.join(ROOT, "data", "dominios.json"))
+if os.path.exists(aditivos_path):
+    shutil.copyfile(aditivos_path, os.path.join(ROOT, "data", "aditivos.json"))
+if os.path.exists(alertas_path):
+    shutil.copyfile(alertas_path, os.path.join(ROOT, "data", "alertas.json"))
 
 # ---- Proyecto: de dónde descargan todos la base actualizada (gratis, sin claves) y a dónde se sugieren marcas
 PROY = json.load(open(os.path.join(os.path.dirname(__file__), "proyecto.json"), encoding="utf-8"))

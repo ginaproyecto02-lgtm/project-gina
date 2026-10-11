@@ -687,7 +687,9 @@
     if (!base.title) base.title = txt(q(doc, "h1")) || (doc.title || "");
     const reliability = extractReliability(doc, s);
     const categoryPath = extractCategoryPath(doc, s);
-    return { site: s, candidates: c, title: base.title, categoryPath, reliability };
+    const specsEl = q(doc, "#feature-bullets, #productDetails_techSpec_section_1, #specifications, .ui-pdp-specs, table, #detailBullets_feature_div, [data-testid='product-description']");
+    const specsText = specsEl ? txt(specsEl) : "";
+    return { site: s, candidates: c, title: base.title, categoryPath, reliability, specsText };
   }
 
   QED.site = site;

@@ -634,6 +634,31 @@ async function main(options = {}) {
   return { report, prResult };
 }
 
+async function verifyEnergyStarModel(modelNumber, fetchFn = globalThis.fetch) {
+  if (!modelNumber || typeof modelNumber !== "string") return null;
+  const cleanModel = modelNumber.trim();
+  if (cleanModel.length < 3) return null;
+  const queryUrl = `https://data.energystar.gov/resource/735e-a638.json?$where=upper(model_number)%20like%20upper('%25${encodeURIComponent(cleanModel)}%25')&$limit=1`;
+  try {
+    const res = await fetchFn(queryUrl, { headers: { "Accept": "application/json" } });
+    if (!res || !res.ok) return null;
+    const data = await res.json();
+    if (Array.isArray(data) && data.length > 0) {
+      const match = data[0];
+      return {
+        certified: true,
+        model: match.model_number || cleanModel,
+        brandName: match.brand_name || "",
+        source: "https://data.energystar.gov",
+        url_oficial: "https://www.energystar.gov/productfinder/"
+      };
+    }
+  } catch (e) {
+    // Silencioso ante fallos
+  }
+  return null;
+}
+
 if (require.main === module) {
   main().catch((e) => {
     console.error(e);
@@ -656,6 +681,7 @@ module.exports = {
   verifySource,
   contrastProposal,
   wikidataOwner,
+  verifyEnergyStarModel,
   createReviewPR,
   main
 };

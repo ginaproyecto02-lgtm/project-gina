@@ -1,0 +1,76 @@
+[
+  {
+    "id": "red3",
+    "codigo": "FD&C Red No. 3",
+    "e_number": "E127",
+    "ins": "127",
+    "nombres": {
+      "es": ["fd&c red no. 3", "fd&c red 3", "red 3", "rojo 3", "rojo eritrosina", "eritrosina", "e127"],
+      "en": ["fd&c red no. 3", "fd&c red 3", "red 3", "red no. 3", "erythrosine", "e127"],
+      "de": ["erythrosin", "e127", "red 3"],
+      "fr": ["érythrosine", "rouge 3", "e127", "red 3"],
+      "it": ["eritrosina", "rosso 3", "e127", "red 3"],
+      "pt": ["eritrosina", "vermelho 3", "e127", "red 3"]
+    },
+    "jurisdiccion": "EE.UU.",
+    "jurisdiccion_en": "US",
+    "accion": "prohibido",
+    "fecha": "2025",
+    "autoridad": "FDA",
+    "url_oficial": "https://www.fda.gov/food/food-additives-petitions/color-additives-status-list"
+  },
+  {
+    "id": "e171",
+    "codigo": "E171",
+    "nombres": {
+      "es": ["e171", "dioxido de titanio", "dióxido de titanio", "blanco de titanio"],
+      "en": ["e171", "titanium dioxide"],
+      "de": ["e171", "titandioxid"],
+      "fr": ["e171", "dioxyde de titane"],
+      "it": ["e171", "biossido di titanio", "diossido di titanio"],
+      "pt": ["e171", "dióxido de titânio", "dioxido de titanio"]
+    },
+    "jurisdiccion": "UE",
+    "jurisdiccion_en": "EU",
+    "accion": "prohibido",
+    "fecha": "2022",
+    "autoridad": "Comisión Europea",
+    "url_oficial": "https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX%3A32022R0063"
+  },
+  {
+    "id": "bvo",
+    "codigo": "BVO",
+    "nombres": {
+      "es": ["aceite vegetal bromado", "bvo"],
+      "en": ["brominated vegetable oil", "bvo"],
+      "de": ["bromiertes pflanzenöl", "bvo"],
+      "fr": ["huile végétale bromée", "bvo"],
+      "it": ["olio vegetale bromurato", "bvo"],
+      "pt": ["óleo vegetal bromado", "oleo vegetal bromado", "bvo"]
+    },
+    "jurisdiccion": "EE.UU.",
+    "jurisdiccion_en": "US",
+    "accion": "prohibido",
+    "fecha": "2024",
+    "autoridad": "FDA",
+    "url_oficial": "https://www.fda.gov/food/food-additives-petitions/brominated-vegetable-oil-bvo"
+  },
+  {
+    "id": "southampton_colors",
+    "codigo": "E102, E104, E110, E122, E124, E129",
+    "nombres": {
+      "es": ["tartrazina", "e102", "amarillo de quinoleina", "amarillo de quinoleína", "e104", "amarillo ocaso", "amarillo crepusculo", "amarillo crepúsculo", "amarillo 6", "e110", "azorrubina", "carmoisina", "e122", "ponceau 4r", "rojo cochinilla a", "e124", "rojo allura", "rojo allura ac", "rojo 40", "e129"],
+      "en": ["tartrazine", "e102", "quinoline yellow", "e104", "sunset yellow", "yellow 6", "e110", "carmoisine", "azorubine", "e122", "ponceau 4r", "e124", "allura red", "red 40", "e129"],
+      "de": ["tartrazin", "e102", "chinolingelb", "e104", "gelborange s", "e110", "azorubin", "e122", "ponceau 4r", "e124", "allurarot ac", "e129"],
+      "fr": ["tartrazine", "e102", "jaune de quinoléine", "e104", "jaune orangé s", "e110", "azoturbine", "carmoisine", "e122", "ponceau 4r", "e124", "rouge allura ac", "e129"],
+      "it": ["tartrazina", "e102", "giallo chinolina", "e104", "giallo tramonto", "e110", "azorubina", "carmoisina", "e122", "ponceau 4r", "e124", "rosso allura ac", "e129"],
+      "pt": ["tartrazina", "e102", "amarelo de quinolina", "e104", "amarelo crepúsculo", "amarelo crepusculo", "amarelo 6", "e110", "azorrubina", "carmoisina", "e122", "ponceau 4r", "e124", "vermelho allura ac", "vermelho 40", "e129"]
+    },
+    "jurisdiccion": "UE",
+    "jurisdiccion_en": "EU",
+    "accion": "advertencia_obligatoria",
+    "fecha": "2010",
+    "autoridad": "Unión Europea",
+    "url_oficial": "https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX%3A32008R1333"
+  }
+]

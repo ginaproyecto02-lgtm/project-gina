@@ -7,7 +7,7 @@ const registry = JSON.parse(fs.readFileSync(path.join(EXT, "data/sites.json"), "
 
 function env(html, url) {
   const dom = new JSDOM(`<!doctype html><html><head></head><body>${html}</body></html>`, { url, runScripts: "outside-only" });
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
   if (dom.window.QED.I18N) dom.window.QED.I18N.setLang("es"); // las pruebas verifican los textos en español
   return dom.window;
 }
@@ -61,6 +61,20 @@ function analyze(w, url) {
   }
   if (QED.evaluateReliability) {
     r.reliabilityEval = QED.evaluateReliability(data.reliability, r.group, cat, data.title, entry ? entry.pais : "México", entry);
+  }
+  if (QED.evaluateProductNotices) {
+    r.productNotices = QED.evaluateProductNotices({
+      category: cat,
+      categoryConfidence: catRes ? (typeof catRes === "string" ? "media" : catRes.confianza) : "ninguna",
+      title: data.title,
+      specsText: data.specsText,
+      storeCountry: entry ? entry.pais : "México",
+      brandName: r.brand || r.brandText || "",
+      group: r.group,
+      aditivos: db.aditivos || [],
+      alertas: db.alertas || [],
+      options: {}
+    });
   }
   QED.showCard(r, {});
   return Object.assign({ mode: "producto", entry }, r);
@@ -566,6 +580,159 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const exactitudAlta = totalAlta > 0 ? (correctosAlta / totalAlta) : 1;
   check("Banco de 100 títulos: exactitud ≥95% en los que dan «alta»", exactitudAlta >= 0.95, `${correctosAlta}/${totalAlta} (${Math.round(exactitudAlta * 100)}%)`);
   check("Banco de 100 títulos: 0 falsos positivos en las 20 trampas", trampasSinFalsosPositivos === totalTrampas, `${trampasSinFalsosPositivos}/${totalTrampas} trampas correctas`);
+}
+
+// ---------------------------------------------------------------- Avisos del producto en Confiabilidad (7 pruebas)
+{
+  const aditivosData = db.aditivos || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/aditivos.json"), "utf8"));
+  const alertasData = db.alertas || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/alertas.json"), "utf8"));
+
+  // 1. Título con "Red 3" en tienda de EE.UU. → aviso con enlace oficial a la FDA
+  {
+    const w = env("", "https://www.amazon.com/dp/B0TESTRED3");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Red 3 Cherry Candy Drops 200g",
+      category: "chocolate_dulces",
+      categoryConfidence: "alta",
+      storeCountry: "Estados Unidos",
+      brand: "Candy Brand",
+      aditivosDb: aditivosData,
+      alertasDb: alertasData
+    });
+    const red3Notice = rNotices.find(n => n.url && n.url.includes("fda.gov"));
+    check("1. Título con «Red 3» en EE.UU. → aviso con enlace oficial a FDA", !!red3Notice && red3Notice.tipo === "oficial" && red3Notice.texto.includes("FDA"), red3Notice ? red3Notice.texto : "no encontrado");
+  }
+
+  // 2. «Carne de res molida» → 0 avisos
+  {
+    const w = env("", "https://www.walmart.com.mx/ip/carne/123");
+    const prep = w.QED.ALT.prepare(db, w.QED.buildIndex(db, [], {}, {}));
+    const catRes = w.QED.ALT.category(prep, "", "Carne de res molida 500 g");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Carne de res molida 500 g",
+      category: catRes.cat,
+      categoryConfidence: catRes.confianza,
+      storeCountry: "México",
+      brand: "",
+      aditivosDb: aditivosData,
+      alertasDb: alertasData
+    });
+    check("2. «Carne de res molida» → 0 avisos", rNotices.length === 0, `avisos: ${rNotices.length}`);
+  }
+
+  // 3. Aceites esenciales → 0 avisos de alimentos
+  {
+    const w = env("", "https://www.amazon.com.mx/dp/B0ACEITES5");
+    const prep = w.QED.ALT.prepare(db, w.QED.buildIndex(db, [], {}, {}));
+    const catRes = w.QED.ALT.category(prep, "Nature's Oils", "ORIGINAL NATURE'S OILS Kit de 5 aceites esenciales… Árbol de Té…", "Hogar > Aromaterapia > Aceites Esenciales");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "ORIGINAL NATURE'S OILS Kit de 5 aceites esenciales… Árbol de Té…",
+      category: catRes.cat,
+      categoryConfidence: catRes.confianza,
+      storeCountry: "México",
+      brand: "Nature's Oils",
+      aditivosDb: aditivosData,
+      alertasDb: alertasData
+    });
+    const foodNotices = rNotices.filter(n => n.categoria === "alimentos" || n.categoria === "aditivos");
+    check("3. Aceites esenciales → 0 avisos de alimentos", foodNotices.length === 0, `cat: ${catRes.cat}, avisos: ${foodNotices.length}`);
+  }
+
+  // 4. Refrigerador con «Consumo 350 kWh/año» → fila de eficiencia con «según la página»
+  {
+    const w = env("", "https://www.walmart.com.mx/ip/refrigerador/456");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Refrigerador Top Mount 13 pies con Despachador",
+      specsText: "Capacidad 360 L. Consumo 350 kWh/año. Voltaje 120V.",
+      category: "electrodomesticos_clima",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Mabe",
+      aditivosDb: aditivosData,
+      alertasDb: alertasData
+    });
+    const refriNotice = rNotices.find(n => n.categoria === "energia" && n.texto.includes("350 kWh/año"));
+    check("4. Refrigerador con «Consumo 350 kWh/año» → fila con «según la página»", !!refriNotice && refriNotice.origen.toLowerCase().includes("según la página"), refriNotice ? refriNotice.texto : "no encontrado");
+  }
+
+  // 5. Cero palabras de alarma (/dañino|tóxico|cancer[ií]geno|peligroso para la salud/) en el código y datos
+  {
+    const badWordRe = /\b(dañino|dañina|tóxico|tóxica|toxico|toxica|cancer[ií]geno|cancer[ií]gena|peligroso\s+para\s+la\s+salud)\b/i;
+    const dirsToCheck = [
+      path.join(EXT, "src"),
+      path.join(__dirname, "..", "datagen"),
+      path.join(__dirname, "..", "job")
+    ];
+    let badMatches = [];
+    for (const dir of dirsToCheck) {
+      if (!fs.existsSync(dir)) continue;
+      const files = fs.readdirSync(dir);
+      for (const f of files) {
+        if (!f.endsWith(".js") && !f.endsWith(".json") && !f.endsWith(".py") && !f.endsWith(".html")) continue;
+        const fullPath = path.join(dir, f);
+        const content = fs.readFileSync(fullPath, "utf8");
+        const lines = content.split("\n");
+        lines.forEach((l, idx) => {
+          if (l.includes("badWordRe") || l.includes("dañino|tóxico") || l.includes("Nunca «dañino»") || l.includes("Nunca \"dañino\"") || l.includes("Cero palabras de alarma") || l.includes("sin palabras de juicio")) return;
+          if (badWordRe.test(l)) {
+            badMatches.push(`${f}:${idx + 1}: ${l.trim().slice(0, 60)}`);
+          }
+        });
+      }
+    }
+    check("5. Cero ocurrencias de /dañino|tóxico|cancerígeno|peligroso para la salud/", badMatches.length === 0, badMatches.length ? badMatches.join("; ") : "0 coincidencias");
+  }
+
+  // 6. Open Food Facts desactivado por defecto → 0 llamadas de red
+  {
+    let fetchCount = 0;
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = async () => { fetchCount++; return { ok: true, json: async () => ({}) }; };
+    try {
+      const w = env("", "https://www.walmart.com.mx/ip/galletas/789");
+      w.QED.evaluateProductNotices({
+        title: "Galletas de avena y miel 300g",
+        category: "botanas_galletas",
+        categoryConfidence: "alta",
+        storeCountry: "México",
+        brand: "Gamesa",
+        options: { openFoodFacts: false },
+        aditivosDb: aditivosData,
+        alertasDb: alertasData
+      });
+    } finally {
+      globalThis.fetch = origFetch;
+    }
+    check("6. Open Food Facts desactivado por defecto → 0 llamadas de red", fetchCount === 0, `llamadas: ${fetchCount}`);
+  }
+
+  // 7. Alerta de solo marca → texto «alertas de esta marca», nunca «este producto»
+  {
+    const w = env("", "https://www.walmart.com.mx/ip/purina/123");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Purina Dog Chow Adultos Carne y Pollo 15 kg",
+      category: "mascotas",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Purina",
+      brandGroup: { id: "nestle" },
+      aditivosDb: aditivosData,
+      alertasDb: [
+        {
+          id: "alerta_purina_beneful_2024",
+          autoridad: "PROFECO",
+          marca: "purina",
+          grupo: "nestle",
+          modelo: "Purina Beneful Lote 999",
+          titulo: "Retiro voluntario por etiquetado",
+          url: "https://www.gob.mx/profeco"
+        }
+      ]
+    });
+    const alertaNotice = rNotices.find(n => n.categoria === "alerta");
+    const okAlerta = !!alertaNotice && alertaNotice.texto.includes("alertas de esta marca") && !alertaNotice.texto.includes("este producto");
+    check("7. Alerta de solo marca → texto «alertas de esta marca», nunca «este producto»", okAlerta, alertaNotice ? alertaNotice.texto : "no encontrada");
+  }
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

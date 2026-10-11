@@ -96,11 +96,27 @@
   function enrichProduct(res, data) {
     if (!res) return res;
     res.title = res.title || data.title;
-    const catRes = res.alternativas ? { cat: res.alternativas.cat } : (alt ? QED.ALT.category(alt, res.brand || res.brandText, data.title, data.categoryPath) : null);
+    res.specsText = data.specsText || "";
+    const catRes = res.alternativas ? { cat: res.alternativas.cat, confianza: res.alternativas.confianza } : (alt ? QED.ALT.category(alt, res.brand || res.brandText, data.title, data.categoryPath) : null);
     const cat = catRes ? (typeof catRes === "string" ? catRes : catRes.cat) : null;
+    const catConf = catRes ? (typeof catRes === "string" ? "media" : (catRes.confianza || "ninguna")) : "ninguna";
     const country = entry ? entry.pais : "MX";
     if (QED.evaluateReliability) {
       res.reliabilityEval = QED.evaluateReliability(data.reliability, res.group, cat, data.title, country);
+    }
+    if (QED.evaluateProductNotices) {
+      res.productNotices = QED.evaluateProductNotices({
+        title: data.title,
+        category: cat,
+        categoryConfidence: catConf,
+        storeCountry: country,
+        brand: res.found ? res.brand : res.brandText,
+        brandGroup: res.group,
+        specsText: data.specsText,
+        aditivosDb: (packaged && packaged.aditivos) || [],
+        alertasDb: (packaged && packaged.alertas) || [],
+        options: prefs
+      });
     }
     return res;
   }

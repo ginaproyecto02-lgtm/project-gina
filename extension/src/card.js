@@ -151,6 +151,17 @@
   .badge-rel.official { background: #e1ebfa; color: #143c73; }
   .badge-rel.verified { background: #e1ebfa; color: #143c73; }
   .badge-rel.check { background: #fbe3c4; color: #6e3500; }
+  .badge-rel.official-notice { background: #fdf1e2; color: #5c2e00; border: 1px solid #f4d4a8; }
+
+  /* Avisos del producto */
+  .prod-notices { margin-top: 10px; margin-bottom: 6px; }
+  .notice-box { border-radius: 7px; padding: 7px 9px; margin-top: 5px; font-size: 11.5px; line-height: 1.35; }
+  .notice-box.notice-official { background: #fdf1e2; color: #5c2e00; border: 1px solid #f4d4a8; }
+  .notice-box.notice-info { background: #f4f6fa; color: #2d3748; border: 1px solid #e2e8f0; }
+  .notice-text { font-weight: 600; }
+  .notice-src { font-size: 10.5px; margin-top: 2px; opacity: 0.9; }
+  .notice-src a { color: inherit; text-decoration: underline; }
+  .notices-footer { font-size: 10px; color: #718096; margin-top: 5px; font-style: italic; line-height: 1.3; }
 
   /* Open Content: 42px indentation */
   .sec-content { padding: 10px 14px 14px 42px; background: #fafbfc; border-top: 1px solid #f0f2f7; }
@@ -391,6 +402,29 @@
       alertsRow = dataRow(t("lbl_official_alerts"), alertsList, t("src_official", { source: "Entidad oficial" }));
     }
 
+    // Avisos del producto (solo si hay al menos 1 aviso)
+    let noticesBlock = "";
+    const pNotices = res.productNotices || [];
+    if (pNotices.length > 0) {
+      const noticesHtml = pNotices.map((n) => {
+        const boxClass = n.tipo === "oficial" ? "notice-box notice-official" : "notice-box notice-info";
+        return `
+          <div class="${boxClass}">
+            <div class="notice-text">${esc(n.texto)}</div>
+            <div class="notice-src">${n.origen}</div>
+          </div>
+        `;
+      }).join("");
+
+      noticesBlock = `
+        <div class="prod-notices">
+          <div class="d-k">${t("lbl_product_notices")}</div>
+          ${noticesHtml}
+          <div class="notices-footer">${t("notices_disclaimer")}</div>
+        </div>
+      `;
+    }
+
     // Caja de aviso si requiere revisión
     let tipBox = "";
     if (rel.level === "check") {
@@ -402,6 +436,7 @@
       ${ratingRow}
       ${shipRow}
       ${intlBox}
+      ${noticesBlock}
       ${legalRow}
       ${warrantyRow}
       ${normsRow}
@@ -660,9 +695,31 @@
 
     const rel = res.reliabilityEval || (QED.evaluateReliability ? QED.evaluateReliability({}, res.group, null, res.title) : {}) || {};
 
-    // Insignia SOLO en Confiabilidad
+    // Evaluación automática de avisos del producto si no vienen evaluados
+    if (!res.productNotices && QED.evaluateProductNotices) {
+      const altCat = res.alternativas && res.alternativas.cat;
+      const altConf = res.alternativas && res.alternativas.confianza;
+      if (altCat && altConf === "alta") {
+        res.productNotices = QED.evaluateProductNotices({
+          title: res.title,
+          category: altCat,
+          categoryConfidence: altConf,
+          storeCountry: (res.store && (res.store.pais || (res.store.entry && res.store.entry.pais))) || "México",
+          brand: res.found ? res.brand : res.brandText,
+          brandGroup: res.group,
+          specsText: res.specsText || "",
+          aditivosDb: (QED.DB && QED.DB.aditivos) || [],
+          alertasDb: (QED.DB && QED.DB.alertas) || [],
+          options: opts || {}
+        });
+      }
+    }
+
+    // Insignia SOLO en Confiabilidad (cambia a "Aviso oficial" si hay avisos oficiales)
     let relBadgeHtml = "";
-    if (rel.sellerType === "direct") {
+    if (res.productNotices && res.productNotices.some(n => n.tipo === "oficial")) {
+      relBadgeHtml = `<span class="badge-rel official-notice">${t("badge_official_notice")}</span>`;
+    } else if (rel.sellerType === "direct") {
       relBadgeHtml = `<span class="badge-rel direct">${t("badge_direct_store")}</span>`;
     } else if (rel.sellerType === "official") {
       relBadgeHtml = `<span class="badge-rel official">${t("badge_official_store")}</span>`;

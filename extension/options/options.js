@@ -29,7 +29,7 @@ const DEFAULTS = {
   classify: { provider: "anthropic", key: "", model: AI.PROVIDERS.anthropic.classifyModel, base: "" },
   research: { provider: "anthropic", key: "", model: AI.PROVIDERS.anthropic.researchModel, base: "", useClassifyKey: false },
   dailyLimit: 100, weeklyLimit: 25, revalidateLimit: 3, repLimit: 3, cacheDays: 90, jobEnabled: false, remoteUrl: "",
-  values: {}, showLobbying: true, showAlternatives: true, userProfile: "ninguno"
+  values: {}, showLobbying: true, showAlternatives: true, openFoodFacts: false, userProfile: "ninguno"
 };
 let PROJ = {};
 const REP = QED.REP;
@@ -138,7 +138,8 @@ function readForm() {
     remoteUrl: $("#remoteUrl") ? $("#remoteUrl").value.trim() : "",
     values: Object.fromEntries(Array.from(document.querySelectorAll("#values [data-value]")).map((el) => [el.dataset.value, parseInt(el.value, 10)])),
     showLobbying: $("#showLobbying") ? $("#showLobbying").checked : true,
-    showAlternatives: $("#showAlternatives") ? $("#showAlternatives").checked : true
+    showAlternatives: $("#showAlternatives") ? $("#showAlternatives").checked : true,
+    openFoodFacts: !!($("#openFoodFacts") && $("#openFoodFacts").checked)
   };
 }
 
@@ -177,6 +178,7 @@ function writeForm(s) {
   });
   if ($("#showLobbying")) $("#showLobbying").checked = s.showLobbying !== false;
   if ($("#showAlternatives")) $("#showAlternatives").checked = s.showAlternatives !== false;
+  if ($("#openFoodFacts")) $("#openFoodFacts").checked = !!s.openFoodFacts;
 
   if (s.aiEnabled || s.jobEnabled || (s.classify && s.classify.key) || (s.research && s.research.key)) {
     const adv = document.querySelector("details.advanced");

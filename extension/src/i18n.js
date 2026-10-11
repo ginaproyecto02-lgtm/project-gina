@@ -980,6 +980,46 @@
       it: "Tema rilevante per i tuoi valori: {topics}",
       ja: "あなたの価値観に関連する注意：{topics}"
     },
+    lbl_product_notices: {
+      es: "AVISOS DEL PRODUCTO",
+      en: "PRODUCT NOTICES",
+      de: "PRODUKTHINWEISE",
+      fr: "AVIS SUR LE PRODUIT",
+      it: "AVVISI SUL PRODOTTO",
+      ja: "製品の通知"
+    },
+    badge_official_notice: {
+      es: "Aviso oficial",
+      en: "Official notice",
+      de: "Offizieller Hinweis",
+      fr: "Avis officiel",
+      it: "Avviso ufficiale",
+      ja: "公的通知"
+    },
+    notices_disclaimer: {
+      es: "Información de autoridades y de la página. No es consejo médico.",
+      en: "Information from authorities and the page. Not medical advice.",
+      de: "Angaben von Behörden und der Website. Keine medizinische Beratung.",
+      fr: "Informations des autorités et du site. Ne constitue pas un avis médical.",
+      it: "Informazioni delle autorità e della pagina. Non è un parere medico.",
+      ja: "当局およびページからの情報です。医療アドバイスではありません。"
+    },
+    lbl_nom051_title: {
+      es: "Sellos de advertencia NOM-051",
+      en: "NOM-051 warning stamps",
+      de: "NOM-051 Warnhinweise",
+      fr: "Sceaux d'avertissement NOM-051",
+      it: "Sigilli di avvertimento NOM-051",
+      ja: "NOM-051警告表示"
+    },
+    opt_chk_openfoodfacts: {
+      es: "Consultar ingredientes en Open Food Facts por código de barras (opcional, base colaborativa ODbL)",
+      en: "Check ingredients on Open Food Facts by barcode (optional, ODbL collaborative database)",
+      de: "Zutaten auf Open Food Facts per Barcode prüfen (optional, ODbL-Kollaborationsdatenbank)",
+      fr: "Vérifier les ingrédients sur Open Food Facts par code-barres (facultatif, base collaborative ODbL)",
+      it: "Verifica gli ingredienti su Open Food Facts tramite codice a barre (opzionale, database collaborativo ODbL)",
+      ja: "バーコードでOpen Food Factsの原材料を確認（任意、ODbL共同データベース）"
+    },
 
     // Footer
     foot_disclaimer: {
