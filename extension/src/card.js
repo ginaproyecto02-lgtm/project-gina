@@ -29,6 +29,88 @@
   const SVG_BUILDING = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="22"/><line x1="8" y1="6" x2="8.01" y2="6"/><line x1="16" y1="6" x2="16.01" y2="6"/><line x1="8" y1="10" x2="8.01" y2="10"/><line x1="16" y1="10" x2="16.01" y2="10"/><line x1="8" y1="14" x2="8.01" y2="14"/><line x1="16" y1="14" x2="16.01" y2="14"/><line x1="8" y1="18" x2="8.01" y2="18"/><line x1="16" y1="18" x2="16.01" y2="18"/></svg>`;
   const SVG_CHEVRON = `<svg class="sec-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>`;
 
+  const PRENSA_NOMBRES = {
+    "reuters.com": "Reuters",
+    "bloomberg.com": "Bloomberg",
+    "ft.com": "Financial Times",
+    "wsj.com": "The Wall Street Journal",
+    "expansion.mx": "Expansión",
+    "elpais.com": "El País",
+    "cincodias.elpais.com": "Cinco Días",
+    "eleconomista.com.mx": "El Economista",
+    "eleconomista.es": "El Economista",
+    "valoreconomico.globo.com": "Valor Econômico",
+    "nikkei.com": "Nikkei",
+    "elceo.com": "EL CEO",
+    "businesswire.com": "Business Wire",
+    "prnewswire.com": "PR Newswire",
+    "stblaw.com": "Simpson Thacher",
+    "lw.com": "Latham & Watkins",
+    "jonesday.com": "Jones Day",
+    "jstories.media": "J-Stories",
+    "fashionunited.uk": "FashionUnited",
+    "bluewin.ch": "Bluewin",
+    "jingdaily.com": "Jing Daily",
+    "insideretail.asia": "Inside Retail",
+    "tusbuenasnoticias.com": "Tus Buenas Noticias",
+    "swissinfo.ch": "SWI swissinfo.ch",
+    "independent.co.uk": "The Independent",
+    "finance.yahoo.com": "Yahoo Finance",
+    "forbes.com": "Forbes",
+    "fortune.com": "Fortune",
+    "handelsblatt.com": "Handelsblatt",
+    "lesechos.fr": "Les Échos",
+    "ilsole24ore.com": "Il Sole 24 Ore"
+  };
+
+  const DOMINIOS_OFICIALES_DEFECTO = [
+    "sec.gov", "data.sec.gov", "bmv.com.mx", "cnmv.es", "hkexnews.hk", "hkex.com.hk",
+    "amf-france.org", "bafin.de", "fca.org.uk", "gleif.org", "api.gleif.org", "cvm.gov.br",
+    "cmfchile.cl", "sebi.gov.in", "tase.co.il", "gov.uk", "company-information.service.gov.uk",
+    "aboutamazon.com", "walmart.com", "stock.walmart.com", "walmex.mx", "inversionistas.walmex.mx",
+    "costco.com", "target.com", "bestbuy.com", "homedepot.com", "grupoherdez.com.mx", "kuo.com.mx",
+    "nestle.com", "loreal.com", "loreal-finance.com", "philips.com", "pierre-fabre.com",
+    "maus.ch", "ferrero.com", "gardnerstandard.com", "truper.com", "jumex.com"
+  ];
+
+  function formatSourceLabel(url, fallbackText) {
+    let domain = "";
+    if (url && typeof url === "string") {
+      try {
+        domain = new URL(url).hostname.replace(/^www\./, "").toLowerCase();
+      } catch (e) {}
+    }
+
+    const doms = (QED && QED.DOMINIOS) || {};
+    const oficialList = (doms.oficial && doms.oficial.length) ? doms.oficial : DOMINIOS_OFICIALES_DEFECTO;
+    const prensaList = (doms.prensa_referencia && doms.prensa_referencia.length) ? doms.prensa_referencia : Object.keys(PRENSA_NOMBRES);
+
+    const isOficial = domain && oficialList.some((d) => domain === d.toLowerCase() || domain.endsWith("." + d.toLowerCase()));
+    const isPrensa = domain && prensaList.some((d) => domain === d.toLowerCase() || domain.endsWith("." + d.toLowerCase()));
+
+    if (isOficial) {
+      return t("src_official", { source: fallbackText || domain || "Registro oficial" });
+    }
+    if (isPrensa) {
+      let matchedName = "";
+      for (const [pDom, pName] of Object.entries(PRENSA_NOMBRES)) {
+        if (domain === pDom || domain.endsWith("." + pDom)) {
+          matchedName = pName;
+          break;
+        }
+      }
+      const medio = matchedName || fallbackText || domain;
+      return `Fuente: ${medio}`;
+    }
+    if (domain) {
+      return `Fuente: ${domain}`;
+    }
+    if (fallbackText && !/registro oficial|sec \/|entidad oficial/i.test(fallbackText)) {
+      return `Fuente: ${fallbackText}`;
+    }
+    return t("src_official", { source: fallbackText || "Registro oficial" });
+  }
+
   const CSS = `
   :host { all: initial; }
   .wrap { position: fixed; right: 16px; bottom: 16px; z-index: 2147483646; width: 340px; max-width: calc(100vw - 32px);
@@ -371,18 +453,22 @@
               ${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}
               ${fuente ? ` · ${fuente}` : ""}
             </div>
-            <div class="d-src">${srcOfficial}</div>
+            <div class="d-src">${formatSourceLabel(it.group.url, it.group.fuente || "Registro oficial")}</div>
           </div>
         `;
       }).join("");
 
+      const cnt = a.items.length;
+      const altHeaderKey = cnt === 1 ? "alt_header_one" : "alt_header_other";
+      const altHeaderTitle = t(altHeaderKey, { count: cnt, cat: esc(catLabel), pais: esc(countryLbl) });
+
       localAltHtml = `
-        <div class="d-k">${t("alt_header", { cat: esc(catLabel), pais: esc(countryLbl) })}${alsoLocal}</div>
+        <div class="d-k">${altHeaderTitle}${alsoLocal}</div>
         ${itemsHtml}
       `;
     }
 
-    // Quién domina esta categoría
+    // Otras marcas de este tipo en la base
     let dominantHtml = "";
     if (a && a.dominant && a.dominant.length) {
       const domLines = a.dominant.map(d => {
@@ -404,11 +490,12 @@
     let otherBrandsHtml = "";
     if (a && a.otherBrands && a.otherBrands.length) {
       const fuente = (res.group && res.group.fuente) || "Registro corporativo";
+      const otherSrc = formatSourceLabel(res.group && res.group.url, fuente);
       otherBrandsHtml = `
         <div class="d-row" style="margin-top:10px;">
           <div class="d-k">${t("lbl_other_brands")}</div>
           <div class="d-v">${esc(a.otherBrands.join(", "))}</div>
-          <div class="d-src">${t("src_official", { source: fuente })}</div>
+          <div class="d-src">${otherSrc}</div>
         </div>
       `;
     }
@@ -450,11 +537,12 @@
     const tipoLbl = I18N().tipoLabel ? I18N().tipoLabel(g.tipo) : g.tipo;
     const chipsHtml = `<div class="chips">${g.pais ? `<span class="chip">🌎 ${esc(countryLbl)}</span>` : ""}${g.tipo ? `<span class="chip">${esc(tipoLbl)}</span>` : ""}${confChip(g.confianza)}</div>`;
 
+    const ctrlSrc = formatSourceLabel(g.url, fuenteLbl);
     const ctrlVal = `${esc(ctrl)}${chipsHtml}`;
-    const ctrlRow = dataRow(t("lbl_controller"), ctrlVal, t("src_official", { source: fuenteLbl }));
+    const ctrlRow = dataRow(t("lbl_controller"), ctrlVal, ctrlSrc);
 
     const fondosRow = fondos ? dataRow(t("lbl_funds"), esc(fondos), t("src_official", { source: "SEC / Reporte oficial" })) : "";
-    const govRow = gobierno ? dataRow(t("lbl_gov"), esc(gobierno), t("src_official", { source: fuenteLbl })) : "";
+    const govRow = gobierno ? dataRow(t("lbl_gov"), esc(gobierno), formatSourceLabel(g.url, fuenteLbl)) : "";
     const notaBox = nota ? `<div class="note">${esc(nota)}</div>` : "";
 
     const repHtml = repBlock(g, opts);
@@ -481,7 +569,7 @@
     const nota = (isEn && g.nota_en) ? g.nota_en : g.nota;
     const fuenteLbl = (isEn && g.fuente_en) ? g.fuente_en : (g.fuente || "Registro oficial");
     const storeVal = `<b>${esc(store.nombre)}</b>: ${esc(g.empresa)} · ${esc(ctrl)}${chipsHtml}${nota ? `<div style="font-size:11px;color:#5f687a;margin-top:3px;">${esc(nota)}</div>` : ""}`;
-    return dataRow(t("lbl_store"), storeVal, t("src_official", { source: fuenteLbl }));
+    return dataRow(t("lbl_store"), storeVal, formatSourceLabel(g.url, fuenteLbl));
   }
 
   // ---------------------------------------------------------------- Viajes
@@ -704,8 +792,8 @@
       brandTitle = `${res.brand} · ${(res.group && res.group.empresa) || ""}`;
       brandOrigin = t("src_read_from", { source: res.source || "página" });
     } else {
-      brandTitle = `${res.brandText || t("not_found_unreadable")} · ${t("not_found_title")}`;
-      brandOrigin = t("src_read_from", { source: t("not_found_title") });
+      brandTitle = res.brandText || t("not_found_unreadable");
+      brandOrigin = t("not_found_page_brand_sub");
     }
 
     let valueAlertHtml = "";

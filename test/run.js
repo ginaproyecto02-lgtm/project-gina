@@ -437,6 +437,57 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   }
   check("Sin promesas de calidad ni certificación propia de Gina (/cumple|garantizad|alta calidad|certificad[oa] por Gina/)", noQualityPromises);
 }
+{
+  const w = env("", "https://example.com/");
+  const langs = ["es", "en", "de", "fr", "it", "ja"];
+
+  // 1. "Otras marcas de este tipo en la base" sin palabras de juicio
+  const domJudgementWords = /domina|l[ií]der|principal|leader|leading|f[uü]hrend|主要/i;
+  const noJudgementInLangs = langs.every((l) => {
+    const val = w.QED.I18N.t("lbl_category_dominance", {}, l);
+    return val && !domJudgementWords.test(val);
+  });
+  check("lbl_category_dominance no contiene palabras de juicio (domina/líder/principal/etc.) en 6 idiomas", noJudgementInLangs);
+  check("lbl_category_dominance en español es «OTRAS MARCAS DE ESTE TIPO EN LA BASE»", w.QED.I18N.t("lbl_category_dominance", {}, "es") === "OTRAS MARCAS DE ESTE TIPO EN LA BASE");
+
+  // 2. Singular y plural de alternativas locales en 6 idiomas
+  const singularOk = langs.every((l) => {
+    const s = w.QED.I18N.t("alt_header_one", { count: 1, cat: "café", pais: "México" }, l);
+    return s && (s.includes("1") || l === "ja");
+  });
+  const pluralOk = langs.every((l) => {
+    const p = w.QED.I18N.t("alt_header_other", { count: 3, cat: "café", pais: "México" }, l);
+    return p && p.includes("3");
+  });
+  check("Alternativas locales maneja singular (1) y plural (3) en los 6 idiomas", singularOk && pluralOk);
+
+  // 3. Marca desconocida leída de la página: Título = marca, Subtítulo = "No está en la base · leída del campo Marca de la página"
+  const urlUnknown = "https://www.amazon.com.mx/dp/B0UNKNOWN";
+  const wUnk = env(`<h1 id="productTitle">Herramienta 16 oz</h1><a id="bylineInfo">Marca: MarcaRaraX</a>`, urlUnknown);
+  analyze(wUnk, urlUnknown);
+  const cardShadow = wUnk.document.getElementById("gina-tarjeta").shadowRoot;
+  const brandLine = cardShadow.querySelector(".brand-line").textContent.trim();
+  const brandSub = cardShadow.querySelector(".brand-sub").textContent.trim();
+  check("Marca desconocida: título es el nombre de la marca sin sufijo de error", brandLine === "MarcaRaraX");
+  check("Marca desconocida: subtítulo es «No está en la base · leída del campo Marca de la página»", brandSub === "No está en la base · leída del campo Marca de la página");
+
+  // 4. Dato oficial estricto por dominios.json
+  const wCard = env("", "https://example.com/");
+  const mockOfficial = { found: true, brand: "Test", group: { empresa: "Test SA", controlador: "Fundador", fuente: "SEC 10-K", url: "https://www.sec.gov/edgar/test" } };
+  wCard.QED.showCard(mockOfficial);
+  const tOfficial = cardText(wCard);
+  check("Fuente oficial (sec.gov) muestra «Dato oficial: SEC 10-K»", tOfficial.includes("Dato oficial: SEC 10-K"));
+
+  const mockPress = { found: true, brand: "Test2", group: { empresa: "Test2 SA", controlador: "Familia", fuente: "Expansión", url: "https://expansion.mx/empresas/test2" } };
+  wCard.QED.showCard(mockPress);
+  const tPress = cardText(wCard);
+  check("Fuente de prensa (expansion.mx) muestra «Fuente: Expansión»", tPress.includes("Fuente: Expansión") && !tPress.includes("Dato oficial: Expansión"));
+
+  const mockGeneric = { found: true, brand: "Test3", group: { empresa: "Test3 SA", controlador: "Familia", fuente: "Web", url: "https://sitio-desconocido.com/nota" } };
+  wCard.QED.showCard(mockGeneric);
+  const tGeneric = cardText(wCard);
+  check("Fuente sin categoría muestra «Fuente: sitio-desconocido.com»", tGeneric.includes("Fuente: sitio-desconocido.com"));
+}
 
 // ---------------------------------------------------------------- Clasificador por capas y banco de 100 títulos
 {

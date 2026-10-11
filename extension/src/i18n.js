@@ -180,6 +180,14 @@
       it: "Impossibile rilevare il marchio di questo prodotto.",
       ja: "この商品のブランドを検出できませんでした。"
     },
+    not_found_page_brand_sub: {
+      es: "No está en la base · leída del campo Marca de la página",
+      en: "Not in database · read from page's brand field",
+      de: "Nicht in der Datenbank · aus dem Markenfeld der Seite gelesen",
+      fr: "Pas dans la base · lu depuis le champ marque de la page",
+      it: "Non nel database · letto dal campo marchio della pagina",
+      ja: "データベース未登録 · ページのブランド欄から読み取り"
+    },
     not_found_pending_hint: {
       es: "📋 Quedó registrada en tu cola de investigación local.",
       en: "📋 Recorded in your local research queue.",
@@ -373,6 +381,22 @@
       fr: "🌱 Alternatives locales de {cat} en {pais}",
       it: "🌱 Alternative locali per {cat} in {pais}",
       ja: "🌱 {pais}の地域資本による{cat}の選択肢"
+    },
+    alt_header_one: {
+      es: "1 alternativa local de {cat} con dueño local en {pais}",
+      en: "1 locally-owned {cat} alternative in {pais}",
+      de: "1 lokale Alternative für {cat} in {pais}",
+      fr: "1 alternative locale de {cat} avec propriétaire en {pais}",
+      it: "1 alternativa locale per {cat} con proprietario in {pais}",
+      ja: "{pais}の地域資本による{cat}の選択肢（1件）"
+    },
+    alt_header_other: {
+      es: "{count} alternativas locales de {cat} con dueño local en {pais}",
+      en: "{count} locally-owned {cat} alternatives in {pais}",
+      de: "{count} lokale Alternativen für {cat} in {pais}",
+      fr: "{count} alternatives locales de {cat} avec propriétaire en {pais}",
+      it: "{count} alternative locali per {cat} con proprietario in {pais}",
+      ja: "{pais}の地域資本による{cat}の選択肢（{count}件）"
     },
     alt_also_local: {
       es: "(esta marca también es de capital local)",
@@ -947,7 +971,7 @@
     lbl_reputation: { es: "REPUTACIÓN PÚBLICA", en: "PUBLIC REPUTATION", de: "ÖFFENTLICHE REPUTATION", fr: "RÉPUTATION PUBLIQUE", it: "REPUTAZIONE PUBBLICA", ja: "公的評価" },
     lbl_official_alerts: { es: "ALERTAS OFICIALES", en: "OFFICIAL ALERTS", de: "OFFIZIELLE WARNUNGEN", fr: "ALERTES OFFICIELLES", it: "ALLERTE UFFICIALI", ja: "公的警告" },
     lbl_other_brands: { es: "OTRAS MARCAS DEL MISMO DUEÑO", en: "OTHER BRANDS FROM SAME OWNER", de: "WEITERE MARKEN DESSELBEN EIGENTÜMERS", fr: "AUTRES MARQUES DU MÊME PROPRIÉTAIRE", it: "ALTRI MARCHI DELLO STESSO PROPRIETARIO", ja: "同一所有者の他のブランド" },
-    lbl_category_dominance: { es: "QUIÉN DOMINA ESTA CATEGORÍA", en: "CATEGORY LEADERS", de: "FÜHREND IN DIESER KATEGORIE", fr: "LEADERS DE LA CATÉGORIE", it: "LEADER DI CATEGORIA", ja: "このカテゴリの主要ブランド" },
+    lbl_category_dominance: { es: "OTRAS MARCAS DE ESTE TIPO EN LA BASE", en: "OTHER BRANDS OF THIS TYPE IN THE DATABASE", de: "WEITERE MARKEN DIESER ART IN DER DATENBANK", fr: "AUTRES MARQUES DE CE TYPE DANS LA BASE", it: "ALTRI MARCHI DI QUESTO TIPO NEL DATABASE", ja: "データベース内の同種ブランド" },
     values_alert_msg: {
       es: "Tema relevante para tus valores: {topics}",
       en: "Relevant topic to your values: {topics}",

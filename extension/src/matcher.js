@@ -21,9 +21,9 @@
     let t = norm(s);
     const patterns = [
       /^visita la tienda de\s+/, /^visit the\s+/, /\s+store$/, /^visitar a loja\s+/,
-      /^marca:?\s*/, /^brand:?\s*/, /^por\s+/, /^by\s+/, /^vendido por\s+/, /^tienda oficial\s+/,
+      /^(?:marca|brand|marque|marke|marchio)(?:[:：]\s*|\s+)/, /^por\s+/, /^by\s+/, /^vendido por\s+/, /^tienda oficial\s+/,
       /^tienda oficial de\s+/, /\s+tienda oficial$/, /\s+oficial$/, /^loja oficial\s+/,
-      /^marque\s+/, /^marke\s+/, /^marchio\s+/, /^(ブランド|メーカー|브랜드|제조사|品牌|מותג)\s*/, /\s+(ストア|스토어|旗舰店|官方旗舰店)$/
+      /^(ブランド|メーカー|브랜드|제조사|品牌|מותג)\s*[:：]?\s*/, /\s+(ストア|스토어|旗舰店|官方旗舰店)$/
     ];
     let prev;
     do { prev = t; for (const p of patterns) t = t.replace(p, "").trim(); } while (t !== prev);
@@ -33,7 +33,8 @@
   // Igual que cleanBrandField pero conserva mayúsculas y acentos (para mostrarla y enviarla a la IA).
   function displayBrand(s) {
     let t = String(s || "").normalize("NFKC").replace(/\s+/g, " ").trim();
-    const patterns = [/^visita la tienda de\s+/i, /^visit the\s+/i, /\s+store$/i, /^visitar a loja\s+/i, /^(marca|brand|marque|marke|marchio)\s*[:：]?\s*/i,
+    const patterns = [/^visita la tienda de\s+/i, /^visit the\s+/i, /\s+store$/i, /^visitar a loja\s+/i,
+      /^(?:marca|brand|marque|marke|marchio)(?:[:：]\s*|\s+)/i,
       /^(por|by|vendido por)\s+/i, /^tienda oficial( de)?\s+/i, /\s+tienda oficial$/i, /\s+oficial$/i, /^loja oficial\s+/i,
       /^(ブランド|メーカー|브랜드|제조사|品牌|מותג)\s*[:：]?\s*/, /\s+(ストア|스토어|旗舰店|官方旗舰店)$/];
     let prev;
