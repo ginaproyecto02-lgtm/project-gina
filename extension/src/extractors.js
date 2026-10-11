@@ -80,6 +80,7 @@
 
   // Extracción de calificación y reseñas verbatim (aggregateRating)
   function extractAggregateRating(doc) {
+    if (!doc) return null;
     for (const p of jsonLdProducts(doc)) {
       const agg = p.aggregateRating;
       if (agg) {
@@ -100,6 +101,25 @@
       const c = txt(microAgg.querySelector('[itemprop="reviewCount"], [itemprop="ratingCount"]'));
       if (v) {
         return `Calificación en la tienda: ${v.replace(".", ",")} de 5${c ? ` · ${c} reseñas` : ""}`;
+      }
+    }
+    // Amazon #acrPopover y #acrCustomerReviewText
+    const acrPop = q(doc, "#acrPopover, [data-action='acr-popover-touch']");
+    if (acrPop) {
+      const popText = acrPop.getAttribute("title") || txt(acrPop);
+      const mScore = popText.match(/(\d+(?:[.,]\d+)?)\s*(?:de|out of|\/)\s*5/i) || popText.match(/(\d+(?:[.,]\d+)?)/);
+      if (mScore) {
+        const valStr = mScore[1].replace(".", ",");
+        const acrCnt = q(doc, "#acrCustomerReviewText");
+        let countStr = null;
+        if (acrCnt) {
+          const cntText = txt(acrCnt);
+          const mCnt = cntText.match(/([\d.,\s]+)/);
+          if (mCnt) countStr = mCnt[1].trim();
+        }
+        return countStr
+          ? `Calificación en la tienda: ${valStr} de 5 · ${countStr} reseñas`
+          : `Calificación en la tienda: ${valStr} de 5`;
       }
     }
     return null;
@@ -173,36 +193,121 @@
     }
   };
 
+  // Sanitización de vendedor (descarta cadenas de interfaz y nombres > 60 caracteres)
+  function sanitizeSellerName(name) {
+    if (!name) return "";
+    let clean = String(name).trim();
+    if (clean.length > 60) return "";
+    if (/^(?:m[aá]s informaci[oó]n|more info|ver m[aá]s|visit the|visita la tienda(?: de)?)/i.test(clean)) return "";
+    if (/^(?:visiter la boutique|besuche den .+ store)/i.test(clean)) return "";
+    clean = clean.replace(/^(?:vendido por|sold by|vendu par|verkauf durch)\s*:?\s*/i, "").trim();
+    if (clean.length > 60 || !clean) return "";
+    if (/^(?:m[aá]s informaci[oó]n|more info|ver m[aá]s|visit the|visita la tienda(?: de)?)/i.test(clean)) return "";
+    return clean;
+  }
+
   // --- Extracción de confiabilidad por tienda ---
   function extractAmazonReliability(doc) {
+    // 1. Vendedor desde #sellerProfileTriggerId o #sellerName
+    let seller = sanitizeSellerName(txt(q(doc, "#sellerProfileTriggerId, #sellerName")));
+
+    // 2. Vendedor y envío desde #tabular-buybox
+    let tabularShips = "";
+    const shipEl = q(doc, "#tabular-buybox [tabular-attribute-name='Ships from'] .tabular-buybox-text, #tabular-buybox [tabular-attribute-name='Envía desde'] .tabular-buybox-text, #tabular-buybox [tabular-attribute-name='Envía'] .tabular-buybox-text, #tabular-buybox .tabular-buybox-row[data-csa-c-slot-id*='ship'] .tabular-buybox-text");
+    if (shipEl) tabularShips = txt(shipEl).trim();
+
+    if (!seller) {
+      const soldEl = q(doc, "#tabular-buybox [tabular-attribute-name='Sold by'] .tabular-buybox-text, #tabular-buybox [tabular-attribute-name='Vendido por'] .tabular-buybox-text, #tabular-buybox .tabular-buybox-row[data-csa-c-slot-id*='sold'] .tabular-buybox-text");
+      if (soldEl) {
+        seller = sanitizeSellerName(txt(soldEl));
+      } else {
+        for (const row of qa(doc, "#tabular-buybox tr, #tabular-buybox .tabular-buybox-row, #tabular-buybox .tabular-buybox-container tr")) {
+          const rowText = txt(row);
+          if (/vendido por|sold by/i.test(rowText)) {
+            const cells = qa(row, "td, .tabular-buybox-text, a, span");
+            const val = cells.length >= 2 ? txt(cells[cells.length - 1]) : txt(row).replace(/.*(?:vendido por|sold by)\s*:?/i, "").trim();
+            const cand = sanitizeSellerName(val);
+            if (cand) {
+              seller = cand;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    if (!tabularShips) {
+      for (const row of qa(doc, "#tabular-buybox tr, #tabular-buybox .tabular-buybox-row, #tabular-buybox .tabular-buybox-container tr")) {
+        const rowText = txt(row);
+        if (/env[ií]a(?: desde)?|ships from/i.test(rowText)) {
+          const cells = qa(row, "td, .tabular-buybox-text, a, span");
+          const val = cells.length >= 2 ? txt(cells[cells.length - 1]) : txt(row).replace(/.*(?:env[ií]a(?: desde)?|ships from)\s*:?/i, "").trim();
+          if (val) {
+            tabularShips = val;
+            break;
+          }
+        }
+      }
+    }
+
+    // 3. Vendedor y envío desde #merchant-info
     const merchantInfo = txt(q(doc, "#merchant-info, #fulfillerInfoFeature_feature_div, #merchantInfoFeature_feature_div"));
-    const tabularShips = txt(q(doc, "#tabular-buybox .tabular-buybox-row[data-csa-c-slot-id*='ship'] .tabular-buybox-text, [tabular-attribute-name='Ships from'], [tabular-attribute-name='Envía desde']"));
-    const tabularSold = txt(q(doc, "#tabular-buybox .tabular-buybox-row[data-csa-c-slot-id*='sold'] .tabular-buybox-text, [tabular-attribute-name='Sold by'], [tabular-attribute-name='Vendido por']"));
-    const sellerLink = txt(q(doc, "#sellerProfileTriggerId, #sellerName"));
-
-    let seller = sellerLink || tabularSold || "";
-    let shipper = tabularShips || "";
-
     if (!seller && merchantInfo) {
       const mSold = merchantInfo.match(/(?:Vendido por|Sold by|Vendu par|Verkauf durch)\s+([^.\n,]+)/i);
-      if (mSold) seller = mSold[1].trim();
-      else if (/enviado y vendido por|ships from and sold by|expédié et vendu par/i.test(merchantInfo)) {
+      if (mSold) {
+        seller = sanitizeSellerName(mSold[1]);
+      } else if (/enviado y vendido por|ships from and sold by|expédié et vendu par/i.test(merchantInfo)) {
         seller = "Amazon";
+      }
+    }
+
+    // 4. Fulfillment desde #icon-farm o #merchant-info
+    const iconFarm = txt(q(doc, "#icon-farm, #delivery-block, #fulfillment-block, .icon-farm"));
+    let isFullAmazon = /amazon/i.test(tabularShips) ||
+                       /enviado por amazon|ships from amazon|expédi[ée] par amazon/i.test(iconFarm) ||
+                       /enviado por amazon|ships from amazon|expédi[ée] par amazon/i.test(merchantInfo);
+
+    let isDirectAmazon = /^(?:vendido por\s+)?amazon(?:\.com(?:\.mx)?)?$/i.test(seller) ||
+                         /vendido por amazon|sold by amazon|ships from and sold by amazon/i.test(merchantInfo);
+
+    if (isDirectAmazon) {
+      seller = "Amazon";
+      isFullAmazon = true;
+    }
+
+    // 5. Envío (fulfillment)
+    let shipper = tabularShips || (isFullAmazon ? "Amazon" : "");
+
+    // 6. Si sellerName ≠ Amazon pero enviado por Amazon → "Vendido por <Tercero>, enviado por Amazon"
+    let sellerDisplay = seller;
+    if (seller && seller !== "Amazon" && !/amazon/i.test(seller) && isFullAmazon) {
+      const cleanThird = seller.replace(/^vendido por\s+/i, "").trim();
+      sellerDisplay = `Vendido por ${cleanThird}, enviado por Amazon`;
+    }
+
+    // 7. Devoluciones: extraer texto exacto
+    let retPolicy = "";
+    const retEl = q(doc, "#RETURNS_POLICY, #productSupportAndReturnPolicy_feature_div, #productSupportAndReturnPolicy, [data-feature-name='returns'], #return-policy-message, [data-action='return-policy-modal']");
+    if (retEl) {
+      const rawRet = txt(retEl).trim();
+      const mKnown = rawRet.match(/(?:no se puede devolver|not returnable|devoluci[oó]n gratis|devoluciones gratis|devoluci[oó]n gratuita|devoluciones gratuitas|free returns?|30 d[ií]as de devoluci[oó]n(?:\s+sin costo)?|\d+\s*d[ií]as de devoluci[oó]n)/i);
+      if (mKnown) {
+        retPolicy = mKnown[0];
+      } else if (rawRet.length <= 80) {
+        retPolicy = rawRet;
+      } else {
+        retPolicy = rawRet.slice(0, 80);
       }
     }
 
     const byLine = txt(q(doc, "#bylineInfo, #brand"));
     const isBrandStore = /visita la tienda|visit the .+ store|tienda de|visiter la boutique|besuche den .+ store/i.test(byLine);
-    const isDirectAmazon = /amazon/i.test(seller) || /vendido por amazon|sold by amazon/i.test(merchantInfo);
-    const isFullAmazon = /amazon/i.test(shipper) || /enviado por amazon|ships from amazon|expédié par amazon/i.test(merchantInfo);
-
-    const retPolicy = txt(q(doc, "#productSupportAndReturnPolicy, #RETURNS_POLICY, [data-feature-name='returns'], #return-policy-message"));
     const warranty = txt(q(doc, "#warranty_feature_div, [data-feature-name='warranty']"));
     const title = txt(q(doc, "#productTitle")) || txt(q(doc, "#title"));
 
     return {
       storeName: "Amazon",
-      seller: seller || (isDirectAmazon ? "Amazon" : ""),
+      seller: sellerDisplay || (isDirectAmazon ? "Amazon" : ""),
       shipper: shipper || (isFullAmazon ? "Amazon" : ""),
       isOfficialStore: isBrandStore,
       isDirectPlatform: isDirectAmazon,

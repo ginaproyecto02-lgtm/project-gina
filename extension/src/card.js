@@ -280,7 +280,13 @@
     }
 
     // Garantía y devolución indicada en página
-    const policyText = [rel.returnPolicy, rel.warranty].filter(Boolean).join(" · ");
+    let returnVal = "";
+    if (rel.returnPolicy) {
+      returnVal = rel.returnPolicy.startsWith("Devolución según la tienda:")
+        ? rel.returnPolicy
+        : `Devolución según la tienda: ${rel.returnPolicy}`;
+    }
+    const policyText = [returnVal, rel.warranty].filter(Boolean).join(" · ");
     const warrantyRow = dataRow(t("lbl_warranty"), policyText ? esc(policyText) : esc(notStated), srcPage);
 
     // Normas aplicables según país de la tienda

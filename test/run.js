@@ -341,6 +341,40 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   check("La calificación solo aparece si hay aggregateRating en el DOM", tWith.includes("4,7 de 5 · 12.480 reseñas") && !tNo.includes("Calificación en la tienda"));
 }
 {
+  const urlSan = "https://www.amazon.com.mx/dp/B0SAN";
+  const htmlInvalidSeller = `<h1 id="productTitle">Audífonos</h1><a id="bylineInfo">Visita la tienda de Sony</a><a id="sellerProfileTriggerId">Más información</a>`;
+  const wInv = env(htmlInvalidSeller, urlSan);
+  const relInv = wInv.QED.extractReliability(wInv.document, "amazon");
+  check("Amazon vendedor sanitizado descarta «Más información» y «Visita la tienda»", relInv.seller === "");
+
+  const htmlLongSeller = `<h1 id="productTitle">Audífonos</h1><span id="sellerProfileTriggerId">Este es un nombre excesivamente largo para un vendedor de tienda que supera los sesenta caracteres</span>`;
+  const wLong = env(htmlLongSeller, urlSan);
+  const relLong = wLong.QED.extractReliability(wLong.document, "amazon");
+  check("Amazon vendedor descarta nombres > 60 caracteres", relLong.seller === "");
+
+  const htmlBuybox = `
+    <h1 id="productTitle">Audífonos</h1>
+    <div id="tabular-buybox">
+      <div class="tabular-buybox-container">
+        <table>
+          <tr><td>Vendido por</td><td><span class="tabular-buybox-text">Distribuidora Audio MX</span></td></tr>
+          <tr><td>Envía</td><td><span class="tabular-buybox-text">Amazon</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="RETURNS_POLICY"><span>30 días de devolución sin costo</span></div>
+    <div id="acrPopover" title="4.5 de 5 estrellas"></div>
+    <span id="acrCustomerReviewText">8.920 calificaciones</span>
+  `;
+  const wBb = env(htmlBuybox, urlSan);
+  analyze(wBb, urlSan);
+  const relBb = wBb.QED.extractReliability(wBb.document, "amazon");
+  const tBb = cardText(wBb);
+  check("Amazon buybox: «Vendido por Tercero, enviado por Amazon»", relBb.seller === "Vendido por Distribuidora Audio MX, enviado por Amazon" && relBb.isFulfilledByPlatform);
+  check("Amazon devoluciones exactas: «Devolución según la tienda: 30 días de devolución sin costo»", relBb.returnPolicy === "30 días de devolución sin costo" && tBb.includes("Devolución según la tienda: 30 días de devolución sin costo"));
+  check("Amazon calificación desde #acrPopover y #acrCustomerReviewText", relBb.storeRating && relBb.storeRating.includes("4,5 de 5 · 8.920"));
+}
+{
   const w = env("", "https://example.com/");
   const legalMX = w.QED.getLegalWarranty("México");
   const legalNone = w.QED.getLegalWarranty("PaisSinTabla");
