@@ -1,5 +1,5 @@
 {
- "version": "2026-10-10T1823",
+ "version": "2026-10-11T0319",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
  "grupos": {
   "walmart": {
@@ -847,15 +847,15 @@
    "gobierno": "",
    "nota": "",
    "confianza": "Alta",
-   "fuente": "Informe anual de Sony",
-   "url": "",
+   "fuente": "Informe anual de Sony (SEC Form 20-F)",
+   "url": "https://www.sec.gov/edgar/browse/?CIK=0000091384",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "",
-   "nota_en": "",
+   "controlador_en": "Dispersed institutional funds; no controlling shareholder",
+   "nota_en": "Japanese multinational conglomerate (Sony, PlayStation).",
    "fondos_en": "",
    "gobierno_en": "",
-   "fuente_en": ""
+   "fuente_en": "Sony Group Form 20-F (SEC)"
   },
   "lg": {
    "empresa": "LG Electronics",
@@ -14877,6 +14877,89 @@
     "牛奶",
     "우유"
    ],
+   "excluye": [
+    "bloqueador",
+    "corporal",
+    "crema corporal",
+    "facial",
+    "jabon",
+    "limpiadora",
+    "locion corporal",
+    "piel",
+    "shampoo"
+   ],
+   "subcats": {
+    "leche": {
+     "label": "Leche",
+     "kw": [
+      "leche",
+      "milk",
+      "leite",
+      "lait",
+      "latte",
+      "milch"
+     ],
+     "marcas": [
+      "Lala",
+      "Nutri Leche",
+      "Borden",
+      "Yomi Lala",
+      "Alpura",
+      "Nido",
+      "Carnation",
+      "La Lechera",
+      "Silk",
+      "Alpro",
+      "Land O'Lakes",
+      "Organic Valley",
+      "Cabot",
+      "Tillamook"
+     ]
+    },
+    "queso": {
+     "label": "Queso",
+     "kw": [
+      "queso",
+      "cheese",
+      "queijo",
+      "fromage",
+      "formaggio",
+      "kase"
+     ],
+     "marcas": [
+      "Lala",
+      "Président",
+      "President",
+      "Galbani",
+      "Parmalat",
+      "Lactalis",
+      "Philadelphia",
+      "Cabot",
+      "Tillamook",
+      "Land O'Lakes"
+     ]
+    },
+    "yogurt": {
+     "label": "Yogurt",
+     "kw": [
+      "yogur",
+      "yoghurt",
+      "yogurt",
+      "iogurte",
+      "yaourt",
+      "joghurt"
+     ],
+     "marcas": [
+      "Danone",
+      "Activia",
+      "Danonino",
+      "Oikos",
+      "Lala",
+      "Alpura",
+      "Tillamook"
+     ]
+    }
+   },
    "marcas": [
     "Lala",
     "Nutri Leche",
@@ -14945,6 +15028,73 @@
     "suco",
     "yerba"
    ],
+   "excluye": [
+    "llavero",
+    "playera",
+    "tarro",
+    "termo",
+    "vaso"
+   ],
+   "subcats": {
+    "refrescos": {
+     "label": "Refrescos y sodas",
+     "kw": [
+      "refresco",
+      "soda",
+      "refrigerante",
+      "soft drink"
+     ],
+     "marcas": [
+      "Coca-Cola",
+      "Coca Cola",
+      "Sprite",
+      "Fanta",
+      "Fresca",
+      "Schweppes",
+      "Pepsi",
+      "Bilz",
+      "Pap"
+     ]
+    },
+    "jugos": {
+     "label": "Jugos y néctares",
+     "kw": [
+      "jugo",
+      "nectar",
+      "juice",
+      "suco",
+      "jus",
+      "succo"
+     ],
+     "marcas": [
+      "Del Valle",
+      "Santa Clara",
+      "Tang",
+      "Kool-Aid",
+      "Capri Sun",
+      "Real Juice"
+     ]
+    },
+    "aguas": {
+     "label": "Aguas y rehidratantes",
+     "kw": [
+      "agua mineral",
+      "agua natural",
+      "agua purificada",
+      "electrolitos"
+     ],
+     "marcas": [
+      "Ciel",
+      "Topo Chico",
+      "Powerade",
+      "Gatorade",
+      "Bonafont",
+      "Evian",
+      "Electrolit",
+      "Cristal"
+     ]
+    }
+   },
    "marcas": [
     "Coca-Cola",
     "Coca Cola",
@@ -14980,6 +15130,7 @@
   "cerveza": {
    "label": "Cerveza",
    "kw": [
+    "ale",
     "beer",
     "bier",
     "biere",
@@ -14987,10 +15138,66 @@
     "cerveja",
     "cerveza",
     "lager",
+    "pilsner",
+    "stout",
     "ヒール",
     "啤酒",
     "맥주"
    ],
+   "excluye": [
+    "abridor",
+    "camiseta",
+    "destapador",
+    "enfriador",
+    "llavero",
+    "playera",
+    "tarro",
+    "vaso"
+   ],
+   "subcats": {
+    "cerveza": {
+     "label": "Cerveza",
+     "kw": [
+      "cerveza",
+      "beer",
+      "lager",
+      "pilsner",
+      "stout",
+      "ale"
+     ],
+     "marcas": [
+      "Corona",
+      "Modelo",
+      "Victoria",
+      "Pacífico",
+      "Michelob Ultra",
+      "Stella Artois",
+      "Budweiser",
+      "Bud Light",
+      "Negra Modelo",
+      "Heineken",
+      "Tecate",
+      "Indio",
+      "Dos Equis",
+      "XX Lager",
+      "Bohemia",
+      "Carta Blanca",
+      "Sol",
+      "Amstel",
+      "Miller",
+      "Guinness",
+      "Mahou",
+      "San Miguel",
+      "Alhambra",
+      "Estrella Damm",
+      "Damm",
+      "Voll-Damm",
+      "Escudo",
+      "Kunstmann",
+      "Austral"
+     ]
+    }
+   },
    "marcas": [
     "Corona",
     "Modelo",
@@ -15031,17 +15238,80 @@
    "label": "Café",
    "kw": [
     "cafe",
+    "cafe en grano",
+    "cafe molido",
+    "cafe soluble",
     "caffe",
-    "capsulas",
+    "capsulas de cafe",
     "coffee",
     "espresso",
     "infusion",
+    "infusiones",
     "kaffee",
-    "te",
+    "matcha",
+    "te chai",
+    "te de manzanilla",
+    "te matcha",
+    "te negro",
+    "te verde",
     "コーヒー",
     "咖啡",
     "커피"
    ],
+   "excluye": [
+    "aceite esencial",
+    "aceites esenciales",
+    "arbol de te",
+    "aroma",
+    "aromaterapia",
+    "cafetera",
+    "capsulas vacias",
+    "difusor",
+    "filtro",
+    "filtro para cafe",
+    "incienso",
+    "llavero",
+    "shampoo",
+    "taza",
+    "termo",
+    "vela",
+    "velas"
+   ],
+   "subcats": {
+    "cafe": {
+     "label": "Café",
+     "kw": [
+      "cafe",
+      "coffee",
+      "kaffee",
+      "caffe",
+      "espresso",
+      "cafe soluble",
+      "cafe molido",
+      "cafe en grano"
+     ],
+     "marcas": [
+      "Nescafé",
+      "Nescafe",
+      "Lavazza",
+      "illy",
+      "Melitta"
+     ]
+    },
+    "te": {
+     "label": "Té e infusiones",
+     "kw": [
+      "infusion",
+      "infusiones",
+      "te verde",
+      "te negro",
+      "te chai",
+      "te matcha",
+      "matcha"
+     ],
+     "marcas": []
+    }
+   },
    "marcas": [
     "Nescafé",
     "Nescafe",
@@ -15071,6 +15341,64 @@
     "巧克力",
     "초콜릿"
    ],
+   "excluye": [
+    "balsamo labial",
+    "crema corporal",
+    "locion",
+    "shampoo",
+    "vela"
+   ],
+   "subcats": {
+    "chocolate": {
+     "label": "Chocolates",
+     "kw": [
+      "chocolate",
+      "chocolat",
+      "cioccolato",
+      "schokolade"
+     ],
+     "marcas": [
+      "KitKat",
+      "Kit Kat",
+      "Snickers",
+      "M&M's",
+      "Milky Way",
+      "Twix",
+      "Mars",
+      "Milka",
+      "Toblerone",
+      "Cadbury",
+      "Ferrero Rocher",
+      "Kinder",
+      "Nutella",
+      "Arcor",
+      "Cofler",
+      "Butterfinger",
+      "Crunch"
+     ]
+    },
+    "dulces": {
+     "label": "Dulces y golosinas",
+     "kw": [
+      "dulce",
+      "dulces",
+      "caramelo",
+      "candy",
+      "bombon",
+      "chicle",
+      "gomitas",
+      "gummies"
+     ],
+     "marcas": [
+      "Skittles",
+      "Trident",
+      "Halls",
+      "Bubbaloo",
+      "Haribo",
+      "Sonric's"
+     ]
+    }
+   },
    "marcas": [
     "KitKat",
     "Kit Kat",
@@ -15131,6 +15459,70 @@
     "スナック",
     "과자"
    ],
+   "excluye": [
+    "cojin",
+    "estuche",
+    "llavero",
+    "playera"
+   ],
+   "subcats": {
+    "botanas": {
+     "label": "Botanas y frituras",
+     "kw": [
+      "papas fritas",
+      "botana",
+      "frituras",
+      "chips",
+      "snack",
+      "salgadinho"
+     ],
+     "marcas": [
+      "Sabritas",
+      "Doritos",
+      "Cheetos",
+      "Ruffles",
+      "Lay's",
+      "Tostitos",
+      "Barcel",
+      "Takis",
+      "Pringles",
+      "Cheez-It",
+      "Bamba",
+      "Bissli"
+     ]
+    },
+    "galletas": {
+     "label": "Galletas",
+     "kw": [
+      "galletas",
+      "cookies",
+      "biscuits",
+      "crackers",
+      "biscoito",
+      "bolacha",
+      "biscotti",
+      "kekse"
+     ],
+     "marcas": [
+      "Gamesa",
+      "Emperador",
+      "Mamut",
+      "Chokis",
+      "Marinela",
+      "Oreo",
+      "Chips Ahoy",
+      "Ritz",
+      "Club Social",
+      "belVita",
+      "Bagley",
+      "Britannia",
+      "Good Day",
+      "Parle",
+      "Parle-G",
+      "Mulino Bianco"
+     ]
+    }
+   },
    "marcas": [
     "Sabritas",
     "Doritos",
@@ -15169,7 +15561,11 @@
   "abarrotes": {
    "label": "Despensa (pastas, salsas, conservas, sopas)",
    "kw": [
-    "aceite",
+    "aceite comestible",
+    "aceite de canola",
+    "aceite de cocina",
+    "aceite de oliva",
+    "aceite vegetal",
     "arroz",
     "atta",
     "atun",
@@ -15202,6 +15598,80 @@
     "sugo",
     "tomate"
    ],
+   "excluye": [
+    "aceite corporal",
+    "aceite de motor",
+    "aceite esencial",
+    "aceite mineral",
+    "aceite para motor",
+    "aceites esenciales",
+    "difusor",
+    "taza"
+   ],
+   "subcats": {
+    "pastas_sopas": {
+     "label": "Pastas y sopas",
+     "kw": [
+      "pasta",
+      "spaghetti",
+      "sopa",
+      "fideo",
+      "noodles",
+      "ramen"
+     ],
+     "marcas": [
+      "Barilla",
+      "Knorr",
+      "Maruchan",
+      "Nissin",
+      "Cup Noodles",
+      "Top Ramen",
+      "Shin Ramyun"
+     ]
+    },
+    "salsas_aderezos": {
+     "label": "Salsas y aderezos",
+     "kw": [
+      "salsa",
+      "mayonesa",
+      "ketchup",
+      "sauce",
+      "sugo",
+      "passata",
+      "molho"
+     ],
+     "marcas": [
+      "Herdez",
+      "Doña María",
+      "Búfalo",
+      "McCormick",
+      "Hellmann's",
+      "Heinz",
+      "Kraft",
+      "Dolmio"
+     ]
+    },
+    "conservas_granos": {
+     "label": "Conservas, legumbres y atún",
+     "kw": [
+      "atun",
+      "conserva",
+      "frijoles",
+      "arroz",
+      "beans",
+      "rice",
+      "mermelada"
+     ],
+     "marcas": [
+      "Herdez",
+      "Del Fuerte",
+      "La Costeña",
+      "La Campagnola",
+      "Uncle Ben's",
+      "Ben's Original"
+     ]
+    }
+   },
    "marcas": [
     "Herdez",
     "Doña María",
@@ -15260,12 +15730,74 @@
     "mehl",
     "oats",
     "pain",
-    "pan",
+    "pan blanco",
     "pan de caja",
+    "pan dulce",
+    "pan integral",
     "pane",
     "pao",
     "tortillas"
    ],
+   "excluye": [
+    "cuchillo",
+    "panera",
+    "recipiente",
+    "tostadora"
+   ],
+   "subcats": {
+    "pan": {
+     "label": "Pan y tortillas",
+     "kw": [
+      "pan de caja",
+      "pan dulce",
+      "pan blanco",
+      "pan integral",
+      "bread",
+      "tortillas",
+      "pao",
+      "pain",
+      "pane",
+      "brot"
+     ],
+     "marcas": [
+      "Bimbo",
+      "Wonder",
+      "Sara Lee",
+      "Oroweat",
+      "Thomas'",
+      "Entenmann's",
+      "Tía Rosa",
+      "Mission",
+      "Guerrero",
+      "Kingsmill",
+      "Wasa"
+     ]
+    },
+    "cereales_harinas": {
+     "label": "Cereales y harinas",
+     "kw": [
+      "harina",
+      "flour",
+      "cereal",
+      "avena",
+      "oats",
+      "farinha",
+      "farine"
+     ],
+     "marcas": [
+      "Maseca",
+      "Quaker",
+      "Kellogg's",
+      "Zucaritas",
+      "Choco Krispis",
+      "Froot Loops",
+      "Special K",
+      "All-Bran",
+      "Bob's Red Mill",
+      "King Arthur Baking"
+     ]
+    }
+   },
    "marcas": [
     "Bimbo",
     "Wonder",
@@ -15300,9 +15832,12 @@
     "desinfectante",
     "detergent",
     "detergente",
+    "detergente en polvo",
+    "detergente liquido",
     "detersivo",
     "dish soap",
     "fabric softener",
+    "jabon liquido para ropa",
     "jabon para ropa",
     "jabon para trastes",
     "laundry",
@@ -15321,6 +15856,99 @@
     "suavizante",
     "waschmittel"
    ],
+   "excluye": [
+    "bloqueador",
+    "crema corporal",
+    "cutis",
+    "facial",
+    "ojos",
+    "piel",
+    "rostro",
+    "serum",
+    "shampoo",
+    "skincare",
+    "solar"
+   ],
+   "subcats": {
+    "ropa": {
+     "label": "Cuidado de la ropa",
+     "kw": [
+      "detergente",
+      "suavizante",
+      "jabon para ropa",
+      "jabon liquido para ropa",
+      "detergente liquido",
+      "detergente en polvo",
+      "laundry",
+      "fabric softener",
+      "lessive",
+      "detersivo",
+      "waschmittel"
+     ],
+     "marcas": [
+      "Ariel",
+      "Tide",
+      "Downy",
+      "Ace",
+      "Persil",
+      "Vernel",
+      "Suavitel",
+      "Vanish",
+      "Surf Excel",
+      "Rin",
+      "Wheel",
+      "Zote",
+      "Roma",
+      "Blanca Nieves",
+      "Foca",
+      "Carisma"
+     ]
+    },
+    "trastes": {
+     "label": "Lavavajillas y trastes",
+     "kw": [
+      "lavatrastes",
+      "jabon para trastes",
+      "lavavajillas",
+      "dish soap",
+      "spulmittel"
+     ],
+     "marcas": [
+      "Salvo",
+      "Dawn",
+      "Cascade",
+      "Fairy",
+      "Axion",
+      "Finish",
+      "Vim"
+     ]
+    },
+    "superficies": {
+     "label": "Limpieza de superficies",
+     "kw": [
+      "cloro",
+      "desinfectante",
+      "limpiador multiusos",
+      "limpiador de pisos",
+      "limpiador de banos",
+      "limpiador de cocina",
+      "limpiador liquido",
+      "limpiapisos",
+      "desengrasante",
+      "multiusos",
+      "bleach",
+      "cleaner"
+     ],
+     "marcas": [
+      "Fabuloso",
+      "Ajax",
+      "Lysol",
+      "Calgon",
+      "Harpic",
+      "Mr. Clean"
+     ]
+    }
+   },
    "marcas": [
     "Ariel",
     "Tide",
@@ -15358,6 +15986,7 @@
   "cuidado_personal": {
    "label": "Higiene y cuidado personal",
    "kw": [
+    "acondicionador",
     "afeitadora",
     "body wash",
     "cepillo electrico",
@@ -15380,6 +16009,98 @@
     "toothpaste",
     "xampu"
    ],
+   "excluye": [
+    "lavatrastes",
+    "lavavajillas",
+    "multiusos",
+    "pisos",
+    "ropa",
+    "vela aromatica"
+   ],
+   "subcats": {
+    "cabello": {
+     "label": "Cuidado del cabello",
+     "kw": [
+      "shampoo",
+      "champu",
+      "acondicionador",
+      "xampu",
+      "shampooing"
+     ],
+     "marcas": [
+      "Dove",
+      "Sedal",
+      "Clear",
+      "TRESemmé",
+      "Head & Shoulders",
+      "Pantene",
+      "Herbal Essences",
+      "Schwarzkopf",
+      "Syoss"
+     ]
+    },
+    "cuerpo": {
+     "label": "Cuidado corporal y desodorantes",
+     "kw": [
+      "jabon de tocador",
+      "desodorante",
+      "crema corporal",
+      "body wash",
+      "soap bar",
+      "sabonete",
+      "savon",
+      "sapone",
+      "seife",
+      "duschgel"
+     ],
+     "marcas": [
+      "Dove",
+      "Rexona",
+      "Axe",
+      "Vasenol",
+      "Palmolive",
+      "Protex",
+      "Nivea",
+      "Johnson's",
+      "Lux",
+      "Lifebuoy",
+      "Natura",
+      "Avon",
+      "O Boticário",
+      "Godrej",
+      "Cinthol",
+      "Jabón Tepeyac"
+     ]
+    },
+    "bucal": {
+     "label": "Higiene bucal",
+     "kw": [
+      "pasta dental",
+      "toothpaste",
+      "cepillo electrico",
+      "cepillo dental"
+     ],
+     "marcas": [
+      "Colgate",
+      "Crest",
+      "Oral-B",
+      "Philips Sonicare",
+      "Sonicare",
+      "Sensodyne",
+      "Listerine"
+     ]
+    },
+    "afeitado": {
+     "label": "Afeitado y rasurado",
+     "kw": [
+      "rasuradora",
+      "afeitadora"
+     ],
+     "marcas": [
+      "Norelco"
+     ]
+    }
+   },
    "marcas": [
     "Dove",
     "Rexona",
@@ -15490,6 +16211,87 @@
     "tonico facial",
     "vitamina c"
    ],
+   "excluye": [
+    "detergente",
+    "inodoro",
+    "lavatrastes",
+    "lavavajillas",
+    "multiusos",
+    "pisos",
+    "ropa",
+    "trastes"
+   ],
+   "subcats": {
+    "facial": {
+     "label": "Cuidado facial y serums",
+     "kw": [
+      "serum",
+      "suero facial",
+      "acido hialuronico",
+      "niacinamida",
+      "retinol",
+      "vitamina c",
+      "crema facial",
+      "contorno de ojos",
+      "hidratante facial"
+     ],
+     "marcas": [
+      "CeraVe",
+      "La Roche-Posay",
+      "Vichy",
+      "Eucerin",
+      "Neutrogena",
+      "Aveeno",
+      "Clean & Clear",
+      "Kiehl's",
+      "Clinique",
+      "Cetaphil",
+      "Avène",
+      "ISDIN",
+      "Bioderma",
+      "Beauty of Joseon",
+      "COSRX"
+     ]
+    },
+    "solar": {
+     "label": "Protección solar",
+     "kw": [
+      "protector solar",
+      "bloqueador solar",
+      "bloqueador",
+      "fotoprotector",
+      "fps",
+      "spf",
+      "sunscreen"
+     ],
+     "marcas": [
+      "ISDIN",
+      "La Roche-Posay",
+      "Eucerin",
+      "Heliocare",
+      "Bioderma",
+      "Anessa",
+      "Bioré"
+     ]
+    },
+    "limpieza_facial": {
+     "label": "Limpieza facial",
+     "kw": [
+      "gel limpiador",
+      "limpiador espumoso",
+      "limpiador facial",
+      "agua micelar",
+      "desmaquillante"
+     ],
+     "marcas": [
+      "CeraVe",
+      "La Roche-Posay",
+      "Bioderma",
+      "Cetaphil",
+      "Neutrogena"
+     ]
+    }
+   },
    "marcas": [
     "CeraVe",
     "La Roche-Posay",
@@ -15552,7 +16354,6 @@
     "kleid",
     "pantalon",
     "playera",
-    "reloj",
     "reloj de pulsera",
     "robe",
     "sandalias",
@@ -15572,10 +16373,116 @@
     "veste",
     "vestido",
     "vestidos",
-    "watch",
     "zapatillas",
     "zapatos"
    ],
+   "excluye": [
+    "estuche",
+    "funda",
+    "llavero",
+    "soporte"
+   ],
+   "subcats": {
+    "calzado": {
+     "label": "Calzado y tenis",
+     "kw": [
+      "tenis",
+      "zapatos",
+      "zapatillas",
+      "botas",
+      "sandalias",
+      "sneakers",
+      "shoes",
+      "boots",
+      "sapato",
+      "chaussures",
+      "scarpe",
+      "schuhe"
+     ],
+     "marcas": [
+      "Nike",
+      "Jordan",
+      "Converse",
+      "Adidas",
+      "Puma",
+      "Skechers",
+      "Reebok",
+      "Under Armour",
+      "New Balance",
+      "Vans",
+      "Timberland",
+      "Crocs",
+      "Havaianas",
+      "ASICS",
+      "Onitsuka Tiger",
+      "Flexi"
+     ]
+    },
+    "ropa": {
+     "label": "Ropa y prendas",
+     "kw": [
+      "playera",
+      "camiseta",
+      "pantalon",
+      "jeans",
+      "chamarra",
+      "chaqueta",
+      "sudadera",
+      "vestido",
+      "vestidos",
+      "traje",
+      "trajes",
+      "jacket",
+      "hoodie",
+      "t-shirt",
+      "dress",
+      "suit"
+     ],
+     "marcas": [
+      "Nike",
+      "Adidas",
+      "Puma",
+      "Under Armour",
+      "Levi's",
+      "Dockers",
+      "Calvin Klein",
+      "Tommy Hilfiger",
+      "The North Face",
+      "Lacoste",
+      "Zara",
+      "Massimo Dutti",
+      "Bershka",
+      "Pull&Bear",
+      "Uniqlo",
+      "GU",
+      "Primark",
+      "H&M",
+      "Mango"
+     ]
+    },
+    "accesorios": {
+     "label": "Sombreros y relojes",
+     "kw": [
+      "sombrero",
+      "sombreros",
+      "gorra",
+      "reloj de pulsera",
+      "hat",
+      "chapeau",
+      "hut"
+     ],
+     "marcas": [
+      "Rolex",
+      "Casio",
+      "G-Shock",
+      "Seiko",
+      "Citizen",
+      "Swatch",
+      "Tissot",
+      "Stetson"
+     ]
+    }
+   },
    "marcas": [
     "Nike",
     "Jordan",
@@ -15636,12 +16543,19 @@
     "bike",
     "camping",
     "cana de pescar",
+    "cantimplora",
     "carrete",
+    "casco de bicicleta",
     "ciclismo",
+    "filtro de agua portatil",
     "fischen",
     "fishing",
+    "linterna de camping",
     "lure",
+    "mancuerna",
+    "mancuernas",
     "moulinet",
+    "pastillas potabilizadoras",
     "pastillas purificadoras",
     "peche",
     "pesca",
@@ -15652,11 +16566,105 @@
     "rolle",
     "rute",
     "senuelo",
+    "supervivencia",
+    "survival",
     "tackle",
+    "tapete de yoga",
     "tent",
     "tienda de campana",
     "water purification"
    ],
+   "excluye": [
+    "calcomania",
+    "estampado",
+    "llavero",
+    "playera",
+    "taza"
+   ],
+   "subcats": {
+    "pesca": {
+     "label": "Pesca",
+     "kw": [
+      "pesca",
+      "carrete",
+      "cana de pescar",
+      "anzuelo",
+      "senuelo",
+      "fishing",
+      "rod",
+      "reel",
+      "lure",
+      "tackle",
+      "peche",
+      "moulinet",
+      "angeln",
+      "fischen",
+      "rute",
+      "rolle"
+     ],
+     "marcas": [
+      "Penn",
+      "Penn Fishing",
+      "Abu Garcia",
+      "Berkley",
+      "Ugly Stik",
+      "Fenwick",
+      "Hardy",
+      "Shakespeare",
+      "Shimano"
+     ]
+    },
+    "camping_supervivencia": {
+     "label": "Camping y supervivencia",
+     "kw": [
+      "camping",
+      "tienda de campana",
+      "tent",
+      "purificador de agua",
+      "pastillas purificadoras",
+      "pastillas potabilizadoras",
+      "potable aqua",
+      "water purification",
+      "filtro de agua portatil",
+      "linterna de camping",
+      "cantimplora",
+      "supervivencia",
+      "survival"
+     ],
+     "marcas": [
+      "Potable Aqua",
+      "Potable Aqua PURE"
+     ]
+    },
+    "ciclismo": {
+     "label": "Ciclismo",
+     "kw": [
+      "ciclismo",
+      "bicicleta",
+      "bike",
+      "bicycle",
+      "casco de bicicleta",
+      "candado de bicicleta"
+     ],
+     "marcas": [
+      "Shimano"
+     ]
+    },
+    "fitness": {
+     "label": "Fitness y ejercicio",
+     "kw": [
+      "fitness",
+      "mancuerna",
+      "mancuernas",
+      "pesa rusa",
+      "kettlebell",
+      "tapete de yoga",
+      "caminadora",
+      "bicicleta fija"
+     ],
+     "marcas": []
+    }
+   },
    "marcas": [
     "Penn",
     "Penn Fishing",
@@ -15691,6 +16699,56 @@
     "toaster",
     "tostadora"
    ],
+   "excluye": [
+    "funda",
+    "recetario",
+    "termo"
+   ],
+   "subcats": {
+    "preparacion": {
+     "label": "Preparación de alimentos",
+     "kw": [
+      "licuadora",
+      "blender",
+      "batidora",
+      "procesador de alimentos",
+      "extractor de jugos"
+     ],
+     "marcas": [
+      "Ninja",
+      "KitchenAid",
+      "Whirlpool",
+      "Acros"
+     ]
+    },
+    "coccion": {
+     "label": "Cocción y freidoras",
+     "kw": [
+      "freidora de aire",
+      "air fryer",
+      "horno tostador",
+      "olla de presion",
+      "parrilla electrica",
+      "toaster",
+      "tostadora",
+      "sandwichera"
+     ],
+     "marcas": [
+      "Ninja",
+      "Ninja Foodi",
+      "Whirlpool",
+      "Acros",
+      "GE Appliances"
+     ]
+    },
+    "cafeteras": {
+     "label": "Cafeteras",
+     "kw": [
+      "cafetera"
+     ],
+     "marcas": []
+    }
+   },
    "marcas": [
     "Ninja",
     "Shark",
@@ -15735,6 +16793,72 @@
     "イヤホン",
     "ヘットホン"
    ],
+   "excluye": [
+    "adaptador",
+    "cable para",
+    "carcasa",
+    "estuche",
+    "funda",
+    "llavero",
+    "mica",
+    "protector de pantalla",
+    "soporte"
+   ],
+   "subcats": {
+    "audio": {
+     "label": "Audio y auriculares",
+     "kw": [
+      "audifonos",
+      "auriculares",
+      "headphones",
+      "earbuds",
+      "headset",
+      "bocina",
+      "bocinas",
+      "altavoz",
+      "speaker",
+      "speakers",
+      "parlante",
+      "soundbar",
+      "barra de sonido",
+      "earphones"
+     ],
+     "marcas": [
+      "Sony",
+      "Bose",
+      "JBL",
+      "Beats",
+      "Harman Kardon",
+      "AirPods",
+      "Sennheiser",
+      "Audio-Technica",
+      "Anker",
+      "Soundcore"
+     ]
+    },
+    "tv_video": {
+     "label": "Televisores y pantallas",
+     "kw": [
+      "pantalla",
+      "tv",
+      "smart tv",
+      "televisor",
+      "television"
+     ],
+     "marcas": [
+      "Sony"
+     ]
+    },
+    "telefonia": {
+     "label": "Smartphones y telefonía",
+     "kw": [
+      "celular",
+      "smartphone",
+      "telefono"
+     ],
+     "marcas": []
+    }
+   },
    "marcas": [
     "Sony",
     "Bose",
@@ -15773,6 +16897,52 @@
     "sillon",
     "sofa"
    ],
+   "excluye": [
+    "almohadilla",
+    "funda",
+    "juguete",
+    "tapete de mouse"
+   ],
+   "subcats": {
+    "muebles": {
+     "label": "Muebles del hogar",
+     "kw": [
+      "mueble",
+      "muebles",
+      "sofa",
+      "sillon",
+      "cama",
+      "colchon",
+      "comedor",
+      "librero",
+      "estante",
+      "buro",
+      "armario",
+      "ropero",
+      "furniture",
+      "mattress"
+     ],
+     "marcas": [
+      "IKEA",
+      "Ashley Furniture"
+     ]
+    },
+    "oficina": {
+     "label": "Muebles de oficina",
+     "kw": [
+      "silla de oficina",
+      "silla ergonomica",
+      "escritorio",
+      "office chair",
+      "desk"
+     ],
+     "marcas": [
+      "Herman Miller",
+      "Knoll",
+      "Steelcase"
+     ]
+    }
+   },
    "marcas": [
     "IKEA",
     "Ashley Furniture",
@@ -15812,6 +16982,57 @@
     "robot vacuum",
     "secadora"
    ],
+   "excluye": [
+    "cable",
+    "control remoto",
+    "filtro para cafe",
+    "funda"
+   ],
+   "subcats": {
+    "clima_lineablanca": {
+     "label": "Línea blanca y climatización",
+     "kw": [
+      "refrigerador",
+      "nevera",
+      "frigobar",
+      "lavadora",
+      "secadora",
+      "estufa",
+      "aire acondicionado",
+      "minisplit",
+      "clima"
+     ],
+     "marcas": [
+      "Whirlpool",
+      "Haier",
+      "Electrolux",
+      "Daikin",
+      "Carrier",
+      "Midea"
+     ]
+    },
+    "aspiracion_aire": {
+     "label": "Aspiradoras y purificadores",
+     "kw": [
+      "purificador de aire",
+      "filtro de aire",
+      "filtro hepa",
+      "aspiradora robot",
+      "robot aspirador",
+      "aspiradora inteligente",
+      "robot vacuum"
+     ],
+     "marcas": [
+      "Dyson",
+      "iRobot",
+      "Roomba",
+      "Roborock",
+      "Ecovacs",
+      "Levoit",
+      "Coway"
+     ]
+    }
+   },
    "marcas": [
     "Whirlpool",
     "Haier",
@@ -15873,6 +17094,37 @@
     "werkzeug",
     "wrench"
    ],
+   "excluye": [
+    "estuche vacio",
+    "juguete",
+    "llavero"
+   ],
+   "subcats": {
+    "herramientas": {
+     "label": "Herramientas",
+     "kw": [
+      "taladro",
+      "rotomartillo",
+      "destornillador",
+      "desarmador",
+      "llave inglesa",
+      "pinzas",
+      "drill",
+      "wrench"
+     ],
+     "marcas": [
+      "DeWalt",
+      "Stanley",
+      "Black+Decker",
+      "Craftsman",
+      "Makita",
+      "Milwaukee",
+      "Ryobi",
+      "Husqvarna",
+      "Bosch"
+     ]
+    }
+   },
    "marcas": [
     "DeWalt",
     "Stanley",
@@ -15931,6 +17183,63 @@
     "rascador para gato",
     "treats para perro"
    ],
+   "excluye": [
+    "llavero",
+    "peluche para bebe",
+    "playera"
+   ],
+   "subcats": {
+    "perros": {
+     "label": "Perros",
+     "kw": [
+      "alimento para perro",
+      "croquetas para perro",
+      "comida para perro",
+      "premios para perro",
+      "bocadillos para perro",
+      "treats para perro",
+      "juguete para perro",
+      "dog food",
+      "dog treats"
+     ],
+     "marcas": [
+      "Purina",
+      "Dog Chow",
+      "Pro Plan",
+      "Pedigree",
+      "Cesar",
+      "Hill's",
+      "Blue Buffalo",
+      "Ganador"
+     ]
+    },
+    "gatos": {
+     "label": "Gatos",
+     "kw": [
+      "alimento para gato",
+      "croquetas para gato",
+      "comida para gato",
+      "premios para gato",
+      "juguete para gato",
+      "rascador para gato",
+      "arena para gato",
+      "cat food",
+      "cat treats"
+     ],
+     "marcas": [
+      "Purina",
+      "Cat Chow",
+      "Pro Plan",
+      "Whiskas",
+      "Royal Canin",
+      "Sheba",
+      "Hill's",
+      "Blue Buffalo",
+      "Fancy Feast",
+      "Minino"
+     ]
+    }
+   },
    "marcas": [
     "Purina",
     "Dog Chow",
@@ -15962,6 +17271,7 @@
    "label": "Aromatizantes, esencias e inciensos",
    "kw": [
     "aceite esencial",
+    "aceites esenciales",
     "air freshener",
     "ambientador",
     "ambientador de cuarto",
@@ -15980,8 +17290,48 @@
     "room spray",
     "scented candle",
     "varillas de incienso",
-    "vela aromatica"
+    "vela aromatica",
+    "velas aromaticas"
    ],
+   "excluye": [
+    "crema corporal",
+    "detergente",
+    "jabon para ropa",
+    "shampoo"
+   ],
+   "subcats": {
+    "aceites_esenciales": {
+     "label": "Aceites esenciales y difusores",
+     "kw": [
+      "aceite esencial",
+      "aceites esenciales",
+      "difusor de aromas",
+      "difusor ultrasonico",
+      "esencia para difusor",
+      "essential oil"
+     ],
+     "marcas": []
+    },
+    "aromatizantes_velas": {
+     "label": "Aromatizantes y velas",
+     "kw": [
+      "aromatizante",
+      "ambientador",
+      "vela aromatica",
+      "velas aromaticas",
+      "incienso",
+      "air freshener",
+      "scented candle"
+     ],
+     "marcas": [
+      "Glade",
+      "Air Wick",
+      "Febreze",
+      "Yankee Candle",
+      "Bath & Body Works"
+     ]
+    }
+   },
    "marcas": [
     "Glade",
     "Air Wick",
@@ -16018,6 +17368,49 @@
     "toilettenpapier",
     "wet wipes"
    ],
+   "excluye": [
+    "bote de basura",
+    "dispensador",
+    "portarrollos"
+   ],
+   "subcats": {
+    "papel": {
+     "label": "Papel higiénico y pañuelos",
+     "kw": [
+      "papel higienico",
+      "papel de bano",
+      "papel sanitario",
+      "toilet paper",
+      "bath tissue"
+     ],
+     "marcas": [
+      "Pétalo",
+      "Regio",
+      "Cottonelle",
+      "Kleenex",
+      "Scott",
+      "Charmin"
+     ]
+    },
+    "bebe_intimo": {
+     "label": "Pañales y cuidado íntimo",
+     "kw": [
+      "toallitas humedas",
+      "toallitas para bebe",
+      "panales",
+      "panal",
+      "toallas sanitarias",
+      "toallas femeninas",
+      "protectores diarios"
+     ],
+     "marcas": [
+      "Huggies",
+      "Pampers",
+      "Saba",
+      "Always"
+     ]
+    }
+   },
    "marcas": [
     "Pétalo",
     "Regio",
@@ -16042,8 +17435,10 @@
     "almohada de viaje",
     "carry on luggage",
     "equipaje de mano",
+    "maleta",
     "maleta carry on",
     "maleta de viaje",
+    "mochila",
     "mochila de viaje",
     "mochila para viaje",
     "neceser de viaje",
@@ -16058,6 +17453,33 @@
     "travel pillow",
     "valija"
    ],
+   "excluye": [
+    "cable",
+    "funda de celular"
+   ],
+   "subcats": {
+    "equipaje": {
+     "label": "Equipaje y maletas",
+     "kw": [
+      "mochila",
+      "maleta",
+      "maleta de viaje",
+      "maleta carry on",
+      "equipaje de mano",
+      "valija",
+      "mochila de viaje"
+     ],
+     "marcas": [
+      "Samsonite",
+      "American Tourister",
+      "Tumi",
+      "Thule",
+      "Osprey",
+      "Delsey Paris",
+      "The North Face"
+     ]
+    }
+   },
    "marcas": [
     "Samsonite",
     "American Tourister",
@@ -16102,6 +17524,31 @@
     "vendas",
     "verbandkasten"
    ],
+   "excluye": [
+    "juguete"
+   ],
+   "subcats": {
+    "primeros_auxilios": {
+     "label": "Primeros auxilios y curación",
+     "kw": [
+      "primeros auxilios",
+      "botiquin",
+      "curitas",
+      "vendas",
+      "gasa esteril",
+      "alcohol etilico",
+      "antiseptico"
+     ],
+     "marcas": [
+      "Band-Aid",
+      "Curitas",
+      "Hansaplast",
+      "Nexcare",
+      "3M",
+      "Omron"
+     ]
+    }
+   },
    "marcas": [
     "Band-Aid",
     "Curitas",
@@ -16134,6 +17581,29 @@
     "pla",
     "resina 3d"
    ],
+   "excluye": [
+    "figura 3d",
+    "poster"
+   ],
+   "subcats": {
+    "impresion_3d": {
+     "label": "Impresión 3D",
+     "kw": [
+      "impresora 3d",
+      "3d printer",
+      "filamento",
+      "pla",
+      "petg",
+      "resina 3d"
+     ],
+     "marcas": [
+      "Creality",
+      "Creality 3D",
+      "Ender",
+      "Ender 3"
+     ]
+    }
+   },
    "marcas": [
     "Creality",
     "Creality 3D",
@@ -16141,5 +17611,140 @@
     "Ender 3"
    ]
   }
+ },
+ "categorias_tienda": {
+  "Aromaterapia|Aceites esenciales|Difusores|Incienso|Velas aromáticas|Ambientadores": {
+   "cat": "aromas_ambiente",
+   "subcat": "aceites_esenciales"
+  },
+  "Café|Café en grano|Café molido|Cápsulas de café|Café soluble": {
+   "cat": "cafe",
+   "subcat": "cafe"
+  },
+  "Té|Infusiones|Té verde|Té negro|Matcha": {
+   "cat": "cafe",
+   "subcat": "te"
+  },
+  "Cervezas|Cerveza artesanal|Cerveza nacional|Cerveza importada": {
+   "cat": "cerveza",
+   "subcat": "cerveza"
+  },
+  "Lácteos|Leches|Quesos|Yogurt|Mantequilla": {
+   "cat": "lacteos",
+   "subcat": "lacteos"
+  },
+  "Bebidas y jugos|Refrescos|Aguas minerales|Jugos y néctares": {
+   "cat": "bebidas",
+   "subcat": "refrescos"
+  },
+  "Chocolates y dulces|Dulces|Caramelos|Golosinas": {
+   "cat": "chocolate_dulces",
+   "subcat": "chocolate"
+  },
+  "Botanas y galletas|Papas fritas|Snacks|Galletas": {
+   "cat": "botanas_galletas",
+   "subcat": "botanas"
+  },
+  "Despensa|Abarrotes|Pastas y sopas|Enlatados y conservas|Salsas": {
+   "cat": "abarrotes",
+   "subcat": "abarrotes"
+  },
+  "Panadería y tortillería|Pan de caja|Tortillas|Harinas|Cereales": {
+   "cat": "panaderia_harinas",
+   "subcat": "pan"
+  },
+  "Limpieza del hogar|Detergentes|Cuidado de la ropa|Suavizantes": {
+   "cat": "limpieza",
+   "subcat": "ropa"
+  },
+  "Lavavajillas|Lavatrastes": {
+   "cat": "limpieza",
+   "subcat": "trastes"
+  },
+  "Higiene y cuidado personal|Cuidado del cabello|Shampoo|Jabones de tocador": {
+   "cat": "cuidado_personal",
+   "subcat": "cabello"
+  },
+  "Higiene bucal|Pastas dentales|Cepillos dentales": {
+   "cat": "cuidado_personal",
+   "subcat": "bucal"
+  },
+  "Dermocosmética|Cuidado de la piel|Facial|Protección solar|Bloqueadores solares|Skincare": {
+   "cat": "skincare_cosmetica",
+   "subcat": "facial"
+  },
+  "Ropa, calzado y accesorios|Zapatos|Tenis|Vestidos|Pantalones|Moda": {
+   "cat": "ropa_calzado",
+   "subcat": "ropa"
+  },
+  "Pesca|Cañas de pescar|Carretes de pesca|Señuelos": {
+   "cat": "deportes_outdoor",
+   "subcat": "pesca"
+  },
+  "Campismo|Camping|Supervivencia|Purificación de agua|Senderismo": {
+   "cat": "deportes_outdoor",
+   "subcat": "camping_supervivencia"
+  },
+  "Ciclismo|Bicicletas": {
+   "cat": "deportes_outdoor",
+   "subcat": "ciclismo"
+  },
+  "Fitness y gimnasio|Pesas y mancuernas|Yoga": {
+   "cat": "deportes_outdoor",
+   "subcat": "fitness"
+  },
+  "Electrodomésticos de cocina|Licuadoras|Freidoras de aire|Cafeteras": {
+   "cat": "electrodomesticos_cocina",
+   "subcat": "cocina"
+  },
+  "Audio y video|Audífonos|Auriculares|Bocinas|Barras de sonido": {
+   "cat": "audio_electronica",
+   "subcat": "audio"
+  },
+  "Televisores|Pantallas|Smart TV": {
+   "cat": "audio_electronica",
+   "subcat": "tv_video"
+  },
+  "Celulares y smartphones|Telefonía": {
+   "cat": "audio_electronica",
+   "subcat": "telefonia"
+  },
+  "Muebles|Muebles de oficina|Colchones": {
+   "cat": "hogar_muebles",
+   "subcat": "muebles"
+  },
+  "Electrodomésticos|Línea blanca|Refrigeradores|Lavadoras|Aspiradoras|Climatización|Aire acondicionado": {
+   "cat": "electrodomesticos_clima",
+   "subcat": "clima_lineablanca"
+  },
+  "Herramientas y ferretería|Herramientas eléctricas|Herramientas manuales|Jardinería|Plomería": {
+   "cat": "herramientas",
+   "subcat": "herramientas"
+  },
+  "Mascotas|Alimento para perros|Alimento para gatos|Cuidado de mascotas": {
+   "cat": "mascotas",
+   "subcat": "alimento"
+  },
+  "Papel higiénico|Toallitas húmedas|Pañales": {
+   "cat": "higiene_papel",
+   "subcat": "papel"
+  },
+  "Equipaje y maletas|Mochilas de viaje|Accesorios de viaje": {
+   "cat": "viajes_equipaje",
+   "subcat": "equipaje"
+  },
+  "Salud y primeros auxilios|Botiquín|Cuidado de heridas": {
+   "cat": "salud_primeros_auxilios",
+   "subcat": "primeros_auxilios"
+  },
+  "Impresión 3D|Filamentos 3D": {
+   "cat": "tecnologia_3d",
+   "subcat": "impresion_3d"
+  },
+  "Accesorios para celulares|Fundas para celular|Protectores de pantalla|Cables y cargadores": null,
+  "Videojuegos|Consolas|Juegos": null,
+  "Libros|Películas|Música": null,
+  "Joyería|Relojes de lujo": null,
+  "Juguetes|Juegos de mesa": null
  }
 }

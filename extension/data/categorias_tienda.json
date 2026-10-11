@@ -1,0 +1,135 @@
+{
+  "Aromaterapia|Aceites esenciales|Difusores|Incienso|Velas aromáticas|Ambientadores": {
+    "cat": "aromas_ambiente",
+    "subcat": "aceites_esenciales"
+  },
+  "Café|Café en grano|Café molido|Cápsulas de café|Café soluble": {
+    "cat": "cafe",
+    "subcat": "cafe"
+  },
+  "Té|Infusiones|Té verde|Té negro|Matcha": {
+    "cat": "cafe",
+    "subcat": "te"
+  },
+  "Cervezas|Cerveza artesanal|Cerveza nacional|Cerveza importada": {
+    "cat": "cerveza",
+    "subcat": "cerveza"
+  },
+  "Lácteos|Leches|Quesos|Yogurt|Mantequilla": {
+    "cat": "lacteos",
+    "subcat": "lacteos"
+  },
+  "Bebidas y jugos|Refrescos|Aguas minerales|Jugos y néctares": {
+    "cat": "bebidas",
+    "subcat": "refrescos"
+  },
+  "Chocolates y dulces|Dulces|Caramelos|Golosinas": {
+    "cat": "chocolate_dulces",
+    "subcat": "chocolate"
+  },
+  "Botanas y galletas|Papas fritas|Snacks|Galletas": {
+    "cat": "botanas_galletas",
+    "subcat": "botanas"
+  },
+  "Despensa|Abarrotes|Pastas y sopas|Enlatados y conservas|Salsas": {
+    "cat": "abarrotes",
+    "subcat": "abarrotes"
+  },
+  "Panadería y tortillería|Pan de caja|Tortillas|Harinas|Cereales": {
+    "cat": "panaderia_harinas",
+    "subcat": "pan"
+  },
+  "Limpieza del hogar|Detergentes|Cuidado de la ropa|Suavizantes": {
+    "cat": "limpieza",
+    "subcat": "ropa"
+  },
+  "Lavavajillas|Lavatrastes": {
+    "cat": "limpieza",
+    "subcat": "trastes"
+  },
+  "Higiene y cuidado personal|Cuidado del cabello|Shampoo|Jabones de tocador": {
+    "cat": "cuidado_personal",
+    "subcat": "cabello"
+  },
+  "Higiene bucal|Pastas dentales|Cepillos dentales": {
+    "cat": "cuidado_personal",
+    "subcat": "bucal"
+  },
+  "Dermocosmética|Cuidado de la piel|Facial|Protección solar|Bloqueadores solares|Skincare": {
+    "cat": "skincare_cosmetica",
+    "subcat": "facial"
+  },
+  "Ropa, calzado y accesorios|Zapatos|Tenis|Vestidos|Pantalones|Moda": {
+    "cat": "ropa_calzado",
+    "subcat": "ropa"
+  },
+  "Pesca|Cañas de pescar|Carretes de pesca|Señuelos": {
+    "cat": "deportes_outdoor",
+    "subcat": "pesca"
+  },
+  "Campismo|Camping|Supervivencia|Purificación de agua|Senderismo": {
+    "cat": "deportes_outdoor",
+    "subcat": "camping_supervivencia"
+  },
+  "Ciclismo|Bicicletas": {
+    "cat": "deportes_outdoor",
+    "subcat": "ciclismo"
+  },
+  "Fitness y gimnasio|Pesas y mancuernas|Yoga": {
+    "cat": "deportes_outdoor",
+    "subcat": "fitness"
+  },
+  "Electrodomésticos de cocina|Licuadoras|Freidoras de aire|Cafeteras": {
+    "cat": "electrodomesticos_cocina",
+    "subcat": "cocina"
+  },
+  "Audio y video|Audífonos|Auriculares|Bocinas|Barras de sonido": {
+    "cat": "audio_electronica",
+    "subcat": "audio"
+  },
+  "Televisores|Pantallas|Smart TV": {
+    "cat": "audio_electronica",
+    "subcat": "tv_video"
+  },
+  "Celulares y smartphones|Telefonía": {
+    "cat": "audio_electronica",
+    "subcat": "telefonia"
+  },
+  "Muebles|Muebles de oficina|Colchones": {
+    "cat": "hogar_muebles",
+    "subcat": "muebles"
+  },
+  "Electrodomésticos|Línea blanca|Refrigeradores|Lavadoras|Aspiradoras|Climatización|Aire acondicionado": {
+    "cat": "electrodomesticos_clima",
+    "subcat": "clima_lineablanca"
+  },
+  "Herramientas y ferretería|Herramientas eléctricas|Herramientas manuales|Jardinería|Plomería": {
+    "cat": "herramientas",
+    "subcat": "herramientas"
+  },
+  "Mascotas|Alimento para perros|Alimento para gatos|Cuidado de mascotas": {
+    "cat": "mascotas",
+    "subcat": "alimento"
+  },
+  "Papel higiénico|Toallitas húmedas|Pañales": {
+    "cat": "higiene_papel",
+    "subcat": "papel"
+  },
+  "Equipaje y maletas|Mochilas de viaje|Accesorios de viaje": {
+    "cat": "viajes_equipaje",
+    "subcat": "equipaje"
+  },
+  "Salud y primeros auxilios|Botiquín|Cuidado de heridas": {
+    "cat": "salud_primeros_auxilios",
+    "subcat": "primeros_auxilios"
+  },
+  "Impresión 3D|Filamentos 3D": {
+    "cat": "tecnologia_3d",
+    "subcat": "impresion_3d"
+  },
+  "Accesorios para celulares|Fundas para celular|Protectores de pantalla|Cables y cargadores": null,
+  "Videojuegos|Consolas|Juegos": null,
+  "Libros|Películas|Música": null,
+  "Joyería|Relojes de lujo": null,
+  "Juguetes|Juegos de mesa": null
+}

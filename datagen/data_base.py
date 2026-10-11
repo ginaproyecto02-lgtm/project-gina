@@ -63,7 +63,7 @@ g("samsung","Samsung Electronics","Familia Lee (vía participaciones cruzadas de
 g("xiaomi","Xiaomi","Lei Jun (control por voto)","China","Fundador","","","",A,"Informe anual de Xiaomi (HKEX)")
 g("huawei","Huawei","Empleados vía sindicato; su fundador Ren Zhengfei tiene ~1%","China","Empleados",NC,"Sanciones de EE.UU. desde 2019","",A,"Informe anual de Huawei")
 g("lenovo","Lenovo (incluye Motorola)","Legend Holdings (vinculada a la Academia China de Ciencias) y fondos","China","Mixto","","","",V,"Informe anual de Lenovo (HKEX)")
-g("sony","Sony Group","Sin accionista de control","Otros (Japón)","Fondos dispersos","","","",A,"Informe anual de Sony")
+g("sony","Sony Group","Sin accionista de control","Otros (Japón)","Fondos dispersos","","","",A,"Informe anual de Sony (SEC Form 20-F)","https://www.sec.gov/edgar/browse/?CIK=0000091384",controlador_en="Dispersed institutional funds; no controlling shareholder",nota_en="Japanese multinational conglomerate (Sony, PlayStation).",fuente_en="Sony Group Form 20-F (SEC)")
 g("lg","LG Electronics","Familia Koo (vía LG Corp.)","Otros (Corea del Sur)","Familia + fondos","","","",A,"Informe anual de LG")
 g("hp","HP Inc.","Sin accionista de control","EE.UU.","Fondos dispersos",P,"Contratos con gobiernos","",A,"Informe 10-K de HP")
 g("dell","Dell Technologies","Michael Dell (control por voto)","EE.UU.","Fundador",P,"Contratos con gobiernos","",A,"Informe 10-K de Dell")

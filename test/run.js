@@ -40,15 +40,20 @@ function analyze(w, url) {
   r.store = entry && entry.tipo === "tienda" ? { nombre: entry.nombre, group: index.groups[entry.g], id: entry.g, entry, modelo: entry.modelo, pais: entry.pais } : null;
   // Igual que content.js: alternativas locales según el tipo de producto y el país de la tienda
   const prep = QED.ALT.prepare(db, index);
-  const cat = entry && entry.tipo === "tienda" ? QED.ALT.category(prep, r.found ? r.brand : r.brandText, data.title) : null;
-  if (cat) {
+  const catRes = entry && entry.tipo === "tienda" ? QED.ALT.category(prep, r.found ? r.brand : r.brandText, data.title, data.categoryPath) : null;
+  const cat = catRes ? (typeof catRes === "string" ? catRes : catRes.cat) : null;
+  const subcat = catRes && catRes.subcat ? catRes.subcat : null;
+  if (cat && catRes.confianza !== "ninguna") {
     const otherBrands = r.group && r.group.id ? QED.ALT.otherBrandsOfSameOwner(prep, r.group.id, r.found ? r.brand : r.brandText, 6) : [];
-    const dominant = QED.ALT.categoryDominantBrands(prep, cat, 4);
+    const dominant = catRes.confianza === "alta" ? QED.ALT.categoryDominantBrands(prep, cat, 4, r.group && r.group.id, subcat) : [];
     r.alternativas = {
       cat,
-      label: prep.cats[cat].label,
+      subcat,
+      confianza: catRes.confianza,
+      motivo: catRes.motivo,
+      label: prep.cats[cat] ? prep.cats[cat].label : cat,
       pais: entry.pais,
-      items: QED.ALT.suggest(prep, cat, entry.pais, r.group && r.group.id, null, 3),
+      items: QED.ALT.suggest(prep, cat, entry.pais, r.group && r.group.id, null, 3, data.title, subcat),
       otherBrands,
       dominant,
       actualEsLocal: !!(r.group && QED.ALT.INDEP[r.group.tipo] && QED.ALT.countries(r.group.pais).includes(entry.pais))
@@ -238,11 +243,11 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
   const idx = w.QED.buildIndex(db, [], {}, {});
   const prep = w.QED.ALT.prepare(db, idx);
   const cat = w.QED.ALT.category(prep, "Philips", "Audífonos inalámbricos Philips Bluetooth");
-  check("«Audífonos inalámbricos Philips» → audio_electronica, no cocina", cat === "audio_electronica", cat);
+  check("«Audífonos inalámbricos Philips» → audio_electronica, no cocina", (cat && (cat.cat || cat)) === "audio_electronica", cat && (cat.cat || cat));
   const others = w.QED.ALT.otherBrandsOfSameOwner(prep, "pg", "Ariel", 6);
   check("Otras marcas del mismo dueño (P&G sin Ariel)", others.length >= 2 && !others.map(x => x.toLowerCase()).includes("ariel"), others.join(", "));
   const dom = w.QED.ALT.categoryDominantBrands(prep, "audio_electronica", 4);
-  check("Marcas dominantes de audio_electronica (Sony, Bose, JBL, etc.)", dom.length >= 2 && dom.some((d) => d.marca === "Sony"), dom.map((d) => d.marca).join(", "));
+  check("Marcas dominantes de audio_electronica (Sony, Bose, JBL, etc.)", dom.length >= 2 && dom.some((d) => d.marca === "Sony" || (d.marcas && d.marcas.includes("Sony"))), dom.map((d) => (d.marcas ? d.empresa + ": " + d.marcas.join(", ") : d.marca)).join("; "));
 }
 {
   const w = env("", "https://example.com/");
@@ -397,6 +402,85 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     }
   }
   check("Sin promesas de calidad ni certificación propia de Gina (/cumple|garantizad|alta calidad|certificad[oa] por Gina/)", noQualityPromises);
+}
+
+// ---------------------------------------------------------------- Clasificador por capas y banco de 100 títulos
+{
+  const w = env("", "https://example.com/");
+  const idx = w.QED.buildIndex(db, [], {}, {});
+  const prep = w.QED.ALT.prepare(db, idx);
+
+  // 1. Caso real aceites esenciales: aromas_ambiente, nunca cafe
+  const rAceites = w.QED.ALT.category(prep, "ORIGINAL NATURE'S OILS", "ORIGINAL NATURE'S OILS Kit de 5 aceites esenciales… Árbol de Té…");
+  check("Caso real aceites esenciales: aromas_ambiente, nunca cafe", rAceites.cat === "aromas_ambiente" && rAceites.cat !== "cafe", rAceites.cat);
+
+  // 2. Conector / núcleo del título
+  const rTaza = w.QED.ALT.category(prep, "", "Taza para café de cerámica artesanal 350 ml");
+  check("«Taza para café de cerámica» ≠ cafe (cat=null)", rTaza.cat !== "cafe" && rTaza.cat === null, rTaza.cat);
+
+  const rFunda = w.QED.ALT.category(prep, "", "Funda para celular de silicona suave compatible con iPhone 15");
+  check("«Funda para celular» ≠ audio_electronica (cat=null)", rFunda.cat !== "audio_electronica" && rFunda.cat === null, rFunda.cat);
+
+  const rCafetera = w.QED.ALT.category(prep, "", "Cafetera italiana de acero inoxidable para 6 tazas");
+  check("«Cafetera italiana» = electrodomesticos_cocina, nunca cafe", rCafetera.cat === "electrodomesticos_cocina" && rCafetera.cat !== "cafe", rCafetera.cat);
+
+  const rTe = w.QED.ALT.category(prep, "", "Té verde orgánico en sobres caja con 25 bolsas");
+  check("«Té verde orgánico» = cafe / te", rTe.cat === "cafe" && rTe.subcat === "te", `${rTe.cat} / ${rTe.subcat}`);
+
+  const rCafeMolido = w.QED.ALT.category(prep, "", "Café molido 400 g");
+  check("«Café molido» = cafe", rCafeMolido.cat === "cafe", rCafeMolido.cat);
+
+  // 3. Breadcrumb gana a palabras del título
+  const rBc = w.QED.ALT.category(prep, "", "Café soluble sabor caramelo", "Hogar > Aromaterapia > Difusores");
+  check("Breadcrumb «Hogar > Aromaterapia» gana al título", rBc.cat === "aromas_ambiente", rBc.cat);
+
+  // 4. Confianza ninguna → sin alternativas ni marcas dominantes
+  const rNinguna = w.QED.ALT.category(prep, "", "Objeto genérico desconocido no clasificado");
+  check("Confianza «ninguna» para objeto no clasificado", rNinguna.confianza === "ninguna" && rNinguna.cat === null);
+
+  // 5. Potable Aqua → deportes_outdoor / camping_supervivencia; sin pesca
+  const rPotable = w.QED.ALT.category(prep, "Potable Aqua", "Potable Aqua Water Purification Iodine Tablets");
+  const domPotable = w.QED.ALT.categoryDominantBrands(prep, rPotable.cat, 4, null, rPotable.subcat);
+  const marcasDomPotable = domPotable.flatMap(d => d.marcas);
+  check("«Potable Aqua Tablets» → camping_supervivencia sin pesca", rPotable.cat === "deportes_outdoor" && rPotable.subcat === "camping_supervivencia" && !marcasDomPotable.includes("Penn") && !marcasDomPotable.includes("Abu Garcia"), `${rPotable.subcat} · dominant: ${marcasDomPotable.join(", ") || "ninguna"}`);
+
+  // 6. Penn carrete → pesca; Potable Aqua no aparece
+  const rPenn = w.QED.ALT.category(prep, "Penn", "Carrete Penn Battle III 4000");
+  const domPenn = w.QED.ALT.categoryDominantBrands(prep, rPenn.cat, 4, "pure_fishing", rPenn.subcat);
+  const marcasDomPenn = domPenn.flatMap(d => d.marcas);
+  check("«Carrete Penn Battle III 4000» → pesca sin Potable Aqua", rPenn.cat === "deportes_outdoor" && rPenn.subcat === "pesca" && !marcasDomPenn.includes("Potable Aqua"), `${rPenn.subcat} · dominant: ${marcasDomPenn.join(", ") || "ninguna"}`);
+
+  // 7. Banco de 100 títulos (test/titulos.json)
+  const titulosBanco = JSON.parse(fs.readFileSync(path.join(__dirname, "titulos.json"), "utf8"));
+  let correctosAlta = 0, totalAlta = 0, trampasSinFalsosPositivos = 0, totalTrampas = 0;
+
+  for (const item of titulosBanco) {
+    const res = w.QED.ALT.category(prep, "", item.titulo);
+    if (item.es_trampa) {
+      totalTrampas++;
+      let okTrampa = true;
+      if (item.cat_esperada !== undefined && item.cat_esperada !== null) {
+        if (res.cat !== item.cat_esperada) okTrampa = false;
+      } else {
+        if (res.cat !== null && res.confianza === "alta") okTrampa = false;
+      }
+      if (item.excluir_cat) {
+        for (const bad of item.excluir_cat) {
+          if (res.cat === bad || res.subcat === bad) okTrampa = false;
+        }
+      }
+      if (okTrampa) trampasSinFalsosPositivos++;
+    } else {
+      if (res.confianza === "alta") {
+        totalAlta++;
+        if (res.cat === item.cat_esperada) correctosAlta++;
+      }
+    }
+  }
+
+  const exactitudAlta = totalAlta > 0 ? (correctosAlta / totalAlta) : 1;
+  check("Banco de 100 títulos: exactitud ≥95% en los que dan «alta»", exactitudAlta >= 0.95, `${correctosAlta}/${totalAlta} (${Math.round(exactitudAlta * 100)}%)`);
+  check("Banco de 100 títulos: 0 falsos positivos en las 20 trampas", trampasSinFalsosPositivos === totalTrampas, `${trampasSinFalsosPositivos}/${totalTrampas} trampas correctas`);
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

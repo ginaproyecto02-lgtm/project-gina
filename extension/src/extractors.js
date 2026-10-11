@@ -512,6 +512,54 @@
     };
   }
 
+  function extractCategoryPath(doc, siteName) {
+    if (!doc) return "";
+    // Amazon
+    const amzBc = q(doc, "#wayfinding-breadcrumbs_feature_div");
+    if (amzBc) {
+      const crumbs = qa(amzBc, "li a, span.a-list-item, a").map((el) => txt(el)).filter(Boolean);
+      if (crumbs.length) return crumbs.join(" > ");
+    }
+    // Mercado Libre
+    const mlBc = q(doc, ".andes-breadcrumb");
+    if (mlBc) {
+      const crumbs = qa(mlBc, "a, span").map((el) => txt(el)).filter(Boolean);
+      if (crumbs.length) return crumbs.join(" > ");
+    }
+    // Walmart
+    const wmBc = q(doc, "[data-testid='breadcrumb'], .breadcrumb");
+    if (wmBc) {
+      const crumbs = qa(wmBc, "li, a").map((el) => txt(el)).filter(Boolean);
+      if (crumbs.length) return crumbs.join(" > ");
+    }
+    // Liverpool
+    const livBc = q(doc, ".m-breadcrumb");
+    if (livBc) {
+      const crumbs = qa(livBc, "li, a").map((el) => txt(el)).filter(Boolean);
+      if (crumbs.length) return crumbs.join(" > ");
+    }
+    // JSON-LD BreadcrumbList y Product.category
+    for (const s of qa(doc, 'script[type="application/ld+json"]')) {
+      try {
+        const data = JSON.parse(s.textContent);
+        const items = Array.isArray(data) ? data : [data];
+        for (const it of items) {
+          if (it["@type"] === "BreadcrumbList" && Array.isArray(it.itemListElement)) {
+            const names = it.itemListElement.map((x) => (x.item && x.item.name) || x.name).filter(Boolean);
+            if (names.length) return names.join(" > ");
+          }
+          if ((it["@type"] === "Product" || (Array.isArray(it["@type"]) && it["@type"].includes("Product"))) && it.category) {
+            return String(it.category);
+          }
+        }
+      } catch (e) {}
+    }
+    // Meta tags
+    const metaCat = q(doc, 'meta[property="product:category"], meta[name="category"]');
+    if (metaCat && metaCat.content) return metaCat.content;
+    return "";
+  }
+
   function extract(doc, host) {
     const s = site(host);
     const base = s && SITE[s] ? SITE[s](doc) : { candidates: [], title: "" };
@@ -533,12 +581,14 @@
     if (spec) c.push({ text: spec, source: "Tabla de especificaciones" });
     if (!base.title) base.title = txt(q(doc, "h1")) || (doc.title || "");
     const reliability = extractReliability(doc, s);
-    return { site: s, candidates: c, title: base.title, reliability };
+    const categoryPath = extractCategoryPath(doc, s);
+    return { site: s, candidates: c, title: base.title, categoryPath, reliability };
   }
 
   QED.site = site;
   QED.isProductPage = isProductPage;
   QED.extract = extract;
+  QED.extractCategoryPath = extractCategoryPath;
   QED.extractReliability = extractReliability;
   QED.evaluateReliability = evaluateReliability;
   QED.getApplicableNorms = getApplicableNorms;

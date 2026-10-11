@@ -66,18 +66,23 @@
   }
 
   // Alternativas locales para el tipo de producto (según el país de la tienda).
-  function withAlternatives(res, brand, title) {
+  function withAlternatives(res, brand, title, categoryPath) {
     if (!alt || !prefs.showAlternatives || !entry || entry.tipo !== "tienda") return res;
-    const cat = QED.ALT.category(alt, brand, title);
-    if (!cat) return res;
+    const catRes = QED.ALT.category(alt, brand, title, categoryPath);
+    if (!catRes || !catRes.cat || catRes.confianza === "ninguna") return res;
+    const cat = catRes.cat;
+    const subcat = catRes.subcat;
     const custom = Object.values(prefs.values || {}).some((v) => v !== 1 && v != null);
-    const items = QED.ALT.suggest(alt, cat, entry.pais, res.group && res.group.id, custom ? prefs.values : null, 5, title);
+    const items = QED.ALT.suggest(alt, cat, entry.pais, res.group && res.group.id, custom ? prefs.values : null, 5, title, subcat);
     const currentGid = res.group && res.group.id;
     const otherBrands = currentGid ? QED.ALT.otherBrandsOfSameOwner(alt, currentGid, brand || res.brandText, 6) : [];
-    const dominant = QED.ALT.categoryDominantBrands(alt, cat, 4);
+    const dominant = catRes.confianza === "alta" ? QED.ALT.categoryDominantBrands(alt, cat, 4, currentGid, subcat) : [];
     res.alternativas = {
       cat,
-      label: alt.cats[cat].label,
+      subcat,
+      confianza: catRes.confianza,
+      motivo: catRes.motivo,
+      label: alt.cats[cat] ? alt.cats[cat].label : cat,
       pais: entry.pais,
       items,
       otherBrands,
@@ -91,7 +96,8 @@
   function enrichProduct(res, data) {
     if (!res) return res;
     res.title = res.title || data.title;
-    const cat = res.alternativas ? res.alternativas.cat : (alt ? QED.ALT.category(alt, res.brand || res.brandText, data.title) : null);
+    const catRes = res.alternativas ? { cat: res.alternativas.cat } : (alt ? QED.ALT.category(alt, res.brand || res.brandText, data.title, data.categoryPath) : null);
+    const cat = catRes ? (typeof catRes === "string" ? catRes : catRes.cat) : null;
     const country = entry ? entry.pais : "MX";
     if (QED.evaluateReliability) {
       res.reliabilityEval = QED.evaluateReliability(data.reliability, res.group, cat, data.title, country);
@@ -111,14 +117,14 @@
     const store = storeOf(entry);
     const local = QED.match(index, data.candidates, data.title);
     if (local.found) {
-      lastResult = enrichProduct(withAlternatives(Object.assign(local, { store }), local.brand, data.title), data);
+      lastResult = enrichProduct(withAlternatives(Object.assign(local, { store }), local.brand, data.title, data.categoryPath), data);
       draw();
       return;
     }
 
     // No está en la memoria local → service worker: caché de IA, clasificación en vivo y registro de pendientes.
     const my = ++seq;
-    lastResult = enrichProduct(withAlternatives(Object.assign(local, { kind: prefs.aiEnabled ? "loading" : "none", title: data.title, store }), local.brandText, data.title), data);
+    lastResult = enrichProduct(withAlternatives(Object.assign(local, { kind: prefs.aiEnabled ? "loading" : "none", title: data.title, store }), local.brandText, data.title, data.categoryPath), data);
     draw();
     const site = entry ? `${entry.nombre} (${entry.pais})` : siteName;
     api.runtime.sendMessage({ type: "qed:resolve", brandText: local.brandText, title: data.title, site }).then((r) => {
@@ -126,9 +132,9 @@
       if ((r.status === "ai" || r.status === "cache") && r.result) {
         // Si la IA asignó la marca a un grupo de la base, se usan los datos locales (incluida su reputación).
         if (r.result.gid && index.groups[r.result.gid]) r.result.group = index.groups[r.result.gid];
-        lastResult = enrichProduct(withAlternatives(Object.assign(r.result, { store }), r.result.brand, data.title), data);
+        lastResult = enrichProduct(withAlternatives(Object.assign(r.result, { store }), r.result.brand, data.title, data.categoryPath), data);
       }
-      else lastResult = enrichProduct(withAlternatives(Object.assign({}, local, { kind: "none", aiStatus: r.status, aiError: r.error, limit: r.limit, aiOn: prefs.aiEnabled, store }), local.brandText, data.title), data);
+      else lastResult = enrichProduct(withAlternatives(Object.assign({}, local, { kind: "none", aiStatus: r.status, aiError: r.error, limit: r.limit, aiOn: prefs.aiEnabled, store }), local.brandText, data.title, data.categoryPath), data);
       draw();
     }).catch(() => {});
   }

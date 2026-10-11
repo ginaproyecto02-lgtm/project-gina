@@ -165,15 +165,20 @@ function generateRenderedHtml(scenario, openSection) {
   r.store = entry && entry.tipo === "tienda" ? { nombre: entry.nombre, group: index.groups[entry.g], id: entry.g, entry, modelo: entry.modelo, pais: entry.pais } : null;
 
   const prep = QED.ALT.prepare(db, index);
-  const cat = entry && entry.tipo === "tienda" ? QED.ALT.category(prep, r.found ? r.brand : r.brandText, data.title) : null;
-  if (cat) {
+  const catRes = entry && entry.tipo === "tienda" ? QED.ALT.category(prep, r.found ? r.brand : r.brandText, data.title, data.categoryPath) : null;
+  const cat = catRes ? (typeof catRes === "string" ? catRes : catRes.cat) : null;
+  const subcat = catRes && catRes.subcat ? catRes.subcat : null;
+  if (cat && catRes.confianza !== "ninguna") {
     const otherBrands = r.group && r.group.id ? QED.ALT.otherBrandsOfSameOwner(prep, r.group.id, r.found ? r.brand : r.brandText, 6) : [];
-    const dominant = QED.ALT.categoryDominantBrands(prep, cat, 4);
+    const dominant = catRes.confianza === "alta" ? QED.ALT.categoryDominantBrands(prep, cat, 4, r.group && r.group.id, subcat) : [];
     r.alternativas = {
       cat,
-      label: prep.cats[cat].label,
+      subcat,
+      confianza: catRes.confianza,
+      motivo: catRes.motivo,
+      label: prep.cats[cat] ? prep.cats[cat].label : cat,
       pais: entry.pais,
-      items: QED.ALT.suggest(prep, cat, entry.pais, r.group && r.group.id, null, 3),
+      items: QED.ALT.suggest(prep, cat, entry.pais, r.group && r.group.id, null, 3, data.title, subcat),
       otherBrands,
       dominant,
       actualEsLocal: !!(r.group && QED.ALT.INDEP[r.group.tipo] && QED.ALT.countries(r.group.pais).includes(entry.pais))

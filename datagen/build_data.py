@@ -68,9 +68,18 @@ for cid, c in CATS.items():
     lista = [m for m in c["marcas"]] + [m for m, cc in locales.CAT.items() if cc == cid]
     missing = [m for m in lista if m.lower() not in known]
     assert not missing, f"categoría {cid}: marcas que no están en la base: {missing}"
-    categorias[cid] = {"label": c["label"], "kw": sorted({nkw(k) for k in c["kw"] if nkw(k)}), "marcas": list(dict.fromkeys(lista))}
+    categorias[cid] = {
+        "label": c["label"],
+        "kw": sorted({nkw(k) for k in c["kw"] if nkw(k)}),
+        "excluye": sorted({nkw(k) for k in c.get("excluye", []) if nkw(k)}),
+        "subcats": c.get("subcats", {}),
+        "marcas": list(dict.fromkeys(lista))
+    }
 for m, cid in locales.CAT.items():
     assert cid in CATS, f"categoría desconocida {cid} ({m})"
+
+cat_tienda_path = os.path.join(os.path.dirname(__file__), "categorias_tienda.json")
+categorias_tienda = json.load(open(cat_tienda_path, encoding="utf-8")) if os.path.exists(cat_tienda_path) else {}
 
 brands = {
     "version": VERSION,
@@ -80,6 +89,7 @@ brands = {
     "aerolineas": aerolineas,
     "reputacion": REP,
     "categorias": categorias,
+    "categorias_tienda": categorias_tienda,
 }
 os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
 # ---- Conservar lo que agregó el job del proyecto (marcas, grupos, reputación y alternativas investigadas).
@@ -158,6 +168,8 @@ json.dump({"version": VERSION, "sitios": S}, open(os.path.join(ROOT, "data", "si
 import shutil
 shutil.copyfile(os.path.join(os.path.dirname(__file__), "garantias_pais.json"), os.path.join(ROOT, "data", "garantias_pais.json"))
 shutil.copyfile(os.path.join(os.path.dirname(__file__), "normas_pais.json"), os.path.join(ROOT, "data", "normas_pais.json"))
+if os.path.exists(cat_tienda_path):
+    shutil.copyfile(cat_tienda_path, os.path.join(ROOT, "data", "categorias_tienda.json"))
 
 # ---- Proyecto: de dónde descargan todos la base actualizada (gratis, sin claves) y a dónde se sugieren marcas
 PROY = json.load(open(os.path.join(os.path.dirname(__file__), "proyecto.json"), encoding="utf-8"))
