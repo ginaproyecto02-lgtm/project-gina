@@ -81,6 +81,10 @@ for m, cid in locales.CAT.items():
 cat_tienda_path = os.path.join(os.path.dirname(__file__), "categorias_tienda.json")
 categorias_tienda = json.load(open(cat_tienda_path, encoding="utf-8")) if os.path.exists(cat_tienda_path) else {}
 
+dominios_path = os.path.join(os.path.dirname(__file__), "dominios.json")
+assert os.path.exists(dominios_path), f"Falta el archivo de dominios: {dominios_path}"
+DOMINIOS = json.load(open(dominios_path, encoding="utf-8"))
+
 brands = {
     "version": VERSION,
     "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -90,6 +94,7 @@ brands = {
     "reputacion": REP,
     "categorias": categorias,
     "categorias_tienda": categorias_tienda,
+    "dominios": DOMINIOS,
 }
 os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
 # ---- Conservar lo que agregó el job del proyecto (marcas, grupos, reputación y alternativas investigadas).
@@ -132,10 +137,6 @@ with open(evidencias_path, encoding="utf-8") as f:
         gid = row.get("grupo_id", "").strip()
         if gid: evidencias[gid] = row
 
-dominios_path = os.path.join(os.path.dirname(__file__), "dominios.json")
-assert os.path.exists(dominios_path), f"Falta el archivo de dominios: {dominios_path}"
-DOMINIOS = json.load(open(dominios_path, encoding="utf-8"))
-
 def host_level(url):
     host = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
     for d in DOMINIOS.get("bloqueado", []):
@@ -162,6 +163,12 @@ for gid, grp in brands["grupos"].items():
         assert hl != "bloqueado", f"Grupo '{gid}': dominio bloqueado en evidencias ({ev['url_final']})"
         assert hl in ("oficial", "prensa_referencia"), f"Grupo '{gid}': dominio fuera de dominios.json ({ev['url_final']})"
 
+for gid, grp in brands["grupos"].items():
+    fuente = grp.get("fuente", "")
+    assert "Conocimiento del modelo" not in fuente, f"Grupo '{gid}' tiene 'Conocimiento del modelo'"
+    if grp.get("confianza") in ("Alta", "Verificado"):
+        assert grp.get("url") and grp["url"].startswith("https://"), f"Grupo '{gid}' con confianza {grp.get('confianza')} sin URL válida"
+
 json.dump(brands, open(prev_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("conservado del job:", kept)
 json.dump({"version": VERSION, "sitios": S}, open(os.path.join(ROOT, "data", "sites.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
@@ -170,6 +177,8 @@ shutil.copyfile(os.path.join(os.path.dirname(__file__), "garantias_pais.json"), 
 shutil.copyfile(os.path.join(os.path.dirname(__file__), "normas_pais.json"), os.path.join(ROOT, "data", "normas_pais.json"))
 if os.path.exists(cat_tienda_path):
     shutil.copyfile(cat_tienda_path, os.path.join(ROOT, "data", "categorias_tienda.json"))
+if os.path.exists(dominios_path):
+    shutil.copyfile(dominios_path, os.path.join(ROOT, "data", "dominios.json"))
 
 # ---- Proyecto: de dónde descargan todos la base actualizada (gratis, sin claves) y a dónde se sugieren marcas
 PROY = json.load(open(os.path.join(os.path.dirname(__file__), "proyecto.json"), encoding="utf-8"))
