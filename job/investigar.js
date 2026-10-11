@@ -13,8 +13,9 @@
 //  5. PUBLICAR: Solo al hacer merge del PR humano se genera y distribuye la base.
 "use strict";
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
-const { execSync } = require("child_process");
+const { execFileSync } = require("child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const EXT = path.join(ROOT, "extension");
@@ -399,44 +400,126 @@ async function wikidataOwner(brand, fetchImpl = fetch) {
   }
 }
 
+function serializeCsvRow(cols) {
+  return cols.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",") + "\n";
+}
+
+function getNextBranchName(baseName, execFileImpl = execFileSync) {
+  let suffix = 1;
+  while (true) {
+    const candidate = suffix === 1 ? baseName : `${baseName}-${suffix}`;
+    let exists = false;
+    try {
+      const outLocal = execFileImpl("git", ["branch", "--list", candidate], { encoding: "utf8" });
+      if (outLocal && outLocal.includes(candidate)) exists = true;
+    } catch (_) {}
+    if (!exists) {
+      try {
+        const outRemote = execFileImpl("git", ["ls-remote", "--heads", "origin", candidate], { encoding: "utf8" });
+        if (outRemote && outRemote.includes(candidate)) exists = true;
+      } catch (_) {}
+    }
+    if (!exists) {
+      return candidate;
+    }
+    suffix++;
+  }
+}
+
 // ---------------------------------------------------------------- Etapa 4: REVISAR humana mediante Pull Request
-async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun, token, repo }) {
+async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun, token, repo, execFileImpl = execFileSync }) {
+  const finalBranchName = getNextBranchName(branchName, execFileImpl);
+
   if (dryRun) {
     return {
-      branch: branchName,
+      branch: finalBranchName,
       prUrl: `https://github.com/${repo || "project-gina"}/pull/dry-run`,
       dryRun: true,
-      changesCount: changesList.length
+      changesCount: changesList ? changesList.length : 0
     };
   }
 
   // 1. Cerrar PRs obsoletos (>14 días)
   try {
-    const prsOut = execSync(`gh pr list --repo "${repo}" --state open --json number,headRefName,createdAt`, { encoding: "utf8" });
+    const prsOut = execFileImpl("gh", ["pr", "list", "--repo", repo, "--state", "open", "--json", "number,headRefName,createdAt"], { encoding: "utf8" });
     const prs = JSON.parse(prsOut || "[]");
     const now = Date.now();
     for (const pr of prs) {
       if (pr.headRefName && pr.headRefName.startsWith("datos/")) {
         const ageDays = (now - Date.parse(pr.createdAt)) / DAY;
         if (ageDays >= 14) {
-          execSync(`gh pr close ${pr.number} --repo "${repo}" --comment "Cerrado automáticamente tras 14 días sin revisión; reemplazado por la ejecución actual."`, { stdio: "ignore" });
+          execFileImpl("gh", ["pr", "close", String(pr.number), "--repo", repo, "--comment", "Cerrado automáticamente tras 14 días sin revisión; reemplazado por la ejecución actual."], { stdio: "ignore" });
         }
       }
     }
   } catch (_) {}
 
   // 2. Crear rama y commit
-  execSync(`git checkout -b "${branchName}"`);
-  execSync(`git add extension/data/brands.json datagen/evidencias.csv job/estado.json job/reportes/`);
-  execSync(`git commit -m "datos: propuesta semanal ${branchName.replace('datos/', '')} (${changesList.length} cambios)"`);
-  execSync(`git push origin "${branchName}"`);
+  execFileImpl("git", ["checkout", "-b", finalBranchName]);
 
-  // 3. Crear Pull Request
-  const prCmd = `gh pr create --repo "${repo}" --title "Datos: propuesta de actualización ${branchName.replace('datos/', '')}" --body "${reportMarkdown.replace(/"/g, '\\"')}" --head "${branchName}" --base "main"`;
-  const prUrl = execSync(prCmd, { encoding: "utf8" }).trim();
-  execSync(`git checkout main`);
+  // Asegurar job/estado.json si no existe (P0.3)
+  if (!fs.existsSync(STATE)) {
+    fs.writeFileSync(STATE, JSON.stringify({ marcas: {}, revalidados: {}, lastRun: Date.now() }, null, 2), "utf8");
+  }
 
-  return { branch: branchName, prUrl, dryRun: false, changesCount: changesList.length };
+  const candidatePaths = [
+    "extension/data/brands.json",
+    "datagen/evidencias.csv",
+    "job/estado.json",
+    "job/reportes",
+    "datagen/fuentes"
+  ];
+  const pathsToAdd = candidatePaths.filter((p) => fs.existsSync(path.resolve(ROOT, p)));
+  if (pathsToAdd.length > 0) {
+    execFileImpl("git", ["add", ...pathsToAdd]);
+  }
+
+  execFileImpl("git", ["commit", "-m", `datos: propuesta semanal ${finalBranchName.replace("datos/", "")} (${changesList ? changesList.length : 0} cambios)`]);
+
+  // 3. Verificar rutas permitidas DENTRO de createReviewPR antes de git push (P0.5)
+  let diffOut = "";
+  try {
+    diffOut = execFileImpl("git", ["diff", "--name-only", "main...HEAD"], { encoding: "utf8" });
+  } catch (_) {
+    try {
+      diffOut = execFileImpl("git", ["diff", "--name-only", "main"], { encoding: "utf8" });
+    } catch (_) {
+      try {
+        diffOut = execFileImpl("git", ["diff", "--name-only", "HEAD~1"], { encoding: "utf8" });
+      } catch (_) {}
+    }
+  }
+  const files = diffOut.split("\n").map((s) => s.trim().replace(/\\/g, "/")).filter(Boolean);
+  const ALLOWED_REGEX = /^(extension\/data\/brands\.json|datagen\/evidencias\.csv|job\/estado\.json|job\/reportes\/|datagen\/fuentes\/)/;
+  const disallowed = files.filter((f) => !ALLOWED_REGEX.test(f));
+  if (disallowed.length > 0) {
+    throw new Error(`Rutas no permitidas modificadas antes del push: ${disallowed.join(", ")}`);
+  }
+
+  // 4. Git push
+  execFileImpl("git", ["push", "origin", finalBranchName]);
+
+  // 5. Crear Pull Request usando --body-file con archivo temporal (P0.1)
+  const tmpBodyFile = path.join(os.tmpdir(), `pr_body_${Date.now()}_${Math.random().toString(36).slice(2)}.md`);
+  let prUrl = "";
+  try {
+    fs.writeFileSync(tmpBodyFile, reportMarkdown, "utf8");
+    const prArgs = [
+      "pr", "create",
+      "--repo", repo,
+      "--title", `Datos: propuesta de actualización ${finalBranchName.replace("datos/", "")}`,
+      "--body-file", tmpBodyFile,
+      "--head", finalBranchName,
+      "--base", "main"
+    ];
+    prUrl = execFileImpl("gh", prArgs, { encoding: "utf8" }).trim();
+  } finally {
+    try { fs.unlinkSync(tmpBodyFile); } catch (_) {}
+  }
+
+  execFileImpl("git", ["checkout", "main"]);
+
+  return { branch: finalBranchName, prUrl, dryRun: false, changesCount: changesList ? changesList.length : 0 };
 }
 
 // ---------------------------------------------------------------- Helpers de sugerencias y pendientes
@@ -551,6 +634,16 @@ async function main(options = {}) {
           if (check.gleif.lei !== "na") db.grupos[gid].lei = check.gleif.lei;
         }
 
+        let factcheckStatus = "na";
+        if (process.env.GINA_FACTCHECK_KEY) {
+          const fc = await checkFactCheck(prop.empresa, prop.valor_nuevo, process.env.GINA_FACTCHECK_KEY, options.fetchImpl || fetch);
+          factcheckStatus = fc.status || "na";
+          if (fc.status === "conflicto") {
+            report.rechazadas.push(`${prop.empresa}: Conflicto en Fact Check`);
+            continue;
+          }
+        }
+
         nuevasEvidencias.push({
           grupo_id: gid,
           url_final: f0.url_final,
@@ -561,7 +654,7 @@ async function main(options = {}) {
           safe_browsing: f0.safe_browsing,
           gleif_lei: check.gleif.lei,
           gleif_coincide: check.gleif.coincide,
-          factcheck: "ok",
+          factcheck: factcheckStatus,
           aprobado_en_pr: `datos/${report.inicio.slice(0, 10)}`
         });
 
@@ -609,10 +702,35 @@ async function main(options = {}) {
   if (!dry && nuevasEvidencias.length > 0) {
     let csvContent = "";
     for (const ev of nuevasEvidencias) {
-      csvContent += `${ev.grupo_id},${ev.url_final},${ev.nivel_dominio},"${ev.cita.replace(/"/g, '""')}",${ev.fecha_consulta},${ev.archivo_url},${ev.safe_browsing},${ev.gleif_lei},${ev.gleif_coincide},${ev.factcheck},${ev.aprobado_en_pr}\n`;
+      csvContent += serializeCsvRow([
+        ev.grupo_id,
+        ev.url_final,
+        ev.nivel_dominio,
+        ev.cita,
+        ev.fecha_consulta,
+        ev.archivo_url,
+        ev.safe_browsing,
+        ev.gleif_lei,
+        ev.gleif_coincide,
+        ev.factcheck,
+        ev.aprobado_en_pr
+      ]);
     }
     fs.appendFileSync(EVIDENCIAS_PATH, csvContent, "utf8");
     fs.writeFileSync(BRANDS, JSON.stringify(db, null, 1), "utf8");
+  }
+
+  // P0.4: Escribir job/reportes/AAAA-MM-DD.md ANTES del commit
+  if (!dry) {
+    fs.mkdirSync(REPORTS, { recursive: true });
+    fs.writeFileSync(path.join(REPORTS, `${dateStr}.md`), prMarkdown, "utf8");
+  }
+
+  // P0.2: Con 0 cambios: no crear rama, ni commit, ni PR. Escribir el reporte y salir con código 0.
+  if (report.cambios.length === 0) {
+    console.log(prMarkdown);
+    console.log("0 cambios propuestos: no se crea rama ni PR.");
+    return { report, prResult: null };
   }
 
   // Etapa 4: Crear rama y PR
@@ -622,13 +740,9 @@ async function main(options = {}) {
     changesList: report.cambios,
     dryRun: dry,
     token,
-    repo
+    repo,
+    execFileImpl: options.execFileImpl || execFileSync
   });
-
-  if (!dry) {
-    fs.mkdirSync(REPORTS, { recursive: true });
-    fs.writeFileSync(path.join(REPORTS, `${dateStr}.md`), prMarkdown);
-  }
 
   console.log(prMarkdown);
   return { report, prResult };
@@ -682,6 +796,8 @@ module.exports = {
   contrastProposal,
   wikidataOwner,
   verifyEnergyStarModel,
+  getNextBranchName,
+  serializeCsvRow,
   createReviewPR,
   main
 };

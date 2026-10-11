@@ -274,6 +274,75 @@ finally:
     check("12. build_data.py falla si un «Verificado» no tiene evidencia completa (S7)", ok, "Falla con AssertionError: safe_browsing no es 'ok'");
   }
 
+  // 13. evidencias.csv: serializador CSV real con todas las columnas entre comillas.
+  {
+    const row = job.serializeCsvRow(["grupo1", "https://url.com", "oficial", 'Cita con "comillas"', "2026-10-11", "https://arch.org", "ok", "na", "na", "ok", "PR#1"]);
+    const expected = '"grupo1","https://url.com","oficial","Cita con ""comillas""","2026-10-11","https://arch.org","ok","na","na","ok","PR#1"\n';
+    check("13. evidencias.csv: serializador CSV real con todas las columnas entre comillas", row === expected, row.trim());
+  }
+
+  // 14. Rama existente del mismo día → sufijo -2, -3.
+  {
+    const mockExec = (cmd, args) => {
+      if (cmd === "git" && args[0] === "branch") {
+        const branchName = args[2];
+        if (branchName === "datos/2026-10-11" || branchName === "datos/2026-10-11-2") {
+          return `* ${branchName}\n`;
+        }
+        return "";
+      }
+      return "";
+    };
+    const nextBranch = job.getNextBranchName("datos/2026-10-11", mockExec);
+    check("14. Rama existente del mismo día → sufijo -2, -3", nextBranch === "datos/2026-10-11-3", nextBranch);
+  }
+
+  // 15. Rutas permitidas: createReviewPR aborta antes del push si hay archivos no permitidos.
+  {
+    let pushCalled = false;
+    const mockExec = (cmd, args) => {
+      if (cmd === "git") {
+        if (args[0] === "diff" && args[1] === "--name-only") {
+          return "extension/data/brands.json\narchivo_malicioso.js\n";
+        }
+        if (args[0] === "push") {
+          pushCalled = true;
+        }
+      }
+      return "";
+    };
+    let errorThrown = false;
+    try {
+      await job.createReviewPR({
+        branchName: "datos/2026-10-11",
+        reportMarkdown: "# Test",
+        changesList: [{ grupo: "X" }],
+        dryRun: false,
+        repo: "test/repo",
+        execFileImpl: mockExec
+      });
+    } catch (e) {
+      errorThrown = true;
+    }
+    check("15. Rutas permitidas: createReviewPR aborta antes del push si algo sobra", errorThrown && !pushCalled, `abortó: ${errorThrown}, push: ${pushCalled}`);
+  }
+
+  // 16. Con 0 cambios: no crear rama, ni commit, ni PR; salida con código 0.
+  {
+    const res = await job.main({ dryRun: true, limit: 0 });
+    const ok = res && res.report && res.report.cambios.length === 0 && res.prResult === null;
+    check("16. Con 0 cambios: no crear rama, ni commit, ni PR", ok, `prResult: ${res.prResult}`);
+  }
+
+  // 17. factcheck: sin clave → 'na', nunca 'ok' fijo.
+  {
+    const origKey = process.env.GINA_FACTCHECK_KEY;
+    delete process.env.GINA_FACTCHECK_KEY;
+    const fc = await job.checkFactCheck("Empresa XYZ", "palabras clave", undefined);
+    process.env.GINA_FACTCHECK_KEY = origKey;
+    check("17. factcheck: sin clave → 'na', nunca 'ok' fijo", fc.ok && fc.status === "na", `status: ${fc.status}`);
+  }
+
   console.log(`\n${pass}/${total} pruebas de job/investigar.js correctas`);
   process.exit(pass === total ? 0 : 1);
 }
