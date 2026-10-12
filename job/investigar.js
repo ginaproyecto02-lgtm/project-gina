@@ -541,22 +541,103 @@ function loadPending() {
   return items;
 }
 
-async function loadIssues(repo, token) {
-  if (!repo || !token) return [];
-  try {
-    const res = await fetch(`https://api.github.com/repos/${repo}/issues?state=open&per_page=100`, {
-      headers: { authorization: `Bearer ${token}`, accept: "application/vnd.github+json", "user-agent": "project-gina-job" }
-    });
-    if (!res.ok) return [];
-    const issues = await res.json();
-    return issues.filter((i) => !i.pull_request).map((i) => {
-      const m = String(i.body || "").match(/gina:sugerencia v1 tipo=(\w+)/);
-      if (!m) return null;
-      return { number: i.number, tipo: m[1], body: i.body };
-    }).filter(Boolean);
-  } catch (e) {
-    return [];
+function closeLegacyIssues(execFileImpl = execFileSync, repo = "ginaproyecto02-lgtm/project-gina") {
+  for (let n = 1; n <= 7; n++) {
+    try {
+      execFileImpl("gh", ["issue", "comment", String(n), "--repo", repo, "--body", "Incorporada en la base (commit de9daa9)"]);
+      execFileImpl("gh", ["issue", "close", String(n), "--repo", repo, "--reason", "completed"]);
+    } catch (_) {}
   }
+}
+
+function parseIssueContent(issue) {
+  const body = String(issue.body || "");
+  const title = String(issue.title || "");
+  const labels = (issue.labels || []).map((l) => (typeof l === "string" ? l : l.name));
+  const createdAt = issue.createdAt || issue.created_at || new Date().toISOString();
+
+  const m = body.match(/gina:sugerencia v1 tipo=(\w+)/);
+  if (m) {
+    const tipo = m[1] === "alternativa" ? "alternativa" : "marca";
+    const items = [];
+    for (const line of body.split(/\r?\n/).slice(0, 60)) {
+      const l = line.trim();
+      if (!l.startsWith("- ")) continue;
+      const f = {};
+      for (const part of l.slice(2).split("|")) {
+        const i = part.indexOf(":");
+        if (i > 0) f[QED.norm(part.slice(0, i)).replace(/\s+/g, "")] = part.slice(i + 1).trim().slice(0, 200).replace(/[<>{}]/g, "");
+      }
+      if (tipo === "alternativa" && f.alternativa) {
+        items.push({ marca: f.alternativa.slice(0, 80), categoria: f.categoria || "", pais: f.pais || "", dueno: f.dueno || "", fuente: f.fuente || "" });
+      }
+      if (tipo === "marca" && (f.marca || f.producto)) {
+        items.push({ brand: (f.marca || "").slice(0, 80), site: (f.tienda || "").slice(0, 60), title: (f.producto || "").slice(0, 160) });
+      }
+    }
+    return { number: issue.number, tipo, items, labels, createdAt };
+  }
+
+  // Formato issue template / YAML / markdown
+  let brand = "";
+  const mBrand = body.match(/###\s*Marca\s*\r?\n+([^\r\n#]+)/i);
+  if (mBrand) brand = mBrand[1].trim();
+  if (!brand) {
+    const mTitle = title.match(/Marca faltante:\s*(.+)/i);
+    if (mTitle) brand = mTitle[1].trim();
+  }
+  const mStore = body.match(/###\s*Tienda\s*\r?\n+([^\r\n#]+)/i);
+  const mPais = body.match(/###\s*Pa[ií]s\s*\r?\n+([^\r\n#]+)/i);
+  const mProd = body.match(/###\s*Producto\s*\r?\n+([^\r\n#]+)/i);
+  const mDueno = body.match(/###\s*Due[ñn]o[^\r\n]*\r?\n+([^\r\n#]+)/i);
+  const mFuente = body.match(/###\s*Fuente[^\r\n]*\r?\n+([^\r\n#]+)/i);
+
+  if (brand) {
+    return {
+      number: issue.number,
+      tipo: "marca",
+      items: [{
+        brand: brand.slice(0, 80),
+        site: mStore ? mStore[1].trim().slice(0, 60) : "",
+        pais: mPais ? mPais[1].trim().slice(0, 40) : "",
+        title: mProd ? mProd[1].trim().slice(0, 160) : "",
+        dueno: mDueno ? mDueno[1].trim().slice(0, 120) : "",
+        fuente: mFuente ? mFuente[1].trim().slice(0, 200) : ""
+      }],
+      labels,
+      createdAt
+    };
+  }
+
+  return null;
+}
+
+async function loadIssues(repo, token, execFileImpl = execFileSync, fetchImpl = fetch) {
+  if (!repo) return [];
+  let issues = null;
+  try {
+    const out = execFileImpl("gh", ["issue", "list", "--repo", repo, "--state", "open", "--json", "number,title,body,labels,createdAt", "--limit", "100"], { encoding: "utf8" });
+    if (out) issues = JSON.parse(out);
+  } catch (_) {}
+
+  if (!issues && token) {
+    try {
+      const res = await fetchImpl(`https://api.github.com/repos/${repo}/issues?state=open&per_page=100`, {
+        headers: { authorization: `Bearer ${token}`, accept: "application/vnd.github+json", "user-agent": "project-gina-job" }
+      });
+      if (res && res.ok) issues = await res.json();
+    } catch (_) {}
+  }
+
+  if (!Array.isArray(issues)) return [];
+
+  const results = [];
+  for (const i of issues) {
+    if (i.pull_request) continue;
+    const parsed = parseIssueContent(i);
+    if (parsed) results.push(parsed);
+  }
+  return results;
 }
 
 // ---------------------------------------------------------------- Función principal de ejecución
@@ -575,14 +656,32 @@ async function main(options = {}) {
     maxSearches: parseInt(env("MAX_SEARCHES", "3"), 10)
   };
   const dry = options.dryRun || env("DRY_RUN", "") === "1";
-  const limit = Math.min(25, parseInt(options.limit || env("LIMIT", "25"), 10)); // Límite máx 25 cambios por PR
+  const limit = Math.min(25, parseInt(options.limit !== undefined ? options.limit : env("LIMIT", "25"), 10)); // Límite máx 25 cambios por PR
+  const everyDays = parseFloat(options.everyDays || env("EVERY_DAYS", "14"));
+  const force = options.force !== undefined ? options.force : (options.dryRun || env("FORCE", "") === "1");
+  const revalidateLimit = parseInt(options.revalidate || env("REVALIDATE", "3"), 10);
+  const repLimit = parseInt(options.repLimit || env("REP_LIMIT", "5"), 10);
+
   const dominios = loadDominios();
   const repo = process.env.GITHUB_REPOSITORY || "ginaproyecto02-lgtm/project-gina";
   const token = process.env.GITHUB_TOKEN || "";
+  const execFileImpl = options.execFileImpl || execFileSync;
+  const fetchImpl = options.fetchImpl || fetch;
 
   const db = readJSON(BRANDS, null);
   if (!db) throw new Error("No se pudo leer " + BRANDS);
-  const state = readJSON(STATE, { marcas: {}, revalidados: {} });
+  const state = readJSON(STATE, { marcas: {}, revalidados: {}, ultimoRun: null });
+
+  // P1.12: Restaurar GINA_EVERY_DAYS (con job/estado.json)
+  if (!force && state.ultimoRun && Date.now() - new Date(state.ultimoRun).getTime() < everyDays * DAY) {
+    console.log(`Menos de ${everyDays} días desde la última ejecución (${state.ultimoRun}); se omite la ejecución periódica.`);
+    return { report: { inicio: new Date().toISOString(), cambios: [], rechazadas: [], propuestas: [] }, prResult: null };
+  }
+
+  // P1.11: Cerrar issues #1–#7 con el comentario "Incorporada en la base (commit de9daa9)"
+  if (!options.skipLegacy) {
+    closeLegacyIssues(execFileImpl, repo);
+  }
 
   const report = {
     inicio: new Date().toISOString(),
@@ -596,22 +695,158 @@ async function main(options = {}) {
     errores: []
   };
 
-  const pending = Array.from(loadPending().values()).slice(0, limit);
-  const nuevasEvidencias = [];
+  // P1.12: main() llama a loadIssues() y une los issues con pendientes/; quita duplicados por marca normalizada
+  const queue = [];
+  const seenBrands = new Map(); // normBrand -> issueNumber
+  const parsedIssues = await loadIssues(repo, token, execFileImpl, fetchImpl);
 
-  for (const item of pending) {
-    // 1. Proponer
-    try {
-      const r = await AI.research(cfg, { brand: item.brand, title: item.title, site: item.site, hint: item.hint }, db.grupos);
-      const prop = r.normalized && r.normalized.propuesta;
-      if (!prop || !AI.validateProposal(prop)) {
-        report.rechazadas.push(`${item.brand}: Propuesta descartada por esquema estricto`);
+  for (const iss of parsedIssues) {
+    // Más de 30 días en sin-fuente → cerrar explicando
+    if (iss.labels.includes("sin-fuente")) {
+      const ageMs = Date.now() - new Date(iss.createdAt).getTime();
+      if (ageMs > 30 * DAY) {
+        try {
+          execFileImpl("gh", ["issue", "comment", String(iss.number), "--repo", repo, "--body", "Cerrado automáticamente: más de 30 días sin fuente verificable."]);
+          execFileImpl("gh", ["issue", "close", String(iss.number), "--repo", repo, "--reason", "completed"]);
+        } catch (_) {}
         continue;
       }
-      report.propuestas.push(prop);
+    }
 
-      // 2 & 3. Verificar y Contrastar
-      const check = await contrastProposal(prop, db.grupos[prop.grupo_id], dominios, { safeBrowsingKey: process.env.GINA_SAFEBROWSING_KEY });
+    for (const it of iss.items) {
+      if (!it.brand) continue;
+      const nb = QED.norm(it.brand);
+      if (seenBrands.has(nb)) {
+        // duplicado → "Duplicada de #N" + cerrar
+        const firstNum = seenBrands.get(nb);
+        if (firstNum && iss.number !== firstNum) {
+          try {
+            execFileImpl("gh", ["issue", "comment", String(iss.number), "--repo", repo, "--body", `Duplicada de #${firstNum}`]);
+            execFileImpl("gh", ["issue", "close", String(iss.number), "--repo", repo, "--reason", "completed"]);
+          } catch (_) {}
+        }
+        continue;
+      }
+      seenBrands.set(nb, iss.number);
+      queue.push(Object.assign({}, it, { issueNumber: iss.number, issueLabels: iss.labels }));
+    }
+  }
+
+  // Unir con pendientes locales
+  const pendingMap = loadPending();
+  for (const [, p] of pendingMap.entries()) {
+    if (!p.brand) continue;
+    const nb = QED.norm(p.brand);
+    if (seenBrands.has(nb)) {
+      const existingItem = queue.find((q) => QED.norm(q.brand) === nb);
+      if (existingItem) existingItem.count = (existingItem.count || 1) + (p.count || 1);
+    } else {
+      seenBrands.set(nb, null);
+      queue.push(p);
+    }
+  }
+
+  const toProcess = queue.slice(0, limit);
+  const nuevasEvidencias = [];
+  const issuesToClose = [];
+
+  for (const item of toProcess) {
+    const normBrand = QED.norm(item.brand);
+
+    // P1.12: (a) ¿La marca ya existe? → comentar y cerrar
+    const existingMarca = db.marcas.find((m) => QED.norm(m.n) === normBrand);
+    if (existingMarca) {
+      const g = db.grupos[existingMarca.g];
+      const grpName = g ? g.empresa : existingMarca.g;
+      if (item.issueNumber) {
+        try {
+          execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", `Ya está en la base (grupo ${grpName})`]);
+          execFileImpl("gh", ["issue", "close", String(item.issueNumber), "--repo", repo, "--reason", "completed"]);
+        } catch (_) {}
+      }
+      continue;
+    }
+
+    // P1.12: (b) Biblioteca local datagen/fuentes/
+    let prop = null;
+    let origen = "";
+    const fuentesDir = path.join(DATAGEN, "fuentes");
+    if (fs.existsSync(fuentesDir)) {
+      const files = fs.readdirSync(fuentesDir).filter((x) => x.endsWith(".json"));
+      for (const f of files) {
+        const fData = readJSON(path.join(fuentesDir, f), null);
+        if (fData && fData.fecha) {
+          const age = Date.now() - new Date(fData.fecha).getTime();
+          if (age < 365 * DAY && fData.url_final && fData.cita) {
+            const fNorm = QED.norm(fData.cita || "") + " " + QED.norm(f);
+            if (fNorm.includes(normBrand)) {
+              prop = {
+                empresa: fData.empresa || item.brand,
+                marca: item.brand,
+                campo: "controlador",
+                valor_nuevo: fData.controlador || item.brand,
+                pais: fData.pais || item.pais || "",
+                tipo: fData.tipo || "Corporación",
+                fuentes_esperadas: [{ url: fData.url_final, cita: fData.cita }]
+              };
+              origen = "biblioteca";
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // P1.12: (c) Wikidata con referencia (wikidataOwner)
+    if (!prop) {
+      try {
+        const wikiHits = await wikidataOwner(item.brand, fetchImpl);
+        const wikiRef = wikiHits.find((w) => w.refUrl && /^https:\/\//i.test(w.refUrl));
+        if (wikiRef) {
+          prop = {
+            empresa: wikiRef.owner,
+            marca: item.brand,
+            campo: "controlador",
+            valor_nuevo: wikiRef.owner,
+            pais: item.pais || "",
+            tipo: "Corporación",
+            fuentes_esperadas: [{ url: wikiRef.refUrl, cita: wikiRef.owner }]
+          };
+          origen = "wikidata";
+        }
+      } catch (_) {}
+    }
+
+    // P1.12: (d) IA solo si lo anterior no resolvió
+    if (!prop && cfg.key) {
+      try {
+        const r = await AI.research(cfg, { brand: item.brand, title: item.title, site: item.site, hint: item.hint }, db.grupos);
+        if (r.normalized && r.normalized.propuesta && AI.validateProposal(r.normalized.propuesta)) {
+          prop = r.normalized.propuesta;
+          origen = "ia";
+        }
+      } catch (e) {
+        report.errores.push(`${item.brand || item.title}: ${e.message}`);
+      }
+    }
+
+    // Si ninguna vía dio con fuente verificable
+    if (!prop) {
+      report.rechazadas.push(`${item.brand}: Sin fuente verificable`);
+      if (item.issueNumber) {
+        try {
+          execFileImpl("gh", ["issue", "edit", String(item.issueNumber), "--repo", repo, "--add-label", "sin-fuente"]);
+          execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", "No se encontró una fuente verificable para esta marca. Si tienes un enlace oficial o de registro público, compártelo aquí para reabrirla."]);
+        } catch (_) {}
+      }
+      continue;
+    }
+
+    report.propuestas.push(prop);
+
+    // 2 & 3. Verificar y Contrastar
+    try {
+      const check = await contrastProposal(prop, db.grupos[prop.grupo_id], dominios, { safeBrowsingKey: process.env.GINA_SAFEBROWSING_KEY }, fetchImpl);
       if (check.aprobada && check.fuentes.length > 0) {
         const f0 = check.fuentes[0];
         let gid = prop.grupo_id;
@@ -622,21 +857,32 @@ async function main(options = {}) {
             controlador: prop.valor_nuevo,
             pais: prop.pais,
             tipo: prop.tipo,
-            confianza: "Verificado",
+            confianza: "Alta", // P1.12: Grupo nuevo o cambiado por el robot: confianza "Alta" en la rama
+            investigado: new Date().toISOString(),
             fuente: f0.nivel_dominio === "oficial" ? "Registro oficial" : "Prensa de referencia",
             url: f0.url_final,
             lei: check.gleif.lei !== "na" ? check.gleif.lei : undefined
           };
         } else {
           db.grupos[gid].controlador = prop.valor_nuevo;
-          db.grupos[gid].confianza = "Verificado";
+          db.grupos[gid].confianza = "Alta"; // P1.12: Grupo nuevo o cambiado por el robot: confianza "Alta" en la rama
+          db.grupos[gid].investigado = new Date().toISOString();
           db.grupos[gid].url = f0.url_final;
           if (check.gleif.lei !== "na") db.grupos[gid].lei = check.gleif.lei;
         }
 
+        // P1.12: Al aprobar una propuesta: agregar la MARCA a db.marcas → {n, g, job:1} además del grupo
+        let brandEntry = db.marcas.find((m) => QED.norm(m.n) === normBrand);
+        if (!brandEntry) {
+          db.marcas.push({ n: item.brand, g: gid, job: 1 });
+        } else {
+          brandEntry.g = gid;
+          brandEntry.job = 1;
+        }
+
         let factcheckStatus = "na";
         if (process.env.GINA_FACTCHECK_KEY) {
-          const fc = await checkFactCheck(prop.empresa, prop.valor_nuevo, process.env.GINA_FACTCHECK_KEY, options.fetchImpl || fetch);
+          const fc = await checkFactCheck(prop.empresa, prop.valor_nuevo, process.env.GINA_FACTCHECK_KEY, fetchImpl);
           factcheckStatus = fc.status || "na";
           if (fc.status === "conflicto") {
             report.rechazadas.push(`${prop.empresa}: Conflicto en Fact Check`);
@@ -665,10 +911,21 @@ async function main(options = {}) {
           despues: prop.valor_nuevo,
           url: f0.url_final,
           cita: f0.cita,
-          archivo: f0.archivo_url
+          archivo: f0.archivo_url,
+          issueNumber: item.issueNumber
         });
+
+        if (item.issueNumber) {
+          issuesToClose.push(item.issueNumber);
+        }
       } else {
         report.rechazadas.push(`${prop.empresa}: ${check.motivo}`);
+        if (item.issueNumber) {
+          try {
+            execFileImpl("gh", ["issue", "edit", String(item.issueNumber), "--repo", repo, "--add-label", "sin-fuente"]);
+            execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", `No se pudo verificar la fuente: ${check.motivo}`]);
+          } catch (_) {}
+        }
       }
     } catch (e) {
       report.errores.push(`${item.brand || item.title}: ${e.message}`);
@@ -682,6 +939,10 @@ async function main(options = {}) {
     (c) => `| ${c.grupo} (\`${c.gid}\`) | ${c.antes} → **${c.despues}** | [Fuente](${c.url}) | «${c.cita}» | [Archivo](${c.archivo}) |`
   );
 
+  const closesLines = issuesToClose.length
+    ? ["", "### Issues resueltos", ...issuesToClose.map((n) => `Closes #${n}`)]
+    : [];
+
   const prMarkdown = [
     `# Propuesta de actualización de datos — ${dateStr}`,
     "",
@@ -694,9 +955,14 @@ async function main(options = {}) {
     "",
     "### Verificaciones y rechazos",
     ...(report.rechazadas.length ? report.rechazadas.map((r) => `- ⚠ ${r}`) : ["- (ninguna propuesta rechazada)"]),
+    ...closesLines,
     "",
     `Proveedor: ${report.proveedor} · Modelo: ${report.modelo} · Fecha: ${dateStr}`
   ].join("\n");
+
+  // Guardar estado
+  state.ultimoRun = new Date().toISOString();
+  fs.writeFileSync(STATE, JSON.stringify(state, null, 2), "utf8");
 
   // Si hay cambios y no es dryRun, agregar filas a evidencias.csv
   if (!dry && nuevasEvidencias.length > 0) {
@@ -741,8 +1007,16 @@ async function main(options = {}) {
     dryRun: dry,
     token,
     repo,
-    execFileImpl: options.execFileImpl || execFileSync
+    execFileImpl
   });
+
+  // P1.12: Comentar en issues: propuesta → "Propuesta en PR #X"
+  const prRef = (prResult && prResult.prUrl) ? prResult.prUrl : branchName;
+  for (const n of issuesToClose) {
+    try {
+      execFileImpl("gh", ["issue", "comment", String(n), "--repo", repo, "--body", `Propuesta en PR ${prRef}`]);
+    } catch (_) {}
+  }
 
   console.log(prMarkdown);
   return { report, prResult };
@@ -799,5 +1073,8 @@ module.exports = {
   getNextBranchName,
   serializeCsvRow,
   createReviewPR,
+  loadIssues,
+  parseIssueContent,
+  closeLegacyIssues,
   main
 };

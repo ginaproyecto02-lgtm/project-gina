@@ -731,6 +731,8 @@
     "scripts": [
       "src/matcher.js",
       "src/reputation.js",
+      "src/alternativas.js",
+      "src/i18n.js",
       "src/ai.js",
       "src/background.js"
     ]

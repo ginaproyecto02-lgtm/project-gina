@@ -733,6 +733,19 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     const okAlerta = !!alertaNotice && alertaNotice.texto.includes("alertas de esta marca") && !alertaNotice.texto.includes("este producto");
     check("7. Alerta de solo marca → texto «alertas de esta marca», nunca «este producto»", okAlerta, alertaNotice ? alertaNotice.texto : "no encontrada");
   }
+
+  // 8. Popup sin producto o con marca conocida → #suggest oculto
+  {
+    const shouldShowSuggest = (res) => {
+      if (!res || res.mode) return false;
+      return !res.found && !!(res.brandText || res.title);
+    };
+    const noProduct = shouldShowSuggest(null);
+    const flightPage = shouldShowSuggest({ mode: "vuelos", airline: { nombre: "Aeroméxico" } });
+    const knownProduct = shouldShowSuggest({ found: true, brand: "Bimbo" });
+    const unknownProduct = shouldShowSuggest({ found: false, brandText: "Original Nature's Oils", title: "Aceite" });
+    check("Popup sin producto o con marca conocida → #suggest oculto", !noProduct && !flightPage && !knownProduct && unknownProduct);
+  }
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

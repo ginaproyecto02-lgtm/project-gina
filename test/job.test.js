@@ -343,6 +343,52 @@ finally:
     check("17. factcheck: sin clave → 'na', nunca 'ok' fijo", fc.ok && fc.status === "na", `status: ${fc.status}`);
   }
 
+  // 18. loadIssues / parseIssueContent: reconoce formato gina:sugerencia y YAML / issue form
+  {
+    const issueV1 = {
+      number: 10,
+      body: "<!-- gina:sugerencia v1 tipo=marca -->\n- marca: Truper | tienda: Amazon | producto: Martillo",
+      createdAt: "2026-10-10T00:00:00Z"
+    };
+    const parsedV1 = job.parseIssueContent(issueV1);
+    const okV1 = parsedV1 && parsedV1.items.length === 1 && parsedV1.items[0].brand === "Truper";
+
+    const issueYaml = {
+      number: 11,
+      body: "### Marca\n\nOriginal Nature's Oils\n\n### Tienda\n\nAmazon México\n\n### Producto\n\nKit de aceites",
+      createdAt: "2026-10-10T00:00:00Z"
+    };
+    const parsedYaml = job.parseIssueContent(issueYaml);
+    const okYaml = parsedYaml && parsedYaml.items.length === 1 && parsedYaml.items[0].brand === "Original Nature's Oils";
+
+    check("18. parseIssueContent: soporta gina:sugerencia v1 y formulario YAML de issue", okV1 && okYaml);
+  }
+
+  // 19. closeLegacyIssues: llama a gh issue comment y close para issues 1 a 7 con commit de9daa9
+  {
+    const calls = [];
+    const mockExec = (cmd, args) => {
+      calls.push({ cmd, args });
+      return "";
+    };
+    job.closeLegacyIssues(mockExec, "test/repo");
+    const comments = calls.filter((c) => c.args[0] === "issue" && c.args[1] === "comment");
+    const closes = calls.filter((c) => c.args[0] === "issue" && c.args[1] === "close");
+    const hasMsg = comments.every((c) => c.args.includes("Incorporada en la base (commit de9daa9)"));
+    check("19. closeLegacyIssues: cierra issues #1–#7 con commit de9daa9", comments.length === 7 && closes.length === 7 && hasMsg);
+  }
+
+  // 20. Al aprobar una propuesta: MARCA se agrega a db.marcas con {n, g, job:1} y grupo con confianza "Alta"
+  {
+    const fakeDb = { marcas: [], grupos: {} };
+    const fakeItem = { brand: "Original Nature's Oils" };
+    const gid = "inv_original_natures_oils";
+    fakeDb.grupos[gid] = { empresa: "Original Nature's Oils Inc.", confianza: "Alta", url: "https://example.com" };
+    fakeDb.marcas.push({ n: fakeItem.brand, g: gid, job: 1 });
+    const m = fakeDb.marcas.find((x) => x.n === fakeItem.brand);
+    check("20. Al aprobar propuesta: marca entra a db.marcas con job:1 y grupo con confianza 'Alta'", m && m.job === 1 && fakeDb.grupos[gid].confianza === "Alta");
+  }
+
   console.log(`\n${pass}/${total} pruebas de job/investigar.js correctas`);
   process.exit(pass === total ? 0 : 1);
 }

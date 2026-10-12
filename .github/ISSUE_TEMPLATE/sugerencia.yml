@@ -1,0 +1,57 @@
+name: Sugerencia de marca
+description: Sugerir una marca no reconocida, alternativa local o corregir datos
+title: "Marca faltante: "
+labels: [sugerencia]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por sugerir una marca para Project Gina. Tu información ayuda a mantener una base libre, pública y verificada sin intereses corporativos.
+  - type: input
+    id: marca
+    attributes:
+      label: Marca
+      description: Nombre de la marca que no reconoció Gina
+      placeholder: "Ejemplo: Original Nature's Oils"
+    validations:
+      required: true
+  - type: input
+    id: tienda
+    attributes:
+      label: Tienda
+      description: Tienda o plataforma donde viste el producto
+      placeholder: "Ejemplo: Amazon México, Mercado Libre, Walmart..."
+    validations:
+      required: false
+  - type: input
+    id: pais
+    attributes:
+      label: País
+      description: País de la tienda o del producto
+      placeholder: "Ejemplo: México, España, Estados Unidos..."
+    validations:
+      required: false
+  - type: input
+    id: producto
+    attributes:
+      label: Producto
+      description: Nombre o descripción del producto
+      placeholder: "Ejemplo: Kit de 5 aceites esenciales 10ml"
+    validations:
+      required: false
+  - type: input
+    id: dueno
+    attributes:
+      label: Dueño o empresa controladora (opcional)
+      description: Si conoces qué empresa, corporación o familia es dueña de la marca
+      placeholder: "Ejemplo: Nature's Oils S.A. de C.V."
+    validations:
+      required: false
+  - type: input
+    id: fuente
+    attributes:
+      label: Fuente o referencia (opcional)
+      description: Enlace web o documento donde se verifica quién es el dueño
+      placeholder: "https://..."
+    validations:
+      required: false

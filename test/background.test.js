@@ -25,6 +25,7 @@ function makeEnv(responder) {
       onInstalled: { addListener: (f) => listeners.installed.push(f) },
       onStartup: { addListener: (f) => listeners.startup.push(f) }
     },
+    tabs: { create: async (opts) => { chrome.tabs.created.push(opts); return { id: 1, ...opts }; }, created: [] },
     alarms: { create: () => {}, onAlarm: { addListener: (f) => listeners.alarm.push(f) } },
     action: { setBadgeText: async () => {}, setBadgeBackgroundColor: async () => {} }
   };
@@ -180,6 +181,46 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
   bad.store.settings = { aiEnabled: true, classify: { provider: "anthropic", key: "mala", model: "claude-haiku-5-5" } };
   r = await bad.send({ type: "qed:resolve", brandText: "Algo", title: "Algo", site: "x" });
   check("Clave inválida: error claro y queda pendiente", r.status === "error" && /revisa la clave/.test(r.error) && bad.store.pending["b:algo"], r.error);
+
+  // P1: Clic en Sugerir abre pestaña vía tabs.create con URL de issue con gina:sugerencia y labels=sugerencia
+  {
+    const sugEnv = makeEnv(async () => ({ status: 200, body: {} }));
+    await sugEnv.send({
+      type: "qed:suggest_brand",
+      brand: "Original Nature's Oils",
+      title: "Kit de aceites",
+      site: "Amazon México"
+    });
+    const lastTab = sugEnv.ctx.chrome.tabs.created[0];
+    const okSug = lastTab && lastTab.url && lastTab.url.includes("gina%3Asugerencia") && lastTab.url.includes("labels=sugerencia");
+    check("El clic en «Sugerir» de la tarjeta llama a tabs.create con gina:sugerencia y labels=sugerencia", okSug, lastTab && lastTab.url);
+  }
+
+  // P1: Base remota con versión mayor se reemplaza y pendientes reconocidos desaparecen
+  {
+    const remoteData = {
+      version: "2099-01-01T0000",
+      marcas: [{ n: "Truper", g: "truper" }],
+      grupos: { truper: { empresa: "Truper" } }
+    };
+    const updateEnv = makeEnv(async (req) => {
+      if (req.url.includes("brands.json")) {
+        return { status: 200, body: remoteData };
+      }
+      return { status: 200, body: {} };
+    });
+    updateEnv.store.pending = {
+      "b:truper": { brand: "Truper", count: 2, status: "por_investigar" },
+      "b:desconocida": { brand: "Desconocida XYZ", count: 1, status: "por_investigar" }
+    };
+    updateEnv.store.remoteBase = { data: { version: "2026-01-01T0000", marcas: [] } };
+    await updateEnv.send({ type: "qed:updateBase" });
+    const newPending = updateEnv.store.pending || {};
+    const truperGone = !newPending["b:truper"];
+    const desconocidaKept = !!newPending["b:desconocida"];
+    const baseUpdated = updateEnv.store.remoteBase && updateEnv.store.remoteBase.data && updateEnv.store.remoteBase.data.version === "2099-01-01T0000";
+    check("Base remota con versión mayor se reemplaza y los pendientes reconocidos desaparecen", truperGone && desconocidaKept && baseUpdated);
+  }
 
   console.log(`\n${pass}/${total} pruebas correctas`);
   process.exit(pass === total ? 0 : 1);

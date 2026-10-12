@@ -64,6 +64,39 @@ function applyI18nLabels() {
   const foot = $("footer"); if (foot) foot.textContent = t("foot_disclaimer");
 }
 
+const keyFor = (brand, title) => {
+  const b = QED.cleanBrandField(brand || "");
+  return b ? "b:" + b : "t:" + QED.norm(title || "").slice(0, 70);
+};
+
+function formatBaseDate(v) {
+  if (!v) return "";
+  const m = String(v).match(/^(\d{4})[-.](\d{2})[-.](\d{2})/);
+  if (m) {
+    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    if (!isNaN(d.getTime())) {
+      const lang = I18N().getLang ? I18N().getLang() : "es";
+      return d.toLocaleDateString(lang, { year: "numeric", month: "short", day: "numeric" });
+    }
+  }
+  return String(v);
+}
+
+async function checkForNewerBase() {
+  if (proj && proj.remoteUrl) {
+    try {
+      const res = await fetch(proj.remoteUrl, { cache: "no-store" });
+      if (res.ok) {
+        const remoteData = await res.json();
+        if (remoteData && remoteData.version && String(remoteData.version) > String(db.version)) {
+          const banner = $("#updateBanner");
+          if (banner) banner.hidden = false;
+        }
+      }
+    } catch (_) {}
+  }
+}
+
 async function init() {
   applyI18nLabels();
   db = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
@@ -80,8 +113,13 @@ async function init() {
   const pend = Object.values(st.pending || {}).filter((x) => ["por_investigar", "por_verificar", "reintentar", "sin_fuentes"].includes(x.status)).length;
   $("#aiInfo").textContent = `${Object.keys(extra.verified).length} marcas verificadas · ${pend} pendientes`;
   $("#count").textContent = `${db.marcas.length + custom.length} marcas · ${Object.keys(db.grupos).length} grupos · base ${db.version}`;
+  const bDate = formatBaseDate(db.version);
+  const baseDateEl = $("#baseDate");
+  if (baseDateEl) baseDateEl.textContent = bDate ? `Base del ${bDate}` : `Base ${db.version}`;
   $("#enabled").checked = st.enabled !== false;
   renderCustom();
+  renderBatchSection(st.pending || {});
+  checkForNewerBase();
   loadPage();
 }
 
@@ -132,11 +170,20 @@ async function loadPage() {
   if (!tab || !tab.id) return;
   try {
     const r = await api.tabs.sendMessage(tab.id, { type: "qed:get" });
-    if (!r || !r.result) { $("#pageOut").textContent = "Esta página no es de un producto, vuelo u hospedaje, o aún se está leyendo."; return; }
+    if (!r || !r.result) {
+      $("#pageOut").textContent = "Esta página no es de un producto, vuelo u hospedaje, o aún se está leyendo.";
+      $("#suggest").hidden = true;
+      return;
+    }
     const res = r.result;
     pageRes = Object.assign({ site: r.site }, res);
-    if (res.mode) { $("#pageOut").innerHTML = travelHtml(res); return; }
-    $("#suggest").hidden = !(!res.found && (res.brandText || res.title));
+    if (res.mode) {
+      $("#pageOut").innerHTML = travelHtml(res);
+      $("#suggest").hidden = true;
+      return;
+    }
+    const isUnknownProductBrand = !res.found && !!(res.brandText || res.title);
+    $("#suggest").hidden = !isUnknownProductBrand;
     const storeLine = res.store && res.store.group ? `<div class="note">${t("shopping_at", { store: esc(res.store.nombre), empresa: esc(res.store.group.empresa), controlador: esc(res.store.group.controlador) })}</div>` : "";
     $("#pageOut").innerHTML = (res.found
       ? card(res.brand, res.group, `(${res.source})`)
@@ -144,7 +191,76 @@ async function loadPage() {
     if (!res.found && res.brandText) $("#addForm").marca.value = res.brandText;
   } catch (e) {
     $("#pageOut").textContent = "Abre un producto en una tienda, o una búsqueda de vuelos u hospedaje (si ya está abierta, recarga la página).";
+    $("#suggest").hidden = true;
   }
+}
+
+function renderBatchSection(pending) {
+  const unrecognized = Object.values(pending || {}).filter(
+    (p) => (p.brand || p.title) && p.status !== "verificada" && p.status !== "enviada"
+  ).sort((a, b) => (b.count || 0) - (a.count || 0));
+
+  const batchSec = $("#batchSection");
+  if (!batchSec) return;
+  if (!unrecognized.length) {
+    batchSec.hidden = true;
+    return;
+  }
+
+  $("#batchCount").textContent = `${unrecognized.length} marcas sin reconocer`;
+  batchSec.hidden = false;
+
+  const topItems = unrecognized.slice(0, 40);
+  const listEl = $("#batchList");
+  listEl.innerHTML = topItems.map((it, idx) => {
+    const bName = it.brand || it.title || "";
+    const extra = [it.site, it.title && it.brand ? it.title : ""].filter(Boolean).join(" · ");
+    return `<label class="batch-item">
+      <input type="checkbox" checked data-idx="${idx}">
+      <span class="batch-item-label"><b>${esc(bName)}</b>${extra ? ` <small class="small">(${esc(extra)})</small>` : ""}</span>
+    </label>`;
+  }).join("");
+
+  $("#btnBatchToggle").onclick = () => {
+    $("#batchBox").hidden = !$("#batchBox").hidden;
+  };
+
+  $("#btnBatchSend").onclick = async () => {
+    const checkedBoxes = Array.from(listEl.querySelectorAll('input[type="checkbox"]:checked'));
+    const chosen = checkedBoxes.map((cb) => topItems[parseInt(cb.dataset.idx, 10)]).filter(Boolean);
+    if (!chosen.length) return;
+
+    $("#btnBatchSend").disabled = true;
+    const itemsPayload = chosen.map((c) => ({
+      marca: c.brand || c.title || "",
+      tienda: c.site || "",
+      producto: c.title || ""
+    }));
+
+    const ghUrl = (QED.ALT && QED.ALT.suggestionLink)
+      ? QED.ALT.suggestionLink(proj, "marca", itemsPayload)
+      : "";
+
+    if (ghUrl) {
+      if (api.tabs && api.tabs.create) {
+        await api.tabs.create({ url: ghUrl });
+      } else {
+        window.open(ghUrl, "_blank");
+      }
+    }
+
+    const { pending: curPending = {} } = await api.storage.local.get("pending");
+    for (const c of chosen) {
+      const k = keyFor(c.brand, c.title);
+      if (curPending[k]) {
+        curPending[k].status = "enviada";
+      }
+    }
+    await api.storage.local.set({ pending: curPending });
+
+    $("#batchBox").hidden = true;
+    renderBatchSection(curPending);
+  };
 }
 
 function search(text) {
@@ -197,23 +313,22 @@ $("#suggest").onclick = async () => {
   const brand = pageRes.brandText || "";
   const title = pageRes.title || "";
   const site = pageRes.site ? `${pageRes.site.nombre} (${pageRes.site.pais})` : "";
-  
+  const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]) : "";
+  const mailto = `mailto:${proj.contacto || ""}?subject=${encodeURIComponent(`Sugerencia de marca: ${brand}`)}&body=${encodeURIComponent(`Marca: ${brand}\nTienda: ${site}\nProducto: ${title}\n`)}`;
+  const targetUrl = ghUrl || (proj.contacto ? mailto : "");
+
   await api.runtime.sendMessage({
     type: "qed:suggest_brand",
     brand: brand,
     title: title,
-    site: site
+    site: site,
+    url: targetUrl
   });
-  
+
   $("#suggest").hidden = true;
   const fb = $("#suggestFeedback");
   fb.hidden = false;
-  
-  const subj = encodeURIComponent(`Sugerencia de marca: ${brand}`);
-  const body = encodeURIComponent(`Marca: ${brand}\nTienda: ${site}\nProducto: ${title}\n`);
-  const mailto = `mailto:${proj.contacto || ""}?subject=${subj}&body=${body}`;
-  const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]) : "";
-  
+
   fb.innerHTML = `
     <div><b>${t("suggest_success")}</b></div>
     <div style="margin-top:6px;font-size:11px;color:#5a6478;">
@@ -237,7 +352,7 @@ $("#altForm").addEventListener("submit", async (e) => {
   const body = encodeURIComponent(`Alternativa: ${f.marca}\nCategoría: ${f.categoria || ""}\nPaís: ${f.pais || ""}\nDueño: ${f.dueno || ""}\nFuente: ${f.fuente || ""}\n`);
   const mailto = `mailto:${proj.contacto || ""}?subject=${subj}&body=${body}`;
   const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "alternativa", [f]) : "";
-  
+
   fb.innerHTML = `
     <div><b>✔ ¡Gracias! Alternativa registrada para verificarla e incluirla en la base.</b></div>
     <div style="margin-top:6px;font-size:11px;color:#5a6478;">
@@ -245,6 +360,28 @@ $("#altForm").addEventListener("submit", async (e) => {
       ${ghUrl ? ` · <a href="${ghUrl}" target="_blank">GitHub</a>` : ""}
     </div>`;
 });
+
+if ($("#btnUpdateBase")) {
+  $("#btnUpdateBase").onclick = async () => {
+    $("#btnUpdateBase").disabled = true;
+    $("#btnUpdateBase").textContent = "Actualizando…";
+    try {
+      const res = await api.runtime.sendMessage({ type: "qed:updateBase" });
+      if (res && res.ok) {
+        $("#updateBanner").hidden = true;
+        db = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
+        const st = await api.storage.local.get("remoteBase");
+        if (st.remoteBase && st.remoteBase.data) db = st.remoteBase.data;
+        const bDate = formatBaseDate(db.version);
+        if ($("#baseDate")) $("#baseDate").textContent = bDate ? `Base del ${bDate}` : `Base ${db.version}`;
+        $("#count").textContent = `${db.marcas.length + custom.length} marcas · ${Object.keys(db.grupos).length} grupos · base ${db.version}`;
+      }
+    } catch (e) {
+      $("#btnUpdateBase").disabled = false;
+      $("#btnUpdateBase").textContent = "Actualizar";
+    }
+  };
+}
 
 $("#openOptions").onclick = () => api.runtime.openOptionsPage();
 init();

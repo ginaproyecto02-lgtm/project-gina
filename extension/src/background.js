@@ -1,7 +1,7 @@
 // Gina — service worker (Chrome/Edge) o página de eventos (Firefox):
 // memoria (caché, pendientes, verificados), clasificación con IA y job semanal de investigación.
 // En Chrome se cargan las dependencias con importScripts; en Firefox ya vienen en background.scripts del manifiesto.
-if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "i18n.js", "ai.js");
+if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "alternativas.js", "i18n.js", "ai.js");
 const QED = globalThis.QED, AI = globalThis.QEDAI;
 const api = chrome;
 const IS_FIREFOX = typeof browser !== "undefined" && !!(browser.runtime && browser.runtime.getBrowserInfo);
@@ -162,8 +162,37 @@ async function refreshRemote(s, log) {
     if (!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
     if (!data.grupos || !Array.isArray(data.marcas)) throw new Error("El archivo no tiene el formato de brands.json");
-    await set({ remoteBase: { fetchedAt: Date.now(), url, data } });
-    log.remote = `Base remota ${data.version} (${data.marcas.length} marcas)`;
+
+    if (!baseCache) baseCache = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
+    const { remoteBase, pending = {} } = await get(["remoteBase", "pending"]);
+    const currentVersion = (remoteBase && remoteBase.data && remoteBase.data.version) || (baseCache && baseCache.version) || "";
+
+    // Solo reemplaza la base si la versión remota es mayor (P1.13)
+    if (String(data.version) <= String(currentVersion)) {
+      log.remote = `Base remota ${data.version} no es mayor que la actual ${currentVersion}; se conserva la actual.`;
+      return;
+    }
+
+    // Borra de pendientes las marcas que ahora reconoce la nueva base (P1.13)
+    const knownBrands = new Set(data.marcas.map((m) => QED.norm(m.n)));
+    let cleanedCount = 0;
+    const newPending = {};
+    for (const [key, p] of Object.entries(pending)) {
+      const normBrand = QED.norm(p.brand || "");
+      if (normBrand && knownBrands.has(normBrand)) {
+        cleanedCount++;
+      } else {
+        newPending[key] = p;
+      }
+    }
+
+    await set({
+      remoteBase: { fetchedAt: Date.now(), url, data },
+      pending: newPending
+    });
+    baseCache = data;
+    await updateBadge();
+    log.remote = `Base remota ${data.version} (${data.marcas.length} marcas; ${cleanedCount} pendientes resueltos)`;
   } catch (e) { log.errors.push("Base remota: " + e.message); }
 }
 
@@ -306,25 +335,41 @@ api.alarms.onAlarm.addListener(async (a) => {
   if ((s.jobEnabled || (await remoteUrlOf(s))) && Date.now() - (jobState.lastRun || 0) >= 7 * DAY) runJob("semanal");
 });
 
-async function recordBrandSuggestion(brand, title, site) {
+async function recordBrandSuggestion(brand, title, site, url) {
   const key = keyFor(brand, title);
   await locked(async () => {
     const { pending = {}, userSuggestions = [] } = await get(["pending", "userSuggestions"]);
-    const p = pending[key] || { brand: brand || "", title: title || "", site: site || "", firstSeen: Date.now(), count: 0, tries: 0, status: "por_investigar" };
-    p.count = (p.count || 0) + 5;
+    const p = pending[key] || { brand: brand || "", title: title || "", site: site || "", firstSeen: Date.now(), count: 0, tries: 0 };
+    p.count = (p.count || 0) + 1;
     p.lastSeen = Date.now();
     p.userSuggested = true;
-    p.status = "por_investigar";
+    p.status = "enviada"; // Guarda en local con estado "enviada" (P1.10)
     if (site) p.site = site;
     if (title && !p.title) p.title = title;
     pending[key] = p;
 
-    const entry = { brand: brand || "", title: title || "", site: site || "", date: Date.now() };
+    const entry = { brand: brand || "", title: title || "", site: site || "", date: Date.now(), status: "enviada" };
     const filtered = userSuggestions.filter((x) => x.brand !== brand || x.title !== title);
     filtered.unshift(entry);
 
     await set({ pending, userSuggestions: filtered.slice(0, 100) });
   });
+
+  // Abre el issue prellenado en una pestaña nueva vía background (tabs.create) (P1.10)
+  if (!url) {
+    const proj = await project();
+    if (typeof QED !== "undefined" && QED.ALT && QED.ALT.suggestionLink) {
+      url = QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]);
+    }
+  }
+  if (url) {
+    try {
+      if (api.tabs && api.tabs.create) {
+        await api.tabs.create({ url });
+      }
+    } catch (_) {}
+  }
+
   await updateBadge();
   return { ok: true };
 }
@@ -343,11 +388,20 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (!msg || !msg.type) return false;
   if (msg.type === "qed:resolve") { resolve(msg).then(reply, (e) => reply({ status: "error", error: String(e) })); return true; }
   if (msg.type === "qed:suggest_brand") {
-    recordBrandSuggestion(msg.brand, msg.title, msg.site).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    recordBrandSuggestion(msg.brand, msg.title, msg.site, msg.url).then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
   if (msg.type === "qed:suggest_alternative") {
     recordAlternativeSuggestion(msg.alternative).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    return true;
+  }
+  if (msg.type === "qed:updateBase") {
+    (async () => {
+      const s = await settings();
+      const log = { start: Date.now(), trigger: "manual", researched: 0, verified: 0, unsourced: 0, notFound: 0, revalidated: 0, changed: [], errors: [], tokensIn: 0, tokensOut: 0, searches: 0 };
+      await refreshRemote(s, log);
+      return { ok: true, log };
+    })().then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
   if (msg.type === "qed:runJob") { runJob("manual").catch(() => {}); reply({ started: true }); return false; }

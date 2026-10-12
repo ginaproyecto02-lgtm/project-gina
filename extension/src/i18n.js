@@ -205,12 +205,12 @@
       ja: "💡 このブランドをプロジェクトに提案"
     },
     suggest_success: {
-      es: "✔ ¡Gracias! Marca anotada para la próxima actualización de la base.",
-      en: "✔ Thank you! Brand queued for the next database update.",
-      de: "✔ Danke! Marke für das nächste Datenbank-Update vorgemerkt.",
-      fr: "✔ Merci ! Marque notée pour la prochaine mise à jour de la base.",
-      it: "✔ Grazie! Marchio annotato per il prossimo aggiornamento del database.",
-      ja: "✔ ありがとうございます！次回のデータベース更新に向けて記録しました。"
+      es: "Se abrió GitHub con tu sugerencia lista: revísala y pulsa «Submit».",
+      en: "GitHub opened with your suggestion ready: review it and click 'Submit'.",
+      de: "GitHub wurde mit deinem Vorschlag geöffnet: Bitte überprüfen und auf „Submit“ klicken.",
+      fr: "GitHub s'est ouvert avec votre suggestion prête : vérifiez-la et cliquez sur « Submit ».",
+      it: "GitHub si è aperto con il tuo suggerimento pronto: ricontrollalo e premi «Submit».",
+      ja: "提案内容を入力したGitHubが開きました。内容を確認して「Submit」を押してください。"
     },
     suggest_email_opt: {
       es: "✉ Enviar por correo al equipo",

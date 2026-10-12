@@ -8,9 +8,14 @@
 <body>
   <header>
     <img class="logo" src="../icons/icon48.png" alt="" width="28" height="28">
-    <div><div class="h">Gina</div><div class="sub" id="count">Cargando base…</div></div>
+    <div><div class="h">Gina</div><div class="sub" id="count">Cargando base…</div><div class="sub" id="baseDate"></div></div>
     <label class="switch" title="Mostrar la tarjeta en las tiendas"><input type="checkbox" id="enabled"><span></span></label>
   </header>
+
+  <div id="updateBanner" class="update-banner" hidden>
+    <span>Hay una base más nueva:</span>
+    <button id="btnUpdateBase" class="btn-update">Actualizar</button>
+  </div>
 
   <nav>
     <button data-tab="page" class="on">Esta página</button>
@@ -23,6 +28,17 @@
     <button id="showCard" class="btn ghost">Mostrar la tarjeta en la página</button>
     <button id="suggest" class="btn ghost" hidden>💡 Sugerir esta marca al proyecto</button>
     <div id="suggestFeedback" class="sug-feedback" hidden></div>
+    <div id="batchSection" class="batch-section" hidden>
+      <div class="batch-head">
+        <span id="batchCount">0 marcas sin reconocer</span> · 
+        <button id="btnBatchToggle" class="btn-link">Enviarlas al proyecto</button>
+      </div>
+      <div id="batchBox" class="batch-box" hidden>
+        <div class="batch-help">Elige las marcas que quieres enviar (máx. 40):</div>
+        <div id="batchList" class="batch-list"></div>
+        <button id="btnBatchSend" class="btn">Enviar marcas seleccionadas</button>
+      </div>
+    </div>
   </section>
 
   <section id="search" class="tab">

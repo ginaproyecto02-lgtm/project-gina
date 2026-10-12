@@ -156,6 +156,13 @@ def host_level(url):
     return None
 
 for gid, grp in brands["grupos"].items():
+    ev = evidencias.get(gid)
+    if ev and ev.get("aprobado_en_pr"):
+        pr_val = str(ev["aprobado_en_pr"]).strip().lstrip("#")
+        if pr_val.isdigit():
+            grp["confianza"] = "Verificado"
+
+for gid, grp in brands["grupos"].items():
     if grp.get("confianza") == "Verificado":
         assert gid in evidencias, f"Grupo verificado '{gid}' ({grp.get('empresa')}) sin fila en evidencias.csv"
         ev = evidencias[gid]

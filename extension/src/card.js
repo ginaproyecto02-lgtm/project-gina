@@ -933,12 +933,19 @@
         try {
           const api = typeof browser !== "undefined" ? browser : chrome;
           const site = res.store ? `${res.store.nombre}` : (typeof location !== "undefined" ? location.hostname : "");
+          const brandName = res.found ? res.brand : (res.brandText || "");
+          const proj = QED.PROJECT || {};
+          let targetUrl = "";
+          if (QED.ALT && QED.ALT.suggestionLink) {
+            targetUrl = QED.ALT.suggestionLink(proj, "marca", [{ marca: brandName, tienda: site, producto: res.title || "" }]);
+          }
           if (api && api.runtime && api.runtime.sendMessage) {
             await api.runtime.sendMessage({
               type: "qed:suggest_brand",
-              brand: res.brandText || "",
+              brand: brandName,
               title: res.title || "",
-              site: site
+              site: site,
+              url: targetUrl
             });
           }
           sugBtn.style.display = "none";
