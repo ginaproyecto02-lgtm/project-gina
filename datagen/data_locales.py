@@ -33,6 +33,17 @@ CAT['Dondé'] = 'botanas_galletas'
 g('loc_grupo_flexi', 'Grupo Flexi (Flexi)', 'Familia Plascencia: fundador Roberto Plascencia Gutiérrez; hoy dirige la tercera generación (Roberto Plascencia Torres).', 'México', 'Familia', "", "", 'Escrito también Plasencia.', 'Alta', 'El CEO: ¿Quién es el dueño de Flexi?', 'https://elceo.com/negocios/quien-es-el-dueno-de-la-marca-flexi/')
 b('loc_grupo_flexi', '!Flexi', 'Grupo Flexi')
 CAT['Flexi'] = 'ropa_calzado'
+g('loc_tiendas_3b', 'Tiendas 3B (BBB Foods Inc.)', 'Anthony Hatoum (fundador) y accionistas en NYSE (TBBB)', 'México', 'Hard discount', "", "", 'Cadena mexicana pionera del formato hard discount (descuento duro) fundada en 2004; comercializa marcas propias de canasta básica de bajo costo.', 'Alta', 'Tiendas 3B Inversionistas', 'https://investors.tiendas3b.com', ahorro=True, ahorro_fuente='https://tiendas3b.com', controlador_en='Anthony Hatoum (founder) / NYSE: TBBB', nota_en='Mexican hard-discount supermarket chain offering private label value staples.')
+b('loc_tiendas_3b', 'LactiBuena', 'Milena', 'Vaca Blanca', 'San Felipe', 'Odisa', 'Nuestro Campo')
+CAT['LactiBuena'] = 'lacteos'
+CAT['Vaca Blanca'] = 'lacteos'
+CAT['Milena'] = 'botanas_galletas'
+CAT['San Felipe'] = 'abarrotes'
+CAT['Nuestro Campo'] = 'abarrotes'
+CAT['Odisa'] = 'limpieza'
+g('loc_waldos', "Waldo's Dólar Mart de México", "Grupo Waldo's (inversionistas privados mexicanos y fundadores)", 'México', 'Hard discount', "", "", "Cadena mexicana de tiendas de conveniencia y descuento fundada en 1999 con marcas de valor accesible.", 'Alta', "Waldo's Corporativo", 'https://waldos.com.mx/pages/quienes-somos', ahorro=True, ahorro_fuente='https://waldos.com.mx', controlador_en="Waldo's Group (Mexican private retail investors)", nota_en="Mexican value and discount retail chain offering everyday staples.")
+b('loc_waldos', "!Waldo's", 'Waldos')
+CAT["Waldo's"] = 'abarrotes'
 g('loc_land_o_lakes_inc', "Land O'Lakes, Inc.", 'Cooperativa agrícola propiedad de sus miembros (aprox. 2,580 miembros en 2024).', 'EE.UU.', 'Cooperativa', "", "", '', 'Alta', "Wikipedia: Land O'Lakes", 'https://en.wikipedia.org/wiki/Land_O%27Lakes')
 b('loc_land_o_lakes_inc', "Land O'Lakes", 'Land O Lakes')
 CAT["Land O'Lakes"] = 'lacteos'

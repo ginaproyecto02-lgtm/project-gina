@@ -10,11 +10,11 @@ CATS = {
     "kw": ["leche", "yogur", "yoghurt", "yogurt", "queso", "mantequilla", "crema acida", "milk", "cheese", "butter", "leite", "iogurte", "queijo", "lait", "fromage", "beurre", "yaourt", "latte", "formaggio", "burro", "milch", "kase", "joghurt", "牛乳", "ヨーグルト", "우유", "牛奶", "חלב", "dahi", "ghee", "paneer"],
     "excluye": ["corporal", "limpiadora", "crema corporal", "locion corporal", "jabon", "shampoo", "facial", "piel", "bloqueador"],
     "subcats": {
-      "leche": {"label": "Leche", "kw": ["leche", "milk", "leite", "lait", "latte", "milch"], "marcas": ["Lala", "Nutri Leche", "Borden", "Yomi Lala", "Alpura", "Nido", "Carnation", "La Lechera", "Silk", "Alpro", "Land O'Lakes", "Organic Valley", "Cabot", "Tillamook"]},
-      "queso": {"label": "Queso", "kw": ["queso", "cheese", "queijo", "fromage", "formaggio", "kase"], "marcas": ["Lala", "Président", "President", "Galbani", "Parmalat", "Lactalis", "Philadelphia", "Cabot", "Tillamook", "Land O'Lakes"]},
+      "leche": {"label": "Leche", "kw": ["leche", "milk", "leite", "lait", "latte", "milch"], "marcas": ["Lala", "Nutri Leche", "Borden", "Yomi Lala", "Alpura", "Nido", "Carnation", "La Lechera", "Silk", "Alpro", "Land O'Lakes", "Organic Valley", "Cabot", "Tillamook", "LactiBuena"]},
+      "queso": {"label": "Queso", "kw": ["queso", "cheese", "queijo", "fromage", "formaggio", "kase"], "marcas": ["Lala", "Président", "President", "Galbani", "Parmalat", "Lactalis", "Philadelphia", "Cabot", "Tillamook", "Land O'Lakes", "Vaca Blanca"]},
       "yogurt": {"label": "Yogurt", "kw": ["yogur", "yoghurt", "yogurt", "iogurte", "yaourt", "joghurt"], "marcas": ["Danone", "Activia", "Danonino", "Oikos", "Lala", "Alpura", "Tillamook"]}
     },
-    "marcas": ["Lala", "Nutri Leche", "Borden", "Yomi Lala", "Alpura", "Danone", "Activia", "Danonino", "Oikos", "Nido", "Carnation", "La Lechera", "Président", "President", "Galbani", "Parmalat", "Lactalis", "Amul", "Tnuva", "Philadelphia", "Silk", "Alpro"]
+    "marcas": ["Lala", "Nutri Leche", "Borden", "Yomi Lala", "Alpura", "Danone", "Activia", "Danonino", "Oikos", "Nido", "Carnation", "La Lechera", "Président", "President", "Galbani", "Parmalat", "Lactalis", "Amul", "Tnuva", "Philadelphia", "Silk", "Alpro", "LactiBuena", "Vaca Blanca"]
   },
   "bebidas": {
     "label": "Bebidas y jugos",
@@ -62,9 +62,9 @@ CATS = {
     "excluye": ["playera", "llavero", "cojin", "estuche"],
     "subcats": {
       "botanas": {"label": "Botanas y frituras", "kw": ["papas fritas", "botana", "frituras", "chips", "snack", "salgadinho"], "marcas": ["Sabritas", "Doritos", "Cheetos", "Ruffles", "Lay's", "Tostitos", "Barcel", "Takis", "Pringles", "Cheez-It", "Bamba", "Bissli"]},
-      "galletas": {"label": "Galletas", "kw": ["galletas", "cookies", "biscuits", "crackers", "biscoito", "bolacha", "biscotti", "kekse"], "marcas": ["Gamesa", "Emperador", "Mamut", "Chokis", "Marinela", "Oreo", "Chips Ahoy", "Ritz", "Club Social", "belVita", "Bagley", "Britannia", "Good Day", "Parle", "Parle-G", "Mulino Bianco"]}
+      "galletas": {"label": "Galletas", "kw": ["galletas", "cookies", "biscuits", "crackers", "biscoito", "bolacha", "biscotti", "kekse"], "marcas": ["Gamesa", "Emperador", "Mamut", "Chokis", "Marinela", "Oreo", "Chips Ahoy", "Ritz", "Club Social", "belVita", "Bagley", "Britannia", "Good Day", "Parle", "Parle-G", "Mulino Bianco", "Milena"]}
     },
-    "marcas": ["Sabritas", "Doritos", "Cheetos", "Ruffles", "Lay's", "Tostitos", "Gamesa", "Emperador", "Mamut", "Chokis", "Marinela", "Barcel", "Takis", "Pringles", "Cheez-It", "Oreo", "Chips Ahoy", "Ritz", "Club Social", "belVita", "Bagley", "Britannia", "Good Day", "Parle", "Parle-G", "Bingo!", "Sunfeast", "Bamba", "Bissli", "Mulino Bianco"]
+    "marcas": ["Sabritas", "Doritos", "Cheetos", "Ruffles", "Lay's", "Tostitos", "Gamesa", "Emperador", "Mamut", "Chokis", "Marinela", "Barcel", "Takis", "Pringles", "Cheez-It", "Oreo", "Chips Ahoy", "Ritz", "Club Social", "belVita", "Bagley", "Britannia", "Good Day", "Parle", "Parle-G", "Bingo!", "Sunfeast", "Bamba", "Bissli", "Mulino Bianco", "Milena"]
   },
   "abarrotes": {
     "label": "Despensa (pastas, salsas, conservas, sopas)",
@@ -73,9 +73,9 @@ CATS = {
     "subcats": {
       "pastas_sopas": {"label": "Pastas y sopas", "kw": ["pasta", "spaghetti", "sopa", "fideo", "noodles", "ramen"], "marcas": ["Barilla", "Knorr", "Maruchan", "Nissin", "Cup Noodles", "Top Ramen", "Shin Ramyun"]},
       "salsas_aderezos": {"label": "Salsas y aderezos", "kw": ["salsa", "mayonesa", "ketchup", "sauce", "sugo", "passata", "molho"], "marcas": ["Herdez", "Doña María", "Búfalo", "McCormick", "Hellmann's", "Heinz", "Kraft", "Dolmio"]},
-      "conservas_granos": {"label": "Conservas, legumbres y atún", "kw": ["atun", "conserva", "frijoles", "arroz", "beans", "rice", "mermelada"], "marcas": ["Herdez", "Del Fuerte", "La Costeña", "La Campagnola", "Uncle Ben's", "Ben's Original"]}
+      "conservas_granos": {"label": "Conservas, legumbres y atún", "kw": ["atun", "conserva", "frijoles", "arroz", "beans", "rice", "mermelada"], "marcas": ["Herdez", "Del Fuerte", "La Costeña", "La Campagnola", "Uncle Ben's", "Ben's Original", "San Felipe", "Nuestro Campo", "Waldo's"]}
     },
-    "marcas": ["Herdez", "Doña María", "Búfalo", "Carlota", "Del Fuerte", "La Costeña", "McCormick", "Barilla", "Knorr", "Hellmann's", "Maggi", "Heinz", "Kraft", "Maruchan", "Nissin", "Cup Noodles", "Top Ramen", "Uncle Ben's", "Ben's Original", "Dolmio", "Carozzi", "La Campagnola", "Tata Sampann", "Aashirvaad", "Kissan", "Patak's", "Shin Ramyun", "Bibigo"]
+    "marcas": ["Herdez", "Doña María", "Búfalo", "Carlota", "Del Fuerte", "La Costeña", "McCormick", "Barilla", "Knorr", "Hellmann's", "Maggi", "Heinz", "Kraft", "Maruchan", "Nissin", "Cup Noodles", "Top Ramen", "Uncle Ben's", "Ben's Original", "Dolmio", "Carozzi", "La Campagnola", "Tata Sampann", "Aashirvaad", "Kissan", "Patak's", "Shin Ramyun", "Bibigo", "San Felipe", "Nuestro Campo", "Waldo's"]
   },
   "panaderia_harinas": {
     "label": "Pan, cereales y harinas",
@@ -92,11 +92,11 @@ CATS = {
     "kw": ["detergente", "suavizante", "jabon para ropa", "jabon liquido para ropa", "detergente liquido", "detergente en polvo", "lavatrastes", "jabon para trastes", "lavavajillas", "cloro", "desinfectante", "limpiador multiusos", "limpiador de pisos", "limpiador de banos", "limpiador de cocina", "limpiador liquido", "limpiapisos", "desengrasante", "multiusos", "detergent", "laundry", "fabric softener", "dish soap", "cleaner", "bleach", "sabao", "lessive", "detersivo", "waschmittel", "spulmittel"],
     "excluye": ["piel", "facial", "rostro", "cutis", "ojos", "skincare", "serum", "bloqueador", "solar", "crema corporal", "shampoo"],
     "subcats": {
-      "ropa": {"label": "Cuidado de la ropa", "kw": ["detergente", "suavizante", "jabon para ropa", "jabon liquido para ropa", "detergente liquido", "detergente en polvo", "laundry", "fabric softener", "lessive", "detersivo", "waschmittel"], "marcas": ["Ariel", "Tide", "Downy", "Ace", "Persil", "Vernel", "Suavitel", "Vanish", "Surf Excel", "Rin", "Wheel", "Zote", "Roma", "Blanca Nieves", "Foca", "Carisma"]},
+      "ropa": {"label": "Cuidado de la ropa", "kw": ["detergente", "suavizante", "jabon para ropa", "jabon liquido para ropa", "detergente liquido", "detergente en polvo", "laundry", "fabric softener", "lessive", "detersivo", "waschmittel"], "marcas": ["Ariel", "Tide", "Downy", "Ace", "Persil", "Vernel", "Suavitel", "Vanish", "Surf Excel", "Rin", "Wheel", "Zote", "Roma", "Blanca Nieves", "Foca", "Carisma", "Odisa"]},
       "trastes": {"label": "Lavavajillas y trastes", "kw": ["lavatrastes", "jabon para trastes", "lavavajillas", "dish soap", "spulmittel"], "marcas": ["Salvo", "Dawn", "Cascade", "Fairy", "Axion", "Finish", "Vim"]},
       "superficies": {"label": "Limpieza de superficies", "kw": ["cloro", "desinfectante", "limpiador multiusos", "limpiador de pisos", "limpiador de banos", "limpiador de cocina", "limpiador liquido", "limpiapisos", "desengrasante", "multiusos", "bleach", "cleaner"], "marcas": ["Fabuloso", "Ajax", "Lysol", "Calgon", "Harpic", "Mr. Clean"]}
     },
-    "marcas": ["Ariel", "Tide", "Downy", "Ace", "Persil", "Vernel", "Suavitel", "Fabuloso", "Ajax", "Lysol", "Vanish", "Finish", "Calgon", "Harpic", "Salvo", "Dawn", "Cascade", "Fairy", "Axion", "Mr. Clean", "Surf Excel", "Rin", "Wheel", "Vim"]
+    "marcas": ["Ariel", "Tide", "Downy", "Ace", "Persil", "Vernel", "Suavitel", "Fabuloso", "Ajax", "Lysol", "Vanish", "Finish", "Calgon", "Harpic", "Salvo", "Dawn", "Cascade", "Fairy", "Axion", "Mr. Clean", "Surf Excel", "Rin", "Wheel", "Vim", "Odisa"]
   },
   "cuidado_personal": {
     "label": "Higiene y cuidado personal",

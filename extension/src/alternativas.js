@@ -6,12 +6,14 @@
   const QED = (root.QED = root.QED || {});
 
   const INDEP = {
-    "Cooperativa": { label: "Cooperativa", prio: 3 },
-    "Empleados": { label: "De sus empleados", prio: 3 },
-    "Fideicomiso": { label: "Controlada por un fideicomiso", prio: 2 },
-    "Familia": { label: "Empresa familiar", prio: 1 },
-    "Fundador": { label: "De su fundador", prio: 1 },
-    "Privada": { label: "Privada independiente", prio: 1 },
+    "Cooperativa": { label: "Cooperativa", prio: 4 },
+    "Empleados": { label: "De sus empleados", prio: 4 },
+    "Fideicomiso": { label: "Controlada por un fideicomiso", prio: 3 },
+    "Familia": { label: "Empresa familiar", prio: 2 },
+    "Fundador": { label: "De su fundador", prio: 2 },
+    "Privada": { label: "Privada independiente", prio: 2 },
+    "Hard discount": { label: "Cadena de descuento", prio: 1 },
+    "Marca propia": { label: "Marca propia de tienda", prio: 1 },
     "Familia + fondos": { label: "Familiar (con fondos minoritarios)", prio: 0 },
     "Fundador + fondos": { label: "De su fundador (con fondos)", prio: 0 }
   };

@@ -755,6 +755,113 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       `${db.licencia} · ${db.atribucion}`
     );
   }
+
+  // 10. Comparativa de precios (1 sem, 1 m, 3 m): flecha roja ≥10% más caro, flecha verde ≤10% más barato, neutral en precio habitual
+  {
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST");
+    const QED = w.QED;
+    const now = Date.now();
+    const DAY = 86400000;
+    const history = [
+      { t: now - 3 * DAY, p: 100 },
+      { t: now - 15 * DAY, p: 100 },
+      { t: now - 45 * DAY, p: 100 }
+    ];
+
+    // +15% más caro (115 vs avg 100)
+    const compExpensive = QED.computePriceComparison(history, 115);
+    const okExp = compExpensive && compExpensive.oneWeek && compExpensive.oneWeek.status === "expensive" && compExpensive.oneWeek.arrow === "🔺" && compExpensive.oneWeek.diffPct === 15;
+
+    // -15% más barato (85 vs avg 100)
+    const compCheap = QED.computePriceComparison(history, 85);
+    const okCheap = compCheap && compCheap.oneWeek && compCheap.oneWeek.status === "cheap" && compCheap.oneWeek.arrow === "🔻" && compCheap.oneWeek.diffPct === -15;
+
+    // +2% habitual (102 vs avg 100)
+    const compNeutral = QED.computePriceComparison(history, 102);
+    const okNeutral = compNeutral && compNeutral.oneWeek && compNeutral.oneWeek.status === "neutral" && compNeutral.oneWeek.arrow === "↔";
+
+    check("Comparativa temporal: flecha roja si ≥10% más caro, verde si ≤10% más barato, ↔ si habitual", okExp && okCheap && okNeutral);
+  }
+
+  // 11. Detección de Meses Sin Intereses (MSI)
+  {
+    const wMsi = env(`<div class="ui-pdp-payment">Hasta 12 meses sin intereses de $100</div>`, "https://articulo.mercadolibre.com.mx/MLM-123");
+    const instMsi = wMsi.QED.extractInstallments(wMsi.document, "mercadolibre");
+    const okMsi = instMsi && instMsi.hasMsi === true && instMsi.months === 12;
+
+    const wNoMsi = env(`<div>Pago de contado $500</div>`, "https://articulo.mercadolibre.com.mx/MLM-456");
+    const instNoMsi = wNoMsi.QED.extractInstallments(wNoMsi.document, "mercadolibre");
+    const okNoMsi = instNoMsi && instNoMsi.hasMsi === false;
+
+    check("Detección de Meses Sin Intereses (MSI) en la tienda", okMsi && okNoMsi);
+  }
+
+  // 12. Rastreadores de libre uso por ecosistema (CamelCamelCamel, Pricearchive, Alitools, Waltrack, Google Shopping)
+  {
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST");
+    const QED = w.QED;
+    const amzTrackers = QED.getTrackerLinks("amazon", { id: "B00EXAMPLE", type: "asin" }, "Audífonos Sony", "México");
+    const hasCamel = amzTrackers.some(tr => tr.name === "CamelCamelCamel" && tr.url.includes("camelcamelcamel.com/product/B00EXAMPLE"));
+
+    const aliTrackers = QED.getTrackerLinks("aliexpress", { id: "12345", type: "url" }, "Reloj Smart", "China");
+    const hasPricearchive = aliTrackers.some(tr => tr.name === "Pricearchive");
+    const hasAlitools = aliTrackers.some(tr => tr.name === "Alitools");
+
+    const wmTrackers = QED.getTrackerLinks("walmart", { id: "999", type: "walmart_id" }, "Café", "México");
+    const hasWaltrack = wmTrackers.some(tr => tr.name === "Waltrack");
+
+    const hasUniversal = amzTrackers.some(tr => tr.name.includes("universal"));
+
+    check("Rastreadores libres: CamelCamelCamel para Amazon, Pricearchive/Alitools para Asia, Waltrack para Walmart, y universal", hasCamel && hasPricearchive && hasAlitools && hasWaltrack && hasUniversal);
+  }
+
+  // 13. Opciones en otras 2 plataformas con comparativa de precio
+  {
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST");
+    const QED = w.QED;
+    const cross = QED.getCrossPlatformOptions("amazon", "Jabón Roma 1kg", "México", 40, null, null, {
+      mercadolibre: { price: 35 },
+      walmart: { price: 45 }
+    });
+    const okPlatforms = cross && cross.platforms && cross.platforms.length === 2;
+    const mlOpt = cross.platforms.find(p => p.site === "mercadolibre");
+    const wmOpt = cross.platforms.find(p => p.site === "walmart");
+    const okDiff = mlOpt && mlOpt.compStatus === "cheaper" && wmOpt && wmOpt.compStatus === "expensive";
+
+    check("Opciones en otras 2 plataformas con enlaces y cotejo de precio (más barato / más caro)", okPlatforms && okDiff);
+  }
+
+  // 14. Alternativas de Tiendas 3B y Waldo's con distintivo de hard discount y ubicación
+  {
+    const wLact = env(`<h1>Leche entera</h1>`, "https://www.amazon.com.mx/dp/B0LECHE");
+    const QED = wLact.QED;
+    const prep = QED.ALT.prepare(db, QED.buildIndex(db, [], {}, {}));
+    const alts = QED.ALT.suggest(prep, "lacteos", "México", null, null, 5, "Leche");
+    const has3b = alts.some(a => a.group && (a.group.id === "tiendas_3b" || a.group.id === "loc_tiendas_3b"));
+
+    // Renderizar tarjeta para verificar insignia y disponibilidad
+    const cardRes = {
+      found: true,
+      brand: "Alpura",
+      group: db.grupos["loc_alpura"],
+      title: "Leche Alpura Clásica 1L",
+      store: { nombre: "Amazon México", pais: "México" },
+      alternativas: {
+        cat: "lacteos",
+        label: "Lácteos",
+        pais: "México",
+        items: alts,
+        dominant: []
+      }
+    };
+    const wCard = env(`<div></div>`, "https://www.amazon.com.mx/dp/B0LECHE");
+    wCard.QED.showCard(cardRes, {});
+    const cardHtml = wCard.document.getElementById("gina-tarjeta").shadowRoot.innerHTML;
+    const hasDiscountBadge = cardHtml.includes("Descuento / 3B / Waldo&#39;s") || cardHtml.includes("Descuento / 3B / Waldo's");
+    const has3bLocation = cardHtml.includes("Tiendas 3B");
+
+    check("Alternativas incluyen marcas de descuento de Tiendas 3B / Waldo's con distintivo y tienda", has3b && hasDiscountBadge && has3bLocation);
+  }
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

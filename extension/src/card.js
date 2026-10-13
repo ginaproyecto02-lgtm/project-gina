@@ -192,6 +192,45 @@
   .tip-box { font-size: 11.5px; color: #4a5468; background: #f2f5f9; border-radius: 7px; padding: 7px 9px; margin-top: 8px; line-height: 1.35; }
   .method { font-size: 10.5px; color: #7a8396; margin-top: 6px; line-height: 1.3; }
 
+  /* Price & Comparison */
+  .price-panel { margin-bottom: 10px; padding: 9px 11px; background: #f8fafd; border: 1px solid #e1e7f0; border-radius: 8px; }
+  .price-main { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .price-current { font-size: 16px; font-weight: 750; color: #1c2233; }
+  .price-cur-lbl { font-size: 10px; font-weight: 600; color: #5f687a; text-transform: uppercase; letter-spacing: .4px; }
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e6eaf2; }
+  .price-cell { text-align: center; background: #fff; padding: 5px 4px; border-radius: 6px; border: 1px solid #e8ecf3; }
+  .price-cell-title { font-size: 10px; color: #6a7386; font-weight: 600; text-transform: uppercase; }
+  .price-cell-val { font-size: 11px; font-weight: 700; margin-top: 2px; }
+  .price-up { color: #b03024; font-weight: 600; }
+  .price-down { color: #2f7a24; font-weight: 600; }
+  .price-neutral { color: #55627a; font-weight: 600; }
+  .price-hist-init { font-size: 11px; color: #64748b; margin-top: 6px; text-align: center; }
+  .price-msi { display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; color: #1f4e8c; margin-top: 6px; }
+
+  /* Cross platform options */
+  .cross-plat-box { margin-top: 10px; padding: 8px 10px; background: #fff; border: 1px solid #e6e9f0; border-radius: 8px; }
+  .cross-plat-item { display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; padding: 5px 0; border-bottom: 1px dashed #edf0f5; }
+  .cross-plat-item:last-child { border-bottom: none; }
+  .cross-plat-name { font-weight: 600; color: #1c2233; }
+  .cross-plat-link { color: #1f6fb2; text-decoration: none; font-weight: 600; font-size: 11px; flex: none; margin-left: 6px; }
+  .cross-plat-link:hover { text-decoration: underline; }
+  .cross-plat-comp { font-size: 10.5px; margin-top: 1px; color: #535d70; }
+
+  /* Free Trackers */
+  .trackers-box { margin-top: 10px; padding: 8px 10px; background: #f2f5fb; border: 1px solid #dce4f2; border-radius: 8px; }
+  .trackers-title { font-size: 10.5px; font-weight: 700; color: #143c73; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+  .tracker-item { font-size: 11.5px; margin-top: 4px; line-height: 1.35; }
+  .tracker-link { font-weight: 600; color: #1f6fb2; text-decoration: none; }
+  .tracker-link:hover { text-decoration: underline; }
+  .tracker-desc { font-size: 10.5px; color: #5f687a; }
+
+  /* Alternatives Badges & Store Anchoring */
+  .alt-badge { display: inline-block; font-size: 9.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; }
+  .alt-badge.local { background: #e2f0d9; color: #235017; }
+  .alt-badge.propia { background: #e0f2fe; color: #0369a1; }
+  .alt-badge.discount { background: #fef3c7; color: #92400e; }
+  .alt-disp { font-size: 10.5px; color: #475569; margin-top: 3px; }
+
   /* Reputación */
   .rep { margin-top: 8px; border: 1px solid #e6e9f0; border-radius: 8px; padding: 8px 9px; background: #fff; }
   .score { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
@@ -345,6 +384,94 @@
     const notStated = t("rel_not_stated");
     const srcPage = t("src_page");
 
+    // 1. Panel de precio y comparativa temporal (1 semana, 1 mes, 3 meses)
+    let priceBlock = "";
+    if (rel.price && rel.price.amount) {
+      const priceFmt = esc(rel.price.formatted || `$${rel.price.amount.toFixed(2)} ${rel.price.currency || ""}`.trim());
+      const comp = rel.priceComparison;
+
+      let gridHtml = "";
+      if (comp && comp.hasHistory) {
+        const renderCell = (periodTitle, periodData) => {
+          if (!periodData) {
+            return `<div class="price-cell">
+              <div class="price-cell-title">${esc(periodTitle)}</div>
+              <div class="price-cell-val" style="color:#7a8396;">—</div>
+            </div>`;
+          }
+          const cls = periodData.status === "expensive" ? "price-up" : periodData.status === "cheap" ? "price-down" : "price-neutral";
+          return `<div class="price-cell">
+            <div class="price-cell-title">${esc(periodTitle)}</div>
+            <div class="price-cell-val ${cls}" title="Promedio: $${periodData.avg}">${periodData.arrow} ${periodData.diffPct > 0 ? "+" : ""}${periodData.diffPct}%</div>
+          </div>`;
+        };
+        gridHtml = `
+          <div class="price-grid">
+            ${renderCell(t("price_1w"), comp.oneWeek)}
+            ${renderCell(t("price_1m"), comp.oneMonth)}
+            ${renderCell(t("price_3m"), comp.threeMonths)}
+          </div>
+        `;
+      } else {
+        gridHtml = `<div class="price-hist-init">${t("price_tracking_started")}</div>`;
+      }
+
+      // MSI
+      let msiHtml = "";
+      if (rel.installments) {
+        if (rel.installments.hasMsi) {
+          msiHtml = `<div class="price-msi">💳 ${esc(rel.installments.text || `Hasta ${rel.installments.months} MSI`)}</div>`;
+        } else {
+          msiHtml = `<div class="price-msi" style="color:#535d70;font-weight:normal;">💳 ${esc(rel.installments.text || t("price_no_msi"))}</div>`;
+        }
+      }
+
+      // Rating estructurado si existe
+      const rat = rel.structuredRating;
+      let ratBox = "";
+      if (rat && rat.value) {
+        ratBox = `<div style="text-align:right;"><div class="price-cur-lbl">${t("lbl_rating")}</div><div style="font-weight:700;font-size:12px;color:#1c2233;">⭐ ${esc(rat.value)}/5${rat.count ? ` <span style="font-size:10px;color:#6b7280;font-weight:normal;">(${esc(rat.count)})</span>` : ""}</div></div>`;
+      }
+
+      priceBlock = `
+        <div class="price-panel">
+          <div class="price-main">
+            <div>
+              <div class="price-cur-lbl">${t("lbl_price")}</div>
+              <div class="price-current">${priceFmt}</div>
+            </div>
+            ${ratBox}
+          </div>
+          ${msiHtml}
+          ${gridHtml}
+        </div>
+      `;
+    }
+
+    // 2. Comparativa en otras 2 plataformas
+    let crossBox = "";
+    if (rel.crossPlatforms && rel.crossPlatforms.platforms && rel.crossPlatforms.platforms.length) {
+      const pItems = rel.crossPlatforms.platforms.map((cp) => {
+        const compClass = cp.compStatus === "cheaper" ? "price-down" : cp.compStatus === "expensive" ? "price-up" : "price-neutral";
+        return `
+          <div class="cross-plat-item">
+            <div>
+              <div class="cross-plat-name">${esc(cp.name)}</div>
+              <div class="cross-plat-comp ${compClass}">${esc(cp.comparisonText)}</div>
+            </div>
+            <a href="${esc(safe(cp.url))}" class="cross-plat-link" target="_blank" rel="noopener noreferrer">${t("btn_compare")} ↗</a>
+          </div>
+        `;
+      }).join("");
+
+      crossBox = `
+        <div class="cross-plat-box">
+          <div class="d-k" style="margin-bottom:4px;">${t("lbl_cross_platforms")}</div>
+          ${pItems}
+        </div>
+      `;
+    }
+
     // Vendedor
     const sellerVal = `${esc(rel.sellerName || notStated)}`;
     const sellerRow = dataRow(t("lbl_seller"), sellerVal, srcPage);
@@ -426,6 +553,24 @@
       `;
     }
 
+    // 3. Trackers de libre uso (CamelCamelCamel, Pricearchive, Alitools, Waltrack, HARPA AI/Universal)
+    let trackersBox = "";
+    if (rel.trackers && rel.trackers.length) {
+      const tItems = rel.trackers.map((tr) => `
+        <div class="tracker-item">
+          <a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.name)} ↗</a>
+          <span class="tracker-desc">· ${esc(tr.desc)}</span>
+        </div>
+      `).join("");
+
+      trackersBox = `
+        <div class="trackers-box">
+          <div class="trackers-title">📊 ${t("lbl_free_trackers")}</div>
+          ${tItems}
+        </div>
+      `;
+    }
+
     // Caja de aviso si requiere revisión
     let tipBox = "";
     if (rel.level === "check") {
@@ -433,6 +578,8 @@
     }
 
     return `
+      ${priceBlock}
+      ${crossBox}
       ${sellerRow}
       ${ratingRow}
       ${shipRow}
@@ -443,6 +590,7 @@
       ${normsRow}
       ${certsRow}
       ${alertsRow}
+      ${trackersBox}
       ${tipBox}
     `;
   }
@@ -480,15 +628,40 @@
         const nota = (isEn && it.group.nota_en) ? it.group.nota_en : it.group.nota;
         const fuente = it.group.url ? `<a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : "";
         const budgetBadge = it.esEconomica ? ` · <span style="color:#1b5e20;font-weight:600;">🏷️ ${t("alt_badge_budget")}${it.group.ahorro_fuente ? ` (<a href="${esc(safe(it.group.ahorro_fuente))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>)` : ""}</span>` : "";
+
+        // Distintivo por tipo y disponibilidad
+        let tipoBadge = "";
+        let whereToFind = "";
+        const gTipo = it.group.tipo;
+        const gEmpresa = (it.group.empresa || "").toLowerCase();
+
+        if (gTipo === "hard_discount" || /3b|waldo/i.test(gEmpresa) || /tiendas 3b|waldo's/i.test(it.group.empresa)) {
+          tipoBadge = `<span class="alt-badge discount">💰 ${t("alt_badge_discount")}</span>`;
+          if (/3b/i.test(gEmpresa)) {
+            whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_3b")}</div>`;
+          } else if (/waldo/i.test(gEmpresa)) {
+            whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_waldos")}</div>`;
+          } else {
+            whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_discount")}</div>`;
+          }
+        } else if (gTipo === "marca_propia" || /walmart|aurrera|soriana|chedraui|la comer|heb/i.test(gEmpresa)) {
+          tipoBadge = `<span class="alt-badge propia">🏷️ ${t("alt_badge_store_brand")}</span>`;
+          whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_supermarkets")}</div>`;
+        } else {
+          tipoBadge = `<span class="alt-badge local">🏠 ${t("alt_badge_local_indep")}</span>`;
+          whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_retail")}</div>`;
+        }
+
         return `
           <div class="alt-box">
-            <b>${esc(it.marcas.join(", "))}</b>
+            <div><b>${esc(it.marcas.join(", "))}</b> ${tipoBadge}</div>
             <div style="font-size:11.5px;color:#334155;margin-top:2px;">
               <b>${esc(it.group.empresa)}</b> · ${esc(it.motivo)} · ${esc(it.capital)}${budgetBadge}
               ${nota ? ` · ${esc(nota)}` : ""}
               ${it.rep != null ? ` · ⚖ ${esc(it.rep)}/100` : ""}
               ${fuente ? ` · ${fuente}` : ""}
             </div>
+            ${whereToFind}
             <div class="d-src">${formatSourceLabel(it.group.url, it.group.fuente || "Registro oficial")}</div>
           </div>
         `;

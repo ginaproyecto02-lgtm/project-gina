@@ -10,19 +10,22 @@
   const api = typeof browser !== "undefined" ? browser : chrome;
   let index = null, alt = null, airIndex = null, packaged = null, registry = null, entry = null;
   let prefs = { enabled: true, minimized: false, aiEnabled: false, values: {}, showLobbying: true, showAlternatives: true };
+  let cachedPriceHistory = {}, cachedCrossHistory = {};
   let lastKey = "", closedFor = "", lastResult = null, timer = null, seq = 0;
 
   async function load() {
     if (!packaged) packaged = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
     if (!registry) registry = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
     if (!QED.PROJECT) { try { QED.PROJECT = await (await fetch(api.runtime.getURL("data/proyecto.json"))).json(); } catch (e) { QED.PROJECT = {}; } }
-    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches"]);
+    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory", "crossPlatformHistory"]);
     prefs.enabled = st.enabled !== false;
     prefs.minimized = !!st.minimized;
     prefs.aiEnabled = !!(st.settings && st.settings.aiEnabled && st.settings.classify && st.settings.classify.key);
     prefs.values = (st.settings && st.settings.values) || {};
     prefs.showLobbying = !(st.settings && st.settings.showLobbying === false);
     prefs.showAlternatives = !(st.settings && st.settings.showAlternatives === false);
+    cachedPriceHistory = st.priceHistory || {};
+    cachedCrossHistory = st.crossPlatformHistory || {};
     const remote = st.remoteBase && st.remoteBase.data;
     const db = remote && String(remote.version) > String(packaged.version) ? remote : packaged;
     if (!db.aerolineas) db.aerolineas = packaged.aerolineas; // bases remotas antiguas sin aerolíneas
@@ -93,6 +96,23 @@
     return res;
   }
 
+  async function recordPrice(productId, price, title) {
+    if (!price || !price.amount) return;
+    const pKey = (productId && productId.id) || (title ? title.slice(0, 40) : "");
+    if (!pKey) return;
+    try {
+      const now = Date.now();
+      const list = cachedPriceHistory[pKey] || [];
+      const last = list[list.length - 1];
+      if (!last || last.p !== price.amount || (now - last.t) > 3600000) {
+        list.push({ t: now, p: price.amount });
+        if (list.length > 100) list.shift();
+        cachedPriceHistory[pKey] = list;
+        await api.storage.local.set({ priceHistory: cachedPriceHistory });
+      }
+    } catch (e) {}
+  }
+
   // Enriquecer el resultado con la evaluación de confiabilidad de compra y normas
   function enrichProduct(res, data) {
     if (!res) return res;
@@ -102,8 +122,21 @@
     const cat = catRes ? (typeof catRes === "string" ? catRes : catRes.cat) : null;
     const catConf = catRes ? (typeof catRes === "string" ? "media" : (catRes.confianza || "ninguna")) : "ninguna";
     const country = entry ? entry.pais : "MX";
+    if (data.reliability && data.reliability.price) {
+      recordPrice(data.reliability.productId, data.reliability.price, data.title);
+    }
     if (QED.evaluateReliability) {
-      res.reliabilityEval = QED.evaluateReliability(data.reliability, res.group, cat, data.title, country);
+      const pKey = (data.reliability && data.reliability.productId && data.reliability.productId.id) || (data.title ? data.title.slice(0, 40) : "");
+      const prodHistory = (cachedPriceHistory && cachedPriceHistory[pKey]) || [];
+      res.reliabilityEval = QED.evaluateReliability(
+        data.reliability,
+        res.group,
+        cat,
+        data.title,
+        country,
+        entry,
+        { priceHistory: prodHistory, crossPlatformHistory: cachedCrossHistory }
+      );
     }
     if (QED.evaluateProductNotices) {
       res.productNotices = QED.evaluateProductNotices({
@@ -191,7 +224,7 @@
   function schedule(force) { clearTimeout(timer); timer = setTimeout(() => analyze(force), 700); }
 
   api.storage.onChanged.addListener(async (ch) => {
-    if (ch.customBrands || ch.enabled || ch.remoteBase || ch.verified || ch.groupPatches || ch.settings || ch.repPatches) { await load(); schedule(true); }
+    if (ch.customBrands || ch.enabled || ch.remoteBase || ch.verified || ch.groupPatches || ch.settings || ch.repPatches || ch.priceHistory || ch.crossPlatformHistory) { await load(); schedule(true); }
   });
 
   api.runtime.onMessage.addListener((msg, _sender, reply) => {

@@ -1022,6 +1022,117 @@
       ja: "バーコードでOpen Food Factsの原材料を確認（任意、ODbL共同データベース）"
     },
 
+    // Price comparison, MSI, trackers & platforms
+    price_1w: { es: "1 sem", en: "1 wk", de: "1 Wo", fr: "1 sem", it: "1 sett", ja: "1週間" },
+    price_1m: { es: "1 mes", en: "1 mo", de: "1 Mo", fr: "1 mois", it: "1 mese", ja: "1ヶ月" },
+    price_3m: { es: "3 meses", en: "3 mos", de: "3 Mo", fr: "3 mois", it: "3 mesi", ja: "3ヶ月" },
+    price_tracking_started: {
+      es: "Seguimiento iniciado (primer registro guardado localmente)",
+      en: "Tracking started (first price recorded locally)",
+      de: "Preisverfolgung gestartet (erster Preis lokal gespeichert)",
+      fr: "Suivi initié (premier prix enregistré localement)",
+      it: "Monitoraggio avviato (primo prezzo registrato localmente)",
+      ja: "価格追跡を開始しました（ローカルに初回記録）"
+    },
+    price_no_msi: {
+      es: "Pago de contado (sin MSI indicado)",
+      en: "Single payment (no installment plan stated)",
+      de: "Einmalzahlung (keine Ratenzahlung angegeben)",
+      fr: "Paiement comptant (aucun paiement échelonné indiqué)",
+      it: "Pagamento in unica soluzione (nessuna rateizzazione indicata)",
+      ja: "一括払い（分割手数料無料の記載なし）"
+    },
+    lbl_price: { es: "PRECIO DETECTADO", en: "DETECTED PRICE", de: "ERMITTELTER PREIS", fr: "PRIX DÉTECTÉ", it: "PREZZO RILEVATO", ja: "検出価格" },
+    lbl_rating: { es: "VALORACIÓN", en: "RATING", de: "BEWERTUNG", fr: "ÉVALUATION", it: "VALUTAZIONE", ja: "評価" },
+    lbl_cross_platforms: {
+      es: "OPCIONES EN OTRAS PLATAFORMAS",
+      en: "OPTIONS ON OTHER PLATFORMS",
+      de: "OPTIONEN AUF ANDEREN PLATTFORMEN",
+      fr: "OPTIONS SUR D'AUTRES PLATEFORMES",
+      it: "OPZIONI SU ALTRE PIATTAFORME",
+      ja: "他プラットフォームでの選択肢"
+    },
+    btn_compare: {
+      es: "Ver opción",
+      en: "View option",
+      de: "Option ansehen",
+      fr: "Voir l'option",
+      it: "Vedi opzione",
+      ja: "選択肢を見る"
+    },
+    lbl_free_trackers: {
+      es: "Rastreadores de precios y ofertas libres",
+      en: "Free price & deal trackers",
+      de: "Kostenlose Preis- & Angebotstracker",
+      fr: "Trackers de prix et offres libres",
+      it: "Tracker gratuiti di prezzi e offerte",
+      ja: "無料の価格追跡・セール確認ツール"
+    },
+    alt_badge_discount: {
+      es: "Descuento / 3B / Waldo's",
+      en: "Hard discount / Value",
+      de: "Hard-Discount / Spartarif",
+      fr: "Hard discount / Économique",
+      it: "Hard discount / Risparmio",
+      ja: "ディスカウント / 格安"
+    },
+    alt_badge_store_brand: {
+      es: "Marca propia",
+      en: "Store brand",
+      de: "Eigenmarke",
+      fr: "Marque distributeur",
+      it: "Marca del distributore",
+      ja: "プライベートブランド"
+    },
+    alt_badge_local_indep: {
+      es: "Local / Independiente",
+      en: "Local / Independent",
+      de: "Lokal / Unabhängig",
+      fr: "Local / Indépendant",
+      it: "Locale / Indipendente",
+      ja: "地域 / 独立系"
+    },
+    alt_available_in_3b: {
+      es: "Disponible en: Tiendas 3B",
+      en: "Available at: Tiendas 3B",
+      de: "Erhältlich bei: Tiendas 3B",
+      fr: "Disponible chez : Tiendas 3B",
+      it: "Disponibile da: Tiendas 3B",
+      ja: "取扱店舗：Tiendas 3B"
+    },
+    alt_available_in_waldos: {
+      es: "Disponible en: Waldo's",
+      en: "Available at: Waldo's",
+      de: "Erhältlich bei: Waldo's",
+      fr: "Disponible chez : Waldo's",
+      it: "Disponibile da: Waldo's",
+      ja: "取扱店舗：Waldo's"
+    },
+    alt_available_in_discount: {
+      es: "Disponible en: Cadenas de descuento (hard discount)",
+      en: "Available at: Hard discount chains",
+      de: "Erhältlich bei: Hard-Discount-Ketten",
+      fr: "Disponible dans : Réseaux de hard discount",
+      it: "Disponibile presso: Catene hard discount",
+      ja: "取扱店舗：ディスカウントストア"
+    },
+    alt_available_in_supermarkets: {
+      es: "Disponible en: Supermercados y tiendas de autoservicio",
+      en: "Available at: Supermarkets and retail chains",
+      de: "Erhältlich im: Supermarkt und Einzelhandel",
+      fr: "Disponible en : Supermarchés et hypermarchés",
+      it: "Disponibile nei: Supermercati e grande distribuzione",
+      ja: "取扱店舗：スーパーマーケット・量販店"
+    },
+    alt_available_in_retail: {
+      es: "Disponible en: Abarrotes, supermercados y tiendas locales",
+      en: "Available at: Local stores, groceries, and supermarkets",
+      de: "Erhältlich in: Lebensmittelgeschäften und Supermärkten",
+      fr: "Disponible en : Épiceries, supermarchés et commerces locaux",
+      it: "Disponibile in: Negozi di alimentari e supermercati",
+      ja: "取扱店舗：地元の商店・スーパーマーケット"
+    },
+
     // Footer
     foot_disclaimer: {
       es: "Orientativo, con fuentes públicas. No es recomendación de compra.",

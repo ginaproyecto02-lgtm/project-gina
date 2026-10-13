@@ -1,5 +1,5 @@
 {
- "version": "2026-10-13T0430",
+ "version": "2026-10-13T2127",
  "licencia": "CC BY 4.0",
  "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -60,6 +60,44 @@
    "fondos_en": "Vanguard, BlackRock and other passive index funds",
    "gobierno_en": "",
    "fuente_en": "Costco Form 10-K (SEC)"
+  },
+  "tiendas_3b": {
+   "empresa": "Tiendas 3B (BBB Foods Inc.)",
+   "controlador": "Anthony Hatoum (fundador) y accionistas en NYSE (TBBB)",
+   "pais": "México",
+   "tipo": "Hard discount",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Cadena mexicana pionera del formato hard discount (descuento duro) fundada en 2004; comercializa marcas propias de canasta básica de bajo costo.",
+   "confianza": "Alta",
+   "fuente": "Relación con Inversionistas de Tiendas 3B / NYSE: TBBB",
+   "url": "https://investors.tiendas3b.com",
+   "ahorro": true,
+   "ahorro_fuente": "https://tiendas3b.com",
+   "controlador_en": "Anthony Hatoum (founder) and public investors (NYSE: TBBB)",
+   "nota_en": "Mexican hard-discount supermarket chain founded in 2004; offers high-value private label staples.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Tiendas 3B Investor Relations (NYSE: TBBB)"
+  },
+  "waldos": {
+   "empresa": "Waldo's Dólar Mart de México",
+   "controlador": "Grupo Waldo's (inversionistas privados mexicanos y fundadores)",
+   "pais": "México",
+   "tipo": "Hard discount",
+   "fondos": "No cotiza en bolsa",
+   "gobierno": "",
+   "nota": "Cadena mexicana de tiendas de conveniencia y descuento fundada en 1999 con más de 800 sucursales.",
+   "confianza": "Alta",
+   "fuente": "Página oficial de Waldo's México",
+   "url": "https://waldos.com.mx/pages/quienes-somos",
+   "ahorro": true,
+   "ahorro_fuente": "https://waldos.com.mx",
+   "controlador_en": "Waldo's Group (Mexican private retail investors)",
+   "nota_en": "Mexican value and discount retail chain founded in 1999.",
+   "fondos_en": "Not publicly traded",
+   "gobierno_en": "",
+   "fuente_en": "Waldo's Corporate About Us"
   },
   "herdez": {
    "empresa": "Grupo Herdez",
@@ -6331,6 +6369,44 @@
    "gobierno_en": "",
    "fuente_en": ""
   },
+  "loc_tiendas_3b": {
+   "empresa": "Tiendas 3B (BBB Foods Inc.)",
+   "controlador": "Anthony Hatoum (fundador) y accionistas en NYSE (TBBB)",
+   "pais": "México",
+   "tipo": "Hard discount",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Cadena mexicana pionera del formato hard discount (descuento duro) fundada en 2004; comercializa marcas propias de canasta básica de bajo costo.",
+   "confianza": "Alta",
+   "fuente": "Tiendas 3B Inversionistas",
+   "url": "https://investors.tiendas3b.com",
+   "ahorro": true,
+   "ahorro_fuente": "https://tiendas3b.com",
+   "controlador_en": "Anthony Hatoum (founder) / NYSE: TBBB",
+   "nota_en": "Mexican hard-discount supermarket chain offering private label value staples.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
+  "loc_waldos": {
+   "empresa": "Waldo's Dólar Mart de México",
+   "controlador": "Grupo Waldo's (inversionistas privados mexicanos y fundadores)",
+   "pais": "México",
+   "tipo": "Hard discount",
+   "fondos": "",
+   "gobierno": "",
+   "nota": "Cadena mexicana de tiendas de conveniencia y descuento fundada en 1999 con marcas de valor accesible.",
+   "confianza": "Alta",
+   "fuente": "Waldo's Corporativo",
+   "url": "https://waldos.com.mx/pages/quienes-somos",
+   "ahorro": true,
+   "ahorro_fuente": "https://waldos.com.mx",
+   "controlador_en": "Waldo's Group (Mexican private retail investors)",
+   "nota_en": "Mexican value and discount retail chain offering everyday staples.",
+   "fondos_en": "",
+   "gobierno_en": "",
+   "fuente_en": ""
+  },
   "loc_land_o_lakes_inc": {
    "empresa": "Land O'Lakes, Inc.",
    "controlador": "Cooperativa agrícola propiedad de sus miembros (aprox. 2,580 miembros en 2024).",
@@ -8014,6 +8090,15 @@
    "s": 1
   },
   {
+   "n": "Bodega Aurrera",
+   "g": "walmart"
+  },
+  {
+   "n": "Aurrera",
+   "g": "walmart",
+   "s": 1
+  },
+  {
    "n": "Amazon Basics",
    "g": "amazon"
   },
@@ -8071,6 +8156,18 @@
    "n": "Kirkland",
    "g": "costco",
    "s": 1
+  },
+  {
+   "n": "Tiendas 3B",
+   "g": "tiendas_3b"
+  },
+  {
+   "n": "3B",
+   "g": "tiendas_3b"
+  },
+  {
+   "n": "Waldo's Dólar Mart",
+   "g": "waldos"
   },
   {
    "n": "Herdez",
@@ -12058,6 +12155,39 @@
    "g": "loc_grupo_flexi"
   },
   {
+   "n": "LactiBuena",
+   "g": "loc_tiendas_3b"
+  },
+  {
+   "n": "Milena",
+   "g": "loc_tiendas_3b"
+  },
+  {
+   "n": "Vaca Blanca",
+   "g": "loc_tiendas_3b"
+  },
+  {
+   "n": "San Felipe",
+   "g": "loc_tiendas_3b"
+  },
+  {
+   "n": "Odisa",
+   "g": "loc_tiendas_3b"
+  },
+  {
+   "n": "Nuestro Campo",
+   "g": "loc_tiendas_3b"
+  },
+  {
+   "n": "Waldo's",
+   "g": "loc_waldos",
+   "s": 1
+  },
+  {
+   "n": "Waldos",
+   "g": "loc_waldos"
+  },
+  {
    "n": "Land O'Lakes",
    "g": "loc_land_o_lakes_inc"
   },
@@ -14915,7 +15045,8 @@
       "Land O'Lakes",
       "Organic Valley",
       "Cabot",
-      "Tillamook"
+      "Tillamook",
+      "LactiBuena"
      ]
     },
     "queso": {
@@ -14938,7 +15069,8 @@
       "Philadelphia",
       "Cabot",
       "Tillamook",
-      "Land O'Lakes"
+      "Land O'Lakes",
+      "Vaca Blanca"
      ]
     },
     "yogurt": {
@@ -14985,6 +15117,8 @@
     "Philadelphia",
     "Silk",
     "Alpro",
+    "LactiBuena",
+    "Vaca Blanca",
     "Land O'Lakes",
     "Organic Valley",
     "Cabot",
@@ -15521,7 +15655,8 @@
       "Good Day",
       "Parle",
       "Parle-G",
-      "Mulino Bianco"
+      "Mulino Bianco",
+      "Milena"
      ]
     }
    },
@@ -15556,6 +15691,7 @@
     "Bamba",
     "Bissli",
     "Mulino Bianco",
+    "Milena",
     "Dondé",
     "Haldiram's"
    ]
@@ -15670,7 +15806,10 @@
       "La Costeña",
       "La Campagnola",
       "Uncle Ben's",
-      "Ben's Original"
+      "Ben's Original",
+      "San Felipe",
+      "Nuestro Campo",
+      "Waldo's"
      ]
     }
    },
@@ -15703,6 +15842,9 @@
     "Patak's",
     "Shin Ramyun",
     "Bibigo",
+    "San Felipe",
+    "Nuestro Campo",
+    "Waldo's",
     "La Moderna",
     "Aurora",
     "Co-op",
@@ -15903,7 +16045,8 @@
       "Roma",
       "Blanca Nieves",
       "Foca",
-      "Carisma"
+      "Carisma",
+      "Odisa"
      ]
     },
     "trastes": {
@@ -15976,6 +16119,7 @@
     "Rin",
     "Wheel",
     "Vim",
+    "Odisa",
     "Zote",
     "Roma",
     "Blanca Nieves",
