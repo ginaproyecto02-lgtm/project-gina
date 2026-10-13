@@ -93,6 +93,8 @@ ALERTAS = json.load(open(alertas_path, encoding="utf-8")) if os.path.exists(aler
 
 brands = {
     "version": VERSION,
+    "licencia": "CC BY 4.0",
+    "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
     "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
     "grupos": base.G,
     "marcas": marcas,
@@ -105,12 +107,34 @@ brands = {
     "alertas": ALERTAS,
 }
 os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
+# ---- Validación de licencia_origen (CC0 | ODbL | oficial | prensa) y atribución obligatoria para ODbL
+VALID_LICENCIAS_ORIGEN = {"CC0", "ODbL", "oficial", "prensa"}
+def validate_odbl_attribution(obj, context="datos"):
+    if isinstance(obj, dict):
+        lic = obj.get("licencia_origen")
+        if lic is not None:
+            assert lic in VALID_LICENCIAS_ORIGEN, f"{context}: licencia_origen no válida '{lic}'"
+            if lic == "ODbL":
+                nota_txt = " ".join(
+                    str(obj.get(k, "")) for k in ("atribucion", "nota", "nota_atribucion")
+                ).lower()
+                assert "open food facts" in nota_txt and "odbl" in nota_txt, (
+                    f"{context}: dato con licencia_origen 'ODbL' sin la nota de atribución correspondiente "
+                    f"('Datos de Open Food Facts (ODbL)')"
+                )
+        for k, v in obj.items():
+            validate_odbl_attribution(v, f"{context}.{k}")
+    elif isinstance(obj, list):
+        for i, item in enumerate(obj):
+            validate_odbl_attribution(item, f"{context}[{i}]")
+
 # ---- Conservar lo que agregó el job del proyecto (marcas, grupos, reputación y alternativas investigadas).
 # El job escribe directo en extension/data/brands.json; regenerar desde datagen/ no debe borrarlo.
 prev_path = os.path.join(ROOT, "data", "brands.json")
 kept = {"grupos": 0, "marcas": 0, "reputacion": 0, "categorias": 0}
 if os.path.exists(prev_path):
     prev = json.load(open(prev_path, encoding="utf-8"))
+    validate_odbl_attribution(prev, "brands.json(prev)")
     norm = lambda x: nkw(x)
     for gid, g in prev.get("grupos", {}).items():
         if gid not in brands["grupos"]:
@@ -131,6 +155,13 @@ if os.path.exists(prev_path):
             extra = [m for m in c.get("marcas", []) if norm(m) in names and m not in brands["categorias"][cid]["marcas"]]
             brands["categorias"][cid]["marcas"] += extra; kept["categorias"] += len(extra)
     brands["version"] = max(VERSION, str(prev.get("version", "")))  # nunca hacia atrás
+
+validate_odbl_attribution(brands, "brands")
+fuentes_dir = os.path.join(os.path.dirname(__file__), "fuentes")
+if os.path.exists(fuentes_dir):
+    for fn in sorted(os.listdir(fuentes_dir)):
+        if fn.endswith(".json"):
+            validate_odbl_attribution(json.load(open(os.path.join(fuentes_dir, fn), encoding="utf-8")), f"fuentes/{fn}")
 
 # ---- S7: Validación estricta de evidencias para grupos con confianza «Verificado»
 import csv, urllib.parse

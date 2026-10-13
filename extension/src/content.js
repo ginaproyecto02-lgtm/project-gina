@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Orquesta en la página:
 //  · Tiendas: lee la marca del producto, la busca en la memoria local y, si no está, consulta la IA vía el service worker.
 //    Además muestra quién es dueño de la tienda.

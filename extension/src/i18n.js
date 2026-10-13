@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Gina — Sistema de internacionalización (i18n) para 6 idiomas:
 // es (español), en (inglés), de (alemán), fr (francés), it (italiano), ja (japonés).
 (function (root) {

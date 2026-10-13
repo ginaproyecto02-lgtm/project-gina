@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Páginas de viajes: decide si la página es de vuelos u hospedaje y detecta qué aerolíneas aparecen.
 // Funciona en sitios de aerolíneas, agencias (Expedia, Despegar…) y metabuscadores (Google Vuelos, Kayak, Skyscanner…).
 (function (root) {

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Coincidencia de marcas: normaliza texto y busca la marca en la base.
 // Se carga como content script (global) y también en Node para pruebas.
 (function (root) {

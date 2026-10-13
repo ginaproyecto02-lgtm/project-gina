@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Tarjeta compacta dentro de un Shadow DOM, para que el CSS de la tienda no la afecte.
 // Rediseño modular de 3 secciones plegables:
 //   1. Confiabilidad de compra (vendedor, logística, garantías y normas de calidad con origen estricto)

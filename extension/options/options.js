@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Página de opciones: perfil, valores, claves y modelos, base remota y memoria.
 const api = typeof browser !== "undefined" ? browser : chrome;
 const AI = globalThis.QEDAI;

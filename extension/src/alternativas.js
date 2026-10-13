@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Alternativas locales: para el tipo de producto que se ve, marcas de la base cuyo dueño es una cooperativa,
 // sus empleados, un fideicomiso, una familia o su fundador, con capital del país de la tienda.
 // Solo usa datos de propiedad de la base (con fuente); no evalúa calidad ni precio.

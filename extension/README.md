@@ -104,3 +104,9 @@ Para publicarla en las tiendas sigue **`PUBLICAR.md`**.
 - Los datos cambian: revisa la confianza y la fuente de cada tarjeta.
 - La tarjeta y las opciones están en español; el nombre y la ficha de la tienda, en inglés y español.
 - Es información orientativa basada en fuentes públicas, no una recomendación de compra ni de inversión.
+
+## Licencias
+
+- **Código:** publicado bajo la licencia [MIT](../LICENSE).
+- **Datos (`extension/data/*.json`, `datagen/`):** publicados bajo [CC BY 4.0](../LICENSE-DATA.md) (atribución requerida: *«Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)»*).
+- **Nombre y logotipo:** «Gina», «Project Gina» y su logotipo están reservados y no forman parte de estas licencias.

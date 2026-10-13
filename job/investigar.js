@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT
 // Project Gina — Robot semanal con verificación determinista y revisión humana (5 etapas).
 // Ningún dato llega a los usuarios sin:
 // (1) una URL real que abre,
@@ -629,6 +630,8 @@ function queryLibrary(brand, { fuentesDir = path.join(DATAGEN, "fuentes"), indic
         valor_nuevo: fData.controlador || fData.empresa || brand,
         pais: fData.pais || "México",
         tipo: fData.tipo || "Corporación",
+        licencia_origen: fData.licencia_origen || undefined,
+        atribucion: fData.atribucion || fData.nota || undefined,
         fuentes: [{
           url: fData.url_final,
           cita: fData.cita,
@@ -641,6 +644,16 @@ function queryLibrary(brand, { fuentesDir = path.join(DATAGEN, "fuentes"), indic
   }
   return null;
 }
+
+function inferSourceLicense(origen, urlFinal, nivelDominio) {
+  const u = String(urlFinal || "").toLowerCase();
+  const o = String(origen || "").toLowerCase();
+  if (o === "cc0" || o === "wikidata" || u.includes("wikidata.org")) return "CC0";
+  if (o === "odbl" || o === "openfoodfacts" || u.includes("openfoodfacts.org")) return "ODbL";
+  if (o === "oficial" || nivelDominio === "oficial") return "oficial";
+  return "prensa";
+}
+
 
 // ---------------------------------------------------------------- Helpers de sugerencias y pendientes
 function loadPending(pendDir = PEND_DIR) {
@@ -1005,6 +1018,9 @@ async function main(options = {}) {
         }
 
         const f0 = check.fuentes[0];
+        const licenciaOrigen = prop.licencia_origen && ["CC0", "ODbL", "oficial", "prensa"].includes(prop.licencia_origen)
+          ? prop.licencia_origen
+          : inferSourceLicense(origen, f0.url_final, f0.nivel_dominio);
         let gid = prop.grupo_id;
         if (!gid || !db.grupos[gid]) {
           gid = gid || ("inv_" + slug(prop.empresa));
@@ -1017,6 +1033,8 @@ async function main(options = {}) {
             investigado: new Date().toISOString(),
             fuente: f0.nivel_dominio === "oficial" ? "Registro oficial" : "Prensa de referencia",
             url: f0.url_final,
+            licencia_origen: licenciaOrigen,
+            atribucion: prop.atribucion || prop.nota || undefined,
             lei: check.gleif.lei !== "na" ? check.gleif.lei : undefined
           };
         } else {
@@ -1024,16 +1042,22 @@ async function main(options = {}) {
           db.grupos[gid].confianza = "Alta"; // P1.12: Grupo nuevo o cambiado por el robot: confianza "Alta" en la rama
           db.grupos[gid].investigado = new Date().toISOString();
           db.grupos[gid].url = f0.url_final;
+          db.grupos[gid].licencia_origen = licenciaOrigen;
+          if (prop.atribucion || prop.nota) db.grupos[gid].atribucion = prop.atribucion || prop.nota;
           if (check.gleif.lei !== "na") db.grupos[gid].lei = check.gleif.lei;
         }
 
         // P1.12: Al aprobar una propuesta: agregar la MARCA a db.marcas → {n, g, job:1} además del grupo
         let brandEntry = db.marcas.find((m) => QED.norm(m.n) === normBrand);
         if (!brandEntry) {
-          db.marcas.push({ n: item.brand, g: gid, job: 1 });
+          const newBrand = { n: item.brand, g: gid, job: 1, licencia_origen: licenciaOrigen };
+          if (prop.atribucion || prop.nota) newBrand.atribucion = prop.atribucion || prop.nota;
+          db.marcas.push(newBrand);
         } else {
           brandEntry.g = gid;
           brandEntry.job = 1;
+          brandEntry.licencia_origen = licenciaOrigen;
+          if (prop.atribucion || prop.nota) brandEntry.atribucion = prop.atribucion || prop.nota;
         }
 
         if (origen && metricas.resueltasPor[origen] !== undefined) {
@@ -1046,6 +1070,9 @@ async function main(options = {}) {
           for (const src of check.fuentes) {
             const h8 = hash8(src.url_final);
             const fuenteFile = path.join(fuentesDir, `${gid}-${h8}.json`);
+            const srcLicencia = prop.licencia_origen && ["CC0", "ODbL", "oficial", "prensa"].includes(prop.licencia_origen)
+              ? prop.licencia_origen
+              : inferSourceLicense(origen, src.url_final, src.nivel_dominio);
             const fuentePayload = {
               grupo_id: gid,
               empresa: prop.empresa,
@@ -1056,7 +1083,9 @@ async function main(options = {}) {
               archivo_url: src.archivo_url,
               fecha: report.inicio.slice(0, 10),
               cita: src.cita,
-              extracto: truncateUtf8(src.extracto || src.cita || "", 20480)
+              extracto: truncateUtf8(src.extracto || src.cita || "", 20480),
+              licencia_origen: srcLicencia,
+              atribucion: prop.atribucion || prop.nota || undefined
             };
             fs.writeFileSync(fuenteFile, JSON.stringify(fuentePayload, null, 2), "utf8");
           }
@@ -1081,6 +1110,7 @@ async function main(options = {}) {
           gid,
           marca: item.brand,
           origen,
+          licencia_origen: licenciaOrigen,
           antes: prop.valor_anterior || "(nuevo)",
           despues: prop.valor_nuevo,
           url: f0.url_final,
@@ -1341,6 +1371,7 @@ module.exports = {
   contrastProposal,
   wikidataOwner,
   queryLibrary,
+  inferSourceLicense,
   verifyEnergyStarModel,
   getNextBranchName,
   serializeCsvRow,

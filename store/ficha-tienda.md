@@ -148,7 +148,7 @@ Works without an account or key: open any product page on walmart.com, amazon.co
 ```
 No build step: the uploaded files are the source. The innerHTML warnings are template strings whose dynamic values all pass through an esc() HTML-escaping helper (defined at the top of card.js, popup.js and options.js). In Firefox the background uses background.scripts (service_worker is only for Chrome). AI is optional and uses the user's own API key; without a key, test on any product page on walmart.com or amazon.com, or a Google Flights search.
 ```
-- License: choose one (for example MIT, or "All rights reserved").
+- License: MIT
 
 ## 8. Reputation data: editorial notes for reviewers and press
 

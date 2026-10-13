@@ -746,6 +746,15 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     const unknownProduct = shouldShowSuggest({ found: false, brandText: "Original Nature's Oils", title: "Aceite" });
     check("Popup sin producto o con marca conocida → #suggest oculto", !noProduct && !flightPage && !knownProduct && unknownProduct);
   }
+
+  // 9. Licencias en brands.json: licencia CC BY 4.0 y atribución de Project Gina
+  {
+    check(
+      "brands.json incluye licencia «CC BY 4.0» y atribución de Project Gina",
+      db.licencia === "CC BY 4.0" && db.atribucion === "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
+      `${db.licencia} · ${db.atribucion}`
+    );
+  }
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

@@ -102,4 +102,4 @@ Requiere una Mac con Xcode, convertir la extensión con `xcrun safari-web-extens
 - [ ] Gratis (recomendado) o de pago
 - [ ] Confirmación del nombre «Gina» tras la búsqueda de marcas
 - [ ] ¿Base remota por defecto con tu repositorio de GitHub? (sí o no)
-- [ ] Licencia para Firefox
+- [x] Licencia para Firefox: MIT (código en `LICENSE`; datos bajo CC BY 4.0 en `LICENSE-DATA.md`)

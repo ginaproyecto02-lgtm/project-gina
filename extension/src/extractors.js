@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Lectura de la marca, título del producto y confiabilidad de compra en cada tienda.
 // Fuentes directas del DOM y datos estructurados (schema.org/Product / JSON-LD / microdatos).
 // Regla de oro: cada dato conserva su origen exacto y no se inventan calificaciones.

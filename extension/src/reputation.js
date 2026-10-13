@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Reputación: hechos con fuente (controversias, hechos positivos, lobbying) de empresas y fondos,
 // un índice transparente calculado SOLO a partir de esos hechos y la afinidad con los valores del usuario.
 (function (root) {

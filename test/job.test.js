@@ -433,6 +433,31 @@ finally:
     check("21. Contrato (test/fixtures/): issue válido, sin marcador, duplicado, existente, Wikidata, IA y HTML", okContrato);
   }
 
+  // 22. licencia_origen (CC0 | ODbL | oficial | prensa) y fallo en build_data.py si ODbL no tiene nota de atribución
+  {
+    const licWiki = job.inferSourceLicense("wikidata", "https://www.wikidata.org/wiki/Q1", "oficial");
+    const licOdbl = job.inferSourceLicense("ia", "https://world.openfoodfacts.org/product/123", "oficial");
+    const licOficial = job.inferSourceLicense("ia", "https://www.sec.gov/edgar/1", "oficial");
+    const licPrensa = job.inferSourceLicense("ia", "https://www.reuters.com/article/1", "prensa_referencia");
+
+    const pyCode = `
+import sys
+sys.path.insert(0, 'datagen')
+import data_base as base
+base.g('grupo_odbl_sin_nota', 'ODbL Corp', 'Controlador', 'Francia', 'Corporación', confianza='Verificar', fuente='Open Food Facts')
+base.G['grupo_odbl_sin_nota']['licencia_origen'] = 'ODbL'
+import build_data
+`;
+    const res = spawnSync("python", ["-c", pyCode], {
+      encoding: "utf8",
+      cwd: path.join(__dirname, ".."),
+      env: Object.assign({}, process.env, { PYTHONIOENCODING: "utf-8" })
+    });
+    const okFail = res.status !== 0 && (res.stderr || "").includes("licencia_origen 'ODbL'");
+    const okLic = licWiki === "CC0" && licOdbl === "ODbL" && licOficial === "oficial" && licPrensa === "prensa";
+    check("22. licencia_origen (CC0|ODbL|oficial|prensa) y fallo en build_data.py si ODbL carece de atribución", okLic && okFail, "Falla con AssertionError: licencia_origen 'ODbL' sin la nota de atribución");
+  }
+
   console.log(`\n${pass}/${total} pruebas de job/investigar.js correctas`);
   process.exit(pass === total ? 0 : 1);
 }

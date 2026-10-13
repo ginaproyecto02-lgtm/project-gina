@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Gina — Avisos del producto en Confiabilidad.
 // Solo se activa cuando el clasificador por capas tiene confianza «alta».
 // Regla de oro: Gina no evalúa salud ni eficiencia. Solo muestra:

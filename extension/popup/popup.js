@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 const api = typeof browser !== "undefined" ? browser : chrome;
 const QED = globalThis.QED;
 const $ = (s) => document.querySelector(s);

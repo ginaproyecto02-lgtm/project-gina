@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Capa de IA multiproveedor. Se usa desde el service worker de la extensión y desde el job de servidor (Node 18+).
 //  - Clasificación rápida (modelo pequeño): ¿a qué empresa pertenece esta marca?
 //  - Investigación (modelo grande + búsqueda web): confirma con fuentes y actualiza datos.

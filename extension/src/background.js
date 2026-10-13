@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // Gina — service worker (Chrome/Edge) o página de eventos (Firefox):
 // memoria (caché, pendientes, verificados), clasificación con IA y job semanal de investigación.
 // En Chrome se cargan las dependencias con importScripts; en Firefox ya vienen en background.scripts del manifiesto.
