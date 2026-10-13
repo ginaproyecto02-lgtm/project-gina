@@ -89,6 +89,17 @@ Requiere una Mac con Xcode, convertir la extensión con `xcrun safari-web-extens
 
 ¿Solo cambian los datos (no el código)? Con el job semanal de GitHub y la «Base remota» configurada, los usuarios reciben la base nueva sin publicar una versión. Para que eso funcione para todos sin configuración, puedes poner tu URL raw como valor por defecto de `remoteUrl` antes de publicar. Como el archivo se descarga de tu repositorio, entonces sí debes declarar esa conexión en la política de privacidad (solo descarga, no envía datos).
 
+## 6b. Proteger la rama `main` (una sola vez)
+
+Así ningún dato llega a los usuarios sin pasar por un PR revisado y por las pruebas.
+
+1. GitHub → tu repositorio → *Settings → Branches → Add branch protection rule* (o *Rulesets → New ruleset*).
+2. *Branch name pattern*: `main`.
+3. Activa **Require a pull request before merging** con **1 aprobación** (tú).
+4. Activa **Require status checks to pass** y elige el check **«pruebas-y-paquete»** (flujo «Project Gina — pruebas y paquete»).
+5. Activa **Do not allow bypassing the above settings** si quieres que la regla aplique también a ti.
+6. Guarda. Desde ahora el robot de investigación abre PR `datos/AAAA-MM-DD` y el flujo de paquete abre PR `build/AAAA-MM-DD-HHMM`; ninguno escribe directo en `main`.
+
 ## 7. Lista de lo que tengo que decidir o dar
 
 - [ ] **Usuario de GitHub** y nombre del repositorio (sugerido: `project-gina`, público)

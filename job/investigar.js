@@ -674,15 +674,6 @@ function loadPending(pendDir = PEND_DIR) {
   return items;
 }
 
-function closeLegacyIssues(execFileImpl = defaultExecFile, repo = "ginaproyecto02-lgtm/project-gina", cwd = ROOT) {
-  for (let n = 1; n <= 7; n++) {
-    try {
-      execFileImpl("gh", ["issue", "comment", String(n), "--repo", repo, "--body", "Incorporada en la base (commit de9daa9)"], { cwd });
-      execFileImpl("gh", ["issue", "close", String(n), "--repo", repo, "--reason", "completed"], { cwd });
-    } catch (_) {}
-  }
-}
-
 function parseIssueContent(issue) {
   const body = String(issue.body || "");
   const title = String(issue.title || "");
@@ -774,6 +765,72 @@ async function loadIssues(repo, token, execFileImpl = defaultExecFile, fetchImpl
 }
 
 // ---------------------------------------------------------------- Función principal de ejecución
+// ---------------------------------------------------------------- C4: revalidación de evidencias
+// CSV mínimo con comillas dobles ("" = comilla literal).
+function parseCsv(text) {
+  const rows = [];
+  let row = [], cell = "", inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQ) {
+      if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (ch === '"') inQ = false;
+      else cell += ch;
+    } else if (ch === '"') inQ = true;
+    else if (ch === ",") { row.push(cell); cell = ""; }
+    else if (ch === "\n" || ch === "\r") {
+      if (ch === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); cell = "";
+      if (row.some((c) => c !== "")) rows.push(row);
+      row = [];
+    } else cell += ch;
+  }
+  if (cell !== "" || row.length) { row.push(cell); if (row.some((c) => c !== "")) rows.push(row); }
+  if (!rows.length) return [];
+  const head = rows[0].map((h) => h.trim());
+  return rows.slice(1).map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] || "").trim()])));
+}
+
+// ¿La cita sigue en la página? Igualdad normalizada o, si el HTML cambió de forma, ≥80% de sus palabras de 5+ letras.
+function citaPresente(pageText, cita) {
+  const page = normalizeText(pageText || "");
+  const c = normalizeText(cita || "");
+  if (!c) return false;
+  if (page.includes(c)) return true;
+  const words = c.split(" ").filter((w) => w.length >= 5);
+  if (words.length < 4) return false;
+  const hits = words.filter((w) => page.includes(w)).length;
+  return hits / words.length >= 0.8;
+}
+
+async function revalidateEvidencias({ evidenciasPath, db, state, limit, fetchImpl = fetch, now = Date.now() }) {
+  const out = { vigentes: [], fallidas: [] };
+  if (!fs.existsSync(evidenciasPath) || !(limit > 0)) return out;
+  state.revalidados = state.revalidados || {};
+  const rows = parseCsv(fs.readFileSync(evidenciasPath, "utf8"))
+    .filter((r) => r.grupo_id && /^https:\/\//.test(r.url_final || "") && db.grupos && db.grupos[r.grupo_id])
+    // No repetir una revisión de menos de 90 días
+    .filter((r) => !(state.revalidados[r.grupo_id] && now - Date.parse(state.revalidados[r.grupo_id]) < 90 * DAY))
+    // Las más viejas primero (las de más de 12 meses quedan al principio)
+    .sort((a, b) => String(a.fecha_consulta || "").localeCompare(String(b.fecha_consulta || "")))
+    .slice(0, limit);
+  const hoy = new Date(now).toISOString().slice(0, 10);
+  for (const r of rows) {
+    const g = db.grupos[r.grupo_id];
+    let motivo = "";
+    const res = await resolveUrl(r.url_final, fetchImpl);
+    if (!res.ok) motivo = `Fuente ya no disponible (${hoy}): ${res.error || "HTTP " + res.status}`;
+    else if (!citaPresente(extractText(res.body, res.contentType), r.cita)) motivo = `Fuente ya no disponible (${hoy}): la cita ya no aparece en la página`;
+    state.revalidados[r.grupo_id] = new Date(now).toISOString();
+    if (!motivo) { out.vigentes.push(g.empresa); continue; }
+    const antes = g.confianza;
+    g.confianza = "Verificar";
+    g.nota = [g.nota, motivo].filter(Boolean).join(" ");
+    out.fallidas.push({ gid: r.grupo_id, empresa: g.empresa, antes, url: r.url_final, archivo: r.archivo_url, motivo });
+  }
+  return out;
+}
+
 async function main(options = {}) {
   const rootDir = options.rootDir || ROOT;
   const brandsPath = options.brandsPath || path.join(rootDir, "extension", "data", "brands.json");
@@ -813,6 +870,10 @@ async function main(options = {}) {
   const aiResearchImpl = options.aiResearchImpl || ((c, it, grps) => AI.research(c, it, grps, fetchImpl));
   const skipArchive = options.skipArchive !== undefined ? options.skipArchive : false;
 
+  // El estado (última ejecución, revalidaciones) solo lo escribe el robot en GitHub Actions; una corrida local
+  // nunca debe dejar un ultimoRun versionado que bloquee la ejecución programada del lunes.
+  const writeState = !dry && (process.env.GITHUB_ACTIONS === "true" || !!options.rootDir || !!options.statePath || env("WRITE_STATE", "") === "1");
+
   const db = readJSON(brandsPath, null);
   if (!db) throw new Error("No se pudo leer " + brandsPath);
   const state = readJSON(statePath, { marcas: {}, revalidados: {}, ultimoRun: null, rechazosAltosSeguidos: 0 });
@@ -823,11 +884,6 @@ async function main(options = {}) {
     return { report: { inicio: new Date().toISOString(), cambios: [], rechazadas: [], propuestas: [] }, prResult: null };
   }
 
-  // P1.11: Cerrar issues #1–#7 con el comentario "Incorporada en la base (commit de9daa9)"
-  if (!options.skipLegacy && !dry && !state.legacyClosed) {
-    closeLegacyIssues(execFileImpl, repo, rootDir);
-    state.legacyClosed = true;
-  }
 
   const metricas = {
     issuesLeidos: 0,
@@ -1141,24 +1197,19 @@ async function main(options = {}) {
     }
   }
 
-  // Revalidación opcional (GINA_REVALIDATE) y Reputación opcional (GINA_REP_LIMIT) cuando se solicitan explícitamente
-  if (revalidateLimit > 0 && cfg.key) {
-    const stale = Object.entries(db.grupos || {})
-      .filter(([id, g]) => /^verificar/i.test(g.confianza || "") && !(state.revalidados && state.revalidados[id] && Date.now() - Date.parse(state.revalidados[id]) < 90 * DAY))
-      .slice(0, revalidateLimit);
-    for (const [id, g] of stale) {
-      try {
-        metricas.llamadasIA++;
-        const r = await aiResearchImpl(cfg, { kind: "revalidar", group: g }, db.grupos);
-        state.revalidados = state.revalidados || {};
-        state.revalidados[id] = new Date().toISOString();
-        if (r && r.normalized && r.normalized.propuesta) {
-          report.revalidadas.push(`${g.empresa}`);
-        }
-      } catch (e) {
-        report.errores.push(`Revalidar ${g.empresa}: ${e.message}`);
-      }
+  // C4: Revalidación determinista de evidencias (GINA_REVALIDATE por ejecución, las más viejas primero).
+  // La URL debe seguir abriendo (200) y la cita seguir en la página; si no, el grupo pasa a «Verificar» y va al PR.
+  let brandsChanged = false;
+  if (revalidateLimit > 0) {
+    const rev = await revalidateEvidencias({
+      evidenciasPath, db, state, limit: revalidateLimit, fetchImpl, now: Date.now()
+    });
+    for (const f of rev.fallidas) {
+      report.cambios.push({ grupo: f.empresa, gid: f.gid, antes: f.antes, despues: "Verificar", url: f.url, cita: f.motivo, archivo: f.archivo || "" });
+      metricas.rechazadasPorMotivo["Fuente ya no disponible"] = (metricas.rechazadasPorMotivo["Fuente ya no disponible"] || 0) + 1;
+      brandsChanged = true;
     }
+    for (const ok of rev.vigentes) report.revalidadas.push(ok);
   }
 
   if (repLimit > 0 && cfg.key && AI.researchReputation && QED.REP) {
@@ -1251,13 +1302,13 @@ async function main(options = {}) {
 
   // Guardar estado solo cuando no es dryRun (P2.16: canario DRY_RUN=1 sin escribir)
   state.ultimoRun = new Date().toISOString();
-  if (!dry) {
+  if (writeState) {
     fs.mkdirSync(path.dirname(statePath), { recursive: true });
     fs.writeFileSync(statePath, JSON.stringify(state, null, 2), "utf8");
   }
 
   // Si hay cambios y no es dryRun, agregar filas a evidencias.csv y guardar brands.json
-  if (!dry && nuevasEvidencias.length > 0) {
+  if (!dry && (nuevasEvidencias.length > 0 || brandsChanged)) {
     let csvContent = "";
     for (const ev of nuevasEvidencias) {
       csvContent += serializeCsvRow([
@@ -1275,7 +1326,7 @@ async function main(options = {}) {
       ]);
     }
     fs.mkdirSync(path.dirname(evidenciasPath), { recursive: true });
-    fs.appendFileSync(evidenciasPath, csvContent, "utf8");
+    if (csvContent) fs.appendFileSync(evidenciasPath, csvContent, "utf8");
     fs.mkdirSync(path.dirname(brandsPath), { recursive: true });
     fs.writeFileSync(brandsPath, JSON.stringify(db, null, 1), "utf8");
   }
@@ -1354,6 +1405,9 @@ if (require.main === module) {
 }
 
 module.exports = {
+  parseCsv,
+  citaPresente,
+  revalidateEvidencias,
   hash8,
   truncateUtf8,
   loadDominios,
@@ -1378,7 +1432,6 @@ module.exports = {
   createReviewPR,
   loadIssues,
   parseIssueContent,
-  closeLegacyIssues,
   main
 };
 

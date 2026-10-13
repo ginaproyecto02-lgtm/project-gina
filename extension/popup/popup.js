@@ -70,6 +70,13 @@ const keyFor = (brand, title) => {
   return b ? "b:" + b : "t:" + QED.norm(title || "").slice(0, 70);
 };
 
+function baseDateText(v) {
+  const bDate = formatBaseDate(v);
+  const age = QED.baseAgeDays ? QED.baseAgeDays(v) : null;
+  if (bDate && age != null && age > (QED.BASE_STALE_DAYS || 21)) return t("base_stale", { fecha: bDate });
+  return bDate ? `Base del ${bDate}` : `Base ${v}`;
+}
+
 function formatBaseDate(v) {
   if (!v) return "";
   const m = String(v).match(/^(\d{4})[-.](\d{2})[-.](\d{2})/);
@@ -114,9 +121,8 @@ async function init() {
   const pend = Object.values(st.pending || {}).filter((x) => ["por_investigar", "por_verificar", "reintentar", "sin_fuentes"].includes(x.status)).length;
   $("#aiInfo").textContent = `${Object.keys(extra.verified).length} marcas verificadas · ${pend} pendientes`;
   $("#count").textContent = `${db.marcas.length + custom.length} marcas · ${Object.keys(db.grupos).length} grupos · base ${db.version}`;
-  const bDate = formatBaseDate(db.version);
   const baseDateEl = $("#baseDate");
-  if (baseDateEl) baseDateEl.textContent = bDate ? `Base del ${bDate}` : `Base ${db.version}`;
+  if (baseDateEl) baseDateEl.textContent = baseDateText(db.version);
   $("#enabled").checked = st.enabled !== false;
   renderCustom();
   renderBatchSection(st.pending || {});
@@ -373,8 +379,7 @@ if ($("#btnUpdateBase")) {
         db = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
         const st = await api.storage.local.get("remoteBase");
         if (st.remoteBase && st.remoteBase.data) db = st.remoteBase.data;
-        const bDate = formatBaseDate(db.version);
-        if ($("#baseDate")) $("#baseDate").textContent = bDate ? `Base del ${bDate}` : `Base ${db.version}`;
+        if ($("#baseDate")) $("#baseDate").textContent = baseDateText(db.version);
         $("#count").textContent = `${db.marcas.length + custom.length} marcas · ${Object.keys(db.grupos).length} grupos · base ${db.version}`;
       }
     } catch (e) {

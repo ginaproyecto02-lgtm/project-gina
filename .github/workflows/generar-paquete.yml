@@ -1,7 +1,7 @@
 # Project Gina: pruebas automáticas y paquete para las tiendas.
 # - En cada push o pull request que toque la extensión, los datos o las pruebas: regenera y corre las pruebas.
 # - Al ejecutarlo a mano (Actions → «Run workflow»): además arma el zip con la versión del manifest
-#   y, si la base cambió de verdad (no solo la fecha), la sube al repositorio.
+#   y, si la base cambió de verdad (no solo la fecha), abre un PR «build: regenerar base» (nunca push directo a main).
 # - Al empujar una etiqueta vX.Y.Z (igual a la versión del manifest): crea un Release con el zip.
 name: Project Gina — pruebas y paquete
 
@@ -21,6 +21,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   pruebas-y-paquete:
@@ -159,16 +160,22 @@ jobs:
             ${{ steps.zip.outputs.zip }}.sha256
           retention-days: 90
 
-      - name: Subir la base regenerada
+      - name: Proponer la base regenerada por PR (nunca push directo a main)
         if: ((github.event_name == 'workflow_dispatch' && inputs.guardar_base) || (github.event_name == 'push' && github.ref == 'refs/heads/main')) && (steps.cambios.outputs.real == '1' || steps.cambios.outputs.manifest == '1' || steps.pr_merge.outputs.updated == '1')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "gina-bot"
           git config user.email "gina-bot@users.noreply.github.com"
           git add extension docs store datagen/evidencias.csv
-          if git diff --cached --quiet; then echo "Sin cambios que subir."; exit 0; fi
-          git commit -m "Paquete ${{ steps.v.outputs.version }}: base ${{ steps.v.outputs.base }} regenerada"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          if git diff --cached --quiet; then echo "Sin cambios que proponer."; exit 0; fi
+          RAMA="build/$(date -u +%Y-%m-%d-%H%M)"
+          git checkout -b "$RAMA"
+          git commit -m "build: regenerar base ${{ steps.v.outputs.base }} (paquete ${{ steps.v.outputs.version }})"
+          git push origin "$RAMA"
+          gh pr create --base main --head "$RAMA" \
+            --title "build: regenerar base ${{ steps.v.outputs.base }}" \
+            --body "Base y archivos generados por el flujo «pruebas y paquete» (incluye aprobado_en_pr de evidencias tras fusionar un PR de datos). Revisar y fusionar."
 
       - name: Crear Release con el zip
         if: startsWith(github.ref, 'refs/tags/v')

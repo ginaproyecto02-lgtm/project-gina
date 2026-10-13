@@ -364,18 +364,10 @@ finally:
     check("18. parseIssueContent: soporta gina:sugerencia v1 y formulario YAML de issue", okV1 && okYaml);
   }
 
-  // 19. closeLegacyIssues: llama a gh issue comment y close para issues 1 a 7 con commit de9daa9
+  // 19. El robot ya no cierra issues fijos (tarea de una sola vez fuera del código de producción)
   {
-    const calls = [];
-    const mockExec = (cmd, args) => {
-      calls.push({ cmd, args });
-      return "";
-    };
-    job.closeLegacyIssues(mockExec, "test/repo");
-    const comments = calls.filter((c) => c.args[0] === "issue" && c.args[1] === "comment");
-    const closes = calls.filter((c) => c.args[0] === "issue" && c.args[1] === "close");
-    const hasMsg = comments.every((c) => c.args.includes("Incorporada en la base (commit de9daa9)"));
-    check("19. closeLegacyIssues: cierra issues #1–#7 con commit de9daa9", comments.length === 7 && closes.length === 7 && hasMsg);
+    const src = fs.readFileSync(path.join(__dirname, "..", "job", "investigar.js"), "utf8");
+    check("19. El robot no contiene closeLegacyIssues ni números de issue fijos", !/closeLegacyIssues|de9daa9/.test(src) && typeof job.closeLegacyIssues === "undefined");
   }
 
   // 20. Al aprobar una propuesta: MARCA se agrega a db.marcas con {n, g, job:1} y grupo con confianza "Alta"

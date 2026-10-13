@@ -5,7 +5,8 @@
 #   Secreto  GINA_FACTCHECK_KEY    = clave de Google Fact Check Tools API (opcional)
 #   Variable GINA_PROVIDER         = anthropic | gemini | groq | xai | openai (por defecto: anthropic)
 #   Variable GINA_MODEL            = modelo económico de investigación
-#   Variable GINA_EVERY_DAYS       = días entre ejecuciones (14 por defecto)
+#   Variable GINA_EVERY_DAYS       = días mínimos entre ejecuciones reales (6 por defecto: corre cada lunes)
+#   Variable GINA_REVALIDATE       = evidencias a revalidar por ejecución (5 por defecto)
 #   Variable GINA_URL_CHECK        = safebrowsing | webrisk
 name: Project Gina — investigación
 
@@ -60,10 +61,10 @@ jobs:
           GINA_MODEL: ${{ vars.GINA_MODEL }}
           GINA_BASE_URL: ${{ vars.GINA_BASE_URL }}
           GINA_LIMIT: "25"
-          GINA_REVALIDATE: ${{ vars.GINA_REVALIDATE || '0' }}
+          GINA_REVALIDATE: ${{ vars.GINA_REVALIDATE || '5' }}
           GINA_REP_LIMIT: ${{ vars.GINA_REP_LIMIT || '0' }}
           GINA_MAX_SEARCHES: "3"
-          GINA_EVERY_DAYS: ${{ vars.GINA_EVERY_DAYS || '14' }}
+          GINA_EVERY_DAYS: ${{ vars.GINA_EVERY_DAYS || '6' }}
           GINA_DRY_RUN: ${{ (github.event.schedule == '17 9 * * 0' || inputs.dry_run) && '1' || '' }}
           GINA_FORCE: ${{ (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 9 * * 0') && '1' || '' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -78,3 +79,18 @@ jobs:
             exit 1
           fi
 
+      # C3: si cualquier paso falla, abrir (o comentar, si ya existe) el issue «Robot de investigación falló».
+      - name: Avisar si el robot falló
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          TITULO="Robot de investigación falló"
+          NUM=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$TITULO\" in:title" --json number --jq '.[0].number')
+          CUERPO="La ejecución del $(date -u +%Y-%m-%d) falló: $RUN_URL"
+          if [ -n "$NUM" ]; then
+            gh issue comment "$NUM" --repo "$GITHUB_REPOSITORY" --body "$CUERPO"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITULO" --body "$CUERPO"
+          fi

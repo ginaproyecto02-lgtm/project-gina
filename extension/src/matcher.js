@@ -143,6 +143,15 @@
   QED.norm = norm;
   QED.cleanBrandField = cleanBrandField;
   QED.displayBrand = displayBrand;
+  // Antigüedad de la base: la versión es "AAAA-MM-DDTHHMM". Más de 21 días → la interfaz avisa que puede estar desactualizada.
+  function baseAgeDays(version, now) {
+    const m = String(version || "").match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return null;
+    const t = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return Math.floor(((now || Date.now()) - t) / 86400000);
+  }
+  QED.baseAgeDays = baseAgeDays;
+  QED.BASE_STALE_DAYS = 21;
   QED.buildIndex = buildIndex;
   QED.match = match;
 })(typeof globalThis !== "undefined" ? globalThis : this);
