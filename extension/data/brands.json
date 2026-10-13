@@ -1,5 +1,5 @@
 {
- "version": "2026-10-13T2127",
+ "version": "2026-10-13T2351",
  "licencia": "CC BY 4.0",
  "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -21,7 +21,13 @@
    "nota_en": "World's largest retailer; in Mexico operates Walmex (~70% Walmart Inc.).",
    "fondos_en": "Vanguard, BlackRock and other passive index funds",
    "gobierno_en": "",
-   "fuente_en": "Walmart Form 10-K (SEC)"
+   "fuente_en": "Walmart Form 10-K (SEC)",
+   "marca_propia": true,
+   "paises_venta": [
+    "EE.UU.",
+    "México",
+    "Canadá"
+   ]
   },
   "amazon": {
    "empresa": "Amazon.com Inc. (marca propia)",
@@ -40,7 +46,22 @@
    "nota_en": "Own retail and private labels (Amazon Basics).",
    "fondos_en": "Vanguard, BlackRock and other passive index funds",
    "gobierno_en": "AWS holds major government cloud computing contracts",
-   "fuente_en": "Amazon Form 10-K (SEC)"
+   "fuente_en": "Amazon Form 10-K (SEC)",
+   "marca_propia": true,
+   "paises_venta": [
+    "EE.UU.",
+    "México",
+    "Canadá",
+    "Brasil",
+    "Reino Unido",
+    "Alemania",
+    "Francia",
+    "España",
+    "Italia",
+    "Japón",
+    "India",
+    "Singapur"
+   ]
   },
   "costco": {
    "empresa": "Costco Wholesale (marca propia)",
@@ -59,45 +80,61 @@
    "nota_en": "Membership warehouse club chain; owner of Kirkland Signature.",
    "fondos_en": "Vanguard, BlackRock and other passive index funds",
    "gobierno_en": "",
-   "fuente_en": "Costco Form 10-K (SEC)"
+   "fuente_en": "Costco Form 10-K (SEC)",
+   "marca_propia": true,
+   "paises_venta": [
+    "EE.UU.",
+    "Canadá",
+    "México",
+    "Reino Unido",
+    "Japón",
+    "Corea del Sur",
+    "España"
+   ]
   },
   "tiendas_3b": {
    "empresa": "Tiendas 3B (BBB Foods Inc.)",
-   "controlador": "Anthony Hatoum (fundador) y accionistas en NYSE (TBBB)",
+   "controlador": "BBB Foods Inc., que cotiza en la Bolsa de Nueva York (TBBB); empresa dirigida por su fundador, Anthony Hatoum",
    "pais": "México",
-   "tipo": "Hard discount",
-   "fondos": "No cotiza en bolsa",
+   "tipo": "Corporación",
+   "fondos": "Cotiza en NYSE (TBBB)",
    "gobierno": "",
-   "nota": "Cadena mexicana pionera del formato hard discount (descuento duro) fundada en 2004; comercializa marcas propias de canasta básica de bajo costo.",
-   "confianza": "Alta",
-   "fuente": "Relación con Inversionistas de Tiendas 3B / NYSE: TBBB",
-   "url": "https://investors.tiendas3b.com",
-   "ahorro": true,
-   "ahorro_fuente": "https://tiendas3b.com",
-   "controlador_en": "Anthony Hatoum (founder) and public investors (NYSE: TBBB)",
-   "nota_en": "Mexican hard-discount supermarket chain founded in 2004; offers high-value private label staples.",
-   "fondos_en": "Not publicly traded",
+   "nota": "Cadena mexicana de descuento con marcas propias de canasta básica (lácteos, pastas, limpieza, belleza, panadería). Accionistas principales por confirmar en su reporte 20-F (SEC, archivo 001-41954).",
+   "confianza": "Verificar",
+   "fuente": "Presentación corporativa de Tiendas 3B (4T25)",
+   "url": "https://s203.q4cdn.com/155743495/files/doc_presentations/2025/Dec/01/Tiendas-3B-Corporate-Presentation-4Q25.pdf",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "BBB Foods Inc., listed on the NYSE (TBBB); founder-led by Anthony Hatoum",
+   "nota_en": "Mexican discount grocery chain with private labels. Main shareholders to be confirmed in its Form 20-F (SEC file 001-41954).",
+   "fondos_en": "Listed on NYSE (TBBB)",
    "gobierno_en": "",
-   "fuente_en": "Tiendas 3B Investor Relations (NYSE: TBBB)"
+   "fuente_en": "Tiendas 3B corporate presentation (4Q25)",
+   "canal": "descuento",
+   "marca_propia": true,
+   "paises_venta": [
+    "México"
+   ]
   },
   "waldos": {
-   "empresa": "Waldo's Dólar Mart de México",
-   "controlador": "Grupo Waldo's (inversionistas privados mexicanos y fundadores)",
+   "empresa": "Waldo's Dólar Mart de México (Grupo Vizion)",
+   "controlador": "Grupo Vizion (accionistas mexicanos; ACON Investments tomó el control en 2012 y Grupo Vizion desde 2014)",
    "pais": "México",
-   "tipo": "Hard discount",
+   "tipo": "Corporación",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "Cadena mexicana de tiendas de conveniencia y descuento fundada en 1999 con más de 800 sucursales.",
+   "nota": "Fundada en 1998 en Illinois (EE.UU.); su primera tienda en México abrió en 1999 en Tijuana.",
    "confianza": "Alta",
-   "fuente": "Página oficial de Waldo's México",
-   "url": "https://waldos.com.mx/pages/quienes-somos",
-   "ahorro": true,
-   "ahorro_fuente": "https://waldos.com.mx",
-   "controlador_en": "Waldo's Group (Mexican private retail investors)",
-   "nota_en": "Mexican value and discount retail chain founded in 1999.",
+   "fuente": "Ámbito: quién es el verdadero dueño de Waldo's (2026)",
+   "url": "https://www.ambito.com/mexico/economia/quien-es-el-verdadero-dueno-waldos-2026-el-imperio-tiendas-descuentos-que-no-crecer-n6306161",
+   "ahorro": false,
+   "ahorro_fuente": "",
+   "controlador_en": "Grupo Vizion (Mexican shareholders; ACON Investments took control in 2012, Grupo Vizion since 2014)",
+   "nota_en": "Founded in 1998 in Illinois (US); first Mexican store opened in 1999 in Tijuana.",
    "fondos_en": "Not publicly traded",
    "gobierno_en": "",
-   "fuente_en": "Waldo's Corporate About Us"
+   "fuente_en": "Ámbito: who really owns Waldo's (2026)",
+   "canal": "descuento"
   },
   "herdez": {
    "empresa": "Grupo Herdez",
@@ -6369,44 +6406,6 @@
    "gobierno_en": "",
    "fuente_en": ""
   },
-  "loc_tiendas_3b": {
-   "empresa": "Tiendas 3B (BBB Foods Inc.)",
-   "controlador": "Anthony Hatoum (fundador) y accionistas en NYSE (TBBB)",
-   "pais": "México",
-   "tipo": "Hard discount",
-   "fondos": "",
-   "gobierno": "",
-   "nota": "Cadena mexicana pionera del formato hard discount (descuento duro) fundada en 2004; comercializa marcas propias de canasta básica de bajo costo.",
-   "confianza": "Alta",
-   "fuente": "Tiendas 3B Inversionistas",
-   "url": "https://investors.tiendas3b.com",
-   "ahorro": true,
-   "ahorro_fuente": "https://tiendas3b.com",
-   "controlador_en": "Anthony Hatoum (founder) / NYSE: TBBB",
-   "nota_en": "Mexican hard-discount supermarket chain offering private label value staples.",
-   "fondos_en": "",
-   "gobierno_en": "",
-   "fuente_en": ""
-  },
-  "loc_waldos": {
-   "empresa": "Waldo's Dólar Mart de México",
-   "controlador": "Grupo Waldo's (inversionistas privados mexicanos y fundadores)",
-   "pais": "México",
-   "tipo": "Hard discount",
-   "fondos": "",
-   "gobierno": "",
-   "nota": "Cadena mexicana de tiendas de conveniencia y descuento fundada en 1999 con marcas de valor accesible.",
-   "confianza": "Alta",
-   "fuente": "Waldo's Corporativo",
-   "url": "https://waldos.com.mx/pages/quienes-somos",
-   "ahorro": true,
-   "ahorro_fuente": "https://waldos.com.mx",
-   "controlador_en": "Waldo's Group (Mexican private retail investors)",
-   "nota_en": "Mexican value and discount retail chain offering everyday staples.",
-   "fondos_en": "",
-   "gobierno_en": "",
-   "fuente_en": ""
-  },
   "loc_land_o_lakes_inc": {
    "empresa": "Land O'Lakes, Inc.",
    "controlador": "Cooperativa agrícola propiedad de sus miembros (aprox. 2,580 miembros en 2024).",
@@ -8090,15 +8089,6 @@
    "s": 1
   },
   {
-   "n": "Bodega Aurrera",
-   "g": "walmart"
-  },
-  {
-   "n": "Aurrera",
-   "g": "walmart",
-   "s": 1
-  },
-  {
    "n": "Amazon Basics",
    "g": "amazon"
   },
@@ -8163,7 +8153,8 @@
   },
   {
    "n": "3B",
-   "g": "tiendas_3b"
+   "g": "tiendas_3b",
+   "s": 1
   },
   {
    "n": "Waldo's Dólar Mart",
@@ -12155,39 +12146,6 @@
    "g": "loc_grupo_flexi"
   },
   {
-   "n": "LactiBuena",
-   "g": "loc_tiendas_3b"
-  },
-  {
-   "n": "Milena",
-   "g": "loc_tiendas_3b"
-  },
-  {
-   "n": "Vaca Blanca",
-   "g": "loc_tiendas_3b"
-  },
-  {
-   "n": "San Felipe",
-   "g": "loc_tiendas_3b"
-  },
-  {
-   "n": "Odisa",
-   "g": "loc_tiendas_3b"
-  },
-  {
-   "n": "Nuestro Campo",
-   "g": "loc_tiendas_3b"
-  },
-  {
-   "n": "Waldo's",
-   "g": "loc_waldos",
-   "s": 1
-  },
-  {
-   "n": "Waldos",
-   "g": "loc_waldos"
-  },
-  {
    "n": "Land O'Lakes",
    "g": "loc_land_o_lakes_inc"
   },
@@ -15045,8 +15003,7 @@
       "Land O'Lakes",
       "Organic Valley",
       "Cabot",
-      "Tillamook",
-      "LactiBuena"
+      "Tillamook"
      ]
     },
     "queso": {
@@ -15069,8 +15026,7 @@
       "Philadelphia",
       "Cabot",
       "Tillamook",
-      "Land O'Lakes",
-      "Vaca Blanca"
+      "Land O'Lakes"
      ]
     },
     "yogurt": {
@@ -15117,8 +15073,6 @@
     "Philadelphia",
     "Silk",
     "Alpro",
-    "LactiBuena",
-    "Vaca Blanca",
     "Land O'Lakes",
     "Organic Valley",
     "Cabot",
@@ -15655,8 +15609,7 @@
       "Good Day",
       "Parle",
       "Parle-G",
-      "Mulino Bianco",
-      "Milena"
+      "Mulino Bianco"
      ]
     }
    },
@@ -15691,7 +15644,6 @@
     "Bamba",
     "Bissli",
     "Mulino Bianco",
-    "Milena",
     "Dondé",
     "Haldiram's"
    ]
@@ -15806,10 +15758,7 @@
       "La Costeña",
       "La Campagnola",
       "Uncle Ben's",
-      "Ben's Original",
-      "San Felipe",
-      "Nuestro Campo",
-      "Waldo's"
+      "Ben's Original"
      ]
     }
    },
@@ -15842,9 +15791,6 @@
     "Patak's",
     "Shin Ramyun",
     "Bibigo",
-    "San Felipe",
-    "Nuestro Campo",
-    "Waldo's",
     "La Moderna",
     "Aurora",
     "Co-op",
@@ -16045,8 +15991,7 @@
       "Roma",
       "Blanca Nieves",
       "Foca",
-      "Carisma",
-      "Odisa"
+      "Carisma"
      ]
     },
     "trastes": {
@@ -16119,7 +16064,6 @@
     "Rin",
     "Wheel",
     "Vim",
-    "Odisa",
     "Zote",
     "Roma",
     "Blanca Nieves",
@@ -18248,5 +18192,233 @@
    "url": "https://www.gob.mx/profeco",
    "fecha": "2024"
   }
- ]
+ ],
+ "rastreadores": [
+  {
+   "nombre": "CamelCamelCamel",
+   "desc": "Historial de precios de Amazon",
+   "requiere": "asin",
+   "dominios": {
+    "amazon.com": "https://camelcamelcamel.com/product/{asin}",
+    "amazon.ca": "https://ca.camelcamelcamel.com/product/{asin}",
+    "amazon.co.uk": "https://uk.camelcamelcamel.com/product/{asin}"
+   },
+   "verificado": "2026-10-13",
+   "fuente": "https://camelcamelcamel.com/features · https://ca.camelcamelcamel.com/features · https://uk.camelcamelcamel.com/features",
+   "pendiente": "amazon.com.mx, amazon.de, amazon.fr, amazon.it, amazon.es, amazon.co.jp: no se confirmó soporte en su sitio; sin enlace hasta confirmarlo."
+  },
+  {
+   "nombre": "Pricearchive",
+   "desc": "Historial de precios de AliExpress desde 2016",
+   "requiere": "q",
+   "dominios": {
+    "aliexpress.com": "https://www.pricearchive.org/search/aliexpress.com/{q}/1",
+    "aliexpress.us": "https://www.pricearchive.org/search/aliexpress.com/{q}/1"
+   },
+   "verificado": "2026-10-13",
+   "fuente": "https://www.pricearchive.org/"
+  },
+  {
+   "nombre": "Alitools",
+   "desc": "Extensión con historial de precios y calificación del vendedor en AliExpress",
+   "requiere": null,
+   "dominios": {
+    "aliexpress.com": "https://alitools.io/",
+    "aliexpress.us": "https://alitools.io/"
+   },
+   "verificado": "2026-10-13",
+   "fuente": "https://alitools.io/"
+  },
+  {
+   "nombre": "Waltrack",
+   "excluido": "waltrack.net redirige a waltrack.com, que el 2026-10-13 mostraba un sitio de casino en línea sin relación con Walmart. No se enlaza.",
+   "verificado": "2026-10-13"
+  }
+ ],
+ "tiendas_comparar": {
+  "México": [
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.com.mx",
+    "url_busqueda": "https://listado.mercadolibre.com.mx/{q}"
+   },
+   {
+    "nombre": "Amazon México",
+    "dominio": "amazon.com.mx",
+    "url_busqueda": "https://www.amazon.com.mx/s?k={q}"
+   },
+   {
+    "nombre": "Walmart México",
+    "dominio": "walmart.com.mx",
+    "url_busqueda": "https://www.walmart.com.mx/search?q={q}"
+   }
+  ],
+  "EE.UU.": [
+   {
+    "nombre": "Amazon",
+    "dominio": "amazon.com",
+    "url_busqueda": "https://www.amazon.com/s?k={q}"
+   },
+   {
+    "nombre": "Walmart",
+    "dominio": "walmart.com",
+    "url_busqueda": "https://www.walmart.com/search?q={q}"
+   },
+   {
+    "nombre": "Best Buy",
+    "dominio": "bestbuy.com",
+    "url_busqueda": "https://www.bestbuy.com/site/searchpage.jsp?st={q}"
+   }
+  ],
+  "Canadá": [
+   {
+    "nombre": "Amazon.ca",
+    "dominio": "amazon.ca",
+    "url_busqueda": "https://www.amazon.ca/s?k={q}"
+   },
+   {
+    "nombre": "Walmart Canada",
+    "dominio": "walmart.ca",
+    "url_busqueda": "https://www.walmart.ca/search?q={q}"
+   },
+   {
+    "nombre": "Best Buy Canada",
+    "dominio": "bestbuy.ca",
+    "url_busqueda": "https://www.bestbuy.ca/en-ca/search?search={q}"
+   }
+  ],
+  "Brasil": [
+   {
+    "nombre": "Mercado Livre",
+    "dominio": "mercadolivre.com.br",
+    "url_busqueda": "https://lista.mercadolivre.com.br/{q}"
+   },
+   {
+    "nombre": "Amazon Brasil",
+    "dominio": "amazon.com.br",
+    "url_busqueda": "https://www.amazon.com.br/s?k={q}"
+   }
+  ],
+  "Argentina": [
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.com.ar",
+    "url_busqueda": "https://listado.mercadolibre.com.ar/{q}"
+   }
+  ],
+  "Chile": [
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.cl",
+    "url_busqueda": "https://listado.mercadolibre.cl/{q}"
+   },
+   {
+    "nombre": "Falabella",
+    "dominio": "falabella.com",
+    "url_busqueda": "https://www.falabella.com/falabella-cl/search?Ntt={q}"
+   }
+  ],
+  "Colombia": [
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.com.co",
+    "url_busqueda": "https://listado.mercadolibre.com.co/{q}"
+   }
+  ],
+  "Reino Unido": [
+   {
+    "nombre": "Amazon UK",
+    "dominio": "amazon.co.uk",
+    "url_busqueda": "https://www.amazon.co.uk/s?k={q}"
+   },
+   {
+    "nombre": "Argos",
+    "dominio": "argos.co.uk",
+    "url_busqueda": "https://www.argos.co.uk/search/{q}/"
+   }
+  ],
+  "Alemania": [
+   {
+    "nombre": "Amazon.de",
+    "dominio": "amazon.de",
+    "url_busqueda": "https://www.amazon.de/s?k={q}"
+   },
+   {
+    "nombre": "OTTO",
+    "dominio": "otto.de",
+    "url_busqueda": "https://www.otto.de/suche/{q}/"
+   }
+  ],
+  "Francia": [
+   {
+    "nombre": "Amazon.fr",
+    "dominio": "amazon.fr",
+    "url_busqueda": "https://www.amazon.fr/s?k={q}"
+   }
+  ],
+  "España": [
+   {
+    "nombre": "Amazon.es",
+    "dominio": "amazon.es",
+    "url_busqueda": "https://www.amazon.es/s?k={q}"
+   }
+  ],
+  "Italia": [
+   {
+    "nombre": "Amazon.it",
+    "dominio": "amazon.it",
+    "url_busqueda": "https://www.amazon.it/s?k={q}"
+   }
+  ],
+  "Japón": [
+   {
+    "nombre": "Amazon.co.jp",
+    "dominio": "amazon.co.jp",
+    "url_busqueda": "https://www.amazon.co.jp/s?k={q}"
+   },
+   {
+    "nombre": "Rakuten",
+    "dominio": "rakuten.co.jp",
+    "url_busqueda": "https://search.rakuten.co.jp/search/mall/{q}/"
+   }
+  ],
+  "India": [
+   {
+    "nombre": "Amazon.in",
+    "dominio": "amazon.in",
+    "url_busqueda": "https://www.amazon.in/s?k={q}"
+   },
+   {
+    "nombre": "Flipkart",
+    "dominio": "flipkart.com",
+    "url_busqueda": "https://www.flipkart.com/search?q={q}"
+   }
+  ],
+  "Singapur": [
+   {
+    "nombre": "Amazon.sg",
+    "dominio": "amazon.sg",
+    "url_busqueda": "https://www.amazon.sg/s?k={q}"
+   },
+   {
+    "nombre": "Lazada",
+    "dominio": "lazada.sg",
+    "url_busqueda": "https://www.lazada.sg/catalog/?q={q}"
+   }
+  ],
+  "Corea del Sur": [
+   {
+    "nombre": "Coupang",
+    "dominio": "coupang.com",
+    "url_busqueda": "https://www.coupang.com/np/search?q={q}"
+   }
+  ],
+  "China": [
+   {
+    "nombre": "JD.com",
+    "dominio": "jd.com",
+    "url_busqueda": "https://search.jd.com/Search?keyword={q}"
+   }
+  ]
+ }
 }

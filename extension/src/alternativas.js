@@ -12,8 +12,6 @@
     "Familia": { label: "Empresa familiar", prio: 2 },
     "Fundador": { label: "De su fundador", prio: 2 },
     "Privada": { label: "Privada independiente", prio: 2 },
-    "Hard discount": { label: "Cadena de descuento", prio: 1 },
-    "Marca propia": { label: "Marca propia de tienda", prio: 1 },
     "Familia + fondos": { label: "Familiar (con fondos minoritarios)", prio: 0 },
     "Fundador + fondos": { label: "De su fundador (con fondos)", prio: 0 }
   };
@@ -208,6 +206,7 @@
       if (!e || e.custom || e.verified) continue;
       const g = prep.index.groups[e.g];
       if (!g || e.g === currentGid || !INDEP[g.tipo]) continue;
+      if (g.canal || g.marca_propia) continue; // cadenas y marcas propias nunca son «alternativa local»
       if (!countries(g.pais).includes(pais)) continue;
       const cur = byGroup.get(e.g) || { gid: e.g, group: g, marcas: [] };
       if (!cur.marcas.includes(e.n)) cur.marcas.push(e.n);
@@ -318,6 +317,26 @@
     return out.slice(0, limit || 4);
   }
 
+  // Marcas propias de cadenas para esta categoría, vendidas en el país de la tienda (bloque aparte de las alternativas locales).
+  function storeBrands(prep, catId, pais, currentGid, subcatId, limit) {
+    if (!prep || !catId || !prep.cats || !prep.cats[catId]) return [];
+    const cat = prep.cats[catId];
+    let brandList = cat.marcas || [];
+    if (subcatId && cat.subcats && cat.subcats[subcatId]) brandList = cat.subcats[subcatId].marcas || [];
+    const byGroup = new Map();
+    for (const m of brandList) {
+      const e = prep.index && prep.index.exact && prep.index.exact.get(QED.norm(m));
+      if (!e) continue;
+      const g = prep.index.groups && prep.index.groups[e.g];
+      if (!g || !g.marca_propia || e.g === currentGid) continue;
+      if (!g.url || !(g.paises_venta || []).includes(pais)) continue;
+      const cur = byGroup.get(e.g) || { gid: e.g, group: g, marcas: [] };
+      if (!cur.marcas.includes(e.n)) cur.marcas.push(e.n);
+      byGroup.set(e.g, cur);
+    }
+    return Array.from(byGroup.values()).slice(0, limit || 4);
+  }
+
   // Enlace para sugerir al proyecto marcas faltantes o alternativas locales:
   const clean = (v, n) => String(v == null ? "" : v).replace(/[|\n\r]+/g, " ").replace(/\s+/g, " ").trim().slice(0, n || 120);
   function suggestionLink(proj, tipo, items) {
@@ -332,5 +351,5 @@
     return "";
   }
 
-  QED.ALT = { INDEP, countries, prepare, category, suggest, suggestionLink, otherBrandsOfSameOwner, categoryDominantBrands };
+  QED.ALT = { INDEP, countries, prepare, category, suggest, suggestionLink, otherBrandsOfSameOwner, categoryDominantBrands, storeBrands };
 })(typeof globalThis !== "undefined" ? globalThis : this);
