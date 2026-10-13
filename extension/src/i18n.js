@@ -1022,67 +1022,92 @@
       ja: "バーコードでOpen Food Factsの原材料を確認（任意、ODbL共同データベース）"
     },
 
-    // Price comparison, MSI, trackers & platforms
+    // Precio (según las visitas del usuario), MSI, otras tiendas, rastreadores y marcas propias
     price_1w: { es: "1 sem", en: "1 wk", de: "1 Wo", fr: "1 sem", it: "1 sett", ja: "1週間" },
     price_1m: { es: "1 mes", en: "1 mo", de: "1 Mo", fr: "1 mois", it: "1 mese", ja: "1ヶ月" },
     price_3m: { es: "3 meses", en: "3 mos", de: "3 Mo", fr: "3 mois", it: "3 mesi", ja: "3ヶ月" },
-    price_tracking_started: {
-      es: "Seguimiento iniciado (primer registro guardado localmente)",
-      en: "Tracking started (first price recorded locally)",
-      de: "Preisverfolgung gestartet (erster Preis lokal gespeichert)",
-      fr: "Suivi initié (premier prix enregistré localement)",
-      it: "Monitoraggio avviato (primo prezzo registrato localmente)",
-      ja: "価格追跡を開始しました（ローカルに初回記録）"
+    price_visits_label: {
+      es: "Según tus {n} visitas a este producto (guardado solo en tu navegador)",
+      en: "Based on your {n} visits to this product (stored only in your browser)",
+      de: "Basierend auf deinen {n} Besuchen dieses Produkts (nur in deinem Browser gespeichert)",
+      fr: "D'après vos {n} visites de ce produit (enregistré uniquement dans votre navigateur)",
+      it: "In base alle tue {n} visite a questo prodotto (salvato solo nel tuo browser)",
+      ja: "この商品へのあなたの{n}回の訪問に基づく（ブラウザ内のみに保存）"
+    },
+    price_first_visit: {
+      es: "Primera visita: Gina guarda el precio solo en tu navegador para compararlo en tus próximas visitas.",
+      en: "First visit: Gina saves the price only in your browser to compare it on your next visits.",
+      de: "Erster Besuch: Gina speichert den Preis nur in deinem Browser, um ihn bei späteren Besuchen zu vergleichen.",
+      fr: "Première visite : Gina enregistre le prix uniquement dans votre navigateur pour le comparer lors de vos prochaines visites.",
+      it: "Prima visita: Gina salva il prezzo solo nel tuo browser per confrontarlo nelle prossime visite.",
+      ja: "初回訪問：次回以降の比較のため、価格をブラウザ内にのみ保存します。"
+    },
+    price_insufficient: { es: "Aún no hay suficientes visitas", en: "Not enough visits yet", de: "Noch nicht genug Besuche", fr: "Pas encore assez de visites", it: "Visite non ancora sufficienti", ja: "訪問回数がまだ不足" },
+    price_above: { es: "▲ +{n}% sobre tu promedio", en: "▲ +{n}% above your average", de: "▲ +{n}% über deinem Durchschnitt", fr: "▲ +{n}% au-dessus de votre moyenne", it: "▲ +{n}% sopra la tua media", ja: "▲ 平均より+{n}%" },
+    price_below: { es: "▼ −{n}% bajo tu promedio", en: "▼ −{n}% below your average", de: "▼ −{n}% unter deinem Durchschnitt", fr: "▼ −{n}% sous votre moyenne", it: "▼ −{n}% sotto la tua media", ja: "▼ 平均より−{n}%" },
+    price_around: { es: "≈ En tu promedio ({n}%)", en: "≈ Around your average ({n}%)", de: "≈ Im Durchschnitt ({n}%)", fr: "≈ Dans votre moyenne ({n}%)", it: "≈ Nella tua media ({n}%)", ja: "≈ 平均並み（{n}%）" },
+    price_history_off: {
+      es: "Historial de precios desactivado (Opciones).",
+      en: "Price history is turned off (Options).",
+      de: "Preisverlauf ist deaktiviert (Optionen).",
+      fr: "Historique des prix désactivé (Options).",
+      it: "Cronologia prezzi disattivata (Opzioni).",
+      ja: "価格履歴はオフです（オプション）。"
     },
     price_no_msi: {
-      es: "Pago de contado (sin MSI indicado)",
-      en: "Single payment (no installment plan stated)",
-      de: "Einmalzahlung (keine Ratenzahlung angegeben)",
-      fr: "Paiement comptant (aucun paiement échelonné indiqué)",
-      it: "Pagamento in unica soluzione (nessuna rateizzazione indicata)",
-      ja: "一括払い（分割手数料無料の記載なし）"
+      es: "La página no indica meses sin intereses",
+      en: "The page does not state interest-free installments",
+      de: "Die Seite nennt keine zinsfreie Ratenzahlung",
+      fr: "La page n'indique pas de paiement en plusieurs fois sans frais",
+      it: "La pagina non indica rate senza interessi",
+      ja: "ページに無利息分割払いの記載なし"
     },
-    lbl_price: { es: "PRECIO DETECTADO", en: "DETECTED PRICE", de: "ERMITTELTER PREIS", fr: "PRIX DÉTECTÉ", it: "PREZZO RILEVATO", ja: "検出価格" },
-    lbl_rating: { es: "VALORACIÓN", en: "RATING", de: "BEWERTUNG", fr: "ÉVALUATION", it: "VALUTAZIONE", ja: "評価" },
-    lbl_cross_platforms: {
-      es: "OPCIONES EN OTRAS PLATAFORMAS",
-      en: "OPTIONS ON OTHER PLATFORMS",
-      de: "OPTIONEN AUF ANDEREN PLATTFORMEN",
-      fr: "OPTIONS SUR D'AUTRES PLATEFORMES",
-      it: "OPZIONI SU ALTRE PIATTAFORME",
-      ja: "他プラットフォームでの選択肢"
+    price_msi_months: {
+      es: "Hasta {n} meses sin intereses (según la tienda)",
+      en: "Up to {n} interest-free installments (per the store)",
+      de: "Bis zu {n} zinsfreie Raten (laut Shop)",
+      fr: "Jusqu'à {n} mensualités sans frais (selon la boutique)",
+      it: "Fino a {n} rate senza interessi (secondo il negozio)",
+      ja: "最大{n}回無利息分割（ストア表示）"
     },
-    btn_compare: {
-      es: "Ver opción",
-      en: "View option",
-      de: "Option ansehen",
-      fr: "Voir l'option",
-      it: "Vedi opzione",
-      ja: "選択肢を見る"
+    price_msi_generic: {
+      es: "Meses sin intereses disponibles (según la tienda)",
+      en: "Interest-free installments available (per the store)",
+      de: "Zinsfreie Ratenzahlung verfügbar (laut Shop)",
+      fr: "Paiement sans frais disponible (selon la boutique)",
+      it: "Rate senza interessi disponibili (secondo il negozio)",
+      ja: "無利息分割あり（ストア表示）"
     },
-    lbl_free_trackers: {
-      es: "Rastreadores de precios y ofertas libres",
-      en: "Free price & deal trackers",
-      de: "Kostenlose Preis- & Angebotstracker",
-      fr: "Trackers de prix et offres libres",
-      it: "Tracker gratuiti di prezzi e offerte",
-      ja: "無料の価格追跡・セール確認ツール"
+    lbl_price: { es: "PRECIO EN ESTA PÁGINA", en: "PRICE ON THIS PAGE", de: "PREIS AUF DIESER SEITE", fr: "PRIX SUR CETTE PAGE", it: "PREZZO IN QUESTA PAGINA", ja: "このページの価格" },
+    lbl_rating: { es: "CALIFICACIÓN DE LA TIENDA", en: "STORE RATING", de: "SHOP-BEWERTUNG", fr: "NOTE DE LA BOUTIQUE", it: "VALUTAZIONE DEL NEGOZIO", ja: "ストア評価" },
+    lbl_compare_other: { es: "BUSCAR EN OTRA TIENDA", en: "SEARCH ANOTHER STORE", de: "IN ANDEREM SHOP SUCHEN", fr: "CHERCHER DANS UNE AUTRE BOUTIQUE", it: "CERCA IN UN ALTRO NEGOZIO", ja: "他のストアで検索" },
+    compare_hint: {
+      es: "Abre la otra tienda para comparar precio, meses sin intereses y calificación.",
+      en: "Open the other store to compare price, installments and rating.",
+      de: "Öffne den anderen Shop, um Preis, Raten und Bewertung zu vergleichen.",
+      fr: "Ouvrez l'autre boutique pour comparer prix, paiement en plusieurs fois et note.",
+      it: "Apri l'altro negozio per confrontare prezzo, rate e valutazione.",
+      ja: "他ストアを開いて価格・分割・評価を比較してください。"
     },
-    alt_badge_discount: {
-      es: "Descuento / 3B / Waldo's",
-      en: "Hard discount / Value",
-      de: "Hard-Discount / Spartarif",
-      fr: "Hard discount / Économique",
-      it: "Hard discount / Risparmio",
-      ja: "ディスカウント / 格安"
+    lbl_price_trackers: { es: "HISTORIAL REAL DE PRECIOS (SITIOS EXTERNOS)", en: "REAL PRICE HISTORY (EXTERNAL SITES)", de: "ECHTER PREISVERLAUF (EXTERNE SEITEN)", fr: "HISTORIQUE RÉEL DES PRIX (SITES EXTERNES)", it: "STORICO REALE DEI PREZZI (SITI ESTERNI)", ja: "実際の価格履歴（外部サイト）" },
+    tracker_google: { es: "Buscar en Google Shopping", en: "Search Google Shopping", de: "In Google Shopping suchen", fr: "Rechercher sur Google Shopping", it: "Cerca su Google Shopping", ja: "Googleショッピングで検索" },
+    rel_discount_line: { es: "¿Descuento real? {txt} en el último mes.", en: "Real discount? {txt} over the last month.", de: "Echter Rabatt? {txt} im letzten Monat.", fr: "Vraie remise ? {txt} sur le dernier mois.", it: "Sconto reale? {txt} nell'ultimo mese.", ja: "本当の割引？過去1か月で{txt}。" },
+    rel_discount_unknown: {
+      es: "¿Descuento real? Aún no hay suficientes visitas tuyas para saberlo.",
+      en: "Real discount? Not enough of your visits yet to tell.",
+      de: "Echter Rabatt? Noch nicht genug Besuche, um es zu sagen.",
+      fr: "Vraie remise ? Pas encore assez de visites pour le dire.",
+      it: "Sconto reale? Non ci sono ancora abbastanza visite per dirlo.",
+      ja: "本当の割引？判断するにはまだ訪問回数が足りません。"
     },
-    alt_badge_store_brand: {
-      es: "Marca propia",
-      en: "Store brand",
-      de: "Eigenmarke",
-      fr: "Marque distributeur",
-      it: "Marca del distributore",
-      ja: "プライベートブランド"
+    lbl_store_brands: { es: "MARCAS PROPIAS DE CADENAS EN ESTA CATEGORÍA", en: "STORE BRANDS IN THIS CATEGORY", de: "EIGENMARKEN IN DIESER KATEGORIE", fr: "MARQUES DE DISTRIBUTEUR DANS CETTE CATÉGORIE", it: "MARCHI DEL DISTRIBUTORE IN QUESTA CATEGORIA", ja: "このカテゴリーのプライベートブランド" },
+    store_brands_note: {
+      es: "El dueño es la cadena; el fabricante no suele publicarse. Gina no compara precio ni calidad.",
+      en: "The owner is the retail chain; the manufacturer is usually not disclosed. Gina does not compare price or quality.",
+      de: "Eigentümer ist die Handelskette; der Hersteller wird meist nicht genannt. Gina vergleicht weder Preis noch Qualität.",
+      fr: "Le propriétaire est l'enseigne ; le fabricant n'est généralement pas publié. Gina ne compare ni prix ni qualité.",
+      it: "Il proprietario è la catena; il produttore di solito non è reso noto. Gina non confronta prezzo né qualità.",
+      ja: "所有者は小売チェーンで、製造元は通常公表されません。Ginaは価格や品質を比較しません。"
     },
     alt_badge_local_indep: {
       es: "Local / Independiente",
@@ -1092,45 +1117,31 @@
       it: "Locale / Indipendente",
       ja: "地域 / 独立系"
     },
-    alt_available_in_3b: {
-      es: "Disponible en: Tiendas 3B",
-      en: "Available at: Tiendas 3B",
-      de: "Erhältlich bei: Tiendas 3B",
-      fr: "Disponible chez : Tiendas 3B",
-      it: "Disponibile da: Tiendas 3B",
-      ja: "取扱店舗：Tiendas 3B"
+    pref_price_history: {
+      es: "Guardar historial de precios en este navegador",
+      en: "Save price history in this browser",
+      de: "Preisverlauf in diesem Browser speichern",
+      fr: "Enregistrer l'historique des prix dans ce navigateur",
+      it: "Salva la cronologia dei prezzi in questo browser",
+      ja: "このブラウザに価格履歴を保存する"
     },
-    alt_available_in_waldos: {
-      es: "Disponible en: Waldo's",
-      en: "Available at: Waldo's",
-      de: "Erhältlich bei: Waldo's",
-      fr: "Disponible chez : Waldo's",
-      it: "Disponibile da: Waldo's",
-      ja: "取扱店舗：Waldo's"
+    pref_price_history_desc: {
+      es: "Guarda el identificador del producto (ASIN, MLM, código de barras) y su precio, máximo 300 productos y 90 días. Nunca sale de tu navegador.",
+      en: "Stores the product ID (ASIN, MLM, barcode) and its price, up to 300 products and 90 days. It never leaves your browser.",
+      de: "Speichert die Produkt-ID (ASIN, MLM, Barcode) und den Preis, höchstens 300 Produkte und 90 Tage. Verlässt nie deinen Browser.",
+      fr: "Enregistre l'identifiant du produit (ASIN, MLM, code-barres) et son prix, 300 produits et 90 jours au maximum. Ne quitte jamais votre navigateur.",
+      it: "Salva l'identificativo del prodotto (ASIN, MLM, codice a barre) e il prezzo, massimo 300 prodotti e 90 giorni. Non lascia mai il tuo browser.",
+      ja: "商品ID（ASIN、MLM、バーコード）と価格を最大300商品・90日間保存します。ブラウザの外には送信されません。"
     },
-    alt_available_in_discount: {
-      es: "Disponible en: Cadenas de descuento (hard discount)",
-      en: "Available at: Hard discount chains",
-      de: "Erhältlich bei: Hard-Discount-Ketten",
-      fr: "Disponible dans : Réseaux de hard discount",
-      it: "Disponibile presso: Catene hard discount",
-      ja: "取扱店舗：ディスカウントストア"
-    },
-    alt_available_in_supermarkets: {
-      es: "Disponible en: Supermercados y tiendas de autoservicio",
-      en: "Available at: Supermarkets and retail chains",
-      de: "Erhältlich im: Supermarkt und Einzelhandel",
-      fr: "Disponible en : Supermarchés et hypermarchés",
-      it: "Disponibile nei: Supermercati e grande distribuzione",
-      ja: "取扱店舗：スーパーマーケット・量販店"
-    },
-    alt_available_in_retail: {
-      es: "Disponible en: Abarrotes, supermercados y tiendas locales",
-      en: "Available at: Local stores, groceries, and supermarkets",
-      de: "Erhältlich in: Lebensmittelgeschäften und Supermärkten",
-      fr: "Disponible en : Épiceries, supermarchés et commerces locaux",
-      it: "Disponibile in: Negozi di alimentari e supermercati",
-      ja: "取扱店舗：地元の商店・スーパーマーケット"
+    btn_clear_price_history: { es: "Borrar historial de precios", en: "Clear price history", de: "Preisverlauf löschen", fr: "Effacer l'historique des prix", it: "Cancella cronologia prezzi", ja: "価格履歴を削除" },
+    price_history_cleared: { es: "Historial de precios borrado.", en: "Price history cleared.", de: "Preisverlauf gelöscht.", fr: "Historique des prix effacé.", it: "Cronologia prezzi cancellata.", ja: "価格履歴を削除しました。" },
+    base_stale: {
+      es: "Base del {fecha}: puede haber datos desactualizados.",
+      en: "Database from {fecha}: some data may be out of date.",
+      de: "Datenbank vom {fecha}: Daten könnten veraltet sein.",
+      fr: "Base du {fecha} : certaines données peuvent être obsolètes.",
+      it: "Database del {fecha}: alcuni dati potrebbero non essere aggiornati.",
+      ja: "{fecha}時点のデータ：古い情報が含まれる可能性があります。"
     },
 
     // Footer

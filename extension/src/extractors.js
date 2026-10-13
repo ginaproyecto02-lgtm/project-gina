@@ -170,382 +170,344 @@
     return null;
   }
 
-  function parsePriceNumber(str) {
+  // ---------------------------------------------------------------- Precio, moneda y meses sin intereses
+  // Moneda y separador decimal por país de la tienda (sites.json → pais).
+  const CURRENCY_BY_COUNTRY = {
+    "México": "MXN", "EE.UU.": "USD", "Canadá": "CAD", "Brasil": "BRL", "Argentina": "ARS", "Chile": "CLP", "Colombia": "COP",
+    "Reino Unido": "GBP", "Alemania": "EUR", "Francia": "EUR", "España": "EUR", "Italia": "EUR",
+    "China": "CNY", "Japón": "JPY", "Corea del Sur": "KRW", "Singapur": "SGD", "Israel": "ILS", "India": "INR"
+  };
+  const DECIMAL_COMMA_COUNTRIES = new Set(["Alemania", "Francia", "España", "Italia", "Brasil", "Argentina", "Chile", "Colombia"]);
+  const LOCALE_BY_LANG = { es: "es-MX", en: "en-US", de: "de-DE", fr: "fr-FR", it: "it-IT", ja: "ja-JP" };
+
+  function currencyForCountry(country) {
+    return CURRENCY_BY_COUNTRY[String(country || "").trim()] || null;
+  }
+  function usesDecimalComma(country) {
+    return DECIMAL_COMMA_COUNTRIES.has(String(country || "").trim());
+  }
+  function activeLocale() {
+    const lang = (QED.I18N && QED.I18N.getLang && QED.I18N.getLang()) || "es";
+    return LOCALE_BY_LANG[lang] || "es-MX";
+  }
+
+  // decimalComma = true en países donde la coma es el separador decimal ("1.299,00 €" = 1299; "1.299" = 1299).
+  function parsePriceNumber(str, decimalComma) {
     if (str == null) return null;
+    if (typeof str === "number") return Number.isFinite(str) ? str : null;
     let s = String(str).trim().replace(/[^0-9.,]/g, "");
     if (!s) return null;
-    if (s.includes(",") && s.includes(".")) {
-      if (s.lastIndexOf(",") > s.lastIndexOf(".")) {
-        s = s.replace(/\./g, "").replace(",", ".");
-      } else {
-        s = s.replace(/,/g, "");
-      }
-    } else if (s.includes(",")) {
+    const hasComma = s.includes(","), hasDot = s.includes(".");
+    if (hasComma && hasDot) {
+      // El separador que aparece al final es el decimal.
+      if (s.lastIndexOf(",") > s.lastIndexOf(".")) s = s.replace(/\./g, "").replace(",", ".");
+      else s = s.replace(/,/g, "");
+    } else if (hasComma) {
       const parts = s.split(",");
-      if (parts.length === 2 && parts[1].length === 2) {
+      if (decimalComma) {
+        s = parts.length === 2 ? parts[0] + "." + parts[1] : s.replace(/,/g, "");
+      } else if (parts.length === 2 && parts[1].length <= 2) {
         s = parts[0] + "." + parts[1];
       } else {
         s = s.replace(/,/g, "");
       }
+    } else if (hasDot) {
+      const parts = s.split(".");
+      // Con coma decimal, el punto es separador de miles ("1.299" = 1299; "12.990" = 12990).
+      if (decimalComma && parts.slice(1).every((p) => p.length === 3)) s = s.replace(/\./g, "");
+      else if (!decimalComma && parts.length > 2) s = s.replace(/\./g, "");
     }
     const num = parseFloat(s);
-    return Number.isNaN(num) ? null : num;
+    return Number.isFinite(num) ? num : null;
   }
 
-  function extractPrice(doc, siteName) {
-    if (!doc) return null;
-    let amount = null;
-    let currency = "MXN";
+  function formatMoney(amount, currency) {
+    if (amount == null) return "";
+    try {
+      return new Intl.NumberFormat(activeLocale(), { style: "currency", currency: currency || "USD" }).format(amount);
+    } catch (e) {
+      return `${amount.toFixed(2)} ${currency || ""}`.trim();
+    }
+  }
 
-    // 1. JSON-LD Product offers
+  function currencyFromText(raw) {
+    const r = String(raw || "");
+    if (/US\$|USD/.test(r)) return "USD";
+    if (/€|EUR/.test(r)) return "EUR";
+    if (/£|GBP/.test(r)) return "GBP";
+    if (/R\$|BRL/.test(r)) return "BRL";
+    if (/CA\$|C\$|CAD/.test(r)) return "CAD";
+    if (/MX\$|MXN/.test(r)) return "MXN";
+    if (/¥|JPY|円/.test(r)) return "JPY";
+    if (/₩|KRW/.test(r)) return "KRW";
+    if (/₹|INR/.test(r)) return "INR";
+    if (/₪|ILS/.test(r)) return "ILS";
+    return null;
+  }
+
+  function extractPrice(doc, siteName, country) {
+    if (!doc) return null;
+    const decimalComma = usesDecimalComma(country);
+    let amount = null;
+    let currency = null;
+
+    // 1. JSON-LD Product.offers (precio numérico, la fuente más confiable)
     for (const p of jsonLdProducts(doc)) {
-      if (p.offers) {
-        const off = Array.isArray(p.offers) ? p.offers[0] : p.offers;
-        if (off) {
-          if (off.price != null) amount = parsePriceNumber(off.price);
-          if (off.priceCurrency) currency = String(off.priceCurrency).toUpperCase();
-          if (amount != null) break;
-        }
-      }
+      if (!p.offers) continue;
+      const off = Array.isArray(p.offers) ? p.offers[0] : p.offers;
+      if (!off) continue;
+      const raw = off.price != null ? off.price : off.lowPrice;
+      if (raw != null) amount = typeof raw === "number" ? raw : parsePriceNumber(String(raw), false);
+      if (off.priceCurrency) currency = String(off.priceCurrency).toUpperCase();
+      if (amount != null) break;
     }
 
-    // 2. Selectores específicos de tienda
+    // 2. Selectores de la tienda
     if (amount == null) {
+      let raw = "";
       if (siteName === "amazon") {
-        const pEl = q(doc, "#corePriceDisplay_desktop_feature_div .a-price .a-offscreen, #corePrice_feature_div .a-price .a-offscreen, .apexPriceToPay .a-offscreen, .priceToPay .a-offscreen, #priceblock_ourprice, #priceblock_dealprice, #price_inside_buybox");
-        if (pEl) {
-          const raw = txt(pEl);
-          amount = parsePriceNumber(raw);
-          if (raw.includes("US$") || raw.includes("USD")) currency = "USD";
-          else if (raw.includes("€") || raw.includes("EUR")) currency = "EUR";
-        }
+        raw = txt(q(doc, "#corePriceDisplay_desktop_feature_div .a-price .a-offscreen, #corePrice_feature_div .a-price .a-offscreen, .apexPriceToPay .a-offscreen, .priceToPay .a-offscreen, #priceblock_ourprice, #priceblock_dealprice, #price_inside_buybox"));
       } else if (siteName === "mercadolibre") {
-        const fracEl = q(doc, ".ui-pdp-price__second-line .andes-money-amount__fraction, .ui-pdp-price .andes-money-amount__fraction, meta[itemprop='price']");
-        if (fracEl) {
-          const val = fracEl.getAttribute("content") || txt(fracEl);
-          const centsEl = q(doc, ".ui-pdp-price__second-line .andes-money-amount__cents, .ui-pdp-price .andes-money-amount__cents");
-          const cents = centsEl ? txt(centsEl) : "00";
-          amount = parsePriceNumber(val + "." + cents);
+        const meta = q(doc, "meta[itemprop='price']");
+        if (meta && meta.getAttribute("content")) {
+          amount = parsePriceNumber(meta.getAttribute("content"), false);
+        } else {
+          const frac = txt(q(doc, ".ui-pdp-price__second-line .andes-money-amount__fraction, .ui-pdp-price .andes-money-amount__fraction"));
+          const cents = txt(q(doc, ".ui-pdp-price__second-line .andes-money-amount__cents, .ui-pdp-price .andes-money-amount__cents"));
+          if (frac) amount = parsePriceNumber(frac.replace(/[.,]/g, ""), false) + (cents ? parseInt(cents, 10) / 100 : 0);
         }
       } else if (siteName === "walmart") {
         const pEl = q(doc, "[itemprop='price'], [data-testid='current-price'], [data-testid='price-wrap']");
-        if (pEl) {
-          const val = pEl.getAttribute("content") || txt(pEl);
-          amount = parsePriceNumber(val);
-        }
+        raw = pEl ? (pEl.getAttribute("content") || txt(pEl)) : "";
       } else if (siteName === "liverpool") {
-        const pEl = q(doc, ".m-product__price--discount, .m-product__price");
-        if (pEl) amount = parsePriceNumber(txt(pEl));
+        raw = txt(q(doc, ".m-product__price--discount, .m-product__price"));
+      }
+      if (amount == null && raw) {
+        amount = parsePriceNumber(raw, decimalComma);
+        currency = currency || currencyFromText(raw);
       }
     }
 
-    // 3. Fallback a metadatos / microdatos generales
+    // 3. Metadatos y microdatos generales
     if (amount == null) {
       const metaP = q(doc, 'meta[property="product:price:amount"], meta[itemprop="price"], meta[property="og:price:amount"]');
-      if (metaP) {
-        amount = parsePriceNumber(metaP.getAttribute("content") || metaP.content);
-      }
+      if (metaP) amount = parsePriceNumber(metaP.getAttribute("content") || metaP.content, false);
+    }
+    if (!currency) {
       const metaCur = q(doc, 'meta[property="product:price:currency"], meta[itemprop="priceCurrency"]');
-      if (metaCur) {
-        currency = (metaCur.getAttribute("content") || metaCur.content || currency).toUpperCase();
-      }
+      if (metaCur) currency = String(metaCur.getAttribute("content") || metaCur.content || "").toUpperCase() || null;
     }
 
-    if (amount == null) return null;
-
-    let formatted = "";
-    try {
-      formatted = new Intl.NumberFormat("es-MX", { style: "currency", currency }).format(amount);
-    } catch (e) {
-      formatted = `$${amount.toFixed(2)} ${currency}`;
-    }
-
-    return {
-      amount,
-      currency,
-      formatted
-    };
+    if (amount == null || !(amount > 0)) return null;
+    // Sin moneda en la página → la del país de la tienda (nunca MXN por defecto en otro país).
+    currency = currency || currencyForCountry(country) || "USD";
+    return { amount, currency, formatted: formatMoney(amount, currency) };
   }
+
+  // Meses sin intereses: SOLO desde los contenedores de precio y pago del producto (nunca todo el body).
+  const INSTALLMENT_SELECTORS = {
+    amazon: "#installmentCalculator_feature_div, #inemi_feature_div, [data-feature-name='installmentCalculator'], #best-offer-string-cdp-installment, #corePriceDisplay_desktop_feature_div",
+    mercadolibre: ".ui-pdp-price__subtitles, .ui-pdp-payment, .ui-pdp-payment__subtitles, .ui-pdp-promotions-pill-label",
+    walmart: "[data-testid='installments'], [data-testid='financing'], [data-testid='price-wrap']",
+    liverpool: ".m-pdp__installments, .a-product__paragraphInstallments, .m-product__price",
+    coppel: "[class*='installment'], [class*='credito'], [class*='price']",
+    bestbuy: "[class*='financing'], [class*='priceView']",
+    generic: "[class*='installment'], [id*='installment'], [class*='cuotas'], [class*='msi'], [class*='financing']"
+  };
 
   function extractInstallments(doc, siteName) {
-    if (!doc) return { hasMsi: false, months: null, text: "Pago de contado (sin MSI indicado)" };
-    const textPool = (doc && doc.body ? (
-      txt(q(doc, "#installment-calculator, [data-feature-name='installmentCalculator'], .best-offer-name, #payment-plans-feature-div, .ui-pdp-price__subtitles, .ui-pdp-payment__subtitles, .ui-pdp-color--GREEN, .ui-pdp-promotions-pill-label, .installments, .credit-promotion, .m-pdp__installments")) ||
-      (doc.body.textContent || "")
-    ) : "");
-
-    const msiMatch = textPool.match(/(?:hasta|en)?\s*(\d+)\s*(?:meses\s+sin\s+intereses|msi\b|meses\s+fijos|cuotas\s+sin\s+inter[eé]s)/i) ||
-                     textPool.match(/(\d+)\s*x\s*[\$\d.,\s]+\s*sin\s+inter[eé]s/i);
-
-    if (msiMatch) {
-      const months = parseInt(msiMatch[1], 10);
-      return {
-        hasMsi: true,
-        months,
-        text: `Hasta ${months} meses sin intereses (según la tienda)`
-      };
+    const none = { hasMsi: false, months: null, text: "", noData: true };
+    if (!doc) return none;
+    const sel = INSTALLMENT_SELECTORS[siteName] || INSTALLMENT_SELECTORS.generic;
+    const pool = qa(doc, sel).slice(0, 6).map((el) => txt(el)).filter((t) => t && t.length < 600).join(" · ");
+    if (!pool) return none;
+    const m = pool.match(/(?:hasta|en|até|em)?\s*(\d{1,2})\s*(?:meses\s+sin\s+intereses|msi\b|cuotas\s+sin\s+inter[eé]s|parcelas\s+sem\s+juros|x\s+sem\s+juros)/i) ||
+              pool.match(/(\d{1,2})\s*x\s*[$\d.,\s]+\s*(?:sin\s+inter[eé]s|sem\s+juros)/i);
+    if (m) {
+      const months = parseInt(m[1], 10);
+      return { hasMsi: true, months, text: "", noData: false };
     }
-
-    if (/sin\s+intereses|sin\s+inter[eé]s/i.test(textPool)) {
-      return {
-        hasMsi: true,
-        months: null,
-        text: "Meses sin intereses disponibles (según la tienda)"
-      };
+    if (/meses\s+sin\s+intereses|cuotas\s+sin\s+inter[eé]s|sem\s+juros/i.test(pool)) {
+      return { hasMsi: true, months: null, text: "", noData: false };
     }
-
-    return {
-      hasMsi: false,
-      months: null,
-      text: "Pago de contado (sin MSI indicado)"
-    };
+    return none;
   }
 
+  // Identificador del producto: ASIN / MLM / ID de Walmart / SKU o GTIN del JSON-LD. Nunca el título.
   function extractProductId(doc, siteName, url) {
     const u = String(url || (typeof location !== "undefined" ? location.href : ""));
-    let id = "";
-    let type = "url";
-
     if (siteName === "amazon" || /amazon\./i.test(u)) {
-      const mAsin = u.match(/\/dp\/([A-Z0-9]{10})/i) || u.match(/\/gp\/product\/([A-Z0-9]{10})/i);
-      if (mAsin) {
-        id = mAsin[1].toUpperCase();
-        type = "asin";
-      } else if (doc) {
-        const inp = q(doc, "input#ASIN, input[name='ASIN']");
-        if (inp && inp.value) {
-          id = inp.value.trim().toUpperCase();
-          type = "asin";
-        }
-      }
-    } else if (siteName === "mercadolibre" || /mercadolibre\./i.test(u)) {
-      const mMl = u.match(/(ML[A-Z]-?\d+)/i);
-      if (mMl) {
-        id = mMl[1].replace("-", "");
-        type = "mlm";
-      }
+      const mAsin = u.match(/\/(?:dp|gp\/product|gp\/aw\/d)\/([A-Z0-9]{10})/i);
+      if (mAsin) return { id: mAsin[1].toUpperCase(), type: "asin" };
+      const inp = doc && q(doc, "input#ASIN, input[name='ASIN']");
+      if (inp && inp.value) return { id: inp.value.trim().toUpperCase(), type: "asin" };
+    } else if (siteName === "mercadolibre" || /mercadoli(b|v)re\./i.test(u)) {
+      const mMl = u.match(/\b(M[LC][A-Z])-?(\d{6,})/i);
+      if (mMl) return { id: (mMl[1] + mMl[2]).toUpperCase(), type: "mlm" };
     } else if (siteName === "walmart" || /walmart\./i.test(u)) {
-      const mWm = u.match(/\/ip\/(?:[^/]+\/)?(\d+)/i);
-      if (mWm) {
-        id = mWm[1];
-        type = "walmart_id";
+      const mWm = u.match(/\/ip\/(?:[^/]+\/)?(\d{5,})/i);
+      if (mWm) return { id: mWm[1], type: "walmart_id" };
+    }
+    if (doc) {
+      for (const p of jsonLdProducts(doc)) {
+        const gtin = p.gtin13 || p.gtin12 || p.gtin14 || p.gtin8 || p.gtin;
+        if (gtin && /^\d{8,14}$/.test(String(gtin).trim())) return { id: String(gtin).trim(), type: "gtin" };
+        if (p.sku && String(p.sku).trim().length >= 3 && String(p.sku).length <= 40) return { id: String(p.sku).trim(), type: "sku" };
       }
     }
-
-    if (!id && u) {
-      try {
-        const parsed = new URL(u);
-        id = parsed.pathname;
-      } catch (e) {
-        id = u;
-      }
-    }
-
-    return { id, type };
+    return { id: "", type: "none" };
   }
 
-  function computePriceComparison(history, currentPrice) {
-    if (currentPrice == null) return null;
-    const now = Date.now();
-    const DAY_MS = 86400000;
-
-    const list = Array.isArray(history) ? history.filter(h => h && typeof h.p === "number" && h.p > 0) : [];
-
-    if (!list.length) {
-      return {
-        hasHistory: false,
-        currentPrice,
-        summary: "Seguimiento iniciado (primer registro guardado localmente)"
-      };
+  // Modelo y código de barras para buscar el MISMO producto en otra tienda.
+  function extractModelAndGtin(doc, specsText) {
+    let gtin = "", mpn = "";
+    if (doc) {
+      for (const p of jsonLdProducts(doc)) {
+        const g = p.gtin13 || p.gtin12 || p.gtin14 || p.gtin8 || p.gtin;
+        if (!gtin && g && /^\d{8,14}$/.test(String(g).trim())) gtin = String(g).trim();
+        const mo = p.mpn || (p.model && (typeof p.model === "string" ? p.model : p.model.name));
+        if (!mpn && mo && String(mo).length <= 40) mpn = String(mo).trim();
+      }
     }
+    if (!mpn && specsText) {
+      const m = String(specsText).match(/(?:n[uú]mero de modelo(?: del producto)?|item model number|modellnummer|num[eé]ro du mod[eè]le|numero modello|model number)\s*[:\s‎]*\s*([A-Z0-9][A-Z0-9\-\/.]{2,29})/i);
+      if (m) mpn = m[1];
+    }
+    return { gtin, mpn };
+  }
+
+  // ---------------------------------------------------------------- Historial de precios (solo local)
+  const DAY_MS = 86400000;
+  const HISTORY_MAX_PRODUCTS = 300;
+  const HISTORY_MAX_DAYS = 90;
+  const MIN_POINTS_PER_WINDOW = 3;
+  const dayKey = (t) => new Date(t).toISOString().slice(0, 10);
+
+  // Clave del historial: "<sitio>:<id>". Sin id de producto real → no se guarda nada.
+  function priceHistoryKey(siteName, productId) {
+    if (!productId || !productId.id || productId.type === "none" || productId.type === "url") return "";
+    return `${siteName || "sitio"}:${productId.id}`;
+  }
+
+  // Agrega (o reemplaza el del mismo día) un punto y aplica los límites. Puro: devuelve un objeto nuevo.
+  // Forma: { "<clave>": { u: últimaVisita, c: moneda, p: [{ t, p }] } }
+  function recordPricePoint(history, key, amount, currency, now) {
+    now = now || Date.now();
+    const out = Object.assign({}, history || {});
+    if (!key || !(amount > 0)) return out;
+    const cutoff = now - HISTORY_MAX_DAYS * DAY_MS;
+    const prev = out[key] && Array.isArray(out[key].p) ? out[key] : { p: [] };
+    let pts = prev.p.filter((x) => x && x.t >= cutoff && x.p > 0);
+    // Si cambió la moneda, el historial anterior no es comparable.
+    if (prev.c && currency && prev.c !== currency) pts = [];
+    const today = dayKey(now);
+    pts = pts.filter((x) => dayKey(x.t) !== today);
+    pts.push({ t: now, p: amount });
+    out[key] = { u: now, c: currency || prev.c || "", p: pts };
+    // Máximo de productos: se borra el visto hace más tiempo.
+    const keys = Object.keys(out);
+    if (keys.length > HISTORY_MAX_PRODUCTS) {
+      keys.sort((a, b) => (out[a].u || 0) - (out[b].u || 0));
+      for (const k of keys.slice(0, keys.length - HISTORY_MAX_PRODUCTS)) delete out[k];
+    }
+    return out;
+  }
+
+  // Quita puntos viejos y migra el formato anterior (arreglos sueltos, claves por título).
+  function prunePriceHistory(history, now) {
+    now = now || Date.now();
+    const cutoff = now - HISTORY_MAX_DAYS * DAY_MS;
+    const out = {};
+    for (const [k, v] of Object.entries(history || {})) {
+      if (!v || Array.isArray(v) || !Array.isArray(v.p) || !k.includes(":")) continue;
+      const pts = v.p.filter((x) => x && x.t >= cutoff && x.p > 0);
+      if (pts.length) out[k] = { u: v.u || pts[pts.length - 1].t, c: v.c || "", p: pts };
+    }
+    return out;
+  }
+
+  // Compara el precio de hoy contra el promedio de TUS visitas anteriores (el punto de hoy no entra en el promedio).
+  function computePriceComparison(entryOrPoints, currentPrice, now) {
+    if (currentPrice == null) return null;
+    now = now || Date.now();
+    const pts = Array.isArray(entryOrPoints) ? entryOrPoints : (entryOrPoints && entryOrPoints.p) || [];
+    const today = dayKey(now);
+    const all = pts.filter((h) => h && typeof h.p === "number" && h.p > 0);
+    const past = all.filter((h) => dayKey(h.t) !== today);
+    const visits = past.length + 1; // las visitas anteriores más la de hoy
 
     const calcWindow = (days) => {
       const cutoff = now - days * DAY_MS;
-      const pts = list.filter(h => (h.t || 0) >= cutoff);
-      if (!pts.length) return null;
-      const avg = pts.reduce((s, h) => s + h.p, 0) / pts.length;
-      const diffPct = ((currentPrice - avg) / avg) * 100;
-      let status = "neutral";
-      let arrow = "↔";
-      let text = "Precio habitual";
-      if (diffPct >= 10) {
-        status = "expensive";
-        arrow = "🔺";
-        text = `+${Math.round(diffPct)}% más caro`;
-      } else if (diffPct <= -10) {
-        status = "cheap";
-        arrow = "🔻";
-        text = `${Math.round(diffPct)}% más barato`;
-      } else {
-        const sign = diffPct >= 0 ? "+" : "";
-        text = `En precio habitual (${sign}${Math.round(diffPct)}%)`;
-      }
-      return {
-        avg: Math.round(avg * 100) / 100,
-        diffPct: Math.round(diffPct),
-        status,
-        arrow,
-        text,
-        ptsCount: pts.length
-      };
+      const w = past.filter((h) => h.t >= cutoff);
+      if (w.length < MIN_POINTS_PER_WINDOW) return { insufficient: true, ptsCount: w.length };
+      const avg = w.reduce((s, h) => s + h.p, 0) / w.length;
+      const diffPct = Math.round(((currentPrice - avg) / avg) * 100);
+      let status = "neutral", arrow = "≈";
+      if (diffPct >= 10) { status = "expensive"; arrow = "▲"; }
+      else if (diffPct <= -10) { status = "cheap"; arrow = "▼"; }
+      return { avg: Math.round(avg * 100) / 100, diffPct, status, arrow, ptsCount: w.length };
     };
 
-    const oneWeek = calcWindow(7);
-    const oneMonth = calcWindow(30);
-    const threeMonths = calcWindow(90);
-
     return {
-      hasHistory: !!(oneWeek || oneMonth || threeMonths),
+      hasHistory: past.length > 0,
+      visits,
       currentPrice,
-      oneWeek,
-      oneMonth,
-      threeMonths
+      oneWeek: calcWindow(7),
+      oneMonth: calcWindow(30),
+      threeMonths: calcWindow(90)
     };
   }
 
-  function getTrackerLinks(siteName, productId, title, storeCountry) {
-    const trackers = [];
-    const cleanTitle = String(title || "").trim();
+  // ---------------------------------------------------------------- Rastreadores y comparación entre tiendas (solo enlaces)
+  const fill = (tpl, vals) => String(tpl).replace(/\{(\w+)\}/g, (_, k) => encodeURIComponent(vals[k] || ""));
+  const hostMatches = (host, domain) => {
+    const h = String(host || "").toLowerCase().replace(/^www\./, "");
+    const d = String(domain || "").toLowerCase();
+    return h === d || h.endsWith("." + d);
+  };
 
-    if (siteName === "amazon" || (productId && productId.type === "asin")) {
-      const asin = (productId && productId.type === "asin") ? productId.id : "";
-      const camelUrl = asin
-        ? `https://camelcamelcamel.com/product/${asin}`
-        : `https://camelcamelcamel.com/search?sq=${encodeURIComponent(cleanTitle)}`;
-      trackers.push({
-        name: "CamelCamelCamel",
-        ecosystem: "Amazon",
-        desc: "Historial de 1 sem, 1 m y 3 m en Amazon",
-        url: camelUrl
-      });
-    }
-
-    if (siteName === "aliexpress" || /china|asia/i.test(storeCountry || "")) {
-      trackers.push({
-        name: "Pricearchive",
-        ecosystem: "AliExpress",
-        desc: "Detector de descuentos reales y promedios",
-        url: `https://www.pricearchive.org`
-      });
-      trackers.push({
-        name: "Alitools",
-        ecosystem: "AliExpress / Asia",
-        desc: "Dinámica de precios y fiabilidad del vendedor",
-        url: `https://alitools.io`
-      });
-    }
-
-    if (siteName === "walmart") {
-      trackers.push({
-        name: "Waltrack",
-        ecosystem: "Walmart",
-        desc: "Historial de precios y alertas de ofertas",
-        url: `https://waltrack.net`
-      });
-    }
-
-    trackers.push({
-      name: "Monitor universal (Google Shopping / HARPA AI)",
-      ecosystem: "Universal",
-      desc: "Rastreo de precios y comparativa en tiendas globales",
-      url: `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(cleanTitle)}`
-    });
-
-    return trackers;
+  // Texto de búsqueda: marca + modelo, o código de barras, o el núcleo del título (sin "para…", "con…").
+  function searchQuery(title, brand, ids) {
+    ids = ids || {};
+    if (ids.mpn) return `${brand ? brand + " " : ""}${ids.mpn}`.trim();
+    if (ids.gtin) return ids.gtin;
+    const core = String(title || "").split(/\s+(?:para|for|compatible con|compatible with|con|with|de\s+\d)\s+/i)[0];
+    return core.split(/\s+/).slice(0, 8).join(" ").slice(0, 80).trim();
   }
 
-  function getCrossPlatformOptions(currentSite, title, storeCountry, currentPrice, currentRating, currentInstallments, crossHistory) {
-    const cleanTitle = String(title || "").replace(/\b(?:para|compatible con|con|de)\b.*$/i, "").slice(0, 60).trim();
-    const qTitle = encodeURIComponent(cleanTitle);
-    const country = String(storeCountry || "México").trim();
-
-    const platforms = [];
-
-    if (/m[eé]xico/i.test(country) || country === "MX") {
-      if (currentSite !== "mercadolibre") {
-        platforms.push({
-          site: "mercadolibre",
-          name: "Mercado Libre México",
-          url: `https://listado.mercadolibre.com.mx/${qTitle}`
-        });
-      }
-      if (currentSite !== "walmart") {
-        platforms.push({
-          site: "walmart",
-          name: "Walmart México",
-          url: `https://www.walmart.com.mx/search?q=${qTitle}`
-        });
-      }
-      if (currentSite !== "amazon" && platforms.length < 2) {
-        platforms.push({
-          site: "amazon",
-          name: "Amazon México",
-          url: `https://www.amazon.com.mx/s?k=${qTitle}`
-        });
-      }
-    } else {
-      if (currentSite !== "amazon") {
-        platforms.push({
-          site: "amazon",
-          name: "Amazon US",
-          url: `https://www.amazon.com/s?k=${qTitle}`
-        });
-      }
-      if (currentSite !== "walmart") {
-        platforms.push({
-          site: "walmart",
-          name: "Walmart US",
-          url: `https://www.walmart.com/search?q=${qTitle}`
-        });
-      }
-      if (currentSite !== "bestbuy" && platforms.length < 2) {
-        platforms.push({
-          site: "bestbuy",
-          name: "Best Buy",
-          url: `https://www.bestbuy.com/site/searchpage.jsp?st=${qTitle}`
-        });
-      }
+  // table = brands.json → rastreadores (cada entrada verificada; las excluidas no se muestran).
+  function getTrackerLinks(host, productId, query, table) {
+    const out = [];
+    for (const tr of table || []) {
+      if (!tr || tr.excluido || !tr.dominios) continue;
+      const dom = Object.keys(tr.dominios).find((d) => hostMatches(host, d));
+      if (!dom) continue;
+      if (tr.requiere === "asin" && !(productId && productId.type === "asin")) continue;
+      out.push({
+        name: tr.nombre,
+        desc: tr.desc || "",
+        url: fill(tr.dominios[dom], { asin: productId && productId.id, q: query })
+      });
     }
+    if (query) {
+      out.push({
+        name: "Google Shopping",
+        desc: "",
+        universal: true,
+        url: `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(query)}`
+      });
+    }
+    return out;
+  }
 
-    const targetPlatforms = platforms.slice(0, 2);
-
-    const items = targetPlatforms.map((p) => {
-      const past = crossHistory && crossHistory[p.site];
-      let comparisonText = "Cotejar precio, MSI y puntuación";
-      let compStatus = "check";
-
-      if (past && past.price && currentPrice) {
-        const diff = past.price - currentPrice;
-        if (Math.abs(diff) < 1) {
-          comparisonText = `Mismo precio ($${past.price})`;
-          compStatus = "same";
-        } else if (past.price < currentPrice) {
-          const pct = Math.round(((currentPrice - past.price) / currentPrice) * 100);
-          comparisonText = `🔻 Más barato en ${p.name} ($${past.price}, -${pct}%)`;
-          compStatus = "cheaper";
-        } else {
-          const pct = Math.round(((past.price - currentPrice) / currentPrice) * 100);
-          comparisonText = `🔺 Más caro en ${p.name} ($${past.price}, +${pct}%)`;
-          compStatus = "expensive";
-        }
-      }
-
-      return {
-        site: p.site,
-        name: p.name,
-        url: p.url,
-        comparisonText,
-        compStatus,
-        past
-      };
-    });
-
-    return {
-      currentPrice,
-      currentRating,
-      currentInstallments,
-      platforms: items
-    };
+  // table = brands.json → tiendas_comparar { pais: [{ nombre, dominio, url_busqueda }] }. Máximo 2, nunca la tienda actual.
+  function getCompareLinks(host, country, query, table) {
+    if (!query || !table) return [];
+    const list = table[String(country || "").trim()] || [];
+    return list
+      .filter((s) => s && s.url_busqueda && !hostMatches(host, s.dominio))
+      .slice(0, 2)
+      .map((s) => ({ name: s.nombre, url: fill(s.url_busqueda, { q: query }) }));
   }
 
   // Detección de certificaciones mencionadas en texto o especificaciones
@@ -884,7 +846,7 @@
     };
   }
 
-  function extractReliability(doc, siteName) {
+  function extractReliability(doc, siteName, country) {
     let r;
     if (siteName === "amazon") r = extractAmazonReliability(doc);
     else if (siteName === "mercadolibre") r = extractMercadoLibreReliability(doc);
@@ -894,7 +856,7 @@
     else if (siteName === "bestbuy") r = extractBestBuyReliability(doc);
     else r = extractGenericReliability(doc);
 
-    r.price = extractPrice(doc, siteName);
+    r.price = extractPrice(doc, siteName, country);
     r.installments = extractInstallments(doc, siteName);
     r.structuredRating = extractStructuredRating(doc);
     r.productId = extractProductId(doc, siteName);
@@ -1026,10 +988,12 @@
     const norms = getApplicableNorms(category, brandGroup, title, country);
     const legalWarranty = getLegalWarranty(country);
 
-    const siteName = (siteEntry && siteEntry.id) || (rel.storeName ? rel.storeName.toLowerCase() : "");
-    const priceComp = computePriceComparison(options && options.priceHistory, rel.price ? rel.price.amount : null);
-    const trackers = getTrackerLinks(siteName, rel.productId, title, country);
-    const crossPlatforms = getCrossPlatformOptions(siteName, title, country, rel.price ? rel.price.amount : null, rel.structuredRating, rel.installments, options && options.crossPlatformHistory);
+    options = options || {};
+    const host = options.host || (siteEntry && siteEntry.d) || "";
+    const query = searchQuery(options.rawTitle || title, options.brand || "", rel.modelIds || {});
+    const priceComp = rel.price ? computePriceComparison(options.priceHistory, rel.price.amount, options.now) : null;
+    const trackers = getTrackerLinks(host, rel.productId, query, options.rastreadores);
+    const compareLinks = getCompareLinks(host, country, query, options.tiendasComparar);
 
     return {
       level,
@@ -1054,8 +1018,9 @@
       structuredRating: rel.structuredRating || null,
       productId: rel.productId || null,
       priceComparison: priceComp,
+      historyEnabled: options.historyEnabled !== false,
       trackers,
-      crossPlatforms
+      compareLinks
     };
   }
 
@@ -1107,7 +1072,7 @@
     return "";
   }
 
-  function extract(doc, host) {
+  function extract(doc, host, country) {
     const s = site(host);
     const base = s && SITE[s] ? SITE[s](doc) : { candidates: [], title: "" };
     const c = base.candidates.slice();
@@ -1127,10 +1092,11 @@
     const spec = specRow(doc);
     if (spec) c.push({ text: spec, source: "Tabla de especificaciones" });
     if (!base.title) base.title = txt(q(doc, "h1")) || (doc.title || "");
-    const reliability = extractReliability(doc, s);
+    const reliability = extractReliability(doc, s, country);
     const categoryPath = extractCategoryPath(doc, s);
     const specsEl = q(doc, "#feature-bullets, #productDetails_techSpec_section_1, #specifications, .ui-pdp-specs, table, #detailBullets_feature_div, [data-testid='product-description']");
     const specsText = specsEl ? txt(specsEl) : "";
+    reliability.modelIds = extractModelAndGtin(doc, specsText);
     return { site: s, candidates: c, title: base.title, categoryPath, reliability, specsText };
   }
 
@@ -1151,5 +1117,12 @@
   QED.extractProductId = extractProductId;
   QED.computePriceComparison = computePriceComparison;
   QED.getTrackerLinks = getTrackerLinks;
-  QED.getCrossPlatformOptions = getCrossPlatformOptions;
+  QED.getCompareLinks = getCompareLinks;
+  QED.searchQuery = searchQuery;
+  QED.extractModelAndGtin = extractModelAndGtin;
+  QED.priceHistoryKey = priceHistoryKey;
+  QED.recordPricePoint = recordPricePoint;
+  QED.prunePriceHistory = prunePriceHistory;
+  QED.formatMoney = formatMoney;
+  QED.currencyForCountry = currencyForCountry;
 })(typeof globalThis !== "undefined" ? globalThis : this);

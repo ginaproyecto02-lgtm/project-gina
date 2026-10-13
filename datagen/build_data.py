@@ -91,6 +91,33 @@ ADITIVOS = json.load(open(aditivos_path, encoding="utf-8")) if os.path.exists(ad
 alertas_path = os.path.join(os.path.dirname(__file__), "alertas.json")
 ALERTAS = json.load(open(alertas_path, encoding="utf-8")) if os.path.exists(alertas_path) else []
 
+# ---- Rastreadores de precio (solo enlaces verificados) y tiendas para «Buscar en otra tienda»
+RASTREADORES = json.load(open(os.path.join(os.path.dirname(__file__), "rastreadores.json"), encoding="utf-8"))["rastreadores"]
+for r in RASTREADORES:
+    assert r.get("nombre") and r.get("verificado"), f"rastreador sin nombre o fecha de verificación: {r}"
+    if not r.get("excluido"):
+        assert r.get("fuente") and r.get("dominios"), f"rastreador {r['nombre']}: falta fuente o dominios"
+        for d, u in r["dominios"].items():
+            assert u.startswith("https://"), f"rastreador {r['nombre']} ({d}): URL no https"
+TIENDAS_COMPARAR = json.load(open(os.path.join(os.path.dirname(__file__), "tiendas_comparar.json"), encoding="utf-8"))["tiendas"]
+_sitios_pais = {}
+for e in S:
+    _sitios_pais.setdefault(e["pais"], set()).add(e["d"])
+for pais, lst in TIENDAS_COMPARAR.items():
+    for t in lst:
+        assert t["url_busqueda"].startswith("https://") and "{q}" in t["url_busqueda"], f"tiendas_comparar {pais}: URL inválida {t}"
+        assert t["dominio"] in _sitios_pais.get(pais, set()), f"tiendas_comparar {pais}: {t['dominio']} no está en sites_data.py de ese país"
+
+# ---- Canal y marcas propias: «descuento» es un formato de tienda, no un tipo de dueño
+CANALES = {"descuento", "conveniencia", "departamental", "supermercado"}
+for gid, grp in base.G.items():
+    assert grp["tipo"] not in ("Hard discount", "hard_discount", "Marca propia"), f"grupo {gid}: «{grp['tipo']}» no es un tipo de dueño (usa canal o marca_propia)"
+    if grp.get("canal"):
+        assert grp["canal"] in CANALES, f"grupo {gid}: canal desconocido {grp['canal']}"
+    if grp.get("marca_propia"):
+        assert grp.get("url", "").startswith("https://") and grp.get("fuente"), f"grupo {gid}: marca propia sin fuente"
+        assert grp.get("paises_venta"), f"grupo {gid}: marca propia sin paises_venta"
+
 brands = {
     "version": VERSION,
     "licencia": "CC BY 4.0",
@@ -105,6 +132,8 @@ brands = {
     "dominios": DOMINIOS,
     "aditivos": ADITIVOS,
     "alertas": ALERTAS,
+    "rastreadores": RASTREADORES,
+    "tiendas_comparar": TIENDAS_COMPARAR,
 }
 os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
 # ---- Validación de licencia_origen (CC0 | ODbL | oficial | prensa) y atribución obligatoria para ODbL

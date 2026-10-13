@@ -1,0 +1,45 @@
+{
+ "_nota": "Rastreadores de precio externos. Gina solo ENLAZA (no extrae datos: sus términos no lo permiten). Cada entrada lleva la fecha y la fuente con que se verificó el dominio. Una entrada con 'excluido' no se muestra.",
+ "rastreadores": [
+  {
+   "nombre": "CamelCamelCamel",
+   "desc": "Historial de precios de Amazon",
+   "requiere": "asin",
+   "dominios": {
+    "amazon.com": "https://camelcamelcamel.com/product/{asin}",
+    "amazon.ca": "https://ca.camelcamelcamel.com/product/{asin}",
+    "amazon.co.uk": "https://uk.camelcamelcamel.com/product/{asin}"
+   },
+   "verificado": "2026-10-13",
+   "fuente": "https://camelcamelcamel.com/features · https://ca.camelcamelcamel.com/features · https://uk.camelcamelcamel.com/features",
+   "pendiente": "amazon.com.mx, amazon.de, amazon.fr, amazon.it, amazon.es, amazon.co.jp: no se confirmó soporte en su sitio; sin enlace hasta confirmarlo."
+  },
+  {
+   "nombre": "Pricearchive",
+   "desc": "Historial de precios de AliExpress desde 2016",
+   "requiere": "q",
+   "dominios": {
+    "aliexpress.com": "https://www.pricearchive.org/search/aliexpress.com/{q}/1",
+    "aliexpress.us": "https://www.pricearchive.org/search/aliexpress.com/{q}/1"
+   },
+   "verificado": "2026-10-13",
+   "fuente": "https://www.pricearchive.org/"
+  },
+  {
+   "nombre": "Alitools",
+   "desc": "Extensión con historial de precios y calificación del vendedor en AliExpress",
+   "requiere": null,
+   "dominios": {
+    "aliexpress.com": "https://alitools.io/",
+    "aliexpress.us": "https://alitools.io/"
+   },
+   "verificado": "2026-10-13",
+   "fuente": "https://alitools.io/"
+  },
+  {
+   "nombre": "Waltrack",
+   "excluido": "waltrack.net redirige a waltrack.com, que el 2026-10-13 mostraba un sitio de casino en línea sin relación con Walmart. No se enlaza.",
+   "verificado": "2026-10-13"
+  }
+ ]
+}

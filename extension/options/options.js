@@ -30,7 +30,7 @@ const DEFAULTS = {
   classify: { provider: "anthropic", key: "", model: AI.PROVIDERS.anthropic.classifyModel, base: "" },
   research: { provider: "anthropic", key: "", model: AI.PROVIDERS.anthropic.researchModel, base: "", useClassifyKey: false },
   dailyLimit: 100, weeklyLimit: 25, revalidateLimit: 3, repLimit: 3, cacheDays: 90, jobEnabled: false, remoteUrl: "",
-  values: {}, showLobbying: true, showAlternatives: true, openFoodFacts: false, userProfile: "ninguno"
+  values: {}, showLobbying: true, showAlternatives: true, openFoodFacts: false, priceHistory: true, userProfile: "ninguno"
 };
 let PROJ = {};
 const REP = QED.REP;
@@ -140,7 +140,8 @@ function readForm() {
     values: Object.fromEntries(Array.from(document.querySelectorAll("#values [data-value]")).map((el) => [el.dataset.value, parseInt(el.value, 10)])),
     showLobbying: $("#showLobbying") ? $("#showLobbying").checked : true,
     showAlternatives: $("#showAlternatives") ? $("#showAlternatives").checked : true,
-    openFoodFacts: !!($("#openFoodFacts") && $("#openFoodFacts").checked)
+    openFoodFacts: !!($("#openFoodFacts") && $("#openFoodFacts").checked),
+    priceHistory: $("#priceHistory") ? $("#priceHistory").checked : true
   };
 }
 
@@ -180,6 +181,7 @@ function writeForm(s) {
   if ($("#showLobbying")) $("#showLobbying").checked = s.showLobbying !== false;
   if ($("#showAlternatives")) $("#showAlternatives").checked = s.showAlternatives !== false;
   if ($("#openFoodFacts")) $("#openFoodFacts").checked = !!s.openFoodFacts;
+  if ($("#priceHistory")) $("#priceHistory").checked = s.priceHistory !== false;
 
   if (s.aiEnabled || s.jobEnabled || (s.classify && s.classify.key) || (s.research && s.research.key)) {
     const adv = document.querySelector("details.advanced");
@@ -487,12 +489,22 @@ $("#sendPending").addEventListener("click", async () => {
 // Tus valores se guardan al momento (no necesitan permisos).
 document.addEventListener("change", async (e) => {
   const trg = e.target;
-  if (!(trg instanceof HTMLElement) || !(trg.dataset.value || trg.id === "showLobbying" || trg.id === "showAlternatives")) return;
+  if (!(trg instanceof HTMLElement) || !(trg.dataset.value || ["showLobbying", "showAlternatives", "openFoodFacts", "priceHistory"].includes(trg.id))) return;
   const s = await loadSettings();
   const f = readForm();
   s.values = f.values; s.showLobbying = f.showLobbying; s.showAlternatives = f.showAlternatives;
+  s.openFoodFacts = f.openFoodFacts; s.priceHistory = f.priceHistory;
   await api.storage.local.set({ settings: s });
+  // Apagar el historial también borra lo guardado (no se conserva nada que el usuario no quiere guardar).
+  if (trg.id === "priceHistory" && !f.priceHistory) await api.storage.local.remove("priceHistory");
   msg("msg_values", t("msg_values_saved"), "ok");
+});
+
+// Borrar el historial de precios guardado en este navegador.
+const clearBtn = document.getElementById("clearPriceHistory");
+if (clearBtn) clearBtn.addEventListener("click", async () => {
+  await api.storage.local.remove("priceHistory");
+  msg("msg_values", t("price_history_cleared"), "ok");
 });
 
 loadSettings().then((s) => {

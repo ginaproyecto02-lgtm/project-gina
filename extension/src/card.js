@@ -201,8 +201,8 @@
   .price-cell { text-align: center; background: #fff; padding: 5px 4px; border-radius: 6px; border: 1px solid #e8ecf3; }
   .price-cell-title { font-size: 10px; color: #6a7386; font-weight: 600; text-transform: uppercase; }
   .price-cell-val { font-size: 11px; font-weight: 700; margin-top: 2px; }
-  .price-up { color: #b03024; font-weight: 600; }
-  .price-down { color: #2f7a24; font-weight: 600; }
+  .price-up { color: #8a1f14; font-weight: 600; }
+  .price-down { color: #1f5f19; font-weight: 600; }
   .price-neutral { color: #55627a; font-weight: 600; }
   .price-hist-init { font-size: 11px; color: #64748b; margin-top: 6px; text-align: center; }
   .price-msi { display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; color: #1f4e8c; margin-top: 6px; }
@@ -371,6 +371,66 @@
     return h;
   }
 
+  // ---------------------------------------------------------------- Precio (sección Mercado)
+  function priceDiffText(w) {
+    if (!w || w.insufficient) return t("price_insufficient");
+    if (w.status === "expensive") return t("price_above", { n: w.diffPct });
+    if (w.status === "cheap") return t("price_below", { n: Math.abs(w.diffPct) });
+    return t("price_around", { n: (w.diffPct > 0 ? "+" : "") + w.diffPct });
+  }
+  function priceDiffClass(w) {
+    if (!w || w.insufficient) return "price-neutral";
+    return w.status === "expensive" ? "price-up" : w.status === "cheap" ? "price-down" : "price-neutral";
+  }
+
+  function renderPricePanel(rel) {
+    if (!rel || !rel.price || !rel.price.amount) return "";
+    const priceFmt = esc(QED.formatMoney ? QED.formatMoney(rel.price.amount, rel.price.currency) : rel.price.formatted);
+    const comp = rel.priceComparison;
+    let histHtml = "";
+    if (rel.historyEnabled === false) {
+      histHtml = `<div class="price-hist-init">${t("price_history_off")}</div>`;
+    } else if (!comp || !comp.hasHistory) {
+      histHtml = `<div class="price-hist-init">${t("price_first_visit")}</div>`;
+    } else {
+      const cell = (title, w) => `<div class="price-cell"><div class="price-cell-title">${esc(title)}</div><div class="price-cell-val ${priceDiffClass(w)}"${w && !w.insufficient ? ` title="${esc(QED.formatMoney ? QED.formatMoney(w.avg, rel.price.currency) : w.avg)}"` : ""}>${esc(priceDiffText(w))}</div></div>`;
+      histHtml = `
+        <div class="price-grid">${cell(t("price_1w"), comp.oneWeek)}${cell(t("price_1m"), comp.oneMonth)}${cell(t("price_3m"), comp.threeMonths)}</div>
+        <div class="d-src" style="margin-top:6px;">${esc(t("price_visits_label", { n: comp.visits }))}</div>`;
+    }
+    const inst = rel.installments || {};
+    const msiText = inst.hasMsi ? (inst.months ? t("price_msi_months", { n: inst.months }) : t("price_msi_generic")) : t("price_no_msi");
+    const msiHtml = `<div class="price-msi"${inst.hasMsi ? "" : ' style="color:#535d70;font-weight:normal;"'}>${esc(msiText)}</div>`;
+    const rat = rel.structuredRating;
+    const ratBox = rat && rat.score != null
+      ? `<div style="text-align:right;"><div class="price-cur-lbl">${t("lbl_rating")}</div><div style="font-weight:700;font-size:12px;color:#1c2233;">${esc(String(rat.score))} / ${esc(String(rat.max || 5))}${rat.count ? ` <span style="font-size:10px;color:#535d70;font-weight:normal;">(${esc(String(rat.count))})</span>` : ""}</div></div>`
+      : "";
+    return `
+      <div class="price-panel">
+        <div class="price-main">
+          <div><div class="price-cur-lbl">${t("lbl_price")}</div><div class="price-current">${priceFmt}</div></div>
+          ${ratBox}
+        </div>
+        ${msiHtml}
+        ${histHtml}
+      </div>`;
+  }
+
+  function renderCompareAndTrackers(rel) {
+    let h = "";
+    if (rel && rel.compareLinks && rel.compareLinks.length) {
+      h += `<div class="cross-plat-box"><div class="d-k" style="margin-bottom:4px;">${t("lbl_compare_other")}</div>
+        ${rel.compareLinks.map((c) => `<div class="cross-plat-item"><div class="cross-plat-name">${esc(c.name)}</div><a href="${esc(safe(c.url))}" class="cross-plat-link" target="_blank" rel="noopener noreferrer">${esc(c.name)} ↗</a></div>`).join("")}
+        <div class="d-src">${t("compare_hint")}</div></div>`;
+    }
+    if (rel && rel.trackers && rel.trackers.length) {
+      h += `<div class="trackers-box"><div class="trackers-title">${t("lbl_price_trackers")}</div>
+        ${rel.trackers.map((tr) => `<div class="tracker-item"><a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.universal ? t("tracker_google") : tr.name)} ↗</a>${tr.desc ? ` <span class="tracker-desc">· ${esc(tr.desc)}</span>` : ""}</div>`).join("")}
+      </div>`;
+    }
+    return h;
+  }
+
   // ---------------------------------------------------------------- SECCIÓN 1: Confiabilidad
   function renderReliability(res) {
     const rel = res.reliabilityEval || (QED.evaluateReliability ? QED.evaluateReliability(
@@ -384,92 +444,13 @@
     const notStated = t("rel_not_stated");
     const srcPage = t("src_page");
 
-    // 1. Panel de precio y comparativa temporal (1 semana, 1 mes, 3 meses)
-    let priceBlock = "";
-    if (rel.price && rel.price.amount) {
-      const priceFmt = esc(rel.price.formatted || `$${rel.price.amount.toFixed(2)} ${rel.price.currency || ""}`.trim());
-      const comp = rel.priceComparison;
-
-      let gridHtml = "";
-      if (comp && comp.hasHistory) {
-        const renderCell = (periodTitle, periodData) => {
-          if (!periodData) {
-            return `<div class="price-cell">
-              <div class="price-cell-title">${esc(periodTitle)}</div>
-              <div class="price-cell-val" style="color:#7a8396;">—</div>
-            </div>`;
-          }
-          const cls = periodData.status === "expensive" ? "price-up" : periodData.status === "cheap" ? "price-down" : "price-neutral";
-          return `<div class="price-cell">
-            <div class="price-cell-title">${esc(periodTitle)}</div>
-            <div class="price-cell-val ${cls}" title="Promedio: $${periodData.avg}">${periodData.arrow} ${periodData.diffPct > 0 ? "+" : ""}${periodData.diffPct}%</div>
-          </div>`;
-        };
-        gridHtml = `
-          <div class="price-grid">
-            ${renderCell(t("price_1w"), comp.oneWeek)}
-            ${renderCell(t("price_1m"), comp.oneMonth)}
-            ${renderCell(t("price_3m"), comp.threeMonths)}
-          </div>
-        `;
-      } else {
-        gridHtml = `<div class="price-hist-init">${t("price_tracking_started")}</div>`;
-      }
-
-      // MSI
-      let msiHtml = "";
-      if (rel.installments) {
-        if (rel.installments.hasMsi) {
-          msiHtml = `<div class="price-msi">💳 ${esc(rel.installments.text || `Hasta ${rel.installments.months} MSI`)}</div>`;
-        } else {
-          msiHtml = `<div class="price-msi" style="color:#535d70;font-weight:normal;">💳 ${esc(rel.installments.text || t("price_no_msi"))}</div>`;
-        }
-      }
-
-      // Rating estructurado si existe
-      const rat = rel.structuredRating;
-      let ratBox = "";
-      if (rat && rat.value) {
-        ratBox = `<div style="text-align:right;"><div class="price-cur-lbl">${t("lbl_rating")}</div><div style="font-weight:700;font-size:12px;color:#1c2233;">⭐ ${esc(rat.value)}/5${rat.count ? ` <span style="font-size:10px;color:#6b7280;font-weight:normal;">(${esc(rat.count)})</span>` : ""}</div></div>`;
-      }
-
-      priceBlock = `
-        <div class="price-panel">
-          <div class="price-main">
-            <div>
-              <div class="price-cur-lbl">${t("lbl_price")}</div>
-              <div class="price-current">${priceFmt}</div>
-            </div>
-            ${ratBox}
-          </div>
-          ${msiHtml}
-          ${gridHtml}
-        </div>
-      `;
-    }
-
-    // 2. Comparativa en otras 2 plataformas
-    let crossBox = "";
-    if (rel.crossPlatforms && rel.crossPlatforms.platforms && rel.crossPlatforms.platforms.length) {
-      const pItems = rel.crossPlatforms.platforms.map((cp) => {
-        const compClass = cp.compStatus === "cheaper" ? "price-down" : cp.compStatus === "expensive" ? "price-up" : "price-neutral";
-        return `
-          <div class="cross-plat-item">
-            <div>
-              <div class="cross-plat-name">${esc(cp.name)}</div>
-              <div class="cross-plat-comp ${compClass}">${esc(cp.comparisonText)}</div>
-            </div>
-            <a href="${esc(safe(cp.url))}" class="cross-plat-link" target="_blank" rel="noopener noreferrer">${t("btn_compare")} ↗</a>
-          </div>
-        `;
-      }).join("");
-
-      crossBox = `
-        <div class="cross-plat-box">
-          <div class="d-k" style="margin-bottom:4px;">${t("lbl_cross_platforms")}</div>
-          ${pItems}
-        </div>
-      `;
+    // Una sola línea de precio en Confiabilidad: «¿Descuento real?» (el panel completo está en Mercado).
+    let discountLine = "";
+    if (rel.price && rel.historyEnabled !== false) {
+      const m = rel.priceComparison && rel.priceComparison.oneMonth;
+      discountLine = (m && !m.insufficient)
+        ? `<div class="d-row"><div class="d-v" style="font-weight:normal;">${t("rel_discount_line", { txt: esc(priceDiffText(m)) })}</div><div class="d-src">${esc(t("price_visits_label", { n: rel.priceComparison.visits }))}</div></div>`
+        : `<div class="d-row"><div class="d-v" style="font-weight:normal;color:#535d70;">${t("rel_discount_unknown")}</div></div>`;
     }
 
     // Vendedor
@@ -553,24 +534,6 @@
       `;
     }
 
-    // 3. Trackers de libre uso (CamelCamelCamel, Pricearchive, Alitools, Waltrack, HARPA AI/Universal)
-    let trackersBox = "";
-    if (rel.trackers && rel.trackers.length) {
-      const tItems = rel.trackers.map((tr) => `
-        <div class="tracker-item">
-          <a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.name)} ↗</a>
-          <span class="tracker-desc">· ${esc(tr.desc)}</span>
-        </div>
-      `).join("");
-
-      trackersBox = `
-        <div class="trackers-box">
-          <div class="trackers-title">📊 ${t("lbl_free_trackers")}</div>
-          ${tItems}
-        </div>
-      `;
-    }
-
     // Caja de aviso si requiere revisión
     let tipBox = "";
     if (rel.level === "check") {
@@ -578,8 +541,7 @@
     }
 
     return `
-      ${priceBlock}
-      ${crossBox}
+      ${discountLine}
       ${sellerRow}
       ${ratingRow}
       ${shipRow}
@@ -590,7 +552,6 @@
       ${normsRow}
       ${certsRow}
       ${alertsRow}
-      ${trackersBox}
       ${tipBox}
     `;
   }
@@ -629,28 +590,8 @@
         const fuente = it.group.url ? `<a href="${esc(safe(it.group.url))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>` : "";
         const budgetBadge = it.esEconomica ? ` · <span style="color:#1b5e20;font-weight:600;">🏷️ ${t("alt_badge_budget")}${it.group.ahorro_fuente ? ` (<a href="${esc(safe(it.group.ahorro_fuente))}" target="_blank" rel="noopener noreferrer">${t("source").toLowerCase()}</a>)` : ""}</span>` : "";
 
-        // Distintivo por tipo y disponibilidad
-        let tipoBadge = "";
-        let whereToFind = "";
-        const gTipo = it.group.tipo;
-        const gEmpresa = (it.group.empresa || "").toLowerCase();
-
-        if (gTipo === "hard_discount" || /3b|waldo/i.test(gEmpresa) || /tiendas 3b|waldo's/i.test(it.group.empresa)) {
-          tipoBadge = `<span class="alt-badge discount">💰 ${t("alt_badge_discount")}</span>`;
-          if (/3b/i.test(gEmpresa)) {
-            whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_3b")}</div>`;
-          } else if (/waldo/i.test(gEmpresa)) {
-            whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_waldos")}</div>`;
-          } else {
-            whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_discount")}</div>`;
-          }
-        } else if (gTipo === "marca_propia" || /walmart|aurrera|soriana|chedraui|la comer|heb/i.test(gEmpresa)) {
-          tipoBadge = `<span class="alt-badge propia">🏷️ ${t("alt_badge_store_brand")}</span>`;
-          whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_supermarkets")}</div>`;
-        } else {
-          tipoBadge = `<span class="alt-badge local">🏠 ${t("alt_badge_local_indep")}</span>`;
-          whereToFind = `<div class="alt-disp">📍 ${t("alt_available_in_retail")}</div>`;
-        }
+        const tipoBadge = `<span class="alt-badge local">${t("alt_badge_local_indep")}</span>`;
+        const whereToFind = "";
 
         return `
           <div class="alt-box">
@@ -690,7 +631,7 @@
         <div class="d-row" style="margin-top:10px;">
           <div class="d-k">${t("lbl_category_dominance")}</div>
           <div class="d-v" style="font-weight:normal;line-height:1.45;">${domLines}</div>
-          <div class="d-src">${t("src_official", { source: "Registros corporativos públicos" })}</div>
+
         </div>
       `;
     }
@@ -709,8 +650,24 @@
       `;
     }
 
+    // Marcas propias de cadenas (bloque aparte; nunca son «alternativa local»)
+    let storeBrandsHtml = "";
+    if (a && a.storeBrands && a.storeBrands.length) {
+      const lines = a.storeBrands.map((sb) => `<div style="margin-bottom:4px;"><b>${esc(sb.marcas.join(", "))}</b> · ${esc(sb.group.empresa)}${sb.group.url ? ` · <small><a href="${esc(safe(sb.group.url))}" target="_blank" rel="noopener noreferrer">${esc(sb.group.fuente || t("source").toLowerCase())}</a></small>` : ""}</div>`).join("");
+      storeBrandsHtml = `
+        <div class="d-row" style="margin-top:10px;">
+          <div class="d-k">${t("lbl_store_brands")}</div>
+          <div class="d-v" style="font-weight:normal;line-height:1.45;">${lines}</div>
+          <div class="d-src">${t("store_brands_note")}</div>
+        </div>`;
+    }
+
+    const rel = res.reliabilityEval || {};
     return `
+      ${renderPricePanel(rel)}
+      ${renderCompareAndTrackers(rel)}
       ${localAltHtml}
+      ${storeBrandsHtml}
       ${dominantHtml}
       ${otherBrandsHtml}
       <div class="tip-box">${t("alt_saver_tip")}</div>

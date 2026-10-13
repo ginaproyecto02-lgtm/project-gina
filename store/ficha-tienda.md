@@ -118,7 +118,7 @@ Help shoppers make informed purchases: seller and product reliability shown on t
 
 | Permission | Justification |
 |---|---|
-| `storage` | Saves the user's preferences and values, the cache of identified brands, the list of pending brands, reputation records from the optional weekly research, a local count of which companies the user sees (used only to prioritize that research) and the API keys the user enters. |
+| `storage` | Saves the user's preferences and values, the cache of identified brands, the list of pending brands, reputation records from the optional weekly research, a local count of which companies the user sees (used only to prioritize that research), an optional local price history (product ID, price and date only; at most 300 products and 90 days; the user can turn it off and clear it in Options) and the API keys the user enters. Nothing of this is sent anywhere. |
 | `alarms` | Schedules the weekly download of the project's updated data file and the optional personal research. |
 | Host permissions (content-script sites) | The extension runs only on 335 specific shopping and travel sites to read the product brand or the airline names and show the card. It does not run on other sites. |
 | Optional host permissions (api.anthropic.com, generativelanguage.googleapis.com, api.groq.com, api.x.ai, https://*/*) | Requested only when the user saves their own AI key, to call the API of the provider they choose. A specific origin under `https://*/*` is requested only if the user configures an OpenAI-compatible provider at their own address or a remote data file on their own server. |

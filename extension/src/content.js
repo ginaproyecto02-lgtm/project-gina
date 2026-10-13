@@ -9,23 +9,23 @@
   const QED = globalThis.QED;
   const api = typeof browser !== "undefined" ? browser : chrome;
   let index = null, alt = null, airIndex = null, packaged = null, registry = null, entry = null;
-  let prefs = { enabled: true, minimized: false, aiEnabled: false, values: {}, showLobbying: true, showAlternatives: true };
-  let cachedPriceHistory = {}, cachedCrossHistory = {};
+  let prefs = { enabled: true, minimized: false, aiEnabled: false, values: {}, showLobbying: true, showAlternatives: true, priceHistory: true };
+  let cachedPriceHistory = {};
   let lastKey = "", closedFor = "", lastResult = null, timer = null, seq = 0;
 
   async function load() {
     if (!packaged) packaged = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
     if (!registry) registry = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
     if (!QED.PROJECT) { try { QED.PROJECT = await (await fetch(api.runtime.getURL("data/proyecto.json"))).json(); } catch (e) { QED.PROJECT = {}; } }
-    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory", "crossPlatformHistory"]);
+    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory"]);
     prefs.enabled = st.enabled !== false;
     prefs.minimized = !!st.minimized;
     prefs.aiEnabled = !!(st.settings && st.settings.aiEnabled && st.settings.classify && st.settings.classify.key);
     prefs.values = (st.settings && st.settings.values) || {};
     prefs.showLobbying = !(st.settings && st.settings.showLobbying === false);
     prefs.showAlternatives = !(st.settings && st.settings.showAlternatives === false);
-    cachedPriceHistory = st.priceHistory || {};
-    cachedCrossHistory = st.crossPlatformHistory || {};
+    prefs.priceHistory = !(st.settings && st.settings.priceHistory === false);
+    cachedPriceHistory = prefs.priceHistory ? QED.prunePriceHistory(st.priceHistory || {}) : {};
     const remote = st.remoteBase && st.remoteBase.data;
     const db = remote && String(remote.version) > String(packaged.version) ? remote : packaged;
     if (!db.aerolineas) db.aerolineas = packaged.aerolineas; // bases remotas antiguas sin aerolíneas
@@ -81,6 +81,7 @@
     const currentGid = res.group && res.group.id;
     const otherBrands = currentGid ? QED.ALT.otherBrandsOfSameOwner(alt, currentGid, brand || res.brandText, 6) : [];
     const dominant = catRes.confianza === "alta" ? QED.ALT.categoryDominantBrands(alt, cat, 4, currentGid, subcat) : [];
+    const storeBrands = catRes.confianza === "alta" ? QED.ALT.storeBrands(alt, cat, entry.pais, currentGid, subcat, 4) : [];
     res.alternativas = {
       cat,
       subcat,
@@ -91,25 +92,19 @@
       items,
       otherBrands,
       dominant,
+      storeBrands,
       actualEsLocal: !!(res.group && QED.ALT.INDEP[res.group.tipo] && QED.ALT.countries(res.group.pais).includes(entry.pais))
     };
     return res;
   }
 
-  async function recordPrice(productId, price, title) {
-    if (!price || !price.amount) return;
-    const pKey = (productId && productId.id) || (title ? title.slice(0, 40) : "");
-    if (!pKey) return;
+  // Historial de precios: solo en este navegador, con límites (300 productos, 90 días, 1 punto por día).
+  // Clave = sitio + id del producto (ASIN, MLM, ID de Walmart, GTIN o SKU); sin id real no se guarda nada.
+  async function recordPrice(key, price) {
+    if (!prefs.priceHistory || !key || !price || !(price.amount > 0)) return;
     try {
-      const now = Date.now();
-      const list = cachedPriceHistory[pKey] || [];
-      const last = list[list.length - 1];
-      if (!last || last.p !== price.amount || (now - last.t) > 3600000) {
-        list.push({ t: now, p: price.amount });
-        if (list.length > 100) list.shift();
-        cachedPriceHistory[pKey] = list;
-        await api.storage.local.set({ priceHistory: cachedPriceHistory });
-      }
+      cachedPriceHistory = QED.recordPricePoint(cachedPriceHistory, key, price.amount, price.currency);
+      await api.storage.local.set({ priceHistory: cachedPriceHistory });
     } catch (e) {}
   }
 
@@ -122,20 +117,28 @@
     const cat = catRes ? (typeof catRes === "string" ? catRes : catRes.cat) : null;
     const catConf = catRes ? (typeof catRes === "string" ? "media" : (catRes.confianza || "ninguna")) : "ninguna";
     const country = entry ? entry.pais : "MX";
-    if (data.reliability && data.reliability.price) {
-      recordPrice(data.reliability.productId, data.reliability.price, data.title);
-    }
+    const rel = data.reliability || {};
+    const pKey = QED.priceHistoryKey(QED.site(location.hostname) || location.hostname, rel.productId);
+    // El historial se lee ANTES de guardar la visita de hoy (el punto de hoy no entra en el promedio).
+    const prodHistory = prefs.priceHistory && pKey ? (cachedPriceHistory[pKey] || null) : null;
+    if (rel.price) recordPrice(pKey, rel.price);
     if (QED.evaluateReliability) {
-      const pKey = (data.reliability && data.reliability.productId && data.reliability.productId.id) || (data.title ? data.title.slice(0, 40) : "");
-      const prodHistory = (cachedPriceHistory && cachedPriceHistory[pKey]) || [];
       res.reliabilityEval = QED.evaluateReliability(
-        data.reliability,
+        rel,
         res.group,
         cat,
         data.title,
         country,
         entry,
-        { priceHistory: prodHistory, crossPlatformHistory: cachedCrossHistory }
+        {
+          priceHistory: prodHistory,
+          historyEnabled: prefs.priceHistory,
+          host: location.hostname,
+          rawTitle: data.title,
+          brand: res.found ? res.brand : res.brandText,
+          rastreadores: (packaged && packaged.rastreadores) || [],
+          tiendasComparar: (packaged && packaged.tiendas_comparar) || {}
+        }
       );
     }
     if (QED.evaluateProductNotices) {
@@ -159,7 +162,7 @@
   function analyzeProduct(force) {
     const siteName = QED.site(location.hostname);
     if (!QED.isProductPage(document, siteName, location.href, entry)) { QED.hideCard(); lastResult = null; lastKey = ""; return; }
-    const data = QED.extract(document, location.hostname);
+    const data = QED.extract(document, location.hostname, entry ? entry.pais : "");
     if (!data.title && !data.candidates.length) return; // la página aún está cargando
     const key = location.pathname + "|" + data.title + "|" + data.candidates.map((c) => c.text).join(",");
     if (!force && key === lastKey) return;
@@ -224,7 +227,9 @@
   function schedule(force) { clearTimeout(timer); timer = setTimeout(() => analyze(force), 700); }
 
   api.storage.onChanged.addListener(async (ch) => {
-    if (ch.customBrands || ch.enabled || ch.remoteBase || ch.verified || ch.groupPatches || ch.settings || ch.repPatches || ch.priceHistory || ch.crossPlatformHistory) { await load(); schedule(true); }
+    // El historial solo se sincroniza en memoria (p. ej. al borrarlo desde Opciones); no redibuja la tarjeta.
+    if (ch.priceHistory) cachedPriceHistory = prefs.priceHistory ? QED.prunePriceHistory(ch.priceHistory.newValue || {}) : {};
+    if (ch.customBrands || ch.enabled || ch.remoteBase || ch.verified || ch.groupPatches || ch.settings || ch.repPatches) { await load(); schedule(true); }
   });
 
   api.runtime.onMessage.addListener((msg, _sender, reply) => {

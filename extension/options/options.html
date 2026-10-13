@@ -72,7 +72,9 @@
     <label class="row"><input type="checkbox" id="showLobbying"> <span data-i18n="opt_chk_lobbying">Mostrar el lobbying y las donaciones políticas declaradas (dato público, sin etiquetas ideológicas)</span></label>
     <label class="row"><input type="checkbox" id="showAlternatives"> <span data-i18n="opt_chk_alternatives">Sugerir alternativas con dueño local (cooperativas, de empleados, familiares) para el tipo de producto que ves</span></label>
     <label class="row"><input type="checkbox" id="openFoodFacts"> <span data-i18n="opt_chk_openfoodfacts">Consultar ingredientes en Open Food Facts por código de barras (opcional, base colaborativa ODbL)</span></label>
-    <div class="actions"><span class="msg" id="msg_values"></span></div>
+    <label class="row"><input type="checkbox" id="priceHistory"> <span data-i18n="pref_price_history">Guardar historial de precios en este navegador</span></label>
+    <p class="help" data-i18n="pref_price_history_desc">Guarda el identificador del producto (ASIN, MLM, código de barras) y su precio, máximo 300 productos y 90 días. Nunca sale de tu navegador.</p>
+    <div class="actions"><button type="button" id="clearPriceHistory" data-i18n="btn_clear_price_history">Borrar historial de precios</button> <span class="msg" id="msg_values"></span></div>
   </section>
 
   <section class="card">

@@ -1,0 +1,70 @@
+{
+ "_nota": "Tiendas de búsqueda para 'Buscar en otra tienda', por país (deben estar en sites_data.py de ese país). Gina solo abre la búsqueda; no lee precios de otras tiendas. Se muestran las 2 primeras distintas de la tienda actual. {q} = marca + modelo, código de barras o núcleo del título. Patrones de búsqueda públicos revisados el 2026-10-13; un país sin entrada no muestra enlaces.",
+ "tiendas": {
+  "México": [
+   {"nombre": "Mercado Libre", "dominio": "mercadolibre.com.mx", "url_busqueda": "https://listado.mercadolibre.com.mx/{q}"},
+   {"nombre": "Amazon México", "dominio": "amazon.com.mx", "url_busqueda": "https://www.amazon.com.mx/s?k={q}"},
+   {"nombre": "Walmart México", "dominio": "walmart.com.mx", "url_busqueda": "https://www.walmart.com.mx/search?q={q}"}
+  ],
+  "EE.UU.": [
+   {"nombre": "Amazon", "dominio": "amazon.com", "url_busqueda": "https://www.amazon.com/s?k={q}"},
+   {"nombre": "Walmart", "dominio": "walmart.com", "url_busqueda": "https://www.walmart.com/search?q={q}"},
+   {"nombre": "Best Buy", "dominio": "bestbuy.com", "url_busqueda": "https://www.bestbuy.com/site/searchpage.jsp?st={q}"}
+  ],
+  "Canadá": [
+   {"nombre": "Amazon.ca", "dominio": "amazon.ca", "url_busqueda": "https://www.amazon.ca/s?k={q}"},
+   {"nombre": "Walmart Canada", "dominio": "walmart.ca", "url_busqueda": "https://www.walmart.ca/search?q={q}"},
+   {"nombre": "Best Buy Canada", "dominio": "bestbuy.ca", "url_busqueda": "https://www.bestbuy.ca/en-ca/search?search={q}"}
+  ],
+  "Brasil": [
+   {"nombre": "Mercado Livre", "dominio": "mercadolivre.com.br", "url_busqueda": "https://lista.mercadolivre.com.br/{q}"},
+   {"nombre": "Amazon Brasil", "dominio": "amazon.com.br", "url_busqueda": "https://www.amazon.com.br/s?k={q}"}
+  ],
+  "Argentina": [
+   {"nombre": "Mercado Libre", "dominio": "mercadolibre.com.ar", "url_busqueda": "https://listado.mercadolibre.com.ar/{q}"}
+  ],
+  "Chile": [
+   {"nombre": "Mercado Libre", "dominio": "mercadolibre.cl", "url_busqueda": "https://listado.mercadolibre.cl/{q}"},
+   {"nombre": "Falabella", "dominio": "falabella.com", "url_busqueda": "https://www.falabella.com/falabella-cl/search?Ntt={q}"}
+  ],
+  "Colombia": [
+   {"nombre": "Mercado Libre", "dominio": "mercadolibre.com.co", "url_busqueda": "https://listado.mercadolibre.com.co/{q}"}
+  ],
+  "Reino Unido": [
+   {"nombre": "Amazon UK", "dominio": "amazon.co.uk", "url_busqueda": "https://www.amazon.co.uk/s?k={q}"},
+   {"nombre": "Argos", "dominio": "argos.co.uk", "url_busqueda": "https://www.argos.co.uk/search/{q}/"}
+  ],
+  "Alemania": [
+   {"nombre": "Amazon.de", "dominio": "amazon.de", "url_busqueda": "https://www.amazon.de/s?k={q}"},
+   {"nombre": "OTTO", "dominio": "otto.de", "url_busqueda": "https://www.otto.de/suche/{q}/"}
+  ],
+  "Francia": [
+   {"nombre": "Amazon.fr", "dominio": "amazon.fr", "url_busqueda": "https://www.amazon.fr/s?k={q}"}
+  ],
+  "España": [
+   {"nombre": "Amazon.es", "dominio": "amazon.es", "url_busqueda": "https://www.amazon.es/s?k={q}"}
+  ],
+  "Italia": [
+   {"nombre": "Amazon.it", "dominio": "amazon.it", "url_busqueda": "https://www.amazon.it/s?k={q}"}
+  ],
+  "Japón": [
+   {"nombre": "Amazon.co.jp", "dominio": "amazon.co.jp", "url_busqueda": "https://www.amazon.co.jp/s?k={q}"},
+   {"nombre": "Rakuten", "dominio": "rakuten.co.jp", "url_busqueda": "https://search.rakuten.co.jp/search/mall/{q}/"}
+  ],
+  "India": [
+   {"nombre": "Amazon.in", "dominio": "amazon.in", "url_busqueda": "https://www.amazon.in/s?k={q}"},
+   {"nombre": "Flipkart", "dominio": "flipkart.com", "url_busqueda": "https://www.flipkart.com/search?q={q}"}
+  ],
+  "Singapur": [
+   {"nombre": "Amazon.sg", "dominio": "amazon.sg", "url_busqueda": "https://www.amazon.sg/s?k={q}"},
+   {"nombre": "Lazada", "dominio": "lazada.sg", "url_busqueda": "https://www.lazada.sg/catalog/?q={q}"}
+  ],
+  "Corea del Sur": [
+   {"nombre": "Coupang", "dominio": "coupang.com", "url_busqueda": "https://www.coupang.com/np/search?q={q}"}
+  ],
+  "China": [
+   {"nombre": "JD.com", "dominio": "jd.com", "url_busqueda": "https://search.jd.com/Search?keyword={q}"}
+  ]
+ },
+ "pendiente": "Francia, España, Italia, Argentina, Colombia y Corea del Sur tienen una sola tienda; Israel ninguna. Agregar la segunda tras revisar su URL de búsqueda."
+}
