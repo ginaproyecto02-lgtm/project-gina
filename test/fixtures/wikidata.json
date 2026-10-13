@@ -1,0 +1,13 @@
+{
+  "results": {
+    "bindings": [
+      {
+        "item": { "type": "uri", "value": "http://www.wikidata.org/entity/Q999101" },
+        "itemLabel": { "type": "literal", "value": "Original Nature's Oils" },
+        "owner": { "type": "uri", "value": "http://www.wikidata.org/entity/Q999102" },
+        "ownerLabel": { "type": "literal", "value": "Original Nature's Oils LLC" },
+        "refUrl": { "type": "uri", "value": "https://www.sec.gov/Archives/edgar/data/original-natures-oils.html" }
+      }
+    ]
+  }
+}

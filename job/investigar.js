@@ -12,6 +12,7 @@
 //  4. REVISAR: Crea rama datos/AAAA-MM-DD y abre PR con el reporte (máx 25 cambios; nunca push a main).
 //  5. PUBLICAR: Solo al hacer merge del PR humano se genera y distribuye la base.
 "use strict";
+const crypto = require("crypto");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
@@ -38,6 +39,20 @@ const DAY = 86400000;
 const env = (k, d) => process.env["GINA_" + k] || process.env["AWARENESS_" + k] || process.env["QED_" + k] || d;
 const readJSON = (f, def) => { try { return JSON.parse(fs.readFileSync(f, "utf8")); } catch (e) { return def; } };
 const slug = (s) => QED.norm(s).normalize("NFD").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 40) || "grupo";
+
+function hash8(str) {
+  return crypto.createHash("sha256").update(String(str || ""), "utf8").digest("hex").slice(0, 8);
+}
+
+function truncateUtf8(str, maxBytes = 20480) {
+  let clean = String(str || "").replace(/\s+/g, " ").trim();
+  if (Buffer.byteLength(clean, "utf8") <= maxBytes) return clean;
+  clean = clean.slice(0, maxBytes);
+  while (Buffer.byteLength(clean, "utf8") > maxBytes) {
+    clean = clean.slice(0, Math.floor(clean.length * 0.9));
+  }
+  return clean;
+}
 
 // ---------------------------------------------------------------- Clasificación de dominios (S2)
 function loadDominios(filePath = DOMINIOS_PATH) {
@@ -280,9 +295,19 @@ async function archiveWayback(url, fetchImpl = fetch) {
 async function verifySource(source, company, controller, dominios, options = {}, fetchImpl = fetch) {
   if (!source || !source.url) return { ok: false, motivo: "Fuente sin URL" };
   const resolved = await resolveUrl(source.url, fetchImpl);
-  if (!resolved.ok) return { ok: false, motivo: resolved.error || `HTTP ${resolved.status}`, url: source.url };
 
-  const finalUrl = resolved.finalUrl;
+  let finalUrl = resolved.finalUrl || source.url;
+  let text = "";
+
+  if (resolved.ok) {
+    text = extractText(resolved.body, resolved.contentType);
+  } else if (source.fromLibrary && (source.extracto || source.cita)) {
+    finalUrl = source.url;
+    text = String(source.extracto || source.cita || "");
+  } else {
+    return { ok: false, motivo: resolved.error || `HTTP ${resolved.status}`, url: source.url };
+  }
+
   const sb = await checkSafeBrowsing(finalUrl, options.safeBrowsingKey, fetchImpl);
   if (!sb.safe) return { ok: false, motivo: "Safe Browsing detectó amenaza", url: finalUrl };
 
@@ -290,14 +315,13 @@ async function verifySource(source, company, controller, dominios, options = {},
   if (nivel === "bloqueado") return { ok: false, motivo: "Dominio bloqueado", nivel: "bloqueado", url: finalUrl };
   if (!nivel) return { ok: false, motivo: "Dominio no listado en dominios.json", nivel: null, url: finalUrl };
 
-  const text = extractText(resolved.body, resolved.contentType);
   const cita = findCitationSentence(text, company, controller);
   if (!cita) {
     return { ok: false, motivo: "Página no contiene cita del controlador ni porcentaje", url: finalUrl };
   }
 
-  let archivoUrl = `https://web.archive.org/web/${finalUrl}`;
-  if (!options.skipArchive) {
+  let archivoUrl = source.archivo_url || `https://web.archive.org/web/${finalUrl}`;
+  if (!options.skipArchive && !source.fromLibrary) {
     archivoUrl = await archiveWayback(finalUrl, fetchImpl);
   }
 
@@ -306,6 +330,7 @@ async function verifySource(source, company, controller, dominios, options = {},
     url_final: finalUrl,
     nivel_dominio: nivel,
     cita,
+    extracto: truncateUtf8(text, 20480),
     archivo_url: archivoUrl,
     safe_browsing: sb.status || "ok"
   };
@@ -317,7 +342,8 @@ async function contrastProposal(prop, existingGroup, dominios, options = {}, fet
   const domainHosts = new Set();
   let hasOficial = false;
 
-  for (const f of prop.fuentes || []) {
+  const rawSources = prop.fuentes || prop.fuentes_esperadas || [];
+  for (const f of rawSources) {
     const r = await verifySource(f, prop.empresa, prop.valor_nuevo, dominios, options, fetchImpl);
     if (r.ok) {
       verifiedSources.push(r);
@@ -404,18 +430,32 @@ function serializeCsvRow(cols) {
   return cols.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",") + "\n";
 }
 
-function getNextBranchName(baseName, execFileImpl = execFileSync) {
+function defaultExecFile(cmd, args, opts) {
+  if (process.platform === "win32" && (cmd === "gh" || cmd === "git")) {
+    const pathDirs = String(process.env.PATH || "").split(path.delimiter);
+    for (const d of pathDirs) {
+      if (!d) continue;
+      const jsShim = path.join(d, cmd + ".js");
+      if (fs.existsSync(jsShim)) {
+        return execFileSync(process.execPath, [jsShim, ...(args || [])], opts);
+      }
+    }
+  }
+  return execFileSync(cmd, args, opts);
+}
+
+function getNextBranchName(baseName, execFileImpl = defaultExecFile, cwd = ROOT) {
   let suffix = 1;
   while (true) {
     const candidate = suffix === 1 ? baseName : `${baseName}-${suffix}`;
     let exists = false;
     try {
-      const outLocal = execFileImpl("git", ["branch", "--list", candidate], { encoding: "utf8" });
+      const outLocal = execFileImpl("git", ["branch", "--list", candidate], { cwd, encoding: "utf8" });
       if (outLocal && outLocal.includes(candidate)) exists = true;
     } catch (_) {}
     if (!exists) {
       try {
-        const outRemote = execFileImpl("git", ["ls-remote", "--heads", "origin", candidate], { encoding: "utf8" });
+        const outRemote = execFileImpl("git", ["ls-remote", "--heads", "origin", candidate], { cwd, encoding: "utf8" });
         if (outRemote && outRemote.includes(candidate)) exists = true;
       } catch (_) {}
     }
@@ -427,8 +467,9 @@ function getNextBranchName(baseName, execFileImpl = execFileSync) {
 }
 
 // ---------------------------------------------------------------- Etapa 4: REVISAR humana mediante Pull Request
-async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun, token, repo, execFileImpl = execFileSync }) {
-  const finalBranchName = getNextBranchName(branchName, execFileImpl);
+async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun, token, repo, execFileImpl = defaultExecFile, rootDir = ROOT }) {
+  const finalBranchName = getNextBranchName(branchName, execFileImpl, rootDir);
+  const statePath = path.join(rootDir, "job", "estado.json");
 
   if (dryRun) {
     return {
@@ -441,25 +482,26 @@ async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun,
 
   // 1. Cerrar PRs obsoletos (>14 días)
   try {
-    const prsOut = execFileImpl("gh", ["pr", "list", "--repo", repo, "--state", "open", "--json", "number,headRefName,createdAt"], { encoding: "utf8" });
+    const prsOut = execFileImpl("gh", ["pr", "list", "--repo", repo, "--state", "open", "--json", "number,headRefName,createdAt"], { cwd: rootDir, encoding: "utf8" });
     const prs = JSON.parse(prsOut || "[]");
     const now = Date.now();
     for (const pr of prs) {
       if (pr.headRefName && pr.headRefName.startsWith("datos/")) {
         const ageDays = (now - Date.parse(pr.createdAt)) / DAY;
         if (ageDays >= 14) {
-          execFileImpl("gh", ["pr", "close", String(pr.number), "--repo", repo, "--comment", "Cerrado automáticamente tras 14 días sin revisión; reemplazado por la ejecución actual."], { stdio: "ignore" });
+          execFileImpl("gh", ["pr", "close", String(pr.number), "--repo", repo, "--comment", "Cerrado automáticamente tras 14 días sin revisión; reemplazado por la ejecución actual."], { cwd: rootDir, stdio: "ignore" });
         }
       }
     }
   } catch (_) {}
 
   // 2. Crear rama y commit
-  execFileImpl("git", ["checkout", "-b", finalBranchName]);
+  execFileImpl("git", ["checkout", "-b", finalBranchName], { cwd: rootDir });
 
   // Asegurar job/estado.json si no existe (P0.3)
-  if (!fs.existsSync(STATE)) {
-    fs.writeFileSync(STATE, JSON.stringify({ marcas: {}, revalidados: {}, lastRun: Date.now() }, null, 2), "utf8");
+  if (!fs.existsSync(statePath)) {
+    fs.mkdirSync(path.dirname(statePath), { recursive: true });
+    fs.writeFileSync(statePath, JSON.stringify({ marcas: {}, revalidados: {}, lastRun: Date.now() }, null, 2), "utf8");
   }
 
   const candidatePaths = [
@@ -469,27 +511,40 @@ async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun,
     "job/reportes",
     "datagen/fuentes"
   ];
-  const pathsToAdd = candidatePaths.filter((p) => fs.existsSync(path.resolve(ROOT, p)));
+  const pathsToAdd = candidatePaths.filter((p) => fs.existsSync(path.resolve(rootDir, p)));
   if (pathsToAdd.length > 0) {
-    execFileImpl("git", ["add", ...pathsToAdd]);
+    execFileImpl("git", ["add", ...pathsToAdd], { cwd: rootDir });
   }
 
-  execFileImpl("git", ["commit", "-m", `datos: propuesta semanal ${finalBranchName.replace("datos/", "")} (${changesList ? changesList.length : 0} cambios)`]);
+  execFileImpl("git", ["commit", "-m", `datos: propuesta semanal ${finalBranchName.replace("datos/", "")} (${changesList ? changesList.length : 0} cambios)`], { cwd: rootDir });
 
   // 3. Verificar rutas permitidas DENTRO de createReviewPR antes de git push (P0.5)
-  let diffOut = "";
+  const diffSet = new Set();
+  const addLines = (out) => {
+    for (const line of String(out || "").split("\n")) {
+      const clean = line.trim().replace(/\\/g, "/");
+      if (clean) diffSet.add(clean);
+    }
+  };
   try {
-    diffOut = execFileImpl("git", ["diff", "--name-only", "main...HEAD"], { encoding: "utf8" });
+    addLines(execFileImpl("git", ["diff", "--name-only", "main...HEAD"], { cwd: rootDir, encoding: "utf8" }));
   } catch (_) {
     try {
-      diffOut = execFileImpl("git", ["diff", "--name-only", "main"], { encoding: "utf8" });
+      addLines(execFileImpl("git", ["diff", "--name-only", "main"], { cwd: rootDir, encoding: "utf8" }));
     } catch (_) {
       try {
-        diffOut = execFileImpl("git", ["diff", "--name-only", "HEAD~1"], { encoding: "utf8" });
+        addLines(execFileImpl("git", ["diff", "--name-only", "HEAD~1"], { cwd: rootDir, encoding: "utf8" }));
       } catch (_) {}
     }
   }
-  const files = diffOut.split("\n").map((s) => s.trim().replace(/\\/g, "/")).filter(Boolean);
+  try {
+    addLines(execFileImpl("git", ["diff", "--name-only"], { cwd: rootDir, encoding: "utf8" }));
+  } catch (_) {}
+  try {
+    addLines(execFileImpl("git", ["diff", "--cached", "--name-only"], { cwd: rootDir, encoding: "utf8" }));
+  } catch (_) {}
+
+  const files = Array.from(diffSet);
   const ALLOWED_REGEX = /^(extension\/data\/brands\.json|datagen\/evidencias\.csv|job\/estado\.json|job\/reportes\/|datagen\/fuentes\/)/;
   const disallowed = files.filter((f) => !ALLOWED_REGEX.test(f));
   if (disallowed.length > 0) {
@@ -497,7 +552,7 @@ async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun,
   }
 
   // 4. Git push
-  execFileImpl("git", ["push", "origin", finalBranchName]);
+  execFileImpl("git", ["push", "origin", finalBranchName], { cwd: rootDir });
 
   // 5. Crear Pull Request usando --body-file con archivo temporal (P0.1)
   const tmpBodyFile = path.join(os.tmpdir(), `pr_body_${Date.now()}_${Math.random().toString(36).slice(2)}.md`);
@@ -512,22 +567,87 @@ async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun,
       "--head", finalBranchName,
       "--base", "main"
     ];
-    prUrl = execFileImpl("gh", prArgs, { encoding: "utf8" }).trim();
+    prUrl = (execFileImpl("gh", prArgs, { cwd: rootDir, encoding: "utf8" }) || "").trim();
   } finally {
     try { fs.unlinkSync(tmpBodyFile); } catch (_) {}
   }
 
-  execFileImpl("git", ["checkout", "main"]);
+  execFileImpl("git", ["checkout", "main"], { cwd: rootDir });
 
   return { branch: finalBranchName, prUrl, dryRun: false, changesCount: changesList ? changesList.length : 0 };
 }
 
+// ---------------------------------------------------------------- Biblioteca local de fuentes (P2.14)
+function queryLibrary(brand, { fuentesDir = path.join(DATAGEN, "fuentes"), indiceDbPath = path.join(DATAGEN, "indice_fuentes.sqlite") } = {}) {
+  const normBrand = QED.norm(brand);
+  if (!normBrand) return null;
+
+  const candidates = [];
+  const indiceScript = path.join(DATAGEN, "indice_fuentes.py");
+  if (fs.existsSync(indiceScript) && fs.existsSync(fuentesDir)) {
+    for (const pyBin of ["python3", "python"]) {
+      try {
+        const out = execFileSync(
+          pyBin,
+          [indiceScript, "--no-sync", "--db", indiceDbPath, "--dir", fuentesDir, "--query", brand],
+          { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }
+        );
+        if (out) {
+          const rows = JSON.parse(out);
+          if (Array.isArray(rows)) candidates.push(...rows);
+        }
+        break;
+      } catch (_) {}
+    }
+  }
+
+  if (fs.existsSync(fuentesDir)) {
+    const files = fs.readdirSync(fuentesDir).filter((x) => x.endsWith(".json"));
+    for (const f of files) {
+      const fData = readJSON(path.join(fuentesDir, f), null);
+      if (fData) candidates.push(Object.assign({ archivo: f }, fData));
+    }
+  }
+
+  for (const fData of candidates) {
+    if (!fData || !fData.fecha || !fData.url_final || !fData.cita) continue;
+    const age = Date.now() - new Date(fData.fecha).getTime();
+    if (!(age < 365 * DAY)) continue; // Menos de 12 meses
+    const haystack = [
+      fData.cita || "",
+      fData.extracto || "",
+      fData.empresa || "",
+      fData.marca || "",
+      fData.archivo || ""
+    ].map((x) => QED.norm(x)).join(" ");
+    if (haystack.includes(normBrand)) {
+      return {
+        grupo_id: fData.grupo_id || null,
+        empresa: fData.empresa || brand,
+        marca: brand,
+        campo: "controlador",
+        valor_nuevo: fData.controlador || fData.empresa || brand,
+        pais: fData.pais || "México",
+        tipo: fData.tipo || "Corporación",
+        fuentes: [{
+          url: fData.url_final,
+          cita: fData.cita,
+          extracto: fData.extracto || fData.cita,
+          archivo_url: fData.archivo_url || `https://web.archive.org/web/${fData.url_final}`,
+          fromLibrary: true
+        }]
+      };
+    }
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------- Helpers de sugerencias y pendientes
-function loadPending() {
+function loadPending(pendDir = PEND_DIR) {
   const items = new Map();
-  if (!fs.existsSync(PEND_DIR)) return items;
-  for (const f of fs.readdirSync(PEND_DIR).filter((x) => x.endsWith(".json"))) {
-    const data = readJSON(path.join(PEND_DIR, f), null);
+  if (!fs.existsSync(pendDir)) return items;
+  for (const f of fs.readdirSync(pendDir).filter((x) => x.endsWith(".json"))) {
+    const data = readJSON(path.join(pendDir, f), null);
     if (!data || !Array.isArray(data.items)) continue;
     for (const it of data.items) {
       if (!it || !(it.brand || it.title)) continue;
@@ -541,11 +661,11 @@ function loadPending() {
   return items;
 }
 
-function closeLegacyIssues(execFileImpl = execFileSync, repo = "ginaproyecto02-lgtm/project-gina") {
+function closeLegacyIssues(execFileImpl = defaultExecFile, repo = "ginaproyecto02-lgtm/project-gina", cwd = ROOT) {
   for (let n = 1; n <= 7; n++) {
     try {
-      execFileImpl("gh", ["issue", "comment", String(n), "--repo", repo, "--body", "Incorporada en la base (commit de9daa9)"]);
-      execFileImpl("gh", ["issue", "close", String(n), "--repo", repo, "--reason", "completed"]);
+      execFileImpl("gh", ["issue", "comment", String(n), "--repo", repo, "--body", "Incorporada en la base (commit de9daa9)"], { cwd });
+      execFileImpl("gh", ["issue", "close", String(n), "--repo", repo, "--reason", "completed"], { cwd });
     } catch (_) {}
   }
 }
@@ -583,7 +703,7 @@ function parseIssueContent(issue) {
   const mBrand = body.match(/###\s*Marca\s*\r?\n+([^\r\n#]+)/i);
   if (mBrand) brand = mBrand[1].trim();
   if (!brand) {
-    const mTitle = title.match(/Marca faltante:\s*(.+)/i);
+    const mTitle = title.match(/(?:Marca faltante|Sugerencia de marca):\s*(.+)/i);
     if (mTitle) brand = mTitle[1].trim();
   }
   const mStore = body.match(/###\s*Tienda\s*\r?\n+([^\r\n#]+)/i);
@@ -592,7 +712,7 @@ function parseIssueContent(issue) {
   const mDueno = body.match(/###\s*Due[ñn]o[^\r\n]*\r?\n+([^\r\n#]+)/i);
   const mFuente = body.match(/###\s*Fuente[^\r\n]*\r?\n+([^\r\n#]+)/i);
 
-  if (brand) {
+  if (brand && !/^_No response_$/i.test(brand)) {
     return {
       number: issue.number,
       tipo: "marca",
@@ -612,11 +732,11 @@ function parseIssueContent(issue) {
   return null;
 }
 
-async function loadIssues(repo, token, execFileImpl = execFileSync, fetchImpl = fetch) {
+async function loadIssues(repo, token, execFileImpl = defaultExecFile, fetchImpl = fetch, cwd = ROOT) {
   if (!repo) return [];
   let issues = null;
   try {
-    const out = execFileImpl("gh", ["issue", "list", "--repo", repo, "--state", "open", "--json", "number,title,body,labels,createdAt", "--limit", "100"], { encoding: "utf8" });
+    const out = execFileImpl("gh", ["issue", "list", "--repo", repo, "--state", "open", "--json", "number,title,body,labels,createdAt", "--limit", "100"], { cwd, encoding: "utf8" });
     if (out) issues = JSON.parse(out);
   } catch (_) {}
 
@@ -642,11 +762,21 @@ async function loadIssues(repo, token, execFileImpl = execFileSync, fetchImpl = 
 
 // ---------------------------------------------------------------- Función principal de ejecución
 async function main(options = {}) {
+  const rootDir = options.rootDir || ROOT;
+  const brandsPath = options.brandsPath || path.join(rootDir, "extension", "data", "brands.json");
+  const pendDir = options.pendDir || path.join(rootDir, "job", "pendientes");
+  const statePath = options.statePath || path.join(rootDir, "job", "estado.json");
+  const reportsDir = options.reportsDir || path.join(rootDir, "job", "reportes");
+  const dominiosPath = options.dominiosPath || path.join(rootDir, "datagen", "dominios.json");
+  const evidenciasPath = options.evidenciasPath || path.join(rootDir, "datagen", "evidencias.csv");
+  const fuentesDir = options.fuentesDir || path.join(rootDir, "datagen", "fuentes");
+  const indiceDbPath = options.indiceDbPath || path.join(rootDir, "datagen", "indice_fuentes.sqlite");
+
   const provider = options.provider || env("PROVIDER", "anthropic");
   const p = AI.PROVIDERS[provider];
   if (!p) throw new Error(`Proveedor desconocido: ${provider}`);
   const envKey = { anthropic: "ANTHROPIC_API_KEY", gemini: "GEMINI_API_KEY", groq: "GROQ_API_KEY", xai: "XAI_API_KEY", openai: "OPENAI_API_KEY" }[provider];
-  const apiKey = options.apiKey || env("API_KEY", process.env[envKey] || "");
+  const apiKey = options.apiKey !== undefined ? options.apiKey : env("API_KEY", process.env[envKey] || "");
 
   const cfg = {
     provider,
@@ -655,22 +785,24 @@ async function main(options = {}) {
     base: env("BASE_URL", ""),
     maxSearches: parseInt(env("MAX_SEARCHES", "3"), 10)
   };
-  const dry = options.dryRun || env("DRY_RUN", "") === "1";
+  const dry = options.dryRun !== undefined ? !!options.dryRun : env("DRY_RUN", "") === "1";
   const limit = Math.min(25, parseInt(options.limit !== undefined ? options.limit : env("LIMIT", "25"), 10)); // Límite máx 25 cambios por PR
   const everyDays = parseFloat(options.everyDays || env("EVERY_DAYS", "14"));
-  const force = options.force !== undefined ? options.force : (options.dryRun || env("FORCE", "") === "1");
-  const revalidateLimit = parseInt(options.revalidate || env("REVALIDATE", "3"), 10);
-  const repLimit = parseInt(options.repLimit || env("REP_LIMIT", "5"), 10);
+  const force = options.force !== undefined ? options.force : (dry || env("FORCE", "") === "1");
+  const revalidateLimit = parseInt(options.revalidate !== undefined ? options.revalidate : env("REVALIDATE", "0"), 10);
+  const repLimit = parseInt(options.repLimit !== undefined ? options.repLimit : env("REP_LIMIT", "0"), 10);
 
-  const dominios = loadDominios();
-  const repo = process.env.GITHUB_REPOSITORY || "ginaproyecto02-lgtm/project-gina";
-  const token = process.env.GITHUB_TOKEN || "";
-  const execFileImpl = options.execFileImpl || execFileSync;
+  const dominios = loadDominios(dominiosPath);
+  const repo = options.repo || process.env.GITHUB_REPOSITORY || "ginaproyecto02-lgtm/project-gina";
+  const token = options.token || process.env.GITHUB_TOKEN || "";
+  const execFileImpl = options.execFileImpl || defaultExecFile;
   const fetchImpl = options.fetchImpl || fetch;
+  const aiResearchImpl = options.aiResearchImpl || ((c, it, grps) => AI.research(c, it, grps, fetchImpl));
+  const skipArchive = options.skipArchive !== undefined ? options.skipArchive : false;
 
-  const db = readJSON(BRANDS, null);
-  if (!db) throw new Error("No se pudo leer " + BRANDS);
-  const state = readJSON(STATE, { marcas: {}, revalidados: {}, ultimoRun: null });
+  const db = readJSON(brandsPath, null);
+  if (!db) throw new Error("No se pudo leer " + brandsPath);
+  const state = readJSON(statePath, { marcas: {}, revalidados: {}, ultimoRun: null, rechazosAltosSeguidos: 0 });
 
   // P1.12: Restaurar GINA_EVERY_DAYS (con job/estado.json)
   if (!force && state.ultimoRun && Date.now() - new Date(state.ultimoRun).getTime() < everyDays * DAY) {
@@ -679,8 +811,29 @@ async function main(options = {}) {
   }
 
   // P1.11: Cerrar issues #1–#7 con el comentario "Incorporada en la base (commit de9daa9)"
-  if (!options.skipLegacy) {
-    closeLegacyIssues(execFileImpl, repo);
+  if (!options.skipLegacy && !dry && !state.legacyClosed) {
+    closeLegacyIssues(execFileImpl, repo, rootDir);
+    state.legacyClosed = true;
+  }
+
+  const metricas = {
+    issuesLeidos: 0,
+    propuestas: 0,
+    aprobadas: 0,
+    rechazadasPorMotivo: {},
+    resueltasPor: { yaExistia: 0, biblioteca: 0, wikidata: 0, ia: 0 },
+    llamadasIA: 0,
+    tokensEntrada: 0,
+    tokensSalida: 0,
+    busquedasWeb: 0,
+    costoEstimadoUsd: 0,
+    diasIssueMerge: "N/A"
+  };
+
+  function addRejectReason(brandOrCompany, reason) {
+    const cleanReason = String(reason || "Motivo no especificado").trim();
+    report.rechazadas.push(`${brandOrCompany}: ${cleanReason}`);
+    metricas.rechazadasPorMotivo[cleanReason] = (metricas.rechazadasPorMotivo[cleanReason] || 0) + 1;
   }
 
   const report = {
@@ -692,23 +845,28 @@ async function main(options = {}) {
     revalidadas: [],
     reputacion: [],
     rechazadas: [],
-    errores: []
+    errores: [],
+    metricas,
+    alertaRobot: false
   };
 
   // P1.12: main() llama a loadIssues() y une los issues con pendientes/; quita duplicados por marca normalizada
   const queue = [];
   const seenBrands = new Map(); // normBrand -> issueNumber
-  const parsedIssues = await loadIssues(repo, token, execFileImpl, fetchImpl);
+  const parsedIssues = await loadIssues(repo, token, execFileImpl, fetchImpl, rootDir);
+  metricas.issuesLeidos = parsedIssues.length;
 
   for (const iss of parsedIssues) {
     // Más de 30 días en sin-fuente → cerrar explicando
     if (iss.labels.includes("sin-fuente")) {
       const ageMs = Date.now() - new Date(iss.createdAt).getTime();
       if (ageMs > 30 * DAY) {
-        try {
-          execFileImpl("gh", ["issue", "comment", String(iss.number), "--repo", repo, "--body", "Cerrado automáticamente: más de 30 días sin fuente verificable."]);
-          execFileImpl("gh", ["issue", "close", String(iss.number), "--repo", repo, "--reason", "completed"]);
-        } catch (_) {}
+        if (!dry) {
+          try {
+            execFileImpl("gh", ["issue", "comment", String(iss.number), "--repo", repo, "--body", "Cerrado automáticamente: más de 30 días sin fuente verificable."], { cwd: rootDir });
+            execFileImpl("gh", ["issue", "close", String(iss.number), "--repo", repo, "--reason", "completed"], { cwd: rootDir });
+          } catch (_) {}
+        }
         continue;
       }
     }
@@ -719,21 +877,21 @@ async function main(options = {}) {
       if (seenBrands.has(nb)) {
         // duplicado → "Duplicada de #N" + cerrar
         const firstNum = seenBrands.get(nb);
-        if (firstNum && iss.number !== firstNum) {
+        if (firstNum && iss.number !== firstNum && !dry) {
           try {
-            execFileImpl("gh", ["issue", "comment", String(iss.number), "--repo", repo, "--body", `Duplicada de #${firstNum}`]);
-            execFileImpl("gh", ["issue", "close", String(iss.number), "--repo", repo, "--reason", "completed"]);
+            execFileImpl("gh", ["issue", "comment", String(iss.number), "--repo", repo, "--body", `Duplicada de #${firstNum}`], { cwd: rootDir });
+            execFileImpl("gh", ["issue", "close", String(iss.number), "--repo", repo, "--reason", "completed"], { cwd: rootDir });
           } catch (_) {}
         }
         continue;
       }
       seenBrands.set(nb, iss.number);
-      queue.push(Object.assign({}, it, { issueNumber: iss.number, issueLabels: iss.labels }));
+      queue.push(Object.assign({}, it, { issueNumber: iss.number, issueLabels: iss.labels, issueCreatedAt: iss.createdAt }));
     }
   }
 
   // Unir con pendientes locales
-  const pendingMap = loadPending();
+  const pendingMap = loadPending(pendDir);
   for (const [, p] of pendingMap.entries()) {
     if (!p.brand) continue;
     const nb = QED.norm(p.brand);
@@ -749,6 +907,7 @@ async function main(options = {}) {
   const toProcess = queue.slice(0, limit);
   const nuevasEvidencias = [];
   const issuesToClose = [];
+  const issueAgesDays = [];
 
   for (const item of toProcess) {
     const normBrand = QED.norm(item.brand);
@@ -758,59 +917,37 @@ async function main(options = {}) {
     if (existingMarca) {
       const g = db.grupos[existingMarca.g];
       const grpName = g ? g.empresa : existingMarca.g;
-      if (item.issueNumber) {
+      metricas.resueltasPor.yaExistia++;
+      if (item.issueNumber && !dry) {
         try {
-          execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", `Ya está en la base (grupo ${grpName})`]);
-          execFileImpl("gh", ["issue", "close", String(item.issueNumber), "--repo", repo, "--reason", "completed"]);
+          execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", `Ya está en la base (grupo ${grpName})`], { cwd: rootDir });
+          execFileImpl("gh", ["issue", "close", String(item.issueNumber), "--repo", repo, "--reason", "completed"], { cwd: rootDir });
         } catch (_) {}
       }
       continue;
     }
 
-    // P1.12: (b) Biblioteca local datagen/fuentes/
-    let prop = null;
-    let origen = "";
-    const fuentesDir = path.join(DATAGEN, "fuentes");
-    if (fs.existsSync(fuentesDir)) {
-      const files = fs.readdirSync(fuentesDir).filter((x) => x.endsWith(".json"));
-      for (const f of files) {
-        const fData = readJSON(path.join(fuentesDir, f), null);
-        if (fData && fData.fecha) {
-          const age = Date.now() - new Date(fData.fecha).getTime();
-          if (age < 365 * DAY && fData.url_final && fData.cita) {
-            const fNorm = QED.norm(fData.cita || "") + " " + QED.norm(f);
-            if (fNorm.includes(normBrand)) {
-              prop = {
-                empresa: fData.empresa || item.brand,
-                marca: item.brand,
-                campo: "controlador",
-                valor_nuevo: fData.controlador || item.brand,
-                pais: fData.pais || item.pais || "",
-                tipo: fData.tipo || "Corporación",
-                fuentes_esperadas: [{ url: fData.url_final, cita: fData.cita }]
-              };
-              origen = "biblioteca";
-              break;
-            }
-          }
-        }
-      }
-    }
+    // P1.12 & P2.14: (b) Biblioteca local datagen/fuentes/ (< 12 meses, consulta índice FTS5 / JSON)
+    let prop = queryLibrary(item.brand, { fuentesDir, indiceDbPath });
+    let origen = prop ? "biblioteca" : "";
 
     // P1.12: (c) Wikidata con referencia (wikidataOwner)
     if (!prop) {
       try {
         const wikiHits = await wikidataOwner(item.brand, fetchImpl);
-        const wikiRef = wikiHits.find((w) => w.refUrl && /^https:\/\//i.test(w.refUrl));
-        if (wikiRef) {
+        const wikiWithRef = wikiHits.filter((w) => w.refUrl && /^https:\/\//i.test(w.refUrl));
+        if (wikiWithRef.length > 0) {
+          const wikiRef = wikiWithRef[0];
+          const matchedGid = Object.keys(db.grupos).find((id) => QED.norm(db.grupos[id].empresa) === QED.norm(wikiRef.owner)) || null;
           prop = {
-            empresa: wikiRef.owner,
+            grupo_id: matchedGid,
+            empresa: matchedGid ? db.grupos[matchedGid].empresa : wikiRef.owner,
             marca: item.brand,
             campo: "controlador",
-            valor_nuevo: wikiRef.owner,
-            pais: item.pais || "",
-            tipo: "Corporación",
-            fuentes_esperadas: [{ url: wikiRef.refUrl, cita: wikiRef.owner }]
+            valor_nuevo: matchedGid ? db.grupos[matchedGid].controlador : wikiRef.owner,
+            pais: (matchedGid && db.grupos[matchedGid].pais) || item.pais || "EE.UU.",
+            tipo: (matchedGid && db.grupos[matchedGid].tipo) || "Corporación",
+            fuentes: wikiWithRef.map((w) => ({ url: w.refUrl, cita: wikiRef.owner }))
           };
           origen = "wikidata";
         }
@@ -820,8 +957,16 @@ async function main(options = {}) {
     // P1.12: (d) IA solo si lo anterior no resolvió
     if (!prop && cfg.key) {
       try {
-        const r = await AI.research(cfg, { brand: item.brand, title: item.title, site: item.site, hint: item.hint }, db.grupos);
-        if (r.normalized && r.normalized.propuesta && AI.validateProposal(r.normalized.propuesta)) {
+        metricas.llamadasIA++;
+        const r = await aiResearchImpl(cfg, { brand: item.brand, title: item.title, site: item.site, hint: item.hint }, db.grupos);
+        if (r && r.usage) {
+          metricas.tokensEntrada += r.usage.input || 0;
+          metricas.tokensSalida += r.usage.output || 0;
+        }
+        if (r && r.searches) {
+          metricas.busquedasWeb += r.searches || 0;
+        }
+        if (r && r.normalized && r.normalized.propuesta && AI.validateProposal(r.normalized.propuesta)) {
           prop = r.normalized.propuesta;
           origen = "ia";
         }
@@ -832,31 +977,42 @@ async function main(options = {}) {
 
     // Si ninguna vía dio con fuente verificable
     if (!prop) {
-      report.rechazadas.push(`${item.brand}: Sin fuente verificable`);
-      if (item.issueNumber) {
+      addRejectReason(item.brand, "Sin fuente verificable");
+      if (item.issueNumber && !dry) {
         try {
-          execFileImpl("gh", ["issue", "edit", String(item.issueNumber), "--repo", repo, "--add-label", "sin-fuente"]);
-          execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", "No se encontró una fuente verificable para esta marca. Si tienes un enlace oficial o de registro público, compártelo aquí para reabrirla."]);
+          execFileImpl("gh", ["issue", "edit", String(item.issueNumber), "--repo", repo, "--add-label", "sin-fuente"], { cwd: rootDir });
+          execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", "No se encontró una fuente verificable para esta marca. Si tienes un enlace oficial o de registro público, compártelo aquí para reabrirla."], { cwd: rootDir });
         } catch (_) {}
       }
       continue;
     }
 
     report.propuestas.push(prop);
+    metricas.propuestas++;
 
     // 2 & 3. Verificar y Contrastar
     try {
-      const check = await contrastProposal(prop, db.grupos[prop.grupo_id], dominios, { safeBrowsingKey: process.env.GINA_SAFEBROWSING_KEY }, fetchImpl);
+      const check = await contrastProposal(prop, db.grupos[prop.grupo_id], dominios, { safeBrowsingKey: process.env.GINA_SAFEBROWSING_KEY, skipArchive }, fetchImpl);
       if (check.aprobada && check.fuentes.length > 0) {
+        let factcheckStatus = "na";
+        if (process.env.GINA_FACTCHECK_KEY) {
+          const fc = await checkFactCheck(prop.empresa, prop.valor_nuevo, process.env.GINA_FACTCHECK_KEY, fetchImpl);
+          factcheckStatus = fc.status || "na";
+          if (fc.status === "conflicto") {
+            addRejectReason(prop.empresa, "Conflicto en Fact Check");
+            continue;
+          }
+        }
+
         const f0 = check.fuentes[0];
         let gid = prop.grupo_id;
-        if (!gid) {
-          gid = "inv_" + slug(prop.empresa);
+        if (!gid || !db.grupos[gid]) {
+          gid = gid || ("inv_" + slug(prop.empresa));
           db.grupos[gid] = {
             empresa: prop.empresa,
             controlador: prop.valor_nuevo,
-            pais: prop.pais,
-            tipo: prop.tipo,
+            pais: prop.pais || item.pais || "EE.UU.",
+            tipo: prop.tipo || "Corporación",
             confianza: "Alta", // P1.12: Grupo nuevo o cambiado por el robot: confianza "Alta" en la rama
             investigado: new Date().toISOString(),
             fuente: f0.nivel_dominio === "oficial" ? "Registro oficial" : "Prensa de referencia",
@@ -880,13 +1036,29 @@ async function main(options = {}) {
           brandEntry.job = 1;
         }
 
-        let factcheckStatus = "na";
-        if (process.env.GINA_FACTCHECK_KEY) {
-          const fc = await checkFactCheck(prop.empresa, prop.valor_nuevo, process.env.GINA_FACTCHECK_KEY, fetchImpl);
-          factcheckStatus = fc.status || "na";
-          if (fc.status === "conflicto") {
-            report.rechazadas.push(`${prop.empresa}: Conflicto en Fact Check`);
-            continue;
+        if (origen && metricas.resueltasPor[origen] !== undefined) {
+          metricas.resueltasPor[origen]++;
+        }
+
+        // P2.14: Guardar evidencia en datagen/fuentes/<grupo_id>-<hash8>.json
+        if (!dry) {
+          fs.mkdirSync(fuentesDir, { recursive: true });
+          for (const src of check.fuentes) {
+            const h8 = hash8(src.url_final);
+            const fuenteFile = path.join(fuentesDir, `${gid}-${h8}.json`);
+            const fuentePayload = {
+              grupo_id: gid,
+              empresa: prop.empresa,
+              controlador: prop.valor_nuevo,
+              pais: db.grupos[gid].pais,
+              tipo: db.grupos[gid].tipo,
+              url_final: src.url_final,
+              archivo_url: src.archivo_url,
+              fecha: report.inicio.slice(0, 10),
+              cita: src.cita,
+              extracto: truncateUtf8(src.extracto || src.cita || "", 20480)
+            };
+            fs.writeFileSync(fuenteFile, JSON.stringify(fuentePayload, null, 2), "utf8");
           }
         }
 
@@ -907,6 +1079,8 @@ async function main(options = {}) {
         report.cambios.push({
           grupo: prop.empresa,
           gid,
+          marca: item.brand,
+          origen,
           antes: prop.valor_anterior || "(nuevo)",
           despues: prop.valor_nuevo,
           url: f0.url_final,
@@ -914,16 +1088,21 @@ async function main(options = {}) {
           archivo: f0.archivo_url,
           issueNumber: item.issueNumber
         });
+        metricas.aprobadas++;
 
         if (item.issueNumber) {
           issuesToClose.push(item.issueNumber);
+          if (item.issueCreatedAt) {
+            const ageDays = Math.max(0, (Date.now() - new Date(item.issueCreatedAt).getTime()) / DAY);
+            if (!Number.isNaN(ageDays)) issueAgesDays.push(ageDays);
+          }
         }
       } else {
-        report.rechazadas.push(`${prop.empresa}: ${check.motivo}`);
-        if (item.issueNumber) {
+        addRejectReason(prop.empresa, check.motivo);
+        if (item.issueNumber && !dry) {
           try {
-            execFileImpl("gh", ["issue", "edit", String(item.issueNumber), "--repo", repo, "--add-label", "sin-fuente"]);
-            execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", `No se pudo verificar la fuente: ${check.motivo}`]);
+            execFileImpl("gh", ["issue", "edit", String(item.issueNumber), "--repo", repo, "--add-label", "sin-fuente"], { cwd: rootDir });
+            execFileImpl("gh", ["issue", "comment", String(item.issueNumber), "--repo", repo, "--body", `No se pudo verificar la fuente: ${check.motivo}`], { cwd: rootDir });
           } catch (_) {}
         }
       }
@@ -932,11 +1111,81 @@ async function main(options = {}) {
     }
   }
 
+  // Revalidación opcional (GINA_REVALIDATE) y Reputación opcional (GINA_REP_LIMIT) cuando se solicitan explícitamente
+  if (revalidateLimit > 0 && cfg.key) {
+    const stale = Object.entries(db.grupos || {})
+      .filter(([id, g]) => /^verificar/i.test(g.confianza || "") && !(state.revalidados && state.revalidados[id] && Date.now() - Date.parse(state.revalidados[id]) < 90 * DAY))
+      .slice(0, revalidateLimit);
+    for (const [id, g] of stale) {
+      try {
+        metricas.llamadasIA++;
+        const r = await aiResearchImpl(cfg, { kind: "revalidar", group: g }, db.grupos);
+        state.revalidados = state.revalidados || {};
+        state.revalidados[id] = new Date().toISOString();
+        if (r && r.normalized && r.normalized.propuesta) {
+          report.revalidadas.push(`${g.empresa}`);
+        }
+      } catch (e) {
+        report.errores.push(`Revalidar ${g.empresa}: ${e.message}`);
+      }
+    }
+  }
+
+  if (repLimit > 0 && cfg.key && AI.researchReputation && QED.REP) {
+    const ids = Object.keys(db.grupos || {}).filter((id) => QED.REP.needsResearch(db.reputacion || {}, id, 180)).slice(0, repLimit);
+    for (const id of ids) {
+      const g = db.grupos[id];
+      try {
+        metricas.llamadasIA++;
+        const r = await AI.researchReputation(cfg, { nombre: g.empresa, pais: g.pais, ya: [] }, fetchImpl);
+        if (r && r.verificable) report.reputacion.push(g.empresa);
+      } catch (e) {
+        report.errores.push(`Reputación ${g.empresa}: ${e.message}`);
+      }
+    }
+  }
+
+  // P2.15: Calcular métricas finales y alerta por >50% de rechazos dos ejecuciones seguidas
+  metricas.costoEstimadoUsd = Number(
+    (metricas.tokensEntrada / 1e6 * 0.10 + metricas.tokensSalida / 1e6 * 0.50 + metricas.busquedasWeb * 0.01).toFixed(4)
+  );
+  if (issueAgesDays.length > 0) {
+    const avg = issueAgesDays.reduce((a, b) => a + b, 0) / issueAgesDays.length;
+    metricas.diasIssueMerge = avg.toFixed(1);
+  }
+
+  const totalEvaluadas = metricas.aprobadas + report.rechazadas.length;
+  if (totalEvaluadas > 0) {
+    const rejectRatio = report.rechazadas.length / totalEvaluadas;
+    if (rejectRatio > 0.5) {
+      state.rechazosAltosSeguidos = (state.rechazosAltosSeguidos || 0) + 1;
+    } else {
+      state.rechazosAltosSeguidos = 0;
+    }
+    if (state.rechazosAltosSeguidos >= 2) {
+      report.alertaRobot = true;
+      if (!dry) {
+        try {
+          execFileImpl("gh", [
+            "issue", "create",
+            "--repo", repo,
+            "--title", "Revisar el robot",
+            "--body", `Se rechazó más del 50% de las propuestas en ${state.rechazosAltosSeguidos} ejecuciones seguidas (${report.rechazadas.length}/${totalEvaluadas} en ${report.inicio.slice(0, 10)}).`
+          ], { cwd: rootDir });
+        } catch (_) {}
+      }
+    }
+  }
+
   // Generar reporte en Markdown para el PR
   const dateStr = report.inicio.slice(0, 10);
   const branchName = `datos/${dateStr}`;
   const tableRows = report.cambios.map(
     (c) => `| ${c.grupo} (\`${c.gid}\`) | ${c.antes} → **${c.despues}** | [Fuente](${c.url}) | «${c.cita}» | [Archivo](${c.archivo}) |`
+  );
+
+  const motivosLines = Object.entries(metricas.rechazadasPorMotivo).map(
+    ([motivo, count]) => `  - ${motivo}: ${count}`
   );
 
   const closesLines = issuesToClose.length
@@ -955,16 +1204,29 @@ async function main(options = {}) {
     "",
     "### Verificaciones y rechazos",
     ...(report.rechazadas.length ? report.rechazadas.map((r) => `- ⚠ ${r}`) : ["- (ninguna propuesta rechazada)"]),
+    "",
+    "### Métricas de la ejecución",
+    `- **Issues leídos**: ${metricas.issuesLeidos}`,
+    `- **Propuestas**: ${metricas.propuestas}`,
+    `- **Aprobadas**: ${metricas.aprobadas}`,
+    `- **Rechazadas por motivo**: ${report.rechazadas.length}`,
+    ...motivosLines,
+    `- **Resueltas por**: ya existía (${metricas.resueltasPor.yaExistia}) · biblioteca (${metricas.resueltasPor.biblioteca}) · Wikidata (${metricas.resueltasPor.wikidata}) · IA (${metricas.resueltasPor.ia})`,
+    `- **Costo estimado**: US$${metricas.costoEstimadoUsd.toFixed(4)} (${metricas.llamadasIA} llamadas IA, ${metricas.busquedasWeb} búsquedas)`,
+    `- **Días issue→merge**: ${metricas.diasIssueMerge}`,
     ...closesLines,
     "",
     `Proveedor: ${report.proveedor} · Modelo: ${report.modelo} · Fecha: ${dateStr}`
   ].join("\n");
 
-  // Guardar estado
+  // Guardar estado solo cuando no es dryRun (P2.16: canario DRY_RUN=1 sin escribir)
   state.ultimoRun = new Date().toISOString();
-  fs.writeFileSync(STATE, JSON.stringify(state, null, 2), "utf8");
+  if (!dry) {
+    fs.mkdirSync(path.dirname(statePath), { recursive: true });
+    fs.writeFileSync(statePath, JSON.stringify(state, null, 2), "utf8");
+  }
 
-  // Si hay cambios y no es dryRun, agregar filas a evidencias.csv
+  // Si hay cambios y no es dryRun, agregar filas a evidencias.csv y guardar brands.json
   if (!dry && nuevasEvidencias.length > 0) {
     let csvContent = "";
     for (const ev of nuevasEvidencias) {
@@ -982,14 +1244,16 @@ async function main(options = {}) {
         ev.aprobado_en_pr
       ]);
     }
-    fs.appendFileSync(EVIDENCIAS_PATH, csvContent, "utf8");
-    fs.writeFileSync(BRANDS, JSON.stringify(db, null, 1), "utf8");
+    fs.mkdirSync(path.dirname(evidenciasPath), { recursive: true });
+    fs.appendFileSync(evidenciasPath, csvContent, "utf8");
+    fs.mkdirSync(path.dirname(brandsPath), { recursive: true });
+    fs.writeFileSync(brandsPath, JSON.stringify(db, null, 1), "utf8");
   }
 
   // P0.4: Escribir job/reportes/AAAA-MM-DD.md ANTES del commit
   if (!dry) {
-    fs.mkdirSync(REPORTS, { recursive: true });
-    fs.writeFileSync(path.join(REPORTS, `${dateStr}.md`), prMarkdown, "utf8");
+    fs.mkdirSync(reportsDir, { recursive: true });
+    fs.writeFileSync(path.join(reportsDir, `${dateStr}.md`), prMarkdown, "utf8");
   }
 
   // P0.2: Con 0 cambios: no crear rama, ni commit, ni PR. Escribir el reporte y salir con código 0.
@@ -1007,15 +1271,20 @@ async function main(options = {}) {
     dryRun: dry,
     token,
     repo,
-    execFileImpl
+    execFileImpl,
+    rootDir
   });
 
   // P1.12: Comentar en issues: propuesta → "Propuesta en PR #X"
-  const prRef = (prResult && prResult.prUrl) ? prResult.prUrl : branchName;
-  for (const n of issuesToClose) {
-    try {
-      execFileImpl("gh", ["issue", "comment", String(n), "--repo", repo, "--body", `Propuesta en PR ${prRef}`]);
-    } catch (_) {}
+  if (!dry) {
+    const rawPrUrl = (prResult && prResult.prUrl) ? prResult.prUrl : branchName;
+    const prNumMatch = String(rawPrUrl).match(/\/pull\/(\d+)/);
+    const prLabel = prNumMatch ? `#${prNumMatch[1]} (${rawPrUrl})` : rawPrUrl;
+    for (const n of issuesToClose) {
+      try {
+        execFileImpl("gh", ["issue", "comment", String(n), "--repo", repo, "--body", `Propuesta en PR ${prLabel}`], { cwd: rootDir });
+      } catch (_) {}
+    }
   }
 
   console.log(prMarkdown);
@@ -1055,6 +1324,8 @@ if (require.main === module) {
 }
 
 module.exports = {
+  hash8,
+  truncateUtf8,
   loadDominios,
   classifyDomain,
   stripHtml,
@@ -1069,6 +1340,7 @@ module.exports = {
   verifySource,
   contrastProposal,
   wikidataOwner,
+  queryLibrary,
   verifyEnergyStarModel,
   getNextBranchName,
   serializeCsvRow,
@@ -1078,3 +1350,4 @@ module.exports = {
   closeLegacyIssues,
   main
 };
+

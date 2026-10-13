@@ -1,0 +1,31 @@
+{
+  "model": "claude-haiku-5-5",
+  "usage": { "input": 1200, "output": 240 },
+  "searches": 1,
+  "normalized": {
+    "conocida": true,
+    "verificable": true,
+    "marca": "Original Nature's Oils",
+    "grupo_id": null,
+    "empresa": "Original Nature's Oils LLC",
+    "controlador": "Original Nature's Oils LLC (Familia fundadora 100%)",
+    "pais": "EE.UU.",
+    "tipo": "Familia",
+    "propuesta": {
+      "grupo_id": null,
+      "campo": "controlador",
+      "empresa": "Original Nature's Oils LLC",
+      "valor_nuevo": "Original Nature's Oils LLC (Familia fundadora 100%)",
+      "valor_anterior": "",
+      "pais": "EE.UU.",
+      "tipo": "Familia",
+      "fuentes": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/original-natures-oils.html",
+          "titulo": "SEC Filing - Original Nature's Oils LLC",
+          "cita_esperada": "Original Nature's Oils LLC es controlada al 100% por su familia fundadora."
+        }
+      ]
+    }
+  }
+}

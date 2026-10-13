@@ -389,6 +389,50 @@ finally:
     check("20. Al aprobar propuesta: marca entra a db.marcas con job:1 y grupo con confianza 'Alta'", m && m.job === 1 && fakeDb.grupos[gid].confianza === "Alta");
   }
 
+  // 21. Contrato con fixtures en test/fixtures/: issues (válido / sin marcador / duplicado / marca existente), Wikidata, IA y HTML
+  {
+    const fixturesDir = path.join(__dirname, "fixtures");
+    const issuesFx = JSON.parse(fs.readFileSync(path.join(fixturesDir, "issues.json"), "utf8"));
+    const wikiFx = JSON.parse(fs.readFileSync(path.join(fixturesDir, "wikidata.json"), "utf8"));
+    const iaFx = JSON.parse(fs.readFileSync(path.join(fixturesDir, "ia.json"), "utf8"));
+    const htmlFx = fs.readFileSync(path.join(fixturesDir, "pagina_oficial.html"), "utf8");
+
+    const parsedValid = job.parseIssueContent(issuesFx[0]);
+    const parsedYaml = job.parseIssueContent(issuesFx[1]);
+    const parsedNoMarker = job.parseIssueContent(issuesFx[2]);
+    const parsedExisting = job.parseIssueContent(issuesFx[3]);
+
+    const wikiRes = await job.wikidataOwner("Original Nature's Oils", async () => ({
+      ok: true,
+      status: 200,
+      json: async () => wikiFx
+    }));
+    const srcVer = await job.verifySource(
+      iaFx.normalized.propuesta.fuentes[0],
+      iaFx.normalized.propuesta.empresa,
+      iaFx.normalized.propuesta.valor_nuevo,
+      dominios,
+      { skipArchive: true },
+      async (url) => ({
+        ok: true,
+        status: 200,
+        url,
+        headers: new Map([["content-type", "text/html"]]),
+        text: async () => htmlFx
+      })
+    );
+
+    const okContrato =
+      parsedValid && parsedValid.items[0].brand === "Original Nature's Oils" &&
+      parsedYaml && parsedYaml.items[0].brand === "Original Nature's Oils" &&
+      parsedNoMarker === null &&
+      parsedExisting && parsedExisting.items[0].brand === "Nescafé" &&
+      wikiRes.length === 1 && wikiRes[0].refUrl.includes("sec.gov") &&
+      srcVer.ok && Buffer.byteLength(srcVer.extracto, "utf8") <= 20480;
+
+    check("21. Contrato (test/fixtures/): issue válido, sin marcador, duplicado, existente, Wikidata, IA y HTML", okContrato);
+  }
+
   console.log(`\n${pass}/${total} pruebas de job/investigar.js correctas`);
   process.exit(pass === total ? 0 : 1);
 }

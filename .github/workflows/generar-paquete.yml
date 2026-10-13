@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   pruebas-y-paquete:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     # Misma cola que el robot: nunca publican la base al mismo tiempo.
     concurrency:
@@ -32,7 +32,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Descargar repositorio
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -40,23 +40,69 @@ jobs:
           python-version: "3.11"
 
       - name: Configurar Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: test/package-lock.json
+
+      - name: Completar aprobado_en_pr tras fusionar PR de datos
+        id: pr_merge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - << 'EOF'
+          import csv, os, re, subprocess
+          msg = subprocess.check_output(["git", "log", "-1", "--pretty=%B"], text=True)
+          m = re.search(r"(?:Merge pull request #|#)([0-9]+)", msg)
+          pr_num = m.group(1) if m else ""
+          if not pr_num:
+              try:
+                  sha = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+                  out = subprocess.check_output(["gh", "pr", "list", "--state", "merged", "--search", sha, "--json", "number", "--jq", ".[0].number"], text=True).strip()
+                  if out.isdigit():
+                      pr_num = out
+              except Exception:
+                  pass
+          ev_path = "datagen/evidencias.csv"
+          updated = 0
+          if pr_num and os.path.exists(ev_path):
+              with open(ev_path, encoding="utf-8") as f:
+                  reader = csv.DictReader(f)
+                  fieldnames = reader.fieldnames
+                  rows = list(reader)
+              for r in rows:
+                  val = (r.get("aprobado_en_pr") or "").strip()
+                  if val.startswith("datos/"):
+                      r["aprobado_en_pr"] = f"#{pr_num}"
+                      updated = 1
+              if updated:
+                  with open(ev_path, "w", encoding="utf-8", newline="") as f:
+                      writer = csv.DictWriter(f, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+                      writer.writeheader()
+                      writer.writerows(rows)
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"updated={updated}\n")
+          EOF
 
       - name: Regenerar base, sitios, manifest y traducciones
         run: python3 datagen/build_data.py
 
+      - name: Construir índice FTS5 de biblioteca de fuentes
+        run: python3 datagen/indice_fuentes.py --no-sync
+
       - name: Instalar dependencias de las pruebas
-        run: npm install --prefix test jsdom@24 --no-audit --no-fund
+        run: cd test && npm ci --no-audit --no-fund
 
       - name: Pruebas de la extensión (matcher, tarjeta, extractores…)
         run: node test/run.js
 
       - name: Pruebas del background y del robot
-        run: node test/background.test.js
+        run: |
+          node test/background.test.js
+          node test/job.test.js
+          node test/e2e_ciclo.test.js
 
       - name: Leer versiones
         id: v
@@ -90,7 +136,7 @@ jobs:
           git reset -q
 
       - name: Conservar la base del repositorio si solo cambió la fecha
-        if: steps.cambios.outputs.real == '0'
+        if: steps.cambios.outputs.real == '0' && steps.pr_merge.outputs.updated != '1'
         run: git checkout -- extension/data
 
       - name: Crear zip para las tiendas
@@ -114,11 +160,11 @@ jobs:
           retention-days: 90
 
       - name: Subir la base regenerada
-        if: github.event_name == 'workflow_dispatch' && inputs.guardar_base && (steps.cambios.outputs.real == '1' || steps.cambios.outputs.manifest == '1')
+        if: ((github.event_name == 'workflow_dispatch' && inputs.guardar_base) || (github.event_name == 'push' && github.ref == 'refs/heads/main')) && (steps.cambios.outputs.real == '1' || steps.cambios.outputs.manifest == '1' || steps.pr_merge.outputs.updated == '1')
         run: |
           git config user.name "gina-bot"
           git config user.email "gina-bot@users.noreply.github.com"
-          git add extension docs store
+          git add extension docs store datagen/evidencias.csv
           if git diff --cached --quiet; then echo "Sin cambios que subir."; exit 0; fi
           git commit -m "Paquete ${{ steps.v.outputs.version }}: base ${{ steps.v.outputs.base }} regenerada"
           git pull --rebase origin "${GITHUB_REF_NAME}"
@@ -132,3 +178,4 @@ jobs:
           gh release create "$GITHUB_REF_NAME" "${{ steps.zip.outputs.zip }}" "${{ steps.zip.outputs.zip }}.sha256" \
             --title "Gina ${{ steps.v.outputs.version }}" \
             --notes "Paquete para Chrome Web Store, Edge Add-ons y Firefox AMO. Base de datos ${{ steps.v.outputs.base }}. Ver PUBLICAR.md."
+

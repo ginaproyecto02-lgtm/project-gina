@@ -16,19 +16,26 @@ Cubre 335 sitios de 17 países: EE.UU., México, Canadá, Brasil, Argentina, Chi
 
 ```
 Usuarios: instalan Gina → la base viene incluida → cada semana descargan la versión nueva del repositorio
-          (sin cuenta, sin clave, sin enviar nada suyo)
-          Si Gina no conoce una marca, el usuario puede sugerirla (issue de GitHub prellenado o correo).
+          (sin cuenta, sin clave, sin enviar nada suyo; solo se reemplaza si la versión remota es mayor y limpia pendientes reconocidos).
+          Si Gina no conoce una marca, el botón «Sugerir» de la tarjeta o el lote del popup abre un issue de GitHub prellenado
+          con el marcador «gina:sugerencia» y la etiqueta «sugerencia» (o correo como respaldo).
 
-Proyecto: GitHub Actions corre job/investigar.js cada 2 semanas (configurable):
-          1. Lee las sugerencias de los usuarios (issues con el marcador «gina:sugerencia»).
-          2. Wikidata (gratis): si el dueño de la marca ya es un grupo de la base, la agrega sin gastar en IA.
-          3. Lo demás: IA económica (Claude Haiku 5.5 o Gemini Flash-Lite) con 3 búsquedas web como máximo;
-             un dato solo entra si su fuente salió de la búsqueda real.
-          4. Reputación de las empresas con más marcas (5 por ejecución) y alternativas locales sugeridas.
-          5. Publica extension/data/brands.json, responde y cierra los issues, y deja un reporte en job/reportes/.
+Proyecto: GitHub Actions corre el canario los domingos (DRY_RUN=1, sin escribir) y la ejecución real los lunes (job/investigar.js):
+          1. Lee los issues abiertos (marcador «gina:sugerencia» o plantilla YAML), los une con job/pendientes/ y quita duplicados.
+          2. Orden barato de resolución:
+             (a) ¿La marca ya está en la base? → comenta «Ya está en la base (grupo X)» y cierra el issue ($0).
+             (b) Biblioteca local datagen/fuentes/ e índice SQLite FTS5 (<12 meses) → reutiliza fuente verificada ($0).
+             (c) Wikidata con referencia (prov:wasDerivedFrom / P854) → propone sin gastar en IA ($0).
+             (d) IA económica (Claude Haiku / Gemini Flash-Lite) → solo si lo anterior no resolvió.
+          3. Verificación y contraste determinista (sin IA): HTTP 200, dominios.json, cita textual, Safe Browsing, Wayback, GLEIF y Fact Check.
+          4. Revisión humana: agrega la marca a db.marcas ({n, g, job:1}) y el grupo con confianza «Alta», guarda evidencia en
+             datagen/evidencias.csv y datagen/fuentes/<grupo_id>-<hash8>.json, escribe job/reportes/AAAA-MM-DD.md con métricas,
+             crea la rama datos/AAAA-MM-DD y abre un Pull Request con «Closes #N» (nunca hace push directo a main).
+          5. Publicación al fusionar el PR: el flujo «pruebas y paquete» completa aprobado_en_pr con el número del PR fusionado,
+             build_data.py sube la confianza a «Verificado» y regenera extension/data/brands.json con versión nueva.
 ```
 
-**Costo del proyecto:** GitHub (repositorio público y Actions) es gratis. La única cuenta es la de la IA del job. Con Claude Haiku 5.5 (US$0,10 por millón de tokens de entrada y US$0,50 de salida) y la búsqueda web (US$10 por cada 1.000 búsquedas), cada marca cuesta alrededor de US$0,03, y casi todo es la búsqueda. Una ejecución típica (25 marcas, 5 historiales) cuesta del orden de US$1, unos US$2 al mes si corre cada 2 semanas. Las marcas que resuelve Wikidata no cuestan nada. El reporte de cada ejecución muestra el costo estimado. Para gastar aún menos, baja `GINA_LIMIT`, `GINA_REP_LIMIT` o `GINA_MAX_SEARCHES`, o sube `GINA_EVERY_DAYS`.
+**Costo del proyecto:** GitHub (repositorio público y Actions) es gratis. Las marcas que ya están en la base, las resueltas por la biblioteca local (`datagen/fuentes/`, <12 meses) y las resueltas por Wikidata con referencia cuestan **US$0,00**. La IA solo se invoca como último recurso cuando ninguna vía gratuita encontró fuente verificable. Con Claude Haiku 5.5 (US$0,10 por millón de tokens de entrada y US$0,50 de salida) y la búsqueda web (US$10 por cada 1.000 búsquedas), cada marca que llega a la IA cuesta alrededor de US$0,03. Una ejecución típica cuesta entre US$0,00 y US$0,50 según cuántas marcas nuevas requieran búsqueda con IA. El reporte de cada ejecución detalla las métricas y el costo estimado exacto (`US$`). Para acotar aún más el gasto, ajusta `GINA_LIMIT`, `GINA_MAX_SEARCHES` o `GINA_EVERY_DAYS`.
 
 La IA dentro del navegador sigue disponible como opción avanzada (con la clave de cada persona), pero no hace falta.
 
@@ -43,9 +50,14 @@ La IA dentro del navegador sigue disponible como opción avanzada (con la clave 
 5. Lanza la primera ejecución a mano desde *Actions → Project Gina — investigación → Run workflow*.
 6. Genera el zip y publícalo en las tiendas (ver `PUBLICAR.md`).
 
-Prueba local: `GINA_API_KEY=... GINA_FORCE=1 node job/investigar.js` (Node 18+, sin dependencias; `GINA_DRY_RUN=1` no escribe archivos).
+Prueba local: `GINA_API_KEY=... GINA_FORCE=1 node job/investigar.js` (Node 22+, sin dependencias; `GINA_DRY_RUN=1` no escribe archivos).
+Para correr la suite de pruebas local instala antes las dependencias limpias en `test/`:
+```bash
+cd test && npm ci
+```
+*(Un `node_modules` a medias en `test/` deja `node test/run.js` colgado).*
 
-**Revisa los reportes.** El job publica solo, pero conviene leer `job/reportes/` cada vez: los datos de reputación y las alternativas aparecen junto al nombre de empresas reales.
+**Revisa los Pull Requests y reportes.** El robot nunca publica directo a `main`: abre un Pull Request en la rama `datos/AAAA-MM-DD` con el reporte en `job/reportes/` y las citas verificadas para revisión humana.
 
 ## Reputación: índice y tus valores
 
@@ -83,7 +95,7 @@ Para publicarla en las tiendas sigue **`PUBLICAR.md`**.
 
 | Ruta | Qué es |
 |---|---|
-| `datagen/` | Fuente de los datos: `data_base.py` y `data_mundo.py` (grupos y marcas), `data_locales.py` (alternativas verificadas), `categorias.py`, `reputacion.json`, `sites_data.py`, `proyecto.json`; `build_data.py` genera la base y el manifiesto |
+| `datagen/` | Fuente de los datos: `data_base.py` y `data_mundo.py` (grupos y marcas), `data_locales.py` (alternativas verificadas), `categorias.py`, `reputacion.json`, `sites_data.py`, `proyecto.json`, `fuentes/` y `indice_fuentes.py` (SQLite FTS5); `build_data.py` genera la base y el manifiesto |
 | `extension/manifest.json`, `_locales/` | Manifest V3; nombre y descripción en inglés y español |
 | `extension/data/brands.json` | Grupos, marcas, aerolíneas, reputación y categorías |
 | `extension/data/sites.json`, `proyecto.json` | Registro de sitios y configuración del proyecto (repositorio, correo) |
@@ -94,10 +106,10 @@ Para publicarla en las tiendas sigue **`PUBLICAR.md`**.
 | `extension/src/card.js`, `content.js` | Tarjeta flotante y orquestación de la página |
 | `extension/src/ai.js`, `background.js` | IA opcional, descarga de la base, memoria e investigación en el navegador |
 | `extension/options/`, `extension/popup/` | Opciones (valores, base del proyecto, IA avanzada) y ventana del ícono (página actual, buscador, sugerencias) |
-| `job/investigar.js`, `.github/workflows/` | Job del proyecto y su programación |
+| `job/investigar.js`, `.github/workflows/` | Job del proyecto y su programación (canario dominical + ejecución real de lunes) |
 | `docs/privacidad.html` | Política de privacidad (para publicar en GitHub Pages) |
 | `store/` | Textos e imágenes para las tiendas |
-| `test/` | `node test/run.js`, `node test/background.test.js` (requieren `npm i jsdom` en `test/`) y `python3 test/e2e.py` (Playwright) |
+| `test/` | `node test/run.js`, `node test/background.test.js`, `node test/job.test.js`, `node test/e2e_ciclo.test.js` (ejecutar antes `cd test && npm ci`) y `python3 test/e2e.py` (Playwright) |
 
 ## Límites
 

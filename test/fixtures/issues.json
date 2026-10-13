@@ -1,0 +1,30 @@
+[
+  {
+    "number": 101,
+    "title": "Marca faltante: Original Nature's Oils",
+    "body": "<!-- gina:sugerencia v1 tipo=marca -->\n- marca: Original Nature's Oils | tienda: Amazon México | producto: Kit de 5 aceites esenciales Árbol de Té",
+    "labels": [{"name": "sugerencia"}],
+    "createdAt": "2026-10-10T10:00:00Z"
+  },
+  {
+    "number": 102,
+    "title": "Marca faltante:Original Nature's Oils (duplicado)",
+    "body": "### Marca\n\nOriginal Nature's Oils\n\n### Tienda\n\nAmazon México\n\n### País\n\nMéxico\n\n### Producto\n\nAceite esencial de lavanda",
+    "labels": [{"name": "sugerencia"}],
+    "createdAt": "2026-10-10T12:00:00Z"
+  },
+  {
+    "number": 103,
+    "title": "Bug: el ícono tarda en cargar en una pestaña en blanco",
+    "body": "Hola, abrí una pestaña vacía y no vi nada.",
+    "labels": [{"name": "bug"}],
+    "createdAt": "2026-10-10T13:00:00Z"
+  },
+  {
+    "number": 104,
+    "title": "Marca faltante: Nescafé",
+    "body": "<!-- gina:sugerencia v1 tipo=marca -->\n- marca: Nescafé | tienda: Walmart México | producto: Café soluble clásico 200g",
+    "labels": [{"name": "sugerencia"}],
+    "createdAt": "2026-10-10T14:00:00Z"
+  }
+]
