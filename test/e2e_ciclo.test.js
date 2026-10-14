@@ -67,7 +67,12 @@ if (logFile) fs.writeFileSync(logFile, JSON.stringify(log, null, 2), "utf8");
 
 if (args[0] === "issue" && args[1] === "list") {
   const content = issuesFile && fs.existsSync(issuesFile) ? fs.readFileSync(issuesFile, "utf8") : "[]";
-  process.stdout.write(content);
+  if (args.includes("--jq")) {
+    const arr = JSON.parse(content || "[]");
+    process.stdout.write(arr.length ? String(arr[0].number) : "");
+  } else {
+    process.stdout.write(content);
+  }
   process.exit(0);
 }
 if (args[0] === "pr" && args[1] === "list") {
@@ -604,6 +609,110 @@ async function runAll() {
       res2.report.alertaRobot === true && !!alertIssue,
       alertIssue && alertIssue.args.join(" ")
     );
+  }
+
+  // =========================================================================
+  // D5. Ciclo: estado versionado limpio, frecuencia, revalidación y alarma de falla
+  // =========================================================================
+  {
+    const estado = JSON.parse(fs.readFileSync(path.join(ROOT, "job", "estado.json"), "utf8"));
+    check("D5 a: job/estado.json versionado en main tiene ultimoRun = null (una corrida local no bloquea el lunes)",
+      estado.ultimoRun === null || estado.ultimoRun === undefined, `ultimoRun=${estado.ultimoRun}`);
+  }
+
+  {
+    const env = createTempGitEnv();
+    process.env.PATH = env.binDir + path.delimiter + origPath;
+    process.env.FAKE_GH_LOG = env.ghLogFile;
+    process.env.FAKE_GH_ISSUES = env.issuesFile;
+    env.setOpenIssues([]);
+    const statePath = path.join(env.repoDir, "job", "estado.json");
+    const DAY = 86400000;
+
+    fs.writeFileSync(statePath, JSON.stringify({ marcas: {}, revalidados: {}, ultimoRun: new Date(Date.now() - 7 * DAY).toISOString() }), "utf8");
+    const corre = await job.main({ rootDir: env.repoDir, apiKey: "", force: false, everyDays: 6, skipArchive: true });
+    fs.writeFileSync(statePath, JSON.stringify({ marcas: {}, revalidados: {}, ultimoRun: new Date(Date.now() - 3 * DAY).toISOString() }), "utf8");
+    const salta = await job.main({ rootDir: env.repoDir, apiKey: "", force: false, everyDays: 6, skipArchive: true });
+    check("D5 b: run por schedule con estado de hace 7 días y EVERY_DAYS=6 → corre; con estado de hace 3 días → se omite",
+      Array.isArray(corre.report.revalidadas) && salta.report.revalidadas === undefined);
+  }
+
+  {
+    const env = createTempGitEnv();
+    process.env.PATH = env.binDir + path.delimiter + origPath;
+    process.env.FAKE_GH_LOG = env.ghLogFile;
+    process.env.FAKE_GH_ISSUES = env.issuesFile;
+    env.setOpenIssues([]);
+    // Dos evidencias: una cuya URL ahora da 404 y otra que sigue abriendo con la cita.
+    const brandsPath = path.join(env.repoDir, "extension", "data", "brands.json");
+    const b = JSON.parse(fs.readFileSync(brandsPath, "utf8"));
+    b.grupos.nestle.confianza = "Alta";
+    b.grupos.vigente = Object.assign({}, b.grupos.nestle, { empresa: "Empresa Vigente", confianza: "Alta" });
+    fs.writeFileSync(brandsPath, JSON.stringify(b, null, 1), "utf8");
+    const evPath = path.join(env.repoDir, "datagen", "evidencias.csv");
+    fs.appendFileSync(evPath,
+      '"nestle","https://www.nestle.com/investors/annual-report","oficial","Nestlé S.A. no tiene accionista de control según su informe anual.","2025-01-10","","ok","na","na","na","#1"\n' +
+      '"vigente","https://www.ejemplo-oficial.com/gobierno","oficial","La empresa vigente es propiedad de la familia Ejemplo desde 1950.","2025-06-01","","ok","na","na","na","#2"\n', "utf8");
+    execFileSync("git", ["add", "."], { cwd: env.repoDir });
+    execFileSync("git", ["commit", "-m", "evidencias de prueba"], { cwd: env.repoDir, stdio: "ignore" });
+
+    const fetch404 = async (url) => {
+      if (url.includes("nestle.com")) return { ok: false, status: 404, url, headers: new Map([["content-type", "text/html"]]), text: async () => "" };
+      if (url.includes("ejemplo-oficial.com")) return { ok: true, status: 200, url, headers: new Map([["content-type", "text/html"]]), text: async () => "<p>La empresa vigente es propiedad de la familia Ejemplo desde 1950.</p>" };
+      return { ok: false, status: 404, url, headers: new Map(), text: async () => "" };
+    };
+    const res = await job.main({ rootDir: env.repoDir, apiKey: "", force: true, revalidate: 5, skipArchive: true, fetchImpl: fetch404 });
+    const ghCalls = env.readGhLog();
+    const pr = ghCalls.find((c) => c.args[0] === "pr" && c.args[1] === "create");
+    let rama = null;
+    if (res.prResult && res.prResult.branch) {
+      execFileSync("git", ["checkout", res.prResult.branch], { cwd: env.repoDir, stdio: "ignore" });
+      rama = JSON.parse(fs.readFileSync(brandsPath, "utf8"));
+    }
+    check("D5 c: revalidación con una URL que ahora da 404 → el grupo pasa a «Verificar» con nota y va al PR; la fuente vigente no cambia",
+      !!(pr && rama && rama.grupos.nestle.confianza === "Verificar" && /Fuente ya no disponible/.test(rama.grupos.nestle.nota) &&
+         rama.grupos.vigente.confianza === "Alta" && res.report.revalidadas.includes("Empresa Vigente")),
+      rama ? `nestle=${rama.grupos.nestle.confianza}` : "sin PR");
+  }
+
+  {
+    // Alarma: se ejecuta el script del paso «Avisar si el robot falló» con gh simulado.
+    const env = createTempGitEnv();
+    const wf = fs.readFileSync(path.join(ROOT, ".github", "workflows", "investigacion-semanal.yml"), "utf8");
+    const m = wf.match(/- name: Avisar si el robot falló\n\s+if: failure\(\)[\s\S]*?run: \|\n([\s\S]*)$/);
+    const script = m ? m[1].split("\n").map((l) => l.replace(/^ {10}/, "")).join("\n") : "";
+    const runEnv = Object.assign({}, process.env, {
+      PATH: env.binDir + path.delimiter + origPath,
+      FAKE_GH_LOG: env.ghLogFile,
+      FAKE_GH_ISSUES: env.issuesFile,
+      GITHUB_REPOSITORY: "ginaproyecto02-lgtm/project-gina",
+      RUN_URL: "https://github.com/ginaproyecto02-lgtm/project-gina/actions/runs/1"
+    });
+    env.setOpenIssues([]);
+    const r = spawnSync("bash", ["-c", script], { env: runEnv, encoding: "utf8" });
+    const created = env.readGhLog().find((c) => c.args[0] === "issue" && c.args[1] === "create" && c.args.includes("Robot de investigación falló"));
+    check("D5 d: un fallo del robot → el paso if: failure() crea el issue «Robot de investigación falló» con el enlace a la ejecución",
+      !!m && r.status === 0 && !!created && created.args.some((a) => a.includes("/actions/runs/1")), r.stderr && r.stderr.slice(0, 120));
+  }
+
+  {
+    // Tras fusionar el PR de revalidación, build_data.py conserva «Verificar» (no la vuelve a subir con la evidencia vieja).
+    const mainBrandsPath = path.join(ROOT, "extension", "data", "brands.json");
+    const sitesPath = path.join(ROOT, "extension", "data", "sites.json");
+    const backup = fs.readFileSync(mainBrandsPath, "utf8");
+    const backupSites = fs.readFileSync(sitesPath, "utf8");
+    try {
+      const b = JSON.parse(backup);
+      b.grupos.herdez = Object.assign({}, b.grupos.herdez, { confianza: "Verificar", revalidacion_fallida: "2026-10-13", investigado: "2099-01-01T00:00:00.000Z", nota: "Fuente ya no disponible (2026-10-13)" });
+      fs.writeFileSync(mainBrandsPath, JSON.stringify(b, null, 1), "utf8");
+      const r = spawnSync("python3", ["datagen/build_data.py"], { cwd: ROOT, encoding: "utf8" });
+      const built = JSON.parse(fs.readFileSync(mainBrandsPath, "utf8"));
+      check("D5 e: tras fusionar, build_data.py conserva «Verificar» aunque la evidencia vieja tenga PR aprobado",
+        r.status === 0 && built.grupos.herdez.confianza === "Verificar", `exit=${r.status} ${built.grupos.herdez.confianza} ${(r.stderr || "").slice(-200)}`);
+    } finally {
+      fs.writeFileSync(mainBrandsPath, backup, "utf8");
+      fs.writeFileSync(sitesPath, backupSites, "utf8");
+    }
   }
 
   process.env.PATH = origPath;

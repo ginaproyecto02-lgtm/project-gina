@@ -87,7 +87,7 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           TITULO="Robot de investigación falló"
-          NUM=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$TITULO\" in:title" --json number --jq '.[0].number')
+          NUM=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$TITULO\" in:title" --json number --jq '.[0].number // empty')
           CUERPO="La ejecución del $(date -u +%Y-%m-%d) falló: $RUN_URL"
           if [ -n "$NUM" ]; then
             gh issue comment "$NUM" --repo "$GITHUB_REPOSITORY" --body "$CUERPO"

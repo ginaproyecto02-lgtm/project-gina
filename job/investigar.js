@@ -825,6 +825,8 @@ async function revalidateEvidencias({ evidenciasPath, db, state, limit, fetchImp
     if (!motivo) { out.vigentes.push(g.empresa); continue; }
     const antes = g.confianza;
     g.confianza = "Verificar";
+    g.revalidacion_fallida = hoy; // build_data.py no la vuelve a subir a «Verificado» con la evidencia vieja
+    g.investigado = new Date(now).toISOString(); // build_data.py conserva este cambio sobre la versión de datagen/
     g.nota = [g.nota, motivo].filter(Boolean).join(" ");
     out.fallidas.push({ gid: r.grupo_id, empresa: g.empresa, antes, url: r.url_final, archivo: r.archivo_url, motivo });
   }
@@ -1096,6 +1098,7 @@ async function main(options = {}) {
         } else {
           db.grupos[gid].controlador = prop.valor_nuevo;
           db.grupos[gid].confianza = "Alta"; // P1.12: Grupo nuevo o cambiado por el robot: confianza "Alta" en la rama
+          delete db.grupos[gid].revalidacion_fallida; // hay una fuente nueva verificada
           db.grupos[gid].investigado = new Date().toISOString();
           db.grupos[gid].url = f0.url_final;
           db.grupos[gid].licencia_origen = licenciaOrigen;

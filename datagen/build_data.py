@@ -217,7 +217,7 @@ def host_level(url):
 
 for gid, grp in brands["grupos"].items():
     ev = evidencias.get(gid)
-    if ev and ev.get("aprobado_en_pr"):
+    if ev and ev.get("aprobado_en_pr") and not grp.get("revalidacion_fallida"):
         pr_val = str(ev["aprobado_en_pr"]).strip().lstrip("#")
         if pr_val.isdigit():
             grp["confianza"] = "Verificado"

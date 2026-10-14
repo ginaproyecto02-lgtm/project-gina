@@ -901,6 +901,8 @@
       it: "Venditore terzo",
       ja: "サードパーティ出品者"
     },
+    summary_mkt_one: { es: "1 alternativa local", en: "1 local alternative", de: "1 lokale Alternative", fr: "1 alternative locale", it: "1 alternativa locale", ja: "地域資本の代替案1件" },
+    btn_search_store: { es: "Buscar", en: "Search", de: "Suchen", fr: "Chercher", it: "Cerca", ja: "検索" },
     summary_mkt_count: {
       es: "{count} alternativas locales",
       en: "{count} local alternatives",

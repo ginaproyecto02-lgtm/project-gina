@@ -35,7 +35,7 @@ function analyze(w, url) {
   }
   const site = QED.site(u.hostname);
   if (!QED.isProductPage(w.document, site, url, entry)) return { mode: "none", entry };
-  const data = QED.extract(w.document, u.hostname);
+  const data = QED.extract(w.document, u.hostname, entry ? entry.pais : "");
   const r = QED.match(index, data.candidates, data.title);
   r.store = entry && entry.tipo === "tienda" ? { nombre: entry.nombre, group: index.groups[entry.g], id: entry.g, entry, modelo: entry.modelo, pais: entry.pais } : null;
   // Igual que content.js: alternativas locales según el tipo de producto y el país de la tienda
@@ -60,7 +60,8 @@ function analyze(w, url) {
     };
   }
   if (QED.evaluateReliability) {
-    r.reliabilityEval = QED.evaluateReliability(data.reliability, r.group, cat, data.title, entry ? entry.pais : "México", entry);
+    r.reliabilityEval = QED.evaluateReliability(data.reliability, r.group, cat, data.title, entry ? entry.pais : "México", entry,
+      { host: u.hostname, rawTitle: data.title, brand: r.brand || r.brandText, rastreadores: db.rastreadores, tiendasComparar: db.tiendas_comparar });
   }
   if (QED.evaluateProductNotices) {
     r.productNotices = QED.evaluateProductNotices({
@@ -756,111 +757,176 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     );
   }
 
-  // 10. Comparativa de precios (1 sem, 1 m, 3 m): flecha roja ≥10% más caro, flecha verde ≤10% más barato, neutral en precio habitual
+  // ---------------------------------------------------------------- D1. Precios, MSI, moneda y enlaces
   {
-    const w = env("", "https://www.amazon.com.mx/dp/B0TEST");
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST00000");
     const QED = w.QED;
-    const now = Date.now();
     const DAY = 86400000;
-    const history = [
-      { t: now - 3 * DAY, p: 100 },
-      { t: now - 15 * DAY, p: 100 },
-      { t: now - 45 * DAY, p: 100 }
-    ];
+    const now = Date.UTC(2026, 9, 13, 18, 0, 0);
+    const pts = (arr) => arr.map(([d, p]) => ({ t: now - d * DAY, p }));
 
-    // +15% más caro (115 vs avg 100)
-    const compExpensive = QED.computePriceComparison(history, 115);
-    const okExp = compExpensive && compExpensive.oneWeek && compExpensive.oneWeek.status === "expensive" && compExpensive.oneWeek.arrow === "🔺" && compExpensive.oneWeek.diffPct === 15;
+    // 0 puntos anteriores → primera visita
+    const c0 = QED.computePriceComparison([], 100, now);
+    check("D1. Precio sin historial → primera visita (sin %)", c0 && c0.hasHistory === false && c0.visits === 1 && c0.oneWeek.insufficient);
 
-    // -15% más barato (85 vs avg 100)
-    const compCheap = QED.computePriceComparison(history, 85);
-    const okCheap = compCheap && compCheap.oneWeek && compCheap.oneWeek.status === "cheap" && compCheap.oneWeek.arrow === "🔻" && compCheap.oneWeek.diffPct === -15;
+    // 2 puntos → aún no hay suficientes visitas
+    const c2 = QED.computePriceComparison(pts([[1, 100], [2, 100]]), 150, now);
+    check("D1. Ventana con 2 puntos → «Aún no hay suficientes visitas»", c2.oneWeek.insufficient === true && c2.oneMonth.insufficient === true);
 
-    // +2% habitual (102 vs avg 100)
-    const compNeutral = QED.computePriceComparison(history, 102);
-    const okNeutral = compNeutral && compNeutral.oneWeek && compNeutral.oneWeek.status === "neutral" && compNeutral.oneWeek.arrow === "↔";
+    // 5 puntos → promedio y % (umbral ±10%)
+    const five = pts([[1, 100], [2, 100], [3, 100], [4, 100], [5, 100]]);
+    const up = QED.computePriceComparison(five, 115, now).oneWeek;
+    const down = QED.computePriceComparison(five, 85, now).oneWeek;
+    const flat = QED.computePriceComparison(five, 104, now).oneWeek;
+    check("D1. 5 puntos: +15% → ▲ caro; −15% → ▼ barato; +4% → en tu promedio",
+      up.status === "expensive" && up.arrow === "▲" && up.diffPct === 15 &&
+      down.status === "cheap" && down.arrow === "▼" && down.diffPct === -15 &&
+      flat.status === "neutral", `${up.diffPct} ${down.diffPct} ${flat.diffPct}`);
 
-    check("Comparativa temporal: flecha roja si ≥10% más caro, verde si ≤10% más barato, ↔ si habitual", okExp && okCheap && okNeutral);
+    // El precio de hoy NO entra en el promedio
+    const withToday = five.concat([{ t: now - 3600000, p: 500 }]);
+    const ct = QED.computePriceComparison(withToday, 115, now).oneWeek;
+    check("D1. El punto de hoy no entra en el promedio", ct.avg === 100 && ct.diffPct === 15, `prom ${ct.avg}`);
+
+    // Textos y colores: ▲ #8a1f14, ▼ #1f5f19, sin emojis
+    const card = fs.readFileSync(path.join(EXT, "src/card.js"), "utf8");
+    const i18n = fs.readFileSync(path.join(EXT, "src/i18n.js"), "utf8");
+    check("D1. ▲ en #8a1f14 y ▼ en #1f5f19; textos con flecha y palabra (el color no es la única señal)",
+      /\.price-up \{ color: #8a1f14/.test(card) && /\.price-down \{ color: #1f5f19/.test(card) &&
+      QED.I18N.t("price_above", { n: 12 }).startsWith("▲ +12%") && QED.I18N.t("price_below", { n: 8 }).startsWith("▼ −8%"));
+    check("D1. Sin emojis 🔺🔻💳⭐📊 en el precio ni en los rastreadores", !/🔺|🔻|💳|⭐|📊/.test(card + QED.computePriceComparison.toString()));
+
+    // Separador decimal por país
+    check("D1. «1.299,00 €» = 1299 y «1.299» = 1299 con coma decimal; «$1,299.00» = 1299 en México",
+      QED.parsePriceNumber("1.299,00 €", true) === 1299 && QED.parsePriceNumber("1.299", true) === 1299 &&
+      QED.parsePriceNumber("$1,299.00", false) === 1299 && QED.parsePriceNumber("12.990", true) === 12990);
+
+    // amazon.com sin JSON-LD → USD (nunca MXN por defecto)
+    const wUs = env(`<div id="corePrice_feature_div"><span class="a-price"><span class="a-offscreen">$49.99</span></span></div>`, "https://www.amazon.com/dp/B0USTEST00");
+    const pUs = wUs.QED.extractPrice(wUs.document, "amazon", "EE.UU.");
+    const wDe = env(`<div id="corePrice_feature_div"><span class="a-price"><span class="a-offscreen">1.299,00 €</span></span></div>`, "https://www.amazon.de/dp/B0DETEST00");
+    const pDe = wDe.QED.extractPrice(wDe.document, "amazon", "Alemania");
+    check("D1. amazon.com sin JSON-LD → USD; amazon.de «1.299,00 €» → 1299 EUR",
+      pUs && pUs.currency === "USD" && pUs.amount === 49.99 && pDe && pDe.currency === "EUR" && pDe.amount === 1299,
+      `${pUs && pUs.currency} ${pDe && pDe.amount}`);
+
+    // MSI solo desde contenedores de pago; un anuncio en el pie de página NO cuenta
+    const wMsi = env(`<div class="ui-pdp-payment">Hasta 12 meses sin intereses de $100</div>`, "https://articulo.mercadolibre.com.mx/MLM-123456789");
+    const msi = wMsi.QED.extractInstallments(wMsi.document, "mercadolibre");
+    const wFoot = env(`<div class="ui-pdp-price">$500</div><footer>Hasta 18 meses sin intereses con tarjetas participantes</footer>`, "https://articulo.mercadolibre.com.mx/MLM-987654321");
+    const foot = wFoot.QED.extractInstallments(wFoot.document, "mercadolibre");
+    check("D1. MSI en el bloque de pago → 12 meses; anuncio en el pie de página → NO cuenta",
+      msi.hasMsi && msi.months === 12 && foot.hasMsi === false && foot.noData === true);
+    check("D1. Sin MSI → «La página no indica meses sin intereses»; nunca «Pago de contado»",
+      QED.I18N.t("price_no_msi") === "La página no indica meses sin intereses" && !/[Pp]ago de contado/.test(i18n + card));
+
+    // Rastreadores: solo los verificados en brands.json; Waltrack excluido; CamelCamelCamel nunca en amazon.com.mx
+    const tr = db.rastreadores;
+    const mx = QED.getTrackerLinks("www.amazon.com.mx", { id: "B0TEST00000", type: "asin" }, "Audífonos Sony", tr);
+    const us = QED.getTrackerLinks("www.amazon.com", { id: "B0TEST00000", type: "asin" }, "Audífonos Sony", tr);
+    const ali = QED.getTrackerLinks("es.aliexpress.com", { id: "", type: "none" }, "reloj inteligente", tr);
+    const wm = QED.getTrackerLinks("www.walmart.com", { id: "999999", type: "walmart_id" }, "café", tr);
+    check("D1. Rastreadores: CamelCamelCamel en amazon.com y no en amazon.com.mx; Pricearchive y Alitools en AliExpress; Waltrack nunca",
+      us.some((x) => x.name === "CamelCamelCamel" && x.url === "https://camelcamelcamel.com/product/B0TEST00000") &&
+      !mx.some((x) => x.name === "CamelCamelCamel") &&
+      ali.some((x) => x.name === "Pricearchive") && ali.some((x) => x.name === "Alitools") &&
+      ![...mx, ...us, ...ali, ...wm].some((x) => /waltrack/i.test(x.name + x.url)));
+    check("D1. Enlace universal = «Buscar en Google Shopping» (sin HARPA)", us.some((x) => x.universal && /google\.com\/search\?tbm=shop/.test(x.url)) && !/HARPA/.test(card + i18n));
+
+    // Otras tiendas: solo enlaces, 2 por país, nunca la tienda actual, sin afirmar precios
+    const links = QED.getCompareLinks("www.amazon.com.mx", "México", "Sony WH-1000XM5", db.tiendas_comparar);
+    const linksDe = QED.getCompareLinks("www.amazon.de", "Alemania", "Bosch GSR 12V", db.tiendas_comparar);
+    check("D1. «Buscar en otra tienda»: 2 enlaces del país, sin la tienda actual; amazon.de nunca manda a tiendas de EE.UU.",
+      links.length === 2 && !links.some((l) => /amazon\.com\.mx/.test(l.url)) && links[0].url.includes("Sony%20WH-1000XM5") &&
+      linksDe.length === 1 && /otto\.de/.test(linksDe[0].url));
+    check("D1. Ningún texto afirma «más barato en» / «mismo precio» de otra tienda",
+      !/Más barato en|Mismo precio|crossPlatformHistory/.test(card + i18n + fs.readFileSync(path.join(EXT, "src/extractors.js"), "utf8")));
+
+    // Búsqueda con modelo o GTIN
+    const wModel = env(ld({ "@context": "https://schema.org", "@type": "Product", name: "Audífonos", gtin13: "4548736132597", mpn: "WH1000XM5/B" }), "https://www.liverpool.com.mx/tienda/pdp/1");
+    const ids = wModel.QED.extractModelAndGtin(wModel.document, "");
+    check("D1. Búsqueda con marca + modelo (JSON-LD mpn) o con el GTIN si no hay modelo",
+      QED.searchQuery("Audífonos inalámbricos Sony", "Sony", ids) === "Sony WH1000XM5/B" &&
+      QED.searchQuery("x", "", { gtin: "4548736132597" }) === "4548736132597" &&
+      QED.searchQuery("Taza de cerámica para café 350 ml", "", {}) === "Taza de cerámica");
+
+    // El precio vive en Mercado; en Confiabilidad queda una línea «¿Descuento real?»
+    const wCard = env(`<div></div>`, "https://www.amazon.com.mx/dp/B0TEST00000");
+    const rel = wCard.QED.evaluateReliability(
+      { price: { amount: 85, currency: "MXN" }, productId: { id: "B0TEST00000", type: "asin" }, installments: { hasMsi: false, noData: true } },
+      null, "lacteos", "Leche", "México", { d: "amazon.com.mx", nombre: "Amazon México", pais: "México" },
+      { priceHistory: { p: five }, now, host: "www.amazon.com.mx", rastreadores: db.rastreadores, tiendasComparar: db.tiendas_comparar }
+    );
+    wCard.QED.showCard({ found: true, brand: "Lala", group: db.grupos.lala, title: "Leche", reliabilityEval: rel, alternativas: { cat: "lacteos", label: "Lácteos", pais: "México", items: [], dominant: [] } }, {});
+    const root = wCard.document.getElementById("gina-tarjeta").shadowRoot;
+    const relSec = root.querySelector("#sec-rel") || root;
+    const mktSec = root.querySelector("#sec-mkt") || root;
+    check("D1. El panel de precio está en Mercado y Confiabilidad solo dice «¿Descuento real?»",
+      /¿Descuento real\?/.test(relSec.textContent) && !relSec.querySelector(".price-panel") && !!mktSec.querySelector(".price-panel") &&
+      /Según tus 6 visitas/.test(mktSec.textContent));
   }
 
-  // 11. Detección de Meses Sin Intereses (MSI)
+  // ---------------------------------------------------------------- C5. Antigüedad de la base en el popup
   {
-    const wMsi = env(`<div class="ui-pdp-payment">Hasta 12 meses sin intereses de $100</div>`, "https://articulo.mercadolibre.com.mx/MLM-123");
-    const instMsi = wMsi.QED.extractInstallments(wMsi.document, "mercadolibre");
-    const okMsi = instMsi && instMsi.hasMsi === true && instMsi.months === 12;
-
-    const wNoMsi = env(`<div>Pago de contado $500</div>`, "https://articulo.mercadolibre.com.mx/MLM-456");
-    const instNoMsi = wNoMsi.QED.extractInstallments(wNoMsi.document, "mercadolibre");
-    const okNoMsi = instNoMsi && instNoMsi.hasMsi === false;
-
-    check("Detección de Meses Sin Intereses (MSI) en la tienda", okMsi && okNoMsi);
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST00000");
+    const now = Date.UTC(2026, 9, 13);
+    check("C5. Base de hace 22 días → aviso de desactualizada; de hace 5 días → no",
+      w.QED.baseAgeDays("2026-09-21T0800", now) === 22 && w.QED.baseAgeDays("2026-10-08T0800", now) === 5 && w.QED.BASE_STALE_DAYS === 21 &&
+      /puede haber datos desactualizados/.test(w.QED.I18N.t("base_stale", { fecha: "21 sept 2026" })) &&
+      /baseDateText\(db\.version\)/.test(fs.readFileSync(path.join(EXT, "popup/popup.js"), "utf8")));
   }
 
-  // 12. Rastreadores de libre uso por ecosistema (CamelCamelCamel, Pricearchive, Alitools, Waltrack, Google Shopping)
+  // ---------------------------------------------------------------- D2. Privacidad del historial
   {
-    const w = env("", "https://www.amazon.com.mx/dp/B0TEST");
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST00000");
     const QED = w.QED;
-    const amzTrackers = QED.getTrackerLinks("amazon", { id: "B00EXAMPLE", type: "asin" }, "Audífonos Sony", "México");
-    const hasCamel = amzTrackers.some(tr => tr.name === "CamelCamelCamel" && tr.url.includes("camelcamelcamel.com/product/B00EXAMPLE"));
+    const DAY = 86400000;
+    const now = Date.UTC(2026, 9, 13, 18, 0, 0);
+    let h = {};
+    for (let i = 0; i < 301; i++) h = QED.recordPricePoint(h, `amazon:P${i}`, 10 + i, "MXN", now - (301 - i) * 1000);
+    check("D2. 301 productos → quedan 300 (se borra el visto hace más tiempo)", Object.keys(h).length === 300 && !h["amazon:P0"] && !!h["amazon:P300"]);
 
-    const aliTrackers = QED.getTrackerLinks("aliexpress", { id: "12345", type: "url" }, "Reloj Smart", "China");
-    const hasPricearchive = aliTrackers.some(tr => tr.name === "Pricearchive");
-    const hasAlitools = aliTrackers.some(tr => tr.name === "Alitools");
+    let h2 = { "amazon:X": { u: now - 91 * DAY, c: "MXN", p: [{ t: now - 91 * DAY, p: 50 }, { t: now - 10 * DAY, p: 60 }] } };
+    h2 = QED.recordPricePoint(h2, "amazon:X", 70, "MXN", now);
+    check("D2. Un punto de hace 91 días se descarta", h2["amazon:X"].p.length === 2 && h2["amazon:X"].p.every((x) => x.t > now - 90 * DAY));
 
-    const wmTrackers = QED.getTrackerLinks("walmart", { id: "999", type: "walmart_id" }, "Café", "México");
-    const hasWaltrack = wmTrackers.some(tr => tr.name === "Waltrack");
+    let h3 = QED.recordPricePoint({}, "amazon:Y", 100, "MXN", now - 3600000);
+    h3 = QED.recordPricePoint(h3, "amazon:Y", 95, "MXN", now);
+    check("D2. Máximo 1 punto por día por producto (el último del día lo reemplaza)", h3["amazon:Y"].p.length === 1 && h3["amazon:Y"].p[0].p === 95);
 
-    const hasUniversal = amzTrackers.some(tr => tr.name.includes("universal"));
+    check("D2. Clave = sitio + id del producto; sin id real no se guarda (nunca el título)",
+      QED.priceHistoryKey("amazon", { id: "B0TEST00000", type: "asin" }) === "amazon:B0TEST00000" &&
+      QED.priceHistoryKey("liverpool", { id: "", type: "none" }) === "" &&
+      Object.keys(QED.prunePriceHistory({ "Leche entera Lala 1 litro": [{ t: now, p: 30 }] }, now)).length === 0);
 
-    check("Rastreadores libres: CamelCamelCamel para Amazon, Pricearchive/Alitools para Asia, Waltrack para Walmart, y universal", hasCamel && hasPricearchive && hasAlitools && hasWaltrack && hasUniversal);
+    // content.js: interruptor apagado → 0 escrituras; borrar historial → storage vacío (simulado con el mismo código)
+    const content = fs.readFileSync(path.join(EXT, "src/content.js"), "utf8");
+    const options = fs.readFileSync(path.join(EXT, "options/options.js"), "utf8");
+    check("D2. Interruptor apagado → recordPrice no escribe; Opciones apaga y borra",
+      /if \(!prefs\.priceHistory \|\| !key/.test(content) && /storage\.local\.remove\("priceHistory"\)/.test(options) &&
+      /settings\.priceHistory === false/.test(content));
+    const pol = fs.readFileSync(path.join(__dirname, "..", "docs/privacidad.html"), "utf8");
+    check("D2. La política de privacidad declara el historial de precios local y borrable", /Historial de precios/.test(pol) && /300 productos/.test(pol) && /price history/.test(pol));
   }
 
-  // 13. Opciones en otras 2 plataformas con comparativa de precio
+  // ---------------------------------------------------------------- D3. Datos de descuento y marcas propias
   {
-    const w = env("", "https://www.amazon.com.mx/dp/B0TEST");
+    const tipos = Object.values(db.grupos).map((g) => g.tipo);
+    check("D3. Ningún grupo usa «Hard discount» ni «Marca propia» como tipo de dueño", !tipos.some((t) => /hard.?discount|marca propia/i.test(t)));
+    const w = env("", "https://www.amazon.com.mx/dp/B0LECHE0000");
     const QED = w.QED;
-    const cross = QED.getCrossPlatformOptions("amazon", "Jabón Roma 1kg", "México", 40, null, null, {
-      mercadolibre: { price: 35 },
-      walmart: { price: 45 }
-    });
-    const okPlatforms = cross && cross.platforms && cross.platforms.length === 2;
-    const mlOpt = cross.platforms.find(p => p.site === "mercadolibre");
-    const wmOpt = cross.platforms.find(p => p.site === "walmart");
-    const okDiff = mlOpt && mlOpt.compStatus === "cheaper" && wmOpt && wmOpt.compStatus === "expensive";
-
-    check("Opciones en otras 2 plataformas con enlaces y cotejo de precio (más barato / más caro)", okPlatforms && okDiff);
-  }
-
-  // 14. Alternativas de Tiendas 3B y Waldo's con distintivo de hard discount y ubicación
-  {
-    const wLact = env(`<h1>Leche entera</h1>`, "https://www.amazon.com.mx/dp/B0LECHE");
-    const QED = wLact.QED;
     const prep = QED.ALT.prepare(db, QED.buildIndex(db, [], {}, {}));
-    const alts = QED.ALT.suggest(prep, "lacteos", "México", null, null, 5, "Leche");
-    const has3b = alts.some(a => a.group && (a.group.id === "tiendas_3b" || a.group.id === "loc_tiendas_3b"));
-
-    // Renderizar tarjeta para verificar insignia y disponibilidad
-    const cardRes = {
-      found: true,
-      brand: "Alpura",
-      group: db.grupos["loc_alpura"],
-      title: "Leche Alpura Clásica 1L",
-      store: { nombre: "Amazon México", pais: "México" },
-      alternativas: {
-        cat: "lacteos",
-        label: "Lácteos",
-        pais: "México",
-        items: alts,
-        dominant: []
-      }
-    };
-    const wCard = env(`<div></div>`, "https://www.amazon.com.mx/dp/B0LECHE");
-    wCard.QED.showCard(cardRes, {});
-    const cardHtml = wCard.document.getElementById("gina-tarjeta").shadowRoot.innerHTML;
-    const hasDiscountBadge = cardHtml.includes("Descuento / 3B / Waldo&#39;s") || cardHtml.includes("Descuento / 3B / Waldo's");
-    const has3bLocation = cardHtml.includes("Tiendas 3B");
-
-    check("Alternativas incluyen marcas de descuento de Tiendas 3B / Waldo's con distintivo y tienda", has3b && hasDiscountBadge && has3bLocation);
+    const allAlts = Object.keys(db.categorias).flatMap((c) => QED.ALT.suggest(prep, c, "México", null, null, 20, ""));
+    check("D3. Cadenas de descuento y marcas propias nunca aparecen como «alternativa local»",
+      !allAlts.some((a) => a.group.canal || a.group.marca_propia));
+    check("D3. Waldo's corregido con fuente (Grupo Vizion) y 3B sin marcas sin fuente",
+      /Grupo Vizion/.test(db.grupos.waldos.controlador) && /ambito\.com/.test(db.grupos.waldos.url) &&
+      !db.marcas.some((m) => /LactiBuena|Vaca Blanca|Nuestro Campo|Odisa|Bodega Aurrera/.test(m.n)) &&
+      db.grupos.tiendas_3b.canal === "descuento");
+    const sb = QED.ALT.storeBrands(prep, "limpieza", "México", null, null, 4);
+    check("D3. Marcas propias con fuente y país de venta (bloque aparte)",
+      Object.values(db.grupos).filter((g) => g.marca_propia).every((g) => /^https:\/\//.test(g.url) && (g.paises_venta || []).length) &&
+      sb.every((x) => x.group.marca_propia && x.group.paises_venta.includes("México")));
   }
 }
 

@@ -420,7 +420,7 @@
     let h = "";
     if (rel && rel.compareLinks && rel.compareLinks.length) {
       h += `<div class="cross-plat-box"><div class="d-k" style="margin-bottom:4px;">${t("lbl_compare_other")}</div>
-        ${rel.compareLinks.map((c) => `<div class="cross-plat-item"><div class="cross-plat-name">${esc(c.name)}</div><a href="${esc(safe(c.url))}" class="cross-plat-link" target="_blank" rel="noopener noreferrer">${esc(c.name)} ↗</a></div>`).join("")}
+        ${rel.compareLinks.map((c) => `<div class="cross-plat-item"><div class="cross-plat-name">${esc(c.name)}</div><a href="${esc(safe(c.url))}" class="cross-plat-link" target="_blank" rel="noopener noreferrer">${t("btn_search_store")} ↗</a></div>`).join("")}
         <div class="d-src">${t("compare_hint")}</div></div>`;
     }
     if (rel && rel.trackers && rel.trackers.length) {
@@ -798,7 +798,7 @@
     if (a && a.items && a.items.length) {
       const cnt = a.items.length;
       const countryLbl = I18N().paisLabel ? I18N().paisLabel(a.pais) : a.pais;
-      return t("summary_mkt_count", { count: cnt, pais: countryLbl });
+      return cnt === 1 ? t("summary_mkt_one") : t("summary_mkt_count", { count: cnt, pais: countryLbl });
     }
     return t("summary_mkt_none");
   }

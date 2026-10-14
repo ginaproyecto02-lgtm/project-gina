@@ -104,6 +104,7 @@ jobs:
           node test/background.test.js
           node test/job.test.js
           node test/e2e_ciclo.test.js
+          node test/snapshots.test.js
 
       - name: Leer versiones
         id: v
