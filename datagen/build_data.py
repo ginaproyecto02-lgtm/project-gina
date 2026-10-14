@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import data_base as base
 import data_mundo as mundo
 import data_locales as locales
+import data_candidatas  # noqa: F401  (marcas candidatas por tema; agrega grupos y marcas a data_base)
 from categorias import CATS
 from sites_data import S
 
