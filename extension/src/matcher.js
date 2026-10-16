@@ -19,28 +19,53 @@
 
   // Quita los textos que las tiendas ponen alrededor del nombre de la marca.
   function cleanBrandField(s) {
-    let t = norm(s);
+    let t = norm(String(s || "").replace(/[™®]/g, " "));
     const patterns = [
-      /^visita la tienda de\s+/, /^visit the\s+/, /\s+store$/, /^visitar a loja\s+/,
-      /^(?:marca|brand|marque|marke|marchio)(?:[:：]\s*|\s+)/, /^por\s+/, /^by\s+/, /^vendido por\s+/, /^tienda oficial\s+/,
-      /^tienda oficial de\s+/, /\s+tienda oficial$/, /\s+oficial$/, /^loja oficial\s+/,
+      /^visita la tienda de\s+/, /^visita la tienda oficial de\s+/, /^visit the\s+/, /^visit the official store of\s+/,
+      /\s+store$/, /\s+official store$/, /^visitar a loja\s+/,
+      /^(?:marca|brand|marque|marke|marchio)(?:[:：]\s*|\s+)/,
+      /^(?:por|by|vendido por)\s+/, /^tienda oficial( de)?\s+/, /\s+tienda oficial$/, /\s+oficial$/, /^loja oficial\s+/,
+      /^de la marca\s+/, /^de:\s*/, /^by:\s*/, /^de\s+/,
       /^(ブランド|メーカー|브랜드|제조사|品牌|מותג)\s*[:：]?\s*/, /\s+(ストア|스토어|旗舰店|官方旗舰店)$/
     ];
     let prev;
     do { prev = t; for (const p of patterns) t = t.replace(p, "").trim(); } while (t !== prev);
+    t = t.replace(/^[:\-–—\s]+|[:\-–—\s]+$/g, "").trim();
     return t;
   }
 
   // Igual que cleanBrandField pero conserva mayúsculas y acentos (para mostrarla y enviarla a la IA).
   function displayBrand(s) {
-    let t = String(s || "").normalize("NFKC").replace(/\s+/g, " ").trim();
-    const patterns = [/^visita la tienda de\s+/i, /^visit the\s+/i, /\s+store$/i, /^visitar a loja\s+/i,
+    let t = String(s || "").replace(/[™®]/g, " ").normalize("NFKC").replace(/\s+/g, " ").trim();
+    const patterns = [
+      /^visita la tienda de\s+/i, /^visita la tienda oficial de\s+/i, /^visit the\s+/i, /^visit the official store of\s+/i,
+      /\s+store$/i, /\s+official store$/i, /^visitar a loja\s+/i,
       /^(?:marca|brand|marque|marke|marchio)(?:[:：]\s*|\s+)/i,
       /^(por|by|vendido por)\s+/i, /^tienda oficial( de)?\s+/i, /\s+tienda oficial$/i, /\s+oficial$/i, /^loja oficial\s+/i,
-      /^(ブランド|メーカー|브랜드|제조사|品牌|מותג)\s*[:：]?\s*/, /\s+(ストア|스토어|旗舰店|官方旗舰店)$/];
+      /^de la marca\s+/i, /^de:\s*/i, /^by:\s*/i, /^de\s+/i,
+      /^(ブランド|メーカー|브랜드|제조사|品牌|מותג)\s*[:：]?\s*/, /\s+(ストア|스토어|旗舰店|官方旗舰店)$/
+    ];
     let prev;
     do { prev = t; for (const p of patterns) t = t.replace(p, "").trim(); } while (t !== prev);
+    t = t.replace(/^[:\-–—\s]+|[:\-–—\s]+$/g, "").trim();
     return t;
+  }
+
+  // Comprueba si una marca en bruto ya existe en el índice (exacto, alias, lista estricta o empresa)
+  function isKnownBrand(index, rawBrand) {
+    if (!index || !rawBrand) return false;
+    const cleanKey = cleanBrandField(rawBrand);
+    if (!cleanKey) return false;
+    if (index.exact && index.exact.has(cleanKey)) return true;
+    for (const it of (index.list || [])) {
+      if ((it.key.length >= 3 || NON_LATIN.test(it.key)) && (it.key === cleanKey || it.re.test(cleanKey))) {
+        return true;
+      }
+    }
+    for (const g of Object.values((index && index.groups) || {})) {
+      if (g && g.empresa && norm(g.empresa) === cleanKey) return true;
+    }
+    return false;
   }
 
   function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
@@ -143,6 +168,7 @@
   QED.norm = norm;
   QED.cleanBrandField = cleanBrandField;
   QED.displayBrand = displayBrand;
+  QED.isKnownBrand = isKnownBrand;
   // Antigüedad de la base: la versión es "AAAA-MM-DDTHHMM". Más de 21 días → la interfaz avisa que puede estar desactualizada.
   function baseAgeDays(version, now) {
     const m = String(version || "").match(/^(\d{4})-(\d{2})-(\d{2})/);

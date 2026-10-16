@@ -351,5 +351,42 @@
     return "";
   }
 
-  QED.ALT = { INDEP, countries, prepare, category, suggest, suggestionLink, otherBrandsOfSameOwner, categoryDominantBrands, storeBrands };
+  function suggestionMailData(proj, tipo, items) {
+    proj = proj || {};
+    const today = new Date().toISOString().slice(0, 10);
+    const it0 = (items && items[0]) || {};
+    const brand = clean(it0.marca || it0.producto, 60);
+    const store = clean(it0.tienda, 60);
+    const product = clean(it0.producto, 140);
+    const subject = tipo === "alternativa"
+      ? `[gina:sugerencia] Alternativa local: ${clean(it0.marca, 60)}`
+      : `[gina:sugerencia] Marca faltante: ${brand}`;
+
+    let lines;
+    if (tipo === "alternativa") {
+      lines = (items || []).slice(0, 40).map((it) =>
+        `- alternativa: ${clean(it.marca, 80)} | categoría: ${clean(it.categoria, 40)} | país: ${clean(it.pais, 40)} | dueño: ${clean(it.dueno, 120)} | fuente: ${clean(it.fuente, 200)}`
+      );
+    } else if (items && items.length > 1) {
+      lines = items.slice(0, 40).map((it) =>
+        `- marca: ${clean(it.marca, 80)} | tienda: ${clean(it.tienda, 60)} | producto: ${clean(it.producto, 140)}`
+      );
+    } else {
+      lines = [
+        `- marca: ${brand}`,
+        `- tienda: ${store || "No indicada"}`,
+        `- producto: ${product || "No indicado"}`,
+        `- fecha: ${today}`
+      ];
+    }
+    const body = `<!-- gina:sugerencia v1 tipo=${tipo || "marca"} -->\n${lines.join("\n")}\n\n(Enviado desde la extensión Gina. Revisa y edita antes de enviar; no incluye datos personales.)`;
+    const to = proj.contacto || "gina.proyecto02@gmail.com";
+    const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const ghTitle = tipo === "alternativa" ? `Alternativa local: ${clean(it0.marca, 60)}` : `Marca faltante: ${brand}`;
+    const gh = proj.issuesUrl ? `${proj.issuesUrl}?title=${encodeURIComponent(ghTitle)}&body=${encodeURIComponent(body)}&labels=sugerencia` : "";
+    return { subject, body, to, mailto, gmail, gh, text: body, brand };
+  }
+
+  QED.ALT = { INDEP, countries, prepare, category, suggest, suggestionLink, suggestionMailData, otherBrandsOfSameOwner, categoryDominantBrands, storeBrands };
 })(typeof globalThis !== "undefined" ? globalThis : this);

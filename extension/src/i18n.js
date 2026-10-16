@@ -221,6 +221,62 @@
       it: "✉ Invia via email al team",
       ja: "✉ チームにメールで送信"
     },
+    sug_privacy_notice: {
+      es: "Aviso: El proyecto verá tu dirección de correo al recibir este mensaje.",
+      en: "Notice: The project will see your email address when receiving this message.",
+      de: "Hinweis: Das Projekt sieht deine E-Mail-Adresse beim Empfang dieser Nachricht.",
+      fr: "Avis : Le projet verra votre adresse e-mail à la réception de ce message.",
+      it: "Avviso: Il proyecto vedrà il tuo indirizzo email alla ricezione di questo messaggio.",
+      ja: "注意：メッセージ受信時にプロジェクト管理者にメールアドレスが表示されます。"
+    },
+    sug_opt_mailto: {
+      es: "✉ Abrir en mi programa de correo",
+      en: "✉ Open in email app",
+      de: "✉ Im E-Mail-Programm öffnen",
+      fr: "✉ Ouvrir dans le client de messagerie",
+      it: "✉ Apri nel programma di posta",
+      ja: "✉ メールソフトで開く"
+    },
+    sug_opt_gmail: {
+      es: "✉ Abrir en Gmail",
+      en: "✉ Open in Gmail",
+      de: "✉ In Gmail öffnen",
+      fr: "✉ Ouvrir dans Gmail",
+      it: "✉ Apri in Gmail",
+      ja: "✉ Gmailで開く"
+    },
+    sug_opt_copy: {
+      es: "📋 Copiar texto",
+      en: "📋 Copy text",
+      de: "📋 Text kopieren",
+      fr: "📋 Copier le texte",
+      it: "📋 Copia testo",
+      ja: "📋 テキストをコピー"
+    },
+    sug_opt_github: {
+      es: "🐙 Abrir en GitHub Issues",
+      en: "🐙 Open in GitHub Issues",
+      de: "🐙 In GitHub Issues öffnen",
+      fr: "🐙 Ouvrir dans GitHub Issues",
+      it: "🐙 Apri in GitHub Issues",
+      ja: "🐙 GitHub Issuesで開く"
+    },
+    sug_copied: {
+      es: "✔ ¡Copiado al portapapeles!",
+      en: "✔ Copied to clipboard!",
+      de: "✔ In die Zwischenablage kopiert!",
+      fr: "✔ Copié dans le presse-papiers !",
+      it: "✔ Copiato negli appunti!",
+      ja: "✔ クリップボードにコピーしました！"
+    },
+    suggest_already_submitted: {
+      es: "Ya sugeriste esta marca al proyecto.",
+      en: "You already suggested this brand to the project.",
+      de: "Du hast diese Marke bereits für das Projekt vorgeschlagen.",
+      fr: "Vous avez déjà suggéré cette marque au projet.",
+      it: "Hai già suggerito questo marchio al progetto.",
+      ja: "このブランドは既にプロジェクトに提案済みです。"
+    },
 
     // Store & travel
     shopping_at: {
@@ -1649,6 +1705,14 @@
       it: "Usa la stessa chiave della consultazione directa",
       ja: "即時照会と同じキーを使用（同プロバイダーの場合）"
     },
+    opt_chk_github_issues: {
+      es: "Abrir sugerencias directamente como issues en GitHub (requiere cuenta de GitHub)",
+      en: "Open suggestions directly as GitHub issues (requires GitHub account)",
+      de: "Vorschläge direkt als GitHub-Issues öffnen (erfordert GitHub-Konto)",
+      fr: "Ouvrir les suggestions directement sous forme d'issues GitHub (nécessite un compte GitHub)",
+      it: "Apri i suggerimenti direttamente come issue di GitHub (richiede account GitHub)",
+      ja: "提案を直接GitHub Issueとして開く（GitHubアカウントが必要）"
+    },
     opt_lbl_weekly_limit: {
       es: "Marcas investigadas por semana",
       en: "Brands researched per week",
@@ -1704,6 +1768,14 @@
       fr: "3. Autre base distante",
       it: "3. Altro database remoto",
       ja: "3. カスタムリモートDB"
+    },
+    opt_sec_github_issues: {
+      es: "Sugerencias por GitHub",
+      en: "GitHub Suggestions",
+      de: "GitHub-Vorschläge",
+      fr: "Suggestions via GitHub",
+      it: "Suggerimenti via GitHub",
+      ja: "GitHubでの提案"
     },
     opt_help_custom_remote: {
       es: "Déjalo vacío para usar la base del proyecto. Solo si mantienes tu propia copia (por ejemplo, con el job de <code>job/</code> en tu GitHub), pon aquí la URL de tu <code>brands.json</code>.",

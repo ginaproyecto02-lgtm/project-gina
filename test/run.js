@@ -928,6 +928,54 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       Object.values(db.grupos).filter((g) => g.marca_propia).every((g) => /^https:\/\//.test(g.url) && (g.paises_venta || []).length) &&
       sb.every((x) => x.group.marca_propia && x.group.paises_venta.includes("México")));
   }
+
+  // ---------------------------------------------------------------- E1. Sugerencias por correo y filtro de marcas
+  {
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST00000");
+    const QED = w.QED;
+    const idx = QED.buildIndex(db, [], {}, {});
+
+    // 1. Limpieza de prefijos y caracteres especiales
+    check("E1. cleanBrandField limpia prefijos de tienda y símbolos ™/®",
+      QED.cleanBrandField("Visita la tienda de Sony®") === "sony" &&
+      QED.cleanBrandField("Visit the Apple Store") === "apple" &&
+      QED.cleanBrandField("Marca: Nestlé™") === "nestle" &&
+      QED.cleanBrandField("De la marca Samsung") === "samsung" &&
+      QED.cleanBrandField("Por Truper") === "truper");
+
+    check("E1. displayBrand conserva mayúsculas y quita prefijos/símbolos",
+      QED.displayBrand("Visita la tienda de Sony®") === "Sony" &&
+      QED.displayBrand("Marca: Nestlé™") === "Nestlé");
+
+    // 2. isKnownBrand detecta marcas exactas, alias, empresas y catálogo estricto
+    check("E1. isKnownBrand reconoce marcas existentes aún con prefijos o ™/®",
+      QED.isKnownBrand(idx, "Visita la tienda de Sony®") === true &&
+      QED.isKnownBrand(idx, "Marca: Bimbo") === true &&
+      QED.isKnownBrand(idx, "MarcaInventadaCompletamenteDesconocida123") === false);
+
+    // 3. suggestionMailData genera correo estructurado, fecha y enlaces válidos
+    const p = { contacto: "gina.proyecto02@gmail.com", issuesUrl: "https://github.com/ginaproyecto02-lgtm/project-gina/issues/new" };
+    const mailData = QED.ALT.suggestionMailData(p, "marca", [{ marca: "MarcaX", tienda: "Amazon México", producto: "Café de grano 500g" }]);
+    check("E1. suggestionMailData genera mailto, gmail y cuerpo estructurado con fecha",
+      mailData.mailto.startsWith("mailto:gina.proyecto02@gmail.com?subject=%5Bgina%3Asugerencia%5D%20Marca%20faltante%3A%20MarcaX") &&
+      mailData.gmail.includes("mail.google.com") && mailData.gmail.includes("MarcaX") &&
+      mailData.body.includes("<!-- gina:sugerencia v1 tipo=marca -->") &&
+      mailData.body.includes("- marca: MarcaX") &&
+      mailData.body.includes("- fecha: ") &&
+      mailData.body.includes("no incluye datos personales"));
+
+    // 4. Marca ya sugerida por el usuario muestra aviso en la tarjeta
+    const wCard = env("<div></div>", "https://www.amazon.com.mx/dp/B0UNKNOWN");
+    wCard.QED.showCard(
+      { found: false, brandText: "MarcaYaSugerida", title: "Producto X" },
+      { userSuggestions: [{ brand: "MarcaYaSugerida", title: "Producto X", date: Date.now() }] }
+    );
+    const hostEl = wCard.document.getElementById("gina-tarjeta");
+    const shadow = hostEl && hostEl.shadowRoot;
+    const alreadyEl = shadow && shadow.querySelector(".sug-already");
+    check("E1. Marca ya sugerida en userSuggestions muestra aviso discreto",
+      !!alreadyEl && alreadyEl.textContent.includes("Ya sugeriste"));
+  }
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);

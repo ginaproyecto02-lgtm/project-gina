@@ -450,6 +450,81 @@ import build_data
     check("22. licencia_origen (CC0|ODbL|oficial|prensa) y fallo en build_data.py si ODbL carece de atribución", okLic && okFail, "Falla con AssertionError: licencia_origen 'ODbL' sin la nota de atribución");
   }
 
+  // ---------------------------------------------------------------- E1. Robot de correos (job/correo.js)
+  {
+    const correo = require("../job/correo.js");
+
+    // 23. Sin credenciales IMAP sale con código 0 y skipped
+    const resSkipped = await correo.main();
+    check("23. job/correo.js sin credenciales IMAP sale con código 0 y skipped",
+      resSkipped && resSkipped.skipped === true && resSkipped.reason.includes("Credenciales IMAP no configuradas"));
+
+    // 24. Sanitización rigurosa de remitentes: parseEmailBody extrae datos y elimina remitente/encabezados
+    const rawEmail = `From: Juan Perez <juan.perez@dominio-privado.com>
+To: gina.proyecto02@gmail.com
+Subject: Sugerencia de marca
+Date: Fri, 16 Oct 2026 12:00:00 +0000
+
+<!-- gina:sugerencia v1 tipo=marca -->
+- marca: Café Don Pepe
+- tienda: Mercado Libre México
+- producto: Café artesanal de Veracruz 500g
+- fecha: 2026-10-16
+
+(Enviado desde la extensión Gina. Revisa y edita antes de enviar; no incluye datos personales.)`;
+
+    const parsed = correo.parseEmailBody(rawEmail);
+    const body = correo.buildIssueBody(parsed);
+    check("24. parseEmailBody extrae únicamente la sugerencia estructurada y no incluye remitente ni headers",
+      parsed && parsed.marca === "Café Don Pepe" && parsed.tienda === "Mercado Libre México" &&
+      !body.includes("juan.perez") && !body.includes("dominio-privado.com") && !body.includes("From:") &&
+      body.includes("<!-- gina:sugerencia v1 tipo=marca -->") && body.includes("- marca: Café Don Pepe"));
+
+    // 25. Detección de duplicados contra brands.json e issues abiertos
+    const mockDb = {
+      marcas: [{ n: "Bimbo", g: "bimbo" }, { n: "Sony", g: "sony" }],
+      grupos: { bimbo: { empresa: "Grupo Bimbo" } }
+    };
+    const mockOpenIssues = [
+      { title: "Marca faltante: Café Don Pepe", body: "- marca: Café Don Pepe" }
+    ];
+
+    const dupInDb = correo.isDuplicateBrand("Bimbo", mockDb, []);
+    const dupAlias = correo.isDuplicateBrand("Visita la tienda de Sony®", mockDb, []);
+    const dupIssue = correo.isDuplicateBrand("Café Don Pepe", mockDb, mockOpenIssues);
+    const notDup = correo.isDuplicateBrand("Marca Totalmente Nueva", mockDb, mockOpenIssues);
+
+    check("25. isDuplicateBrand detecta marcas existentes en brands.json y en issues abiertos",
+      dupInDb === true && dupAlias === true && dupIssue === true && notDup === false);
+
+    // 26. Proceso de emails: procesa nuevos, omite duplicados y mueve a gina/procesado
+    const moved = [];
+    const createdIssues = [];
+    const mockImap = {
+      searchUnseen: async () => [1, 2],
+      fetchBody: async (id) => id === 1 ? rawEmail : `<!-- gina:sugerencia v1 tipo=marca -->\n- marca: Bimbo\n- tienda: Oxxo\n- producto: Pan`,
+      moveToProcessed: async (id) => { moved.push(id); }
+    };
+    const mockExec = (cmd, args) => {
+      if (cmd === "gh" && args[0] === "issue" && args[1] === "create") {
+        createdIssues.push({ title: args[args.indexOf("--title") + 1], body: args[args.indexOf("--body") + 1] });
+      }
+    };
+
+    const processRes = await correo.processEmails({
+      imap: mockImap,
+      brandsDb: mockDb,
+      openIssues: [],
+      repo: "ginaproyecto02-lgtm/project-gina",
+      execFile: mockExec
+    });
+
+    check("26. processEmails crea issue solo para la marca nueva, descarta duplicada y mueve ambos a procesado",
+      processRes.read === 2 && processRes.created === 1 && processRes.duplicates === 1 &&
+      createdIssues.length === 1 && createdIssues[0].title === "Marca faltante: Café Don Pepe" &&
+      !createdIssues[0].body.includes("juan.perez") && moved.length === 2);
+  }
+
   console.log(`\n${pass}/${total} pruebas de job/investigar.js correctas`);
   process.exit(pass === total ? 0 : 1);
 }

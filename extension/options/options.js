@@ -141,7 +141,8 @@ function readForm() {
     showLobbying: $("#showLobbying") ? $("#showLobbying").checked : true,
     showAlternatives: $("#showAlternatives") ? $("#showAlternatives").checked : true,
     openFoodFacts: !!($("#openFoodFacts") && $("#openFoodFacts").checked),
-    priceHistory: $("#priceHistory") ? $("#priceHistory").checked : true
+    priceHistory: $("#priceHistory") ? $("#priceHistory").checked : true,
+    useGitHubIssues: !!($("#useGitHubIssues") && $("#useGitHubIssues").checked)
   };
 }
 
@@ -182,6 +183,7 @@ function writeForm(s) {
   if ($("#showAlternatives")) $("#showAlternatives").checked = s.showAlternatives !== false;
   if ($("#openFoodFacts")) $("#openFoodFacts").checked = !!s.openFoodFacts;
   if ($("#priceHistory")) $("#priceHistory").checked = s.priceHistory !== false;
+  if ($("#useGitHubIssues")) $("#useGitHubIssues").checked = !!s.useGitHubIssues;
 
   if (s.aiEnabled || s.jobEnabled || (s.classify && s.classify.key) || (s.research && s.research.key)) {
     const adv = document.querySelector("details.advanced");

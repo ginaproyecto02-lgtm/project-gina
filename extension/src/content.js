@@ -11,13 +11,14 @@
   let index = null, alt = null, airIndex = null, packaged = null, registry = null, entry = null;
   let prefs = { enabled: true, minimized: false, aiEnabled: false, values: {}, showLobbying: true, showAlternatives: true, priceHistory: true };
   let cachedPriceHistory = {};
+  let cachedUserSuggestions = [];
   let lastKey = "", closedFor = "", lastResult = null, timer = null, seq = 0;
 
   async function load() {
     if (!packaged) packaged = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
     if (!registry) registry = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
     if (!QED.PROJECT) { try { QED.PROJECT = await (await fetch(api.runtime.getURL("data/proyecto.json"))).json(); } catch (e) { QED.PROJECT = {}; } }
-    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory"]);
+    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory", "userSuggestions"]);
     prefs.enabled = st.enabled !== false;
     prefs.minimized = !!st.minimized;
     prefs.aiEnabled = !!(st.settings && st.settings.aiEnabled && st.settings.classify && st.settings.classify.key);
@@ -25,6 +26,8 @@
     prefs.showLobbying = !(st.settings && st.settings.showLobbying === false);
     prefs.showAlternatives = !(st.settings && st.settings.showAlternatives === false);
     prefs.priceHistory = !(st.settings && st.settings.priceHistory === false);
+    prefs.useGitHubIssues = !!(st.settings && st.settings.useGitHubIssues);
+    cachedUserSuggestions = st.userSuggestions || [];
     cachedPriceHistory = prefs.priceHistory ? QED.prunePriceHistory(st.priceHistory || {}) : {};
     const remote = st.remoteBase && st.remoteBase.data;
     const db = remote && String(remote.version) > String(packaged.version) ? remote : packaged;
@@ -168,7 +171,11 @@
     if (!force && key === lastKey) return;
     lastKey = key;
     const store = storeOf(entry);
-    const local = QED.match(index, data.candidates, data.title);
+    let local = QED.match(index, data.candidates, data.title);
+    if (!local.found && local.brandText && QED.isKnownBrand && QED.isKnownBrand(index, local.brandText)) {
+      const resolved = QED.match(index, [{ text: local.brandText, source: "campo_limpio" }], data.title);
+      if (resolved.found) local = resolved;
+    }
     if (local.found) {
       lastResult = enrichProduct(withAlternatives(Object.assign(local, { store }), local.brand, data.title, data.categoryPath), data);
       draw();
@@ -219,6 +226,7 @@
     noteSeen(lastResult);
     QED.showCard(lastResult, {
       minimized: prefs.minimized, values: prefs.values, showLobbying: prefs.showLobbying,
+      index: index, userSuggestions: cachedUserSuggestions, useGitHubIssues: prefs.useGitHubIssues,
       onToggle: (m) => { prefs.minimized = m; api.storage.local.set({ minimized: m }); draw(); },
       onClose: () => { closedFor = location.pathname; }
     });
@@ -229,6 +237,7 @@
   api.storage.onChanged.addListener(async (ch) => {
     // El historial solo se sincroniza en memoria (p. ej. al borrarlo desde Opciones); no redibuja la tarjeta.
     if (ch.priceHistory) cachedPriceHistory = prefs.priceHistory ? QED.prunePriceHistory(ch.priceHistory.newValue || {}) : {};
+    if (ch.userSuggestions) cachedUserSuggestions = ch.userSuggestions.newValue || [];
     if (ch.customBrands || ch.enabled || ch.remoteBase || ch.verified || ch.groupPatches || ch.settings || ch.repPatches) { await load(); schedule(true); }
   });
 
