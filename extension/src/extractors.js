@@ -458,6 +458,23 @@
     };
   }
 
+  // Precio objetivo sugerido: si hay historial local de >= 7 días, el mínimo de los últimos 90 días; si no, 10% por debajo del precio actual.
+  function computeTargetPrice(entryOrPoints, currentPrice, now) {
+    if (!(currentPrice > 0)) return null;
+    now = now || Date.now();
+    const pts = Array.isArray(entryOrPoints) ? entryOrPoints : (entryOrPoints && entryOrPoints.p) || [];
+    const cutoff90 = now - HISTORY_MAX_DAYS * DAY_MS;
+    const validPts = pts.filter((h) => h && typeof h.p === "number" && h.p > 0 && h.t >= cutoff90);
+
+    const has7Days = validPts.length >= 2 && (now - Math.min(...validPts.map((h) => h.t)) >= 7 * DAY_MS);
+
+    if (has7Days) {
+      const minPrice = Math.min(...validPts.map((h) => h.p), currentPrice);
+      return Math.round(minPrice * 100) / 100;
+    }
+    return Math.round(currentPrice * 0.9 * 100) / 100;
+  }
+
   // ---------------------------------------------------------------- Rastreadores y comparación entre tiendas (solo enlaces)
   const fill = (tpl, vals) => String(tpl).replace(/\{(\w+)\}/g, (_, k) => encodeURIComponent(vals[k] || ""));
   const hostMatches = (host, domain) => {
@@ -984,6 +1001,7 @@
     const host = options.host || (siteEntry && siteEntry.d) || "";
     const query = searchQuery(options.rawTitle || title, options.brand || "", rel.modelIds || {});
     const priceComp = rel.price ? computePriceComparison(options.priceHistory, rel.price.amount, options.now) : null;
+    const targetPrice = rel.price ? computeTargetPrice(options.priceHistory, rel.price.amount, options.now) : null;
     const trackers = getTrackerLinks(host, rel.productId, query, options.rastreadores);
     const compareLinks = getCompareLinks(host, country, query, options.tiendasComparar);
 
@@ -1010,6 +1028,8 @@
       structuredRating: rel.structuredRating || null,
       productId: rel.productId || null,
       priceComparison: priceComp,
+      targetPrice,
+      priceHistory: options.priceHistory || null,
       historyEnabled: options.historyEnabled !== false,
       trackers,
       compareLinks
@@ -1108,6 +1128,7 @@
   QED.extractStructuredRating = extractStructuredRating;
   QED.extractProductId = extractProductId;
   QED.computePriceComparison = computePriceComparison;
+  QED.computeTargetPrice = computeTargetPrice;
   QED.getTrackerLinks = getTrackerLinks;
   QED.getCompareLinks = getCompareLinks;
   QED.searchQuery = searchQuery;

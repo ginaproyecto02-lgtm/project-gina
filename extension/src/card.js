@@ -425,8 +425,29 @@
     }
     if (rel && rel.trackers && rel.trackers.length) {
       h += `<div class="trackers-box"><div class="trackers-title">${t("lbl_price_trackers")}</div>
-        ${rel.trackers.map((tr) => `<div class="tracker-item"><a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.name)} ↗</a>${tr.desc ? ` <span class="tracker-desc">· ${esc(tr.desc)}</span>` : ""}</div>`).join("")}
-      </div>`;
+        ${rel.trackers.map((tr) => `<div class="tracker-item"><a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.name)} ↗</a>${tr.desc ? ` <span class="tracker-desc">· ${esc(tr.desc)}</span>` : ""}</div>`).join("")}`;
+
+      // Tarea E5: Seguimiento en Keepa ya armado con precio objetivo sugerido
+      const keepaTr = rel.trackers.find((tr) => tr && tr.name === "Keepa");
+      if (keepaTr && rel.price && rel.price.amount) {
+        const targetPrice = rel.targetPrice != null ? rel.targetPrice : (QED.computeTargetPrice ? QED.computeTargetPrice(rel.priceHistory, rel.price.amount) : Math.round(rel.price.amount * 0.9 * 100) / 100);
+        const formattedTarget = QED.formatMoney ? QED.formatMoney(targetPrice, rel.price.currency) : (rel.price.currency ? `${rel.price.currency} ${targetPrice}` : `$${targetPrice}`);
+        h += `
+          <div class="keepa-alert-box" style="margin-top:8px;padding:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:11.5px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+              <a href="${esc(safe(keepaTr.url))}" class="btn-sug keepa-follow-btn" target="_blank" rel="noopener noreferrer" style="margin-top:0;text-decoration:none;">${t("keepa_btn")} ↗</a>
+              <div style="font-size:11px;color:#1e293b;">
+                ${t("keepa_target_label")}: <b>${esc(formattedTarget)}</b>
+                <button type="button" class="sug-opt-link keepa-copy-btn" data-target="${esc(String(targetPrice))}" style="margin-left:4px;padding:2px 6px;cursor:pointer;">${t("btn_copy")}</button>
+              </div>
+            </div>
+            <div id="keepa-copy-ok" style="display:none;color:#166534;font-size:10.5px;margin-top:4px;font-weight:600;">${t("sug_copied")}</div>
+            <div class="d-src" style="margin-top:4px;font-size:10.5px;color:#64748b;">${t("keepa_account_notice")}</div>
+          </div>
+        `;
+      }
+
+      h += `</div>`;
     }
     return h;
   }
@@ -1169,6 +1190,19 @@
         recordSuggestion(null);
       };
     }
+
+    shadow.querySelectorAll(".keepa-copy-btn").forEach((btn) => {
+      btn.onclick = async () => {
+        const val = btn.getAttribute("data-target") || "";
+        try {
+          if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(val);
+          }
+        } catch (_) {}
+        const ok = shadow.querySelector("#keepa-copy-ok");
+        if (ok) ok.style.display = "block";
+      };
+    });
   };
 
   QED.hideCard = function () {

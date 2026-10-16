@@ -1148,6 +1148,38 @@
       ja: "他ストアを開いて価格・分割・評価を比較してください。"
     },
     lbl_price_trackers: { es: "HISTORIAL REAL DE PRECIOS (SITIOS EXTERNOS)", en: "REAL PRICE HISTORY (EXTERNAL SITES)", de: "ECHTER PREISVERLAUF (EXTERNE SEITEN)", fr: "HISTORIQUE RÉEL DES PRIX (SITES EXTERNES)", it: "STORICO REALE DEI PREZZI (SITI ESTERNI)", ja: "実際の価格履歴（外部サイト）" },
+    keepa_btn: {
+      es: "Seguir precio en Keepa",
+      en: "Track price on Keepa",
+      de: "Preis auf Keepa verfolgen",
+      fr: "Suivre le prix sur Keepa",
+      it: "Traccia il prezzo su Keepa",
+      ja: "Keepaで価格を追跡"
+    },
+    keepa_target_label: {
+      es: "Precio objetivo sugerido",
+      en: "Suggested target price",
+      de: "Vorgeschlagener Zielpreis",
+      fr: "Prix cible suggéré",
+      it: "Prezzo target suggerito",
+      ja: "推奨目標価格"
+    },
+    keepa_account_notice: {
+      es: "Keepa te pedirá una cuenta gratuita para enviarte la alerta por correo o Telegram.",
+      en: "Keepa will ask for a free account to send you alerts via email or Telegram.",
+      de: "Keepa benötigt ein kostenloses Konto, um Benachrichtigungen per E-Mail oder Telegram zu senden.",
+      fr: "Keepa demandera un compte gratuit pour vous envoyer des alertes par e-mail ou Telegram.",
+      it: "Keepa richiederà un account gratuito per inviarti avvisi via email o Telegram.",
+      ja: "KeepaはメールまたはTelegramで通知を送信するために無料アカウントを要求します。"
+    },
+    btn_copy: {
+      es: "Copiar",
+      en: "Copy",
+      de: "Kopieren",
+      fr: "Copier",
+      it: "Copia",
+      ja: "コピー"
+    },
     rel_discount_line: { es: "¿Descuento real? {txt} en el último mes.", en: "Real discount? {txt} over the last month.", de: "Echter Rabatt? {txt} im letzten Monat.", fr: "Vraie remise ? {txt} sur le dernier mois.", it: "Sconto reale? {txt} nell'ultimo mese.", ja: "本当の割引？過去1か月で{txt}。" },
     rel_discount_unknown: {
       es: "¿Descuento real? Aún no hay suficientes visitas tuyas para saberlo.",

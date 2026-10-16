@@ -1,5 +1,5 @@
 {
- "version": "2026-10-14T0324",
+ "version": "2026-10-16T2140",
  "licencia": "CC BY 4.0",
  "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -26904,6 +26904,24 @@
   }
  ],
  "rastreadores": [
+  {
+   "nombre": "Keepa",
+   "desc": "Historial y seguimiento de precios en Amazon",
+   "requiere": "asin",
+   "dominios": {
+    "amazon.com.mx": "https://keepa.com/#!product/11-{asin}",
+    "amazon.com": "https://keepa.com/#!product/1-{asin}",
+    "amazon.co.uk": "https://keepa.com/#!product/2-{asin}",
+    "amazon.de": "https://keepa.com/#!product/3-{asin}",
+    "amazon.fr": "https://keepa.com/#!product/4-{asin}",
+    "amazon.co.jp": "https://keepa.com/#!product/5-{asin}",
+    "amazon.ca": "https://keepa.com/#!product/6-{asin}",
+    "amazon.it": "https://keepa.com/#!product/8-{asin}",
+    "amazon.es": "https://keepa.com/#!product/9-{asin}"
+   },
+   "verificado": "2026-10-15",
+   "fuente": "https://keepa.com/#!discuss/t/keepa-extension-and-features/61"
+  },
   {
    "nombre": "CamelCamelCamel",
    "desc": "Historial de precios de Amazon",

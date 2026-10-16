@@ -976,6 +976,75 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     check("E1. Marca ya sugerida en userSuggestions muestra aviso discreto",
       !!alreadyEl && alreadyEl.textContent.includes("Ya sugeriste"));
   }
+
+  // ---------------------------------------------------------------- E5. Seguimiento de precio en Keepa ya armado (Amazon)
+  {
+    const w = env("", "https://www.amazon.com.mx/dp/B0TEST00000");
+    const QED = w.QED;
+    const tr = db.rastreadores;
+
+    // 1. Keepa URL para amazon.com.mx (dominio 11) y amazon.com (dominio 1)
+    const mxTr = QED.getTrackerLinks("www.amazon.com.mx", { id: "B0KEEPA001", type: "asin" }, "Echo Dot", tr);
+    const usTr = QED.getTrackerLinks("www.amazon.com", { id: "B0KEEPA001", type: "asin" }, "Echo Dot", tr);
+    const aliTr = QED.getTrackerLinks("es.aliexpress.com", { id: "12345", type: "none" }, "Echo Dot", tr);
+
+    const mxKeepa = mxTr.find((x) => x.name === "Keepa");
+    const usKeepa = usTr.find((x) => x.name === "Keepa");
+    const aliKeepa = aliTr.find((x) => x.name === "Keepa");
+
+    check("E5. Keepa armado: dominio 11 en amazon.com.mx, dominio 1 en amazon.com, ausente en tiendas no-Amazon",
+      mxKeepa && mxKeepa.url === "https://keepa.com/#!product/11-B0KEEPA001" &&
+      usKeepa && usKeepa.url === "https://keepa.com/#!product/1-B0KEEPA001" &&
+      !aliKeepa);
+
+    // 2. computeTargetPrice: >= 7 días usa mínimo de últimos 90 días, fallback usa 10% descuento
+    const DAY = 86400000;
+    const now = Date.UTC(2026, 9, 15, 12, 0, 0);
+
+    // Sin historial o < 7 días: 10% por debajo del precio actual (100 -> 90)
+    const fallbackTarget = QED.computeTargetPrice([], 100, now);
+    const fallbackTarget2 = QED.computeTargetPrice({ p: [{ t: now - 3 * DAY, p: 95 }] }, 100, now);
+    check("E5. computeTargetPrice sin historial suficiente (menos de 7 días) da 10% de descuento",
+      fallbackTarget === 90 && fallbackTarget2 === 90);
+
+    // Con historial de >= 7 días: mínimo de los últimos 90 días (en este caso 80 vs actual 100)
+    const hist7 = {
+      p: [
+        { t: now - 30 * DAY, p: 80 },
+        { t: now - 15 * DAY, p: 120 },
+        { t: now - 7 * DAY, p: 95 }
+      ]
+    };
+    const targetWithHist = QED.computeTargetPrice(hist7, 100, now);
+    check("E5. computeTargetPrice con historial >= 7 días toma el mínimo de los últimos 90 días",
+      targetWithHist === 80);
+
+    // 3. Renderizado en tarjeta con botón de copiar precio objetivo y aviso de cuenta gratuita
+    const wCard = env("<div></div>", "https://www.amazon.com.mx/dp/B0KEEPA001");
+    wCard.QED.showCard(
+      {
+        found: true,
+        brand: "Amazon Basics",
+        title: "Cable USB-C",
+        reliabilityEval: {
+          price: { amount: 100, currency: "MXN" },
+          productId: { id: "B0KEEPA001", type: "asin" },
+          trackers: mxTr,
+          targetPrice: 90
+        }
+      },
+      {}
+    );
+    const hostEl = wCard.document.getElementById("gina-tarjeta");
+    const shadow = hostEl && hostEl.shadowRoot;
+    const keepaBox = shadow && shadow.querySelector(".keepa-alert-box");
+    const keepaBtn = shadow && shadow.querySelector(".keepa-follow-btn");
+    const copyBtn = shadow && shadow.querySelector(".keepa-copy-btn");
+    check("E5. Tarjeta muestra botón de Keepa, precio objetivo y botón copiar",
+      !!keepaBox && !!keepaBtn && !!copyBtn &&
+      keepaBtn.getAttribute("href") === "https://keepa.com/#!product/11-B0KEEPA001" &&
+      copyBtn.getAttribute("data-target") === "90");
+  }
 }
 
 console.log(`\n${pass}/${total} pruebas correctas`);
