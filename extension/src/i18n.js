@@ -1092,7 +1092,6 @@
       ja: "他ストアを開いて価格・分割・評価を比較してください。"
     },
     lbl_price_trackers: { es: "HISTORIAL REAL DE PRECIOS (SITIOS EXTERNOS)", en: "REAL PRICE HISTORY (EXTERNAL SITES)", de: "ECHTER PREISVERLAUF (EXTERNE SEITEN)", fr: "HISTORIQUE RÉEL DES PRIX (SITES EXTERNES)", it: "STORICO REALE DEI PREZZI (SITI ESTERNI)", ja: "実際の価格履歴（外部サイト）" },
-    tracker_google: { es: "Buscar en Google Shopping", en: "Search Google Shopping", de: "In Google Shopping suchen", fr: "Rechercher sur Google Shopping", it: "Cerca su Google Shopping", ja: "Googleショッピングで検索" },
     rel_discount_line: { es: "¿Descuento real? {txt} en el último mes.", en: "Real discount? {txt} over the last month.", de: "Echter Rabatt? {txt} im letzten Monat.", fr: "Vraie remise ? {txt} sur le dernier mois.", it: "Sconto reale? {txt} nell'ultimo mese.", ja: "本当の割引？過去1か月で{txt}。" },
     rel_discount_unknown: {
       es: "¿Descuento real? Aún no hay suficientes visitas tuyas para saberlo.",

@@ -425,7 +425,7 @@
     }
     if (rel && rel.trackers && rel.trackers.length) {
       h += `<div class="trackers-box"><div class="trackers-title">${t("lbl_price_trackers")}</div>
-        ${rel.trackers.map((tr) => `<div class="tracker-item"><a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.universal ? t("tracker_google") : tr.name)} ↗</a>${tr.desc ? ` <span class="tracker-desc">· ${esc(tr.desc)}</span>` : ""}</div>`).join("")}
+        ${rel.trackers.map((tr) => `<div class="tracker-item"><a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.name)} ↗</a>${tr.desc ? ` <span class="tracker-desc">· ${esc(tr.desc)}</span>` : ""}</div>`).join("")}
       </div>`;
     }
     return h;

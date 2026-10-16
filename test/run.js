@@ -831,7 +831,7 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       !mx.some((x) => x.name === "CamelCamelCamel") &&
       ali.some((x) => x.name === "Pricearchive") && ali.some((x) => x.name === "Alitools") &&
       ![...mx, ...us, ...ali, ...wm].some((x) => /waltrack/i.test(x.name + x.url)));
-    check("D1. Enlace universal = «Buscar en Google Shopping» (sin HARPA)", us.some((x) => x.universal && /google\.com\/search\?tbm=shop/.test(x.url)) && !/HARPA/.test(card + i18n));
+    check("D1. Sin enlace universal a Google Shopping (sin HARPA)", !us.some((x) => x.universal || /google\.com\/search\?tbm=shop/.test(x.url)) && !/HARPA/.test(card + i18n));
 
     // Otras tiendas: solo enlaces, 2 por país, nunca la tienda actual, sin afirmar precios
     const links = QED.getCompareLinks("www.amazon.com.mx", "México", "Sony WH-1000XM5", db.tiendas_comparar);

@@ -489,14 +489,6 @@
         url: fill(tr.dominios[dom], { asin: productId && productId.id, q: query })
       });
     }
-    if (query) {
-      out.push({
-        name: "Google Shopping",
-        desc: "",
-        universal: true,
-        url: `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(query)}`
-      });
-    }
     return out;
   }
 
