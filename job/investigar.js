@@ -1215,6 +1215,22 @@ async function main(options = {}) {
     for (const ok of rev.vigentes) report.revalidadas.push(ok);
   }
 
+  // E3: sitio oficial y buscador de las marcas, por lotes (GINA_SITIOS por ejecución; 0 = apagado).
+  // Cada hallazgo va al mismo PR para revisión humana; nada se publica directo.
+  const sitiosLimit = parseInt(options.sitiosLimit !== undefined ? options.sitiosLimit : env("SITIOS", "0"), 10);
+  if (sitiosLimit > 0) {
+    try {
+      const SO = require("./sitios_oficiales.js");
+      const so = await SO.processBatch({ db, state, limit: sitiosLimit, fetchImpl: options.fetchImpl || fetch, dryRun: dry });
+      for (const c of so.cambios) {
+        report.cambios.push({ grupo: c.marca, gid: c.grupo, antes: "sin sitio oficial", despues: `sitio oficial ${c.sitio_oficial}${c.busqueda_oficial ? ` · buscador ${c.busqueda_oficial}` : " · sin buscador"}`, url: c.sitio_oficial, cita: "Wikidata P856", archivo: "" });
+        brandsChanged = true;
+      }
+    } catch (e) {
+      report.errores.push(`Sitios oficiales: ${e.message}`);
+    }
+  }
+
   if (repLimit > 0 && cfg.key && AI.researchReputation && QED.REP) {
     const ids = Object.keys(db.grupos || {}).filter((id) => QED.REP.needsResearch(db.reputacion || {}, id, 180)).slice(0, repLimit);
     for (const id of ids) {

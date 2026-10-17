@@ -149,6 +149,7 @@ const SCENARIOS = [
 
 function generateRenderedHtml(scenario, openSection) {
   const dom = new JSDOM(scenario.html, { url: scenario.url, runScripts: "outside-only" });
+  dom.window.__GINA_SHADOW_OPEN__ = true; // las capturas leen la tarjeta por host.shadowRoot
   const w = dom.window;
 
   for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/i18n.js", "src/card.js"]) {

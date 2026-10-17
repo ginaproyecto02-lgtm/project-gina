@@ -329,9 +329,32 @@ finally:
 
   // 16. Con 0 cambios: no crear rama, ni commit, ni PR; salida con código 0.
   {
-    const res = await job.main({ dryRun: true, limit: 0 });
+    // Sin red ni gh reales: una prueba nunca debe leer ni escribir en el repositorio de verdad.
+    const res = await job.main({ dryRun: true, limit: 0, execFileImpl: () => { throw new Error("gh no disponible en pruebas"); }, fetchImpl: async () => { throw new Error("red no disponible en pruebas"); } });
     const ok = res && res.report && res.report.cambios.length === 0 && res.prResult === null;
     check("16. Con 0 cambios: no crear rama, ni commit, ni PR", ok, `prResult: ${res.prResult}`);
+  }
+
+  // 16b. Sitios oficiales dentro del robot: un hallazgo entra al reporte del PR; la página del dueño no cuenta.
+  {
+    const tmp = fs.mkdtempSync(path.join(require("os").tmpdir(), "gina-sitios-"));
+    const brandsTmp = path.join(tmp, "brands.json");
+    fs.writeFileSync(brandsTmp, JSON.stringify({ version: "x", grupos: {
+      logi: { empresa: "Logitech International", url: "https://en.wikipedia.org/wiki/Logitech", confianza: "Verificar" },
+      pg: { empresa: "Procter & Gamble", url: "https://en.wikipedia.org/wiki/Procter_%26_Gamble", confianza: "Verificar" } },
+      marcas: [{ n: "Logitech", g: "logi" }, { n: "Olay", g: "pg" }] }));
+    const page = (body, json) => ({ ok: true, status: 200, headers: { get: () => null }, text: async () => body, json: async () => json });
+    const fetchX = async (u) => {
+      if (/wbgetentities/.test(u) && /Logitech/.test(u)) return page("", { entities: { Q1: { claims: { P856: [{ mainsnak: { datavalue: { value: "https://www.logitech.com/" } } }] } } } });
+      if (/wbgetentities/.test(u)) return page("", { entities: { Q2: { claims: { P856: [{ mainsnak: { datavalue: { value: "https://us.pg.com/" } } }] } } } });
+      if (/logitech\.com\/$/.test(u)) return page(`<script type="application/ld+json">{"@type":"WebSite","potentialAction":{"@type":"SearchAction","target":"https://www.logitech.com/search?q={search_term_string}"}}</script>`);
+      return { ok: false, status: 404, headers: { get: () => null }, text: async () => "" };
+    };
+    const res = await job.main({ dryRun: true, limit: 0, sitiosLimit: 5, brandsPath: brandsTmp, statePath: path.join(tmp, "estado.json"),
+      execFileImpl: () => { throw new Error("sin gh"); }, fetchImpl: fetchX });
+    const cambios = (res.report.cambios || []).map((c) => c.grupo + " → " + c.despues);
+    check("16b. Robot: Logitech obtiene sitio y buscador; Olay no recibe el sitio corporativo de P&G",
+      cambios.length === 1 && /Logitech → sitio oficial https:\/\/www\.logitech\.com\/ · buscador https:\/\/www\.logitech\.com\/search\?q=\{q\}/.test(cambios[0]), JSON.stringify(cambios));
   }
 
   // 17. factcheck: sin clave → 'na', nunca 'ok' fijo.
@@ -478,7 +501,7 @@ Date: Fri, 16 Oct 2026 12:00:00 +0000
     check("24. parseEmailBody extrae únicamente la sugerencia estructurada y no incluye remitente ni headers",
       parsed && parsed.marca === "Café Don Pepe" && parsed.tienda === "Mercado Libre México" &&
       !body.includes("juan.perez") && !body.includes("dominio-privado.com") && !body.includes("From:") &&
-      body.includes("<!-- gina:sugerencia v1 tipo=marca -->") && body.includes("- marca: Café Don Pepe"));
+      body.includes("<!-- gina:sugerencia v1 tipo=marca -->") && body.includes("- marca: Café Don Pepe | tienda: Mercado Libre México"));
 
     // 25. Detección de duplicados contra brands.json e issues abiertos
     const mockDb = {
@@ -497,13 +520,15 @@ Date: Fri, 16 Oct 2026 12:00:00 +0000
     check("25. isDuplicateBrand detecta marcas existentes en brands.json y en issues abiertos",
       dupInDb === true && dupAlias === true && dupIssue === true && notDup === false);
 
-    // 26. Proceso de emails: procesa nuevos, omite duplicados y mueve a gina/procesado
+    // 26. Proceso de emails: solo correos con «[gina:sugerencia]» en el asunto; crea la nueva, descarta la duplicada y mueve ambas a procesado
     const moved = [];
     const createdIssues = [];
+    const mail2 = "From: x <x@y.z>\r\nSubject: [gina:sugerencia] Marca faltante: Bimbo\r\n\r\n<!-- gina:sugerencia v1 tipo=marca -->\n- marca: Bimbo\n- tienda: Oxxo\n- producto: Pan";
+    const mail1 = rawEmail.replace("Subject: Sugerencia de marca", "Subject: [gina:sugerencia] Marca faltante: Café Don Pepe");
     const mockImap = {
-      searchUnseen: async () => [1, 2],
-      fetchBody: async (id) => id === 1 ? rawEmail : `<!-- gina:sugerencia v1 tipo=marca -->\n- marca: Bimbo\n- tienda: Oxxo\n- producto: Pan`,
-      moveToProcessed: async (id) => { moved.push(id); }
+      searchGina: async () => [1, 2],
+      fetchRaw: async (id) => Buffer.from(id === 1 ? mail1 : mail2, "utf8"),
+      markProcessed: async (id) => { moved.push(id); }
     };
     const mockExec = (cmd, args) => {
       if (cmd === "gh" && args[0] === "issue" && args[1] === "create") {
@@ -522,7 +547,7 @@ Date: Fri, 16 Oct 2026 12:00:00 +0000
     check("26. processEmails crea issue solo para la marca nueva, descarta duplicada y mueve ambos a procesado",
       processRes.read === 2 && processRes.created === 1 && processRes.duplicates === 1 &&
       createdIssues.length === 1 && createdIssues[0].title === "Marca faltante: Café Don Pepe" &&
-      !createdIssues[0].body.includes("juan.perez") && moved.length === 2);
+      !createdIssues[0].body.includes("juan.perez") && moved.length === 2, JSON.stringify(processRes));
   }
 
   // ---------------------------------------------------------------- E3. Sitios oficiales y buscador de marcas (job/sitios_oficiales.js)
@@ -578,7 +603,7 @@ Date: Fri, 16 Oct 2026 12:00:00 +0000
     );
     check("29. Portada sin buscador guarda sitio_oficial sin busqueda_oficial",
       resNoSearch && resNoSearch.sitio_oficial === "https://sitio-informativo.com/" &&
-      !resNoSearch.busqueda_oficial && resNoSearch.fuente === "Wikidata P856" && resNoSearch.verificado === "2026-10-16",
+      !resNoSearch.busqueda_oficial && String(resNoSearch.fuente).startsWith("Wikidata P856") && resNoSearch.verificado === "2026-10-16",
       JSON.stringify(resNoSearch));
 
     // 30. Marca sin P856 en Wikidata no escribe nada (retorna null)

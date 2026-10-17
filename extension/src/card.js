@@ -983,16 +983,21 @@
     `;
   }
 
+  // Shadow DOM CERRADO: los scripts de la tienda no pueden leer ni reescribir la tarjeta (host.shadowRoot === null).
+  // La referencia vive solo en este mundo aislado. Las pruebas en jsdom piden modo abierto con __GINA_SHADOW_OPEN__.
+  let cardHost = null, cardRoot = null;
   function getHost() {
-    let host = document.getElementById(HOST_ID);
-    if (!host) {
-      host = document.createElement("div");
-      host.id = HOST_ID;
-      host.attachShadow({ mode: "open" });
-      document.documentElement.appendChild(host);
-    }
-    return host;
+    if (cardHost && cardRoot && cardHost.isConnected) return cardHost;
+    // Un elemento con nuestro id que no creamos nosotros (p. ej. puesto por la página) no se reutiliza.
+    const impostor = document.getElementById(HOST_ID);
+    if (impostor && impostor !== cardHost) impostor.remove();
+    cardHost = document.createElement("div");
+    cardHost.id = HOST_ID;
+    cardRoot = cardHost.attachShadow({ mode: globalThis.__GINA_SHADOW_OPEN__ === true ? "open" : "closed" });
+    document.documentElement.appendChild(cardHost);
+    return cardHost;
   }
+  QED.__cardRoot = () => cardRoot;
 
   // Persistencia de última sección abierta en storage.local
   function getSavedSection(siteKey, cb) {
@@ -1026,7 +1031,8 @@
 
   QED.showCard = function (res, opts) {
     opts = opts || {};
-    const shadow = getHost().shadowRoot;
+    getHost();
+    const shadow = cardRoot;
     if (opts.minimized) {
       const label = res.mode === "vuelos" ? `✈️ ${(res.airline ? 1 : 0) + (res.airlines || []).length}` : res.mode === "hospedaje" ? "🏨" : `🔎 ${esc(res.found ? res.brand : "Gina")}`;
       shadow.innerHTML = `<style>${CSS}</style><button class="mini" title="Gina">${label} · Gina</button>`;
@@ -1206,7 +1212,7 @@
   };
 
   QED.hideCard = function () {
-    const h = document.getElementById(HOST_ID);
-    if (h) h.remove();
+    if (cardHost) cardHost.remove();
+    cardHost = null; cardRoot = null;
   };
 })(typeof globalThis !== "undefined" ? globalThis : this);

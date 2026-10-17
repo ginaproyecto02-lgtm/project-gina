@@ -49,7 +49,7 @@ function makeEnv(responder) {
     for (const l of listeners.message) { const r = l(msg, {}, resolve); if (r === true) async = true; }
     if (!async) setTimeout(() => resolve(undefined), 0);
   });
-  return { store, send, calls, ctx };
+  return { store, send, calls, ctx, listeners, chrome };
 }
 
 // ---- Respuestas simuladas
@@ -182,27 +182,30 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
   r = await bad.send({ type: "qed:resolve", brandText: "Algo", title: "Algo", site: "x" });
   check("Clave inválida: error claro y queda pendiente", r.status === "error" && /revisa la clave/.test(r.error) && bad.store.pending["b:algo"], r.error);
 
-  // P1: Clic en Sugerir abre pestaña vía tabs.create con URL de issue con gina:sugerencia y labels=sugerencia
+  // P1 (E1): «Sugerir» abre por defecto un correo al proyecto con el bloque gina:sugerencia; GitHub solo si se activó en Opciones.
   {
     const sugEnv = makeEnv(async () => ({ status: 200, body: {} }));
-    await sugEnv.send({
-      type: "qed:suggest_brand",
-      brand: "Original Nature's Oils",
-      title: "Kit de aceites",
-      site: "Amazon México"
-    });
+    await sugEnv.send({ type: "qed:suggest_brand", brand: "Original Nature's Oils", title: "Kit de aceites", site: "Amazon México" });
     const lastTab = sugEnv.ctx.chrome.tabs.created[0];
-    const okSug = lastTab && lastTab.url && lastTab.url.includes("gina%3Asugerencia") && lastTab.url.includes("labels=sugerencia");
-    check("El clic en «Sugerir» de la tarjeta llama a tabs.create con gina:sugerencia y labels=sugerencia", okSug, lastTab && lastTab.url);
+    const okSug = lastTab && lastTab.url && /^mailto:/.test(lastTab.url) && lastTab.url.includes("gina%3Asugerencia");
+    check("El clic en «Sugerir» abre un correo al proyecto con el bloque gina:sugerencia", okSug, lastTab && lastTab.url);
+    const ghEnv = makeEnv(async () => ({ status: 200, body: {} }));
+    ghEnv.store.settings = { useGitHubIssues: true };
+    await ghEnv.send({ type: "qed:suggest_brand", brand: "Original Nature's Oils", title: "Kit de aceites", site: "Amazon México" });
+    const ghTab = ghEnv.ctx.chrome.tabs.created[0];
+    check("Con «Usar issues de GitHub» activado, «Sugerir» abre el issue prellenado con labels=sugerencia", ghTab && /^https:\/\/github\.com\/.+\/issues\/new\?/.test(ghTab.url) && ghTab.url.includes("labels=sugerencia"), ghTab && ghTab.url);
   }
 
   // P1: Base remota con versión mayor se reemplaza y pendientes reconocidos desaparecen
   {
-    const remoteData = {
-      version: "2099-01-01T0000",
-      marcas: [{ n: "Truper", g: "truper" }],
-      grupos: { truper: { empresa: "Truper" } }
-    };
+    // Base remota realista: la empaquetada más «Truper», con versión de hoy (no del futuro).
+    const packagedDb = JSON.parse(fs.readFileSync(path.join(EXT, "data/brands.json"), "utf8"));
+    const d = new Date(Date.now() - 60000), pad = (x) => String(x).padStart(2, "0");
+    const remoteData = Object.assign({}, packagedDb, {
+      version: `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}`,
+      marcas: packagedDb.marcas.filter((x) => x.n.toLowerCase() !== "truper").concat([{ n: "Truper", g: "truper_remoto" }]),
+      grupos: Object.assign({}, packagedDb.grupos, { truper_remoto: { empresa: "Truper" } })
+    });
     const updateEnv = makeEnv(async (req) => {
       if (req.url.includes("brands.json")) {
         return { status: 200, body: remoteData };
@@ -218,8 +221,43 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
     const newPending = updateEnv.store.pending || {};
     const truperGone = !newPending["b:truper"];
     const desconocidaKept = !!newPending["b:desconocida"];
-    const baseUpdated = updateEnv.store.remoteBase && updateEnv.store.remoteBase.data && updateEnv.store.remoteBase.data.version === "2099-01-01T0000";
+    const baseUpdated = updateEnv.store.remoteBase && updateEnv.store.remoteBase.data && updateEnv.store.remoteBase.data.version === remoteData.version;
     check("Base remota con versión mayor se reemplaza y los pendientes reconocidos desaparecen", truperGone && desconocidaKept && baseUpdated);
+  }
+
+  // Seguridad: bases remotas peligrosas no reemplazan la local; mensajes de páginas no ejecutan órdenes privilegiadas.
+  {
+    const packagedDb = JSON.parse(fs.readFileSync(path.join(EXT, "data/brands.json"), "utf8"));
+    const bad = {
+      "versión 9999 (bloquearía las actualizaciones)": Object.assign({}, packagedDb, { version: "9999-12-31T2359" }),
+      "base casi vacía (borraría marcas)": { version: "2026-10-16T0000", marcas: [{ n: "X", g: "x" }], grupos: { x: { empresa: "X" } } },
+      "marca apuntando a grupo inexistente": Object.assign({}, packagedDb, { version: "2026-10-16T0000", marcas: packagedDb.marcas.concat([{ n: "Fantasma", g: "no_existe" }]) })
+    };
+    for (const [name, data] of Object.entries(bad)) {
+      const e = makeEnv(async (req) => (req.url.includes("brands.json") ? { status: 200, body: data } : { status: 200, body: {} }));
+      e.store.settings = { remoteUrl: "https://raw.githubusercontent.com/o/r/main/extension/data/brands.json" };
+      const r = await e.send({ type: "qed:updateBase" });
+      check(`Base remota rechazada: ${name}`, !e.store.remoteBase && r && r.log && r.log.errors.length > 0, JSON.stringify(r && r.log && r.log.errors));
+    }
+    {
+      const e = makeEnv(async () => ({ status: 200, body: packagedDb }));
+      e.store.settings = { remoteUrl: "http://inseguro.example/brands.json" };
+      const r = await e.send({ type: "qed:updateBase" });
+      check("Base remota por http (no https) rechazada", !e.store.remoteBase && /https/.test(JSON.stringify(r.log.errors)));
+    }
+    {
+      const e = makeEnv(async () => ({ status: 200, body: {} }));
+      const fromTab = (msg) => new Promise((resolve) => {
+        for (const f of e.listeners.message) { const keep = f(msg, { tab: { id: 9 } }, resolve); if (keep !== true) setTimeout(() => resolve(undefined), 0); }
+      });
+      const r1 = await fromTab({ type: "qed:runJob" });
+      const r2 = await fromTab({ type: "qed:testKey", which: "research" });
+      check("Órdenes privilegiadas (runJob, testKey) rechazadas si vienen de una pestaña", r1 && r1.ok === false && r2 && r2.ok === false, JSON.stringify([r1, r2]));
+      e.chrome.tabs.created.length = 0;
+      await new Promise((resolve) => { for (const f of e.listeners.message) f({ type: "qed:suggest_brand", brand: "X", title: "Y", site: "Z", url: "javascript:alert(1)" }, { tab: { id: 9 } }, resolve); });
+      const opened = e.chrome.tabs.created.map((o) => o.url);
+      check("Sugerencia con url javascript: no abre esa url; abre el correo al proyecto (GitHub solo si se activó)", opened.length === 1 && /^mailto:/.test(opened[0]) && !opened.some((u) => /^javascript:/i.test(u)), JSON.stringify(opened));
+    }
   }
 
   console.log(`\n${pass}/${total} pruebas correctas`);

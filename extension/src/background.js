@@ -155,16 +155,38 @@ async function toCard(entry, item) {
 }
 
 // ---------- Job semanal de investigación ----------
+// Una base remota (aunque venga del repositorio del proyecto) se valida antes de reemplazar la local:
+// formato, versión con fecha real (una versión «9999» bloquearía para siempre las actualizaciones),
+// que no borre de golpe la base y que cada marca apunte a un grupo existente.
+function validateRemoteBase(data, packaged) {
+  if (!data || typeof data !== "object" || !data.grupos || typeof data.grupos !== "object" || !Array.isArray(data.marcas)) throw new Error("El archivo no tiene el formato de brands.json");
+  const v = String(data.version || "");
+  const m = v.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2})(\d{2})$/);
+  if (!m) throw new Error(`Versión remota inválida: ${v.slice(0, 40)}`);
+  const ts = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  if (!(ts > 0) || ts > Date.now() + 2 * 86400000) throw new Error(`Versión remota con fecha futura: ${v}`);
+  const minMarcas = Math.floor(((packaged && packaged.marcas && packaged.marcas.length) || 0) * 0.8);
+  if (data.marcas.length < minMarcas) throw new Error(`La base remota trae ${data.marcas.length} marcas; la local tiene ${packaged.marcas.length}`);
+  for (const mk of data.marcas) {
+    if (!mk || typeof mk.n !== "string" || !mk.n || mk.n.length > 120 || !data.grupos[mk.g]) throw new Error(`Marca remota inválida: ${String(mk && mk.n).slice(0, 40)}`);
+  }
+  for (const [gid, g] of Object.entries(data.grupos)) {
+    if (!g || typeof g.empresa !== "string" || !g.empresa) throw new Error(`Grupo remoto inválido: ${gid.slice(0, 40)}`);
+  }
+}
+
 async function refreshRemote(s, log) {
   const url = await remoteUrlOf(s);
   if (!url) return;
   try {
-    const res = await fetch(url, { cache: "no-store" });
+    if (!/^https:\/\//i.test(url)) throw new Error("La base remota debe servirse por https");
+    const res = await fetch(url, { cache: "no-store", credentials: "omit" });
     if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    if (!data.grupos || !Array.isArray(data.marcas)) throw new Error("El archivo no tiene el formato de brands.json");
-
+    const txt = await res.text();
+    if (txt.length > 25 * 1024 * 1024) throw new Error("La base remota es demasiado grande");
+    const data = JSON.parse(txt);
     if (!baseCache) baseCache = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
+    validateRemoteBase(data, baseCache);
     const { remoteBase, pending = {} } = await get(["remoteBase", "pending"]);
     const currentVersion = (remoteBase && remoteBase.data && remoteBase.data.version) || (baseCache && baseCache.version) || "";
 
@@ -358,7 +380,10 @@ async function recordBrandSuggestion(brand, title, site, url) {
 
   // Abre el issue prellenado en una pestaña nueva vía background (tabs.create) (P1.10)
   if (!url) {
-    const proj = await project();
+    // Por defecto la sugerencia va por correo; GitHub solo si el usuario lo activó en Opciones (E1).
+    const proj = Object.assign({}, await project());
+    const s = await settings();
+    if (!(s && s.useGitHubIssues)) delete proj.issuesUrl;
     if (typeof QED !== "undefined" && QED.ALT && QED.ALT.suggestionLink) {
       url = QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]);
     }
@@ -385,8 +410,21 @@ async function recordAlternativeSuggestion(alt) {
   return { ok: true };
 }
 
+// Comunicación (auditoría 2026-10-16): solo mensajes de esta extensión; las órdenes que gastan clave o cambian la base
+// solo desde páginas propias (popup/opciones), nunca desde un script que corre dentro de una tienda.
+const PRIVILEGED = new Set(["qed:updateBase", "qed:runJob", "qed:testKey"]);
+const clip = (v, n) => String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f]+/g, " ").slice(0, n);
+// Lo único que el fondo abre por encargo: correo al proyecto, redacción en Gmail o un issue nuevo del repositorio.
+const SAFE_OPEN = /^(mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\?|https:\/\/mail\.google\.com\/mail\/\?view=cm&|https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/issues\/new\?)/;
+
 api.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (!msg || !msg.type) return false;
+  if (_sender && _sender.id && api.runtime && api.runtime.id && _sender.id !== api.runtime.id) return false;
+  if (PRIVILEGED.has(msg.type) && _sender && _sender.tab) { reply({ ok: false, error: "No permitido desde una página" }); return false; }
+  if (msg.type === "qed:suggest_brand") {
+    msg = Object.assign({}, msg, { brand: clip(msg.brand, 120), title: clip(msg.title, 300), site: clip(msg.site, 120),
+      url: SAFE_OPEN.test(String(msg.url || "")) ? String(msg.url).slice(0, 8000) : "" });
+  }
   if (msg.type === "qed:resolve") { resolve(msg).then(reply, (e) => reply({ status: "error", error: String(e) })); return true; }
   if (msg.type === "qed:suggest_brand") {
     recordBrandSuggestion(msg.brand, msg.title, msg.site, msg.url).then(reply, (e) => reply({ ok: false, error: String(e) }));

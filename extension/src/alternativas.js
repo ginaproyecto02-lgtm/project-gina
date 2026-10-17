@@ -338,7 +338,18 @@
   }
 
   // Enlace para sugerir al proyecto marcas faltantes o alternativas locales:
-  const clean = (v, n) => String(v == null ? "" : v).replace(/[|\n\r]+/g, " ").replace(/\s+/g, " ").trim().slice(0, n || 120);
+  // Limpia lo que va al correo/issue: sin saltos de línea ni «|», sin delimitadores de comentario HTML
+  // (<!-- -->), sin ángulos ni marcado de menciones/enlaces/imágenes de GitHub, y con largo máximo.
+  const clean = (v, n) => String(v == null ? "" : v)
+    .replace(/[\u0000-\u001f\u007f|]+/g, " ")
+    .replace(/<!--|-->|[<>`]/g, " ")
+    .replace(/!\[|\]\(|@(?=\w)/g, " ")
+    .replace(/\s+/g, " ").trim().slice(0, n || 120);
+  // Solo una dirección de correo simple (sin ?cc=, &bcc=, espacios ni saltos).
+  const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const ISSUES_RE = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/issues\/new$/;
+  const issuesOf = (proj) => (proj && ISSUES_RE.test(String(proj.issuesUrl || "")) ? String(proj.issuesUrl) : "");
+  const contactOf = (proj) => (proj && EMAIL_RE.test(String(proj.contacto || "")) ? String(proj.contacto) : "");
   function suggestionLink(proj, tipo, items) {
     proj = proj || {};
     const lines = (items || []).slice(0, 40).map((it) => tipo === "alternativa"
@@ -346,8 +357,8 @@
       : `- marca: ${clean(it.marca, 80)} | tienda: ${clean(it.tienda, 60)} | producto: ${clean(it.producto, 140)}`);
     const title = tipo === "alternativa" ? `Alternativa local: ${clean((items[0] || {}).marca, 60)}` : items.length === 1 ? `Marca faltante: ${clean(items[0].marca || items[0].producto, 60)}` : `${items.length} marcas faltantes`;
     const body = `<!-- gina:sugerencia v1 tipo=${tipo} -->\n${lines.join("\n")}\n\n(Enviado desde la extensión Gina. Revisa y edita antes de enviar; no incluye datos personales.)`;
-    if (proj.issuesUrl) return `${proj.issuesUrl}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=sugerencia`;
-    if (proj.contacto) return `mailto:${proj.contacto}?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+    if (issuesOf(proj)) return `${issuesOf(proj)}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=sugerencia`;
+    if (contactOf(proj)) return `mailto:${contactOf(proj)}?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
     return "";
   }
 
@@ -380,11 +391,11 @@
       ];
     }
     const body = `<!-- gina:sugerencia v1 tipo=${tipo || "marca"} -->\n${lines.join("\n")}\n\n(Enviado desde la extensión Gina. Revisa y edita antes de enviar; no incluye datos personales.)`;
-    const to = proj.contacto || "gina.proyecto02@gmail.com";
+    const to = contactOf(proj) || "gina.proyecto02@gmail.com";
     const mailto = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     const ghTitle = tipo === "alternativa" ? `Alternativa local: ${clean(it0.marca, 60)}` : `Marca faltante: ${brand}`;
-    const gh = proj.issuesUrl ? `${proj.issuesUrl}?title=${encodeURIComponent(ghTitle)}&body=${encodeURIComponent(body)}&labels=sugerencia` : "";
+    const gh = issuesOf(proj) ? `${issuesOf(proj)}?title=${encodeURIComponent(ghTitle)}&body=${encodeURIComponent(body)}&labels=sugerencia` : "";
     return { subject, body, to, mailto, gmail, gh, text: body, brand };
   }
 

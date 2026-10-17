@@ -8,6 +8,8 @@
 #   Variable GINA_EVERY_DAYS       = días mínimos entre ejecuciones reales (6 por defecto: corre cada lunes)
 #   Variable GINA_REVALIDATE       = evidencias a revalidar por ejecución (5 por defecto)
 #   Variable GINA_URL_CHECK        = safebrowsing | webrisk
+#   Variable GINA_SITIOS           = marcas por ejecución para buscar sitio oficial y buscador (50 por defecto; 0 = apagado)
+#   Secreto  GINA_IMAP_USER / GINA_IMAP_PASS = buzón de sugerencias (contraseña de aplicación de Gmail; opcional)
 name: Project Gina — investigación
 
 on:
@@ -51,6 +53,17 @@ jobs:
           git config user.name "gina-bot"
           git config user.email "gina-bot@users.noreply.github.com"
 
+      # E1: correos con «[gina:sugerencia]» en el asunto → issues «sugerencia» (sin remitente). No toca el resto del buzón.
+      # No corre en el canario del domingo. Si el buzón falla, se avisa pero la investigación sigue.
+      - name: Sugerencias por correo → issues
+        if: github.event.schedule != '17 9 * * 0' && !inputs.dry_run
+        continue-on-error: true
+        env:
+          GINA_IMAP_USER: ${{ secrets.GINA_IMAP_USER }}
+          GINA_IMAP_PASS: ${{ secrets.GINA_IMAP_PASS }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node job/correo.js
+
       - name: Investigar, verificar fuentes y proponer cambios
         env:
           GINA_API_KEY: ${{ secrets.GINA_API_KEY }}
@@ -63,6 +76,7 @@ jobs:
           GINA_LIMIT: "25"
           GINA_REVALIDATE: ${{ vars.GINA_REVALIDATE || '5' }}
           GINA_REP_LIMIT: ${{ vars.GINA_REP_LIMIT || '0' }}
+          GINA_SITIOS: ${{ vars.GINA_SITIOS || '50' }}
           GINA_MAX_SEARCHES: "3"
           GINA_EVERY_DAYS: ${{ vars.GINA_EVERY_DAYS || '6' }}
           GINA_DRY_RUN: ${{ (github.event.schedule == '17 9 * * 0' || inputs.dry_run) && '1' || '' }}

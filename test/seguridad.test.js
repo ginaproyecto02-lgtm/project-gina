@@ -1,0 +1,370 @@
+// SPDX-License-Identifier: MIT
+// Pruebas de seguridad «de marco rudo»: inyección en la tarjeta, base remota envenenada, enlaces,
+// Keepa y rastreadores, sugerencias por correo, procesador de correo y detección de sitios oficiales.
+// Cada caso usa cargas maliciosas reales (XSS, javascript:, CRLF, marcado de GitHub, SSRF).
+"use strict";
+const fs = require("fs"), path = require("path"), vm = require("vm");
+const { JSDOM } = require("jsdom");
+const EXT = path.join(__dirname, "..", "extension");
+const ROOT = path.join(__dirname, "..");
+const baseDb = JSON.parse(fs.readFileSync(path.join(EXT, "data/brands.json"), "utf8"));
+const registry = JSON.parse(fs.readFileSync(path.join(EXT, "data/sites.json"), "utf8"));
+
+let pass = 0, total = 0;
+function check(name, ok, detail) { total++; if (ok) pass++; console.log(`${ok ? "OK   " : "FALLA"} ${name}${detail && !ok ? " → " + detail : ""}`); }
+
+const X = {
+  tag: `<img src=x onerror="window.__pwned=1">`,
+  svg: `"><svg/onload=window.__pwned=1>`,
+  attr: `" onmouseover="window.__pwned=1" x="`,
+  js: "javascript:window.__pwned=1",
+  dataUrl: "data:text/html,<script>window.__pwned=1</script>",
+  style: `</style><style>*{background:url(https://evil.example/x)}</style>`,
+  tpl: "${7*7}{{constructor.constructor('window.__pwned=1')()}}",
+};
+const ALL = Object.values(X).join(" ");
+
+function env(html, url) {
+  const dom = new JSDOM(`<!doctype html><html><head></head><body>${html}</body></html>`, { url, runScripts: "outside-only" });
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  if (dom.window.QED.I18N) dom.window.QED.I18N.setLang("es");
+  return dom.window;
+}
+const ld = (o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\\u003c")}</script>`;
+
+// Igual que content.js (mínimo): extrae, empareja, evalúa confiabilidad y muestra la tarjeta.
+function analyze(w, url, db, extra) {
+  const QED = w.QED, u = new URL(url);
+  const index = QED.buildIndex(db, [], {}, {});
+  const entry = QED.siteInfo(registry, u.hostname, u.pathname);
+  const data = QED.extract(w.document, u.hostname, entry ? entry.pais : "");
+  const r = QED.match(index, data.candidates, data.title);
+  r.store = entry && entry.tipo === "tienda" ? { nombre: entry.nombre, group: index.groups[entry.g], id: entry.g, entry, pais: entry.pais } : null;
+  const prep = QED.ALT.prepare(db, index);
+  const catRes = QED.ALT.category(prep, r.found ? r.brand : r.brandText, data.title, data.categoryPath);
+  if (catRes && catRes.cat) {
+    r.alternativas = { cat: catRes.cat, label: (prep.cats[catRes.cat] || {}).label || catRes.cat, pais: entry && entry.pais, confianza: catRes.confianza,
+      items: QED.ALT.suggest(prep, catRes.cat, entry && entry.pais, r.group && r.group.id, null, 3, data.title, catRes.subcat), otherBrands: [], dominant: [] };
+  }
+  r.reliabilityEval = QED.evaluateReliability(data.reliability, r.group, catRes && catRes.cat, data.title, entry ? entry.pais : "México", entry,
+    Object.assign({ host: u.hostname, rawTitle: data.title, brand: r.brand || r.brandText, rastreadores: db.rastreadores, tiendasComparar: db.tiendas_comparar }, extra || {}));
+  QED.showCard(r, { values: { seguridad: 2, laboral: 2 } });
+  return r;
+}
+const rootOf = (w) => (w.QED.__cardRoot ? w.QED.__cardRoot() : (w.document.getElementById("gina-tarjeta") || {}).shadowRoot);
+
+// Revisa el árbol de la tarjeta: sin scripts, sin manejadores en atributos, solo enlaces web o mailto.
+function auditTree(root) {
+  const bad = [];
+  if (!root) return ["sin tarjeta"];
+  for (const el of root.querySelectorAll("*")) {
+    const tag = el.tagName.toLowerCase();
+    if (["script", "iframe", "object", "embed", "img", "form", "meta", "link", "base", "foreignobject"].includes(tag)) bad.push(`<${tag}>`);
+    for (const a of Array.from(el.attributes)) {
+      const n = a.name.toLowerCase(), v = a.value.trim().toLowerCase();
+      if (n.startsWith("on")) bad.push(`${tag}[${n}]`);
+      if ((n === "href" || n === "src" || n === "action" || n === "formaction" || n === "xlink:href") && v && !/^(https?:\/\/|#|mailto:)/.test(v)) bad.push(`${tag}[${n}=${v.slice(0, 40)}]`);
+      if (/javascript:|data:text\/html/.test(v)) bad.push(`${tag}[${n}] con ${v.slice(0, 30)}`);
+      if (n === "style" && /url\(|expression\(/.test(v)) bad.push(`${tag}[style url()]`);
+    }
+  }
+  const styles = root.querySelectorAll("style");
+  if (styles.length > 1) bad.push(`${styles.length} <style> (se inyectó una hoja)`);
+  for (const el of root.querySelectorAll("*")) for (const a of Array.from(el.attributes)) if (/evil\.example/.test(a.value)) bad.push(`${el.tagName.toLowerCase()}[${a.name}] apunta a evil.example`);
+  for (const s of styles) if (/evil\.example|url\(/.test(s.textContent)) bad.push("hoja de estilo con url() externa");
+  return bad;
+}
+
+// ---------------------------------------------------------------- 1. Página de tienda maliciosa
+const pages = [
+  ["Amazon MX", "https://www.amazon.com.mx/dp/B0ABCDEF12",
+    `<span id="productTitle">Crema ${X.tag} ${X.svg}</span><a id="bylineInfo">Visita la tienda de ${X.attr}</a>
+     <div id="merchant-info">Vendido por ${X.tag}</div><span class="a-price"><span class="a-offscreen">$1,299.00</span></span>
+     <div id="installmentCalculator_feature_div">Hasta 12 meses sin intereses ${X.svg}</div>
+     <input id="ASIN" value="${X.svg.replace(/"/g, "&quot;")}">`],
+  ["JSON-LD hostil", "https://www.liverpool.com.mx/tienda/pdp/1",
+    ld({ "@context": "https://schema.org", "@type": "Product", name: `Tenis ${X.tag}`, brand: { "@type": "Brand", name: X.svg }, gtin13: X.attr, sku: X.js,
+      offers: { "@type": "Offer", price: X.attr, priceCurrency: X.svg, seller: { name: X.tag }, url: X.js },
+      aggregateRating: { ratingValue: X.attr, reviewCount: X.svg } }) + `<h1>Tenis ${X.svg}</h1>`],
+  ["Mercado Libre", "https://articulo.mercadolibre.com.mx/MLM-123456789-x",
+    `<h1 class="ui-pdp-title">Leche ${X.tag}</h1><div class="ui-pdp-seller__header__title">${X.svg}</div><span class="andes-money-amount__fraction">${X.attr}</span>`],
+];
+for (const [name, url, html] of pages) {
+  const w = env(html, url);
+  let err = null;
+  try { analyze(w, url, baseDb); } catch (e) { err = e; }
+  const bad = auditTree(rootOf(w));
+  check(`Inyección desde la página (${name}): la tarjeta no ejecuta ni inserta marcado`, !err && bad.length === 0 && !w.__pwned, err ? String(err) : bad.join(", "));
+}
+
+// ---------------------------------------------------------------- 2. Base remota envenenada (repo comprometido)
+{
+  const db = JSON.parse(JSON.stringify(baseDb));
+  const g = db.grupos.ferrero;
+  Object.assign(g, { empresa: `Ferrero ${X.tag}`, controlador: X.svg, nota: X.style, fuente: X.attr, url: X.js, fondos: X.tag, gobierno: X.svg,
+    pais: `Italia ${X.tag}`, tipo: `Familia${X.attr}`, ahorro_fuente: X.dataUrl, sitio_oficial: X.js, busqueda_oficial: X.js + "{q}" });
+  db.reputacion = db.reputacion || {};
+  db.reputacion.ferrero = { revisado: "2026-01-01", eventos: [{ tema: "laboral", estado: "multa", titulo: X.tag, url: X.js, fuente: X.svg, anio: X.attr, monto: X.tag }], positivos: [{ titulo: X.svg, url: X.dataUrl }], lobbying: [{ titulo: X.attr, url: X.js }] };
+  db.rastreadores = [{ nombre: `Keepa ${X.tag}`, desc: X.svg, requiere: "asin", dominios: { "amazon.com.mx": "javascript:window.__pwned=1//{asin}" } },
+    { nombre: X.svg, desc: X.attr, requiere: "q", dominios: { "amazon.com.mx": X.dataUrl } }];
+  db.tiendas_comparar = { "México": [{ nombre: X.tag, dominio: "evil.example", url_busqueda: "javascript:window.__pwned=1/{q}" }, { nombre: "Ok", dominio: "x.example", url_busqueda: X.dataUrl + "{q}" }] };
+  const url = "https://www.amazon.com.mx/dp/B0ABCDEF12";
+  const w = env(`<span id="productTitle">Nutella 650 g</span><a id="bylineInfo">Visita la tienda de Ferrero</a><span class="a-price"><span class="a-offscreen">$99.00</span></span>`, url);
+  let err = null;
+  try { analyze(w, url, db); } catch (e) { err = e; }
+  const root = rootOf(w);
+  const bad = auditTree(root);
+  check("Base remota envenenada: textos escapados y enlaces javascript:/data: neutralizados", !err && bad.length === 0 && !w.__pwned, err ? String(err) : bad.join(", "));
+}
+
+// ---------------------------------------------------------------- 3. Integridad de la tarjeta frente a la página
+{
+  const url = "https://www.amazon.com.mx/dp/B0ABCDEF12";
+  const w = env(`<span id="productTitle">Nutella 650 g</span><a id="bylineInfo">Visita la tienda de Ferrero</a>`, url);
+  analyze(w, url, baseDb);
+  const host = w.document.getElementById("gina-tarjeta");
+  // Lo que ve un script de la propia página (host.shadowRoot): con Shadow DOM cerrado es null.
+  check("La página no puede leer ni alterar la tarjeta (Shadow DOM cerrado)", host && !host.shadowRoot && !!rootOf(w), host && host.shadowRoot ? "shadowRoot abierto: la tienda puede reescribir el veredicto" : "sin tarjeta");
+}
+
+// ---------------------------------------------------------------- 4. Keepa y rastreadores: escenarios
+{
+  const W = env("", "https://www.amazon.com.mx/");
+  const Q = W.QED;
+  const tbl = baseDb.rastreadores;
+  const cases = [
+    ["www.amazon.com.mx", { id: "B0ABCDEF12", type: "asin" }, "https://keepa.com/#!product/11-B0ABCDEF12"],
+    ["www.amazon.com", { id: "B0ABCDEF12", type: "asin" }, "https://keepa.com/#!product/1-B0ABCDEF12"],
+    ["smile.amazon.com", { id: "B0ABCDEF12", type: "asin" }, "https://keepa.com/#!product/1-B0ABCDEF12"],
+    ["www.amazon.co.uk", { id: "B0ABCDEF12", type: "asin" }, "https://keepa.com/#!product/2-B0ABCDEF12"],
+    ["www.amazon.de", { id: "B0ABCDEF12", type: "asin" }, "https://keepa.com/#!product/3-B0ABCDEF12"],
+    ["www.amazon.es", { id: "B0ABCDEF12", type: "asin" }, "https://keepa.com/#!product/9-B0ABCDEF12"],
+    ["www.amazon.co.jp", { id: "B0ABCDEF12", type: "asin" }, "https://keepa.com/#!product/5-B0ABCDEF12"],
+  ];
+  for (const [host, pid, want] of cases) {
+    const links = Q.getTrackerLinks(host, pid, "q", tbl);
+    const k = links.find((l) => l.name === "Keepa");
+    check(`Keepa en ${host} → ${want.split("/").pop()}`, k && k.url === want, k ? k.url : "sin enlace");
+  }
+  const noAsin = Q.getTrackerLinks("www.amazon.com.mx", { id: "", type: "none" }, "q", tbl);
+  check("Amazon sin ASIN → sin Keepa ni CamelCamelCamel", !noAsin.some((l) => /Keepa|Camel/.test(l.name)), JSON.stringify(noAsin));
+  const ml = Q.getTrackerLinks("articulo.mercadolibre.com.mx", { id: "MLM123456", type: "mlm" }, "q", tbl);
+  check("Mercado Libre → sin Keepa", !ml.some((l) => l.name === "Keepa"), JSON.stringify(ml));
+  const fake = Q.getTrackerLinks("amazon.com.mx.evil.example", { id: "B0ABCDEF12", type: "asin" }, "q", tbl);
+  check("Dominio impostor (amazon.com.mx.evil.example) → sin rastreadores", fake.length === 0, JSON.stringify(fake));
+  const evilAsinPage = env(`<input id="ASIN" value='B0X"&gt;&lt;svg onload=1&gt;'>`, "https://www.amazon.com.mx/gp/offer-listing/");
+  const pid = evilAsinPage.QED.extractProductId(evilAsinPage.document, "amazon", "https://www.amazon.com.mx/gp/offer-listing/");
+  check("ASIN falso en <input id=ASIN> se descarta (solo 10 caracteres A-Z0-9)", pid.type !== "asin", JSON.stringify(pid));
+  const tp1 = Q.computeTargetPrice(null, 1000);
+  const DAY = 86400000, now = Date.UTC(2026, 9, 16);
+  const tp2 = Q.computeTargetPrice({ p: [{ t: now - 40 * DAY, p: 850 }, { t: now - 5 * DAY, p: 990 }] }, 1000, now);
+  const tp3 = Q.computeTargetPrice({ p: [{ t: now - 200 * DAY, p: 500 }, { t: now - 3 * DAY, p: 990 }] }, 1000, now);
+  check("Precio objetivo: sin historial = 10% abajo; con 7+ días = mínimo de 90 días; ignora puntos de más de 90 días", tp1 === 900 && tp2 === 850 && tp3 === 900, `${tp1} ${tp2} ${tp3}`);
+  check("Precio objetivo con precio 0, negativo o NaN → sin precio objetivo", Q.computeTargetPrice(null, 0) == null && Q.computeTargetPrice(null, -5) == null && Q.computeTargetPrice(null, NaN) == null);
+}
+
+// ---------------------------------------------------------------- 4b. Keepa en la tarjeta (recorrido visual)
+{
+  const url = "https://www.amazon.com.mx/dp/B0ABCDEF12";
+  const w = env(`<span id="productTitle">Nutella 650 g</span><a id="bylineInfo">Visita la tienda de Ferrero</a><div id="corePriceDisplay_desktop_feature_div"><span class="a-price"><span class="a-offscreen">$100.00</span></span></div>`, url);
+  analyze(w, url, baseDb);
+  const root = rootOf(w);
+  const a = root && root.querySelector("a.keepa-follow-btn");
+  const target = root && root.querySelector(".keepa-copy-btn");
+  check("Tarjeta en Amazon MX: botón «Seguir precio en Keepa» al producto exacto y precio objetivo 10% abajo",
+    a && a.getAttribute("href") === "https://keepa.com/#!product/11-B0ABCDEF12" && a.getAttribute("rel") === "noopener noreferrer" && target && target.getAttribute("data-target") === "90",
+    a ? `${a.getAttribute("href")} · ${target && target.getAttribute("data-target")}` : "sin botón");
+  const url2 = "https://articulo.mercadolibre.com.mx/MLM-123456789-leche";
+  const w2 = env(`<h1 class="ui-pdp-title">Leche Lala 1 L</h1>`, url2);
+  analyze(w2, url2, baseDb);
+  check("Tarjeta en Mercado Libre: sin botón de Keepa", !rootOf(w2).querySelector("a.keepa-follow-btn"));
+}
+
+// ---------------------------------------------------------------- 5. Sugerencias por correo (extensión)
+{
+  const W = env("", "https://www.amazon.com.mx/");
+  const ALT = W.QED.ALT;
+  const proj = { contacto: "gina.proyecto02@gmail.com" };
+  const evil = { marca: "Acme\r\nBcc: victima@example.com\r\n-->@everyone [x](https://evil.example)", tienda: "amazon\n%0d%0aCc: a@b.c", producto: "x".repeat(5000) };
+  const d = ALT.suggestionMailData ? ALT.suggestionMailData(proj, "marca", [evil]) : null;
+  const link = ALT.suggestionLink(proj, "marca", [evil]);
+  const all = JSON.stringify(d || {}) + link;
+  const decoded = decodeURIComponent((link.split("?")[1] || "").replace(/&(subject|body)=/g, "\n"));
+  check("Correo de sugerencia: sin saltos de línea en el asunto ni cabeceras inyectadas", link.startsWith("mailto:gina.proyecto02@gmail.com?subject=") && !/[\r\n]/.test(decodeURIComponent(link.split("subject=")[1].split("&")[0])) && !/&(cc|bcc)=/i.test(link), link.slice(0, 160));
+  check("Correo de sugerencia: el bloque gina:sugerencia no se puede cerrar desde la marca (-->)", (decoded.match(/-->/g) || []).length === 1, decoded.slice(0, 200));
+  check("Correo de sugerencia: longitud acotada (≤ 2,000 caracteres en el cuerpo)", decoded.length < 2000, String(decoded.length));
+  const contactoMalo = ALT.suggestionLink({ contacto: "x@y.z?bcc=a@b.c" }, "marca", [{ marca: "A" }]);
+  check("Correo de proyecto con parámetros (?bcc=) se rechaza", !/bcc=/i.test(contactoMalo), contactoMalo);
+}
+
+// ---------------------------------------------------------------- 6. Procesador de correo (robot)
+const correo = require(path.join(ROOT, "job", "correo.js"));
+function mime(subject, bodyText, opts = {}) {
+  const enc = opts.enc || "7bit";
+  let b = bodyText;
+  if (enc === "quoted-printable") b = bodyText.replace(/[^\x20-\x7e\n]/g, (c) => Array.from(Buffer.from(c, "utf8")).map((x) => "=" + x.toString(16).toUpperCase().padStart(2, "0")).join("")).replace(/=/g, (m, i, s) => m).replace(/\n/g, "\r\n");
+  if (enc === "base64") b = Buffer.from(bodyText, "utf8").toString("base64");
+  const head = `From: Persona <persona@example.com>\r\nTo: gina.proyecto02@gmail.com\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\n`;
+  if (opts.multipart) {
+    return head + `Content-Type: multipart/alternative; boundary="BB"\r\n\r\n--BB\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: ${enc}\r\n\r\n${b}\r\n--BB\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<div>${bodyText.replace(/</g, "&lt;")}</div>\r\n--BB--\r\n`;
+  }
+  return head + `Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: ${enc}\r\n\r\n${b}\r\n`;
+}
+const block = (marca, extra = "") => `<!-- gina:sugerencia v1 tipo=marca -->\n- marca: ${marca}\n- tienda: amazon.com.mx\n- producto: Producto de prueba categoría\n- fecha: 2026-10-16${extra}\n\n(Enviado desde la extensión Gina.)`;
+
+function fakeImap(messages) {
+  // messages: [{ uid, raw }]; recuerda qué se movió y qué se borró.
+  const st = { moved: [], deleted: [], expunged: 0, box: messages.slice() };
+  return {
+    st,
+    async searchUnseen() { return st.box.map((m) => m.uid); },
+    async searchGina() { return st.box.filter((m) => /\[gina:sugerencia\]/i.test(m.raw.split("\r\n\r\n")[0])).map((m) => m.uid); },
+    async fetchRaw(uid) { const m = st.box.find((x) => x.uid === uid); return m ? m.raw : ""; },
+    async fetchBody(uid) { const m = st.box.find((x) => x.uid === uid); return m ? m.raw.split("\r\n\r\n").slice(1).join("\r\n\r\n") : ""; },
+    async moveToProcessed(uid) { st.moved.push(uid); },
+    async markProcessed(uid) { st.moved.push(uid); },
+  };
+}
+
+(async () => {
+  {
+    const msgs = [
+      { uid: 101, raw: mime("Hola, ¿comemos el viernes?", "Nos vemos. La marca: Patito es la mejor.") },             // correo personal
+      { uid: 102, raw: mime("Alerta de seguridad de Google", "Alguien inició sesión.\nmarca: Google") },             // correo del sistema
+      { uid: 103, raw: mime("[gina:sugerencia] Marca faltante: Jabones Zazil", block("Jabones Zazil"), { enc: "quoted-printable", multipart: true }) },
+      { uid: 104, raw: mime("[gina:sugerencia] Marca faltante: Café Ñandú", block("Café Ñandú"), { enc: "base64" }) },
+      { uid: 105, raw: mime("[gina:sugerencia] Marca faltante: Nutella", block("Nutella")) },                         // ya está en la base
+      { uid: 106, raw: mime("[gina:sugerencia] Marca faltante: x", block("@everyone ![p](https://evil.example/p.png) <img src=x onerror=alert(1)> [click](javascript:alert(1)) Zuzu")) },
+    ];
+    const imap = fakeImap(msgs);
+    const created = [];
+    const exec = (cmd, args) => { if (args[0] === "issue" && args[1] === "create") created.push({ title: args[args.indexOf("--title") + 1], body: args[args.indexOf("--body") + 1] || "" }); return ""; };
+    let res, err = null;
+    try { res = await correo.processEmails({ imap, brandsDb: baseDb, openIssues: [], repo: "o/r", execFile: exec }); } catch (e) { err = e; }
+    check("Correo: ignora y NO toca correos ajenos (personales o del sistema)", !err && !imap.st.moved.includes(101) && !imap.st.moved.includes(102) && !created.some((c) => /Patito|Google/.test(c.title)), err ? String(err) : `movidos ${imap.st.moved} · issues ${created.map((c) => c.title)}`);
+    check("Correo: decodifica quoted-printable y base64 (acentos intactos)", created.some((c) => /Jabones Zazil/.test(c.title)) && created.some((c) => /Café Ñandú/.test(c.title)), created.map((c) => c.title).join(" | "));
+    check("Correo: marca existente (Nutella) no crea issue", !created.some((c) => /Nutella/.test(c.title)));
+    const txt = created.map((c) => c.title + "\n" + c.body).join("\n");
+    check("Correo: ningún issue lleva menciones, imágenes, HTML ni enlaces javascript: (la marca hostil se descarta)", !/@everyone|!\[|<img|onerror|javascript:|evil\.example/i.test(txt), txt.slice(0, 200));
+    check("Correo: el issue no lleva la dirección del remitente", !created.some((c) => /persona@example\.com/.test(c.title + c.body)));
+  }
+  {
+    // Inundación: 200 correos válidos distintos → tope por ejecución.
+    const msgs = Array.from({ length: 200 }, (_, i) => ({ uid: 1000 + i, raw: mime(`[gina:sugerencia] Marca faltante: Zmarca${i}`, block(`Zmarca${i}`)) }));
+    const imap = fakeImap(msgs);
+    let n = 0;
+    await correo.processEmails({ imap, brandsDb: baseDb, openIssues: [], repo: "o/r", execFile: (c, a) => { if (a[1] === "create") n++; return ""; } });
+    check("Correo: tope de issues por ejecución (≤ 25) ante una inundación", n > 0 && n <= 25, String(n));
+  }
+  {
+    // Duplicado contra issues cerrados (rechazados antes): no se vuelve a abrir.
+    const imap = fakeImap([{ uid: 7, raw: mime("[gina:sugerencia] Marca faltante: Marca Rechazada", block("Marca Rechazada")) }]);
+    let n = 0;
+    await correo.processEmails({ imap, brandsDb: baseDb, openIssues: [{ title: "Marca faltante: Marca Rechazada", body: "", state: "CLOSED" }], repo: "o/r", execFile: (c, a) => { if (a[1] === "create") n++; return ""; } });
+    check("Correo: una marca con issue ya cerrado no se vuelve a abrir", n === 0, String(n));
+  }
+  {
+    // Cliente IMAP: los comandos usan UID (no números de secuencia que cambian tras borrar) y no borran.
+    const src = fs.readFileSync(path.join(ROOT, "job", "correo.js"), "utf8");
+    check("IMAP: usa UID SEARCH/FETCH/MOVE (los números de secuencia cambian tras EXPUNGE)", /UID SEARCH/.test(src) && /UID FETCH/.test(src) && !/[^D] FETCH \$\{seq/.test(src));
+    check("IMAP: nunca marca \\Deleted ni hace EXPUNGE en el buzón", !/\\\\Deleted|EXPUNGE/.test(src));
+    check("IMAP: lee sin marcar como leído (BODY.PEEK)", /BODY\.PEEK/.test(src));
+    check("IMAP: credenciales entre comillas escapadas (sin inyección de comandos)", /quoteImap|imapQuote|literal/i.test(src));
+  }
+
+  {
+    // Cliente IMAP real contra un servidor simulado: literales por bytes (con «G3 OK» dentro del correo) y comandos exactos.
+    const net = require("net");
+    const mail = Buffer.from("Subject: =?UTF-8?Q?[gina:sugerencia]_Marca_faltante:_Caf=C3=A9_Lun=C3=A1?=\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n<!-- gina:sugerencia v1 tipo=marca -->\r\n- marca: Caf=C3=A9 Lun=C3=A1\r\n- tienda: amazon.com.mx\r\nG3 OK esto es texto del correo, no una respuesta\r\n", "utf8");
+    const seen = [];
+    const server = net.createServer((sock) => {
+      sock.write("* OK Gmail listo\r\n");
+      let acc = "";
+      sock.on("data", (d) => {
+        acc += d.toString("latin1");
+        let i;
+        while ((i = acc.indexOf("\r\n")) >= 0) {
+          const line = acc.slice(0, i); acc = acc.slice(i + 2);
+          const [tag, ...rest] = line.split(" "); const cmd = rest.join(" ");
+          seen.push(cmd);
+          if (/^LOGIN/.test(cmd)) sock.write(`${tag} OK LOGIN\r\n`);
+          else if (/^CAPABILITY/.test(cmd)) sock.write(`* CAPABILITY IMAP4rev1 MOVE UIDPLUS\r\n${tag} OK\r\n`);
+          else if (/^SELECT/.test(cmd)) sock.write(`* 3 EXISTS\r\n${tag} OK [READ-WRITE]\r\n`);
+          else if (/^UID SEARCH/.test(cmd)) sock.write(`* SEARCH 41\r\n${tag} OK\r\n`);
+          else if (/^UID FETCH 41 \(BODY\.PEEK\[\]\)/.test(cmd)) { sock.write(`* 1 FETCH (UID 41 BODY[] {${mail.length}}\r\n`); sock.write(mail); sock.write(`)\r\n${tag} OK FETCH\r\n`); }
+          else if (/^CREATE/.test(cmd)) sock.write(`${tag} NO [ALREADYEXISTS]\r\n`);
+          else if (/^UID MOVE 41/.test(cmd)) sock.write(`${tag} OK MOVE\r\n`);
+          else if (/^LOGOUT/.test(cmd)) { sock.write(`* BYE\r\n${tag} OK\r\n`); sock.end(); }
+          else sock.write(`${tag} BAD\r\n`);
+        }
+      });
+    });
+    await new Promise((r) => server.listen(0, "127.0.0.1", r));
+    const port = server.address().port;
+    const client = new correo.SimpleImapClient({ user: 'yo"@x', pass: "a\\b\"c", socketFactory: () => net.connect(port, "127.0.0.1") });
+    let res, err = null;
+    const created = [];
+    try {
+      await client.connect(); await client.login(); await client.select("INBOX");
+      res = await correo.processEmails({ imap: client, brandsDb: baseDb, issues: [], repo: "o/r", execFile: (c, a) => { if (a[1] === "create") created.push(a[a.indexOf("--title") + 1]); return ""; } });
+      await client.logout();
+    } catch (e) { err = e; }
+    server.close();
+    check("IMAP real (servidor simulado): lee el literal completo aunque contenga «G3 OK», decodifica el asunto RFC 2047 y crea 1 issue",
+      !err && res && res.created === 1 && created[0] === "Marca faltante: Café Luná", err ? String(err) : JSON.stringify({ res, created }));
+    check("IMAP real: comandos esperados (UID SEARCH con asunto, BODY.PEEK, UID MOVE; contraseña escapada)",
+      seen.some((c) => c === 'LOGIN "yo\\"@x" "a\\\\b\\"c"') && seen.some((c) => /^UID SEARCH SUBJECT "gina:sugerencia"/.test(c)) && seen.some((c) => /^UID MOVE 41 "gina\/procesado"/.test(c)) && !seen.some((c) => /EXPUNGE|\\Deleted/.test(c)), seen.join(" | "));
+  }
+
+  {
+    // Contrato del recorrido: el issue que crea el correo lo entiende el robot (parseIssueContent) sin pérdida.
+    const job = require(path.join(ROOT, "job", "investigar.js"));
+    const p1 = correo.sanitize(correo.parseEmailBody(block("Jabones Zazil")));
+    const parsedM = job.parseIssueContent({ number: 1, title: "Marca faltante: Jabones Zazil", body: correo.buildIssueBody(p1), labels: ["sugerencia"] });
+    const p2 = correo.sanitize({ tipo: "alternativa", marca: "Café Ñandú", categoria: "Café", pais: "México", dueno: "Cooperativa X", fuente: "https://cooperativa-x.mx/quienes-somos" });
+    const parsedA = job.parseIssueContent({ number: 2, title: "Alternativa local: Café Ñandú", body: correo.buildIssueBody(p2), labels: ["sugerencia"] });
+    check("Recorrido: correo → issue → robot entiende marca, tienda y producto",
+      parsedM && parsedM.tipo === "marca" && parsedM.items[0].brand === "Jabones Zazil" && parsedM.items[0].site === "amazon.com.mx" && /Producto de prueba/.test(parsedM.items[0].title), JSON.stringify(parsedM));
+    check("Recorrido: correo de alternativa → issue → robot entiende categoría, país, dueño y fuente",
+      parsedA && parsedA.tipo === "alternativa" && parsedA.items[0].marca === "Café Ñandú" && parsedA.items[0].fuente === "https://cooperativa-x.mx/quienes-somos", JSON.stringify(parsedA));
+  }
+
+  // ---------------------------------------------------------------- 7. Sitios oficiales: SSRF, dominio cruzado y entidad equivocada
+  const so = require(path.join(ROOT, "job", "sitios_oficiales.js"));
+  const page = (body, type = "text/html") => ({ ok: true, status: 200, headers: new Map([["content-type", type]]), text: async () => body, json: async () => JSON.parse(body) });
+  {
+    const html = `<link rel="search" type="application/opensearchdescription+xml" href="/os.xml">`;
+    const fetchX = async (u) => /os\.xml/.test(u) ? page(`<OpenSearchDescription><Url type="text/html" template="https://evil.example/s?q={searchTerms}"/></OpenSearchDescription>`, "application/xml") : page("");
+    const t = await so.extractOpenSearch(html, "https://www.marca.com/", fetchX);
+    check("Sitios oficiales: buscador OpenSearch en otro dominio se rechaza", !t, String(t));
+    const t2 = so.extractSearchAction(ld({ "@type": "WebSite", potentialAction: { "@type": "SearchAction", target: "https://www.marca.com/buscar?q={search_term_string}" } }), "https://www.marca.com/");
+    check("Sitios oficiales: SearchAction del mismo dominio se acepta", t2 === "https://www.marca.com/buscar?q={q}", String(t2));
+    const t3 = so.extractSearchAction(ld({ "@type": "WebSite", potentialAction: { "@type": "SearchAction", target: "https://shop.marca.com/s/{search_term_string}" } }), "https://www.marca.com/");
+    check("Sitios oficiales: subdominio de la marca se acepta", t3 === "https://shop.marca.com/s/{q}", String(t3));
+  }
+  {
+    const visited = [];
+    const fetchX = async (u) => {
+      visited.push(u);
+      if (/wbgetentities/.test(u)) return page(JSON.stringify({ entities: { Q1: { claims: { P856: [{ mainsnak: { datavalue: { value: "http://169.254.169.254/latest/meta-data/" } } }] } } } }), "application/json");
+      return page("");
+    };
+    const r = await so.investigateBrandOfficialSite({ brand: "Marca", wikipedia_url: "https://en.wikipedia.org/wiki/Marca" }, { fetchImpl: fetchX });
+    check("Sitios oficiales: P856 apuntando a IP interna (169.254.169.254) no se visita ni se guarda", !r && !visited.some((u) => /169\.254/.test(u)), JSON.stringify(r));
+  }
+  {
+    const fetchX = async (u) => {
+      if (/wbsearchentities/.test(u)) return page(JSON.stringify({ search: [{ id: "Q2" }] }), "application/json");
+      if (/wbgetentities/.test(u) && /ids=Q2/.test(u)) return page(JSON.stringify({ entities: { Q2: { claims: { P856: [{ mainsnak: { datavalue: { value: "https://www.otra-cosa.com/" } } }] } } } }), "application/json");
+      if (/wbgetentities/.test(u)) return page(JSON.stringify({ entities: { "-1": {} } }), "application/json");
+      return page("");
+    };
+    const r = await so.investigateBrandOfficialSite({ brand: "Gain" }, { fetchImpl: fetchX });
+    check("Sitios oficiales: sin página de Wikipedia propia no se adivina por nombre (Gain ≠ primera entidad que coincide)", !r, JSON.stringify(r));
+    const r2 = await so.investigateBrandOfficialSite({ brand: "Olay", url: "https://en.wikipedia.org/wiki/Procter_%26_Gamble" }, { fetchImpl: fetchX });
+    check("Sitios oficiales: el sitio del DUEÑO no se asigna como tienda oficial de cada marca", !r2, JSON.stringify(r2));
+  }
+
+  console.log(`\n${pass}/${total} pruebas de seguridad correctas`);
+  process.exit(pass === total ? 0 : 1);
+})();

@@ -8,10 +8,10 @@ name: Project Gina — pruebas y paquete
 on:
   push:
     branches: [main]
-    paths: ["extension/**", "datagen/**", "test/**", ".github/workflows/generar-paquete.yml"]
+    paths: ["extension/**", "datagen/**", "job/**", "test/**", ".github/workflows/**"]
     tags: ["v*"]
   pull_request:
-    paths: ["extension/**", "datagen/**", "test/**", ".github/workflows/generar-paquete.yml"]
+    paths: ["extension/**", "datagen/**", "job/**", "test/**", ".github/workflows/**"]
   workflow_dispatch:
     inputs:
       guardar_base:
@@ -105,6 +105,7 @@ jobs:
           node test/job.test.js
           node test/e2e_ciclo.test.js
           node test/snapshots.test.js
+          node test/seguridad.test.js
 
       - name: Leer versiones
         id: v

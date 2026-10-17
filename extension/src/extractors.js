@@ -340,7 +340,8 @@
       const mAsin = u.match(/\/(?:dp|gp\/product|gp\/aw\/d)\/([A-Z0-9]{10})/i);
       if (mAsin) return { id: mAsin[1].toUpperCase(), type: "asin" };
       const inp = doc && q(doc, "input#ASIN, input[name='ASIN']");
-      if (inp && inp.value) return { id: inp.value.trim().toUpperCase(), type: "asin" };
+      const v = inp && String(inp.value || "").trim().toUpperCase();
+      if (v && /^[A-Z0-9]{10}$/.test(v)) return { id: v, type: "asin" };
     } else if (siteName === "mercadolibre" || /mercadoli(b|v)re\./i.test(u)) {
       const mMl = u.match(/\b(M[LC][A-Z])-?(\d{6,})/i);
       if (mMl) return { id: (mMl[1] + mMl[2]).toUpperCase(), type: "mlm" };
