@@ -1,2 +1,7 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Detecta texto y guarda todo con LF (igual en Windows, Linux y CI)
+* text=auto eol=lf
+
+# Scripts de Windows sí van con CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
