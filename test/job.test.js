@@ -525,6 +525,103 @@ Date: Fri, 16 Oct 2026 12:00:00 +0000
       !createdIssues[0].body.includes("juan.perez") && moved.length === 2);
   }
 
+  // ---------------------------------------------------------------- E3. Sitios oficiales y buscador de marcas (job/sitios_oficiales.js)
+  {
+    const sitios = require("../job/sitios_oficiales.js");
+    const fixturesDir = path.join(__dirname, "fixtures", "sitios_oficiales");
+
+    // 27. extractOpenSearch extrae plantilla OpenSearch y reemplaza {searchTerms} por {q}
+    const htmlOpenSearch = fs.readFileSync(path.join(fixturesDir, "opensearch_page.html"), "utf8");
+    const xmlOpenSearch = fs.readFileSync(path.join(fixturesDir, "opensearch.xml"), "utf8");
+    const mockFetchOpenSearch = async (url) => {
+      if (url.includes("opensearch.xml")) {
+        return { ok: true, status: 200, text: async () => xmlOpenSearch };
+      }
+      return { ok: false, status: 404, text: async () => "" };
+    };
+    const tplOpenSearch = await sitios.extractOpenSearch(htmlOpenSearch, "https://tienda-ejemplo.com", mockFetchOpenSearch);
+    check("27. extractOpenSearch extrae plantilla OpenSearch y reemplaza {searchTerms} por {q}",
+      tplOpenSearch === "https://tienda-ejemplo.com/catalogo?busqueda={q}", tplOpenSearch);
+
+    // 28. extractSearchAction extrae Schema.org SearchAction de JSON-LD y reemplaza por {q}
+    const htmlSearchAction = fs.readFileSync(path.join(fixturesDir, "searchaction_page.html"), "utf8");
+    const tplSearchAction = sitios.extractSearchAction(htmlSearchAction, "https://tienda-marca.com");
+    check("28. extractSearchAction extrae Schema.org SearchAction de JSON-LD y reemplaza por {q}",
+      tplSearchAction === "https://tienda-marca.com/search?query={q}", tplSearchAction);
+
+    // 29. Portada sin buscador guarda sitio_oficial sin busqueda_oficial
+    const htmlNoSearch = fs.readFileSync(path.join(fixturesDir, "no_search_page.html"), "utf8");
+    const mockFetchNoSearch = async (url) => {
+      if (url.includes("wikidata.org")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            entities: {
+              Q999: {
+                claims: {
+                  P856: [{ mainsnak: { datavalue: { value: "https://sitio-informativo.com" } } }]
+                }
+              }
+            }
+          })
+        };
+      }
+      if (url.includes("sitio-informativo.com")) {
+        return { ok: true, status: 200, text: async () => htmlNoSearch };
+      }
+      return { ok: false, status: 404, text: async () => "" };
+    };
+    const resNoSearch = await sitios.investigateBrandOfficialSite(
+      { brand: "Marca Informativa", wikipedia_title: "Marca_Informativa" },
+      { fetchImpl: mockFetchNoSearch, now: "2026-10-16" }
+    );
+    check("29. Portada sin buscador guarda sitio_oficial sin busqueda_oficial",
+      resNoSearch && resNoSearch.sitio_oficial === "https://sitio-informativo.com/" &&
+      !resNoSearch.busqueda_oficial && resNoSearch.fuente === "Wikidata P856" && resNoSearch.verificado === "2026-10-16",
+      JSON.stringify(resNoSearch));
+
+    // 30. Marca sin P856 en Wikidata no escribe nada (retorna null)
+    const mockFetchNoP856 = async (url) => {
+      if (url.includes("wikidata.org")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            entities: {
+              Q1000: { claims: {} }
+            }
+          })
+        };
+      }
+      return { ok: false, status: 404, text: async () => "" };
+    };
+    const resNoP856 = await sitios.investigateBrandOfficialSite(
+      { brand: "Marca Sin P856", wikipedia_title: "Marca_Sin_P856" },
+      { fetchImpl: mockFetchNoP856 }
+    );
+    check("30. Marca sin P856 en Wikidata no escribe nada (retorna null)",
+      resNoP856 === null, String(resNoP856));
+
+    // 31. build_data.py rechaza una plantilla sin {q} (AssertionError)
+    const pyCodeNoQ = `
+import sys
+sys.path.insert(0, 'datagen')
+import data_base as base
+base.g('grupo_sin_q', 'Grupo Sin Q', 'Controlador', 'México', 'Familia', confianza='Alta', fuente='Registro oficial', url='https://oficial.com', sitio_oficial='https://tienda.com', busqueda_oficial='https://tienda.com/buscar?query=sin_parametro', verificado='2026-10-16')
+import build_data
+`;
+    const resPyNoQ = spawnSync("python", ["-c", pyCodeNoQ], {
+      encoding: "utf8",
+      cwd: path.join(__dirname, ".."),
+      env: Object.assign({}, process.env, { PYTHONIOENCODING: "utf-8" })
+    });
+    const okFailNoQ = resPyNoQ.status !== 0 && (resPyNoQ.stderr || "").includes("busqueda_oficial debe contener '{q}'");
+    check("31. build_data.py rechaza una plantilla sin {q} (AssertionError)",
+      okFailNoQ, "Falla con AssertionError: busqueda_oficial debe contener '{q}'");
+  }
+
+
   console.log(`\n${pass}/${total} pruebas de job/investigar.js correctas`);
   process.exit(pass === total ? 0 : 1);
 }

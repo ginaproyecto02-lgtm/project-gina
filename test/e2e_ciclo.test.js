@@ -46,9 +46,10 @@ function createTempGitEnv() {
   const ghJsCode = `#!/usr/bin/env node
 "use strict";
 const fs = require("fs");
+const path = require("path");
 const args = process.argv.slice(2);
-const logFile = process.env.FAKE_GH_LOG;
-const issuesFile = process.env.FAKE_GH_ISSUES;
+const logFile = process.env.FAKE_GH_LOG || path.join(__dirname, "..", "gh_calls.json");
+const issuesFile = process.env.FAKE_GH_ISSUES || path.join(__dirname, "..", "open_issues.json");
 
 let log = [];
 try { log = JSON.parse(fs.readFileSync(logFile, "utf8")); } catch (_) {}
@@ -93,7 +94,23 @@ process.exit(0);
 
   // Ejecutable Unix (bin/gh) + shim Windows (bin/gh.cmd y bin/gh.js detectado por defaultExecFile)
   const ghUnixPath = path.join(binDir, "gh");
-  fs.writeFileSync(ghUnixPath, ghJsCode, { encoding: "utf8", mode: 0o755 });
+  const ghShCode = `#!/bin/sh
+SCRIPT_DIR="$(dirname "$0")"
+if command -v wslpath >/dev/null 2>&1; then
+  TARGET="$(wslpath -w "$SCRIPT_DIR/gh.js")"
+elif (cd "$SCRIPT_DIR" && pwd -W) >/dev/null 2>&1; then
+  TARGET="$(cd "$SCRIPT_DIR" && pwd -W)/gh.js"
+else
+  TARGET="$SCRIPT_DIR/gh.js"
+fi
+
+if command -v node >/dev/null 2>&1; then
+  exec node "$TARGET" "$@"
+elif command -v node.exe >/dev/null 2>&1; then
+  exec node.exe "$TARGET" "$@"
+fi
+`;
+  fs.writeFileSync(ghUnixPath, ghShCode, { encoding: "utf8", mode: 0o755 });
   try { fs.chmodSync(ghUnixPath, 0o755); } catch (_) {}
   const ghCmdPath = path.join(binDir, "gh.cmd");
   fs.writeFileSync(ghCmdPath, `@echo off\r\n"${process.execPath}" "%~dp0gh.js" %*\r\n`, "utf8");
@@ -681,6 +698,10 @@ async function runAll() {
     const wf = fs.readFileSync(path.join(ROOT, ".github", "workflows", "investigacion-semanal.yml"), "utf8");
     const m = wf.match(/- name: Avisar si el robot falló\n\s+if: failure\(\)[\s\S]*?run: \|\n([\s\S]*)$/);
     const script = m ? m[1].split("\n").map((l) => l.replace(/^ {10}/, "")).join("\n") : "";
+    const isWin = process.platform === "win32";
+    const bashBin = isWin
+      ? env.binDir.replace(/^([a-zA-Z]):/, (_, d) => "/mnt/" + d.toLowerCase()).replace(/\\/g, "/")
+      : env.binDir;
     const runEnv = Object.assign({}, process.env, {
       PATH: env.binDir + path.delimiter + origPath,
       FAKE_GH_LOG: env.ghLogFile,
@@ -689,7 +710,13 @@ async function runAll() {
       RUN_URL: "https://github.com/ginaproyecto02-lgtm/project-gina/actions/runs/1"
     });
     env.setOpenIssues([]);
-    const r = spawnSync("bash", ["-c", script], { env: runEnv, encoding: "utf8" });
+    const runnerScript = `#!/bin/sh\nexport PATH="${bashBin}:$PATH"\nexport GITHUB_REPOSITORY="${runEnv.GITHUB_REPOSITORY}"\nexport RUN_URL="${runEnv.RUN_URL}"\n${script}`.replace(/\r/g, "");
+    const shFile = path.join(env.binDir, "run_failure_test.sh");
+    fs.writeFileSync(shFile, runnerScript, "utf8");
+    const shBash = isWin
+      ? shFile.replace(/^([a-zA-Z]):/, (_, d) => "/mnt/" + d.toLowerCase()).replace(/\\/g, "/")
+      : shFile;
+    const r = spawnSync("bash", [shBash], { env: runEnv, encoding: "utf8" });
     const created = env.readGhLog().find((c) => c.args[0] === "issue" && c.args[1] === "create" && c.args.includes("Robot de investigación falló"));
     check("D5 d: un fallo del robot → el paso if: failure() crea el issue «Robot de investigación falló» con el enlace a la ejecución",
       !!m && r.status === 0 && !!created && created.args.some((a) => a.includes("/actions/runs/1")), r.stderr && r.stderr.slice(0, 120));

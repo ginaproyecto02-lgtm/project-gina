@@ -7,7 +7,7 @@ G = {}
 P_EN = "Vanguard, BlackRock and other passive index funds"
 NC_EN = "Not publicly traded"
 
-def g(id, empresa, controlador, pais, tipo, fondos="", gobierno="", nota="", confianza=A, fuente="", url="", ahorro=False, ahorro_fuente="", controlador_en="", nota_en="", fondos_en="", gobierno_en="", fuente_en="", canal="", marca_propia=False, paises_venta=None):
+def g(id, empresa, controlador, pais, tipo, fondos="", gobierno="", nota="", confianza=A, fuente="", url="", ahorro=False, ahorro_fuente="", controlador_en="", nota_en="", fondos_en="", gobierno_en="", fuente_en="", canal="", marca_propia=False, paises_venta=None, sitio_oficial="", busqueda_oficial="", paises=None, verificado=""):
     if not fondos_en:
         if fondos == P: fondos_en = P_EN
         elif fondos == NC or fondos == "No cotiza en bolsa": fondos_en = NC_EN
@@ -19,6 +19,10 @@ def g(id, empresa, controlador, pais, tipo, fondos="", gobierno="", nota="", con
     if canal: G[id]["canal"] = canal
     if marca_propia: G[id]["marca_propia"] = True
     if paises_venta: G[id]["paises_venta"] = list(paises_venta)
+    if sitio_oficial: G[id]["sitio_oficial"] = sitio_oficial
+    if busqueda_oficial: G[id]["busqueda_oficial"] = busqueda_oficial
+    if paises: G[id]["paises"] = list(paises)
+    if verificado: G[id]["verificado"] = verificado
 
 # ---- Marcas propias de tiendas
 g("walmart","Walmart Inc. (marca propia)","Familia Walton (~45% de Walmart)","EE.UU.","Familia",P,"","En México opera Walmex, ~70% de Walmart Inc.",A,"Informe 10-K de Walmart (SEC)","https://stock.walmart.com/financials/sec-filings/default.aspx",controlador_en="Walton family (~45% voting ownership)",nota_en="World's largest retailer; in Mexico operates Walmex (~70% Walmart Inc.).",fuente_en="Walmart Form 10-K (SEC)",marca_propia=True,paises_venta=["EE.UU.","México","Canadá"])
@@ -124,8 +128,12 @@ g("implus","Wisconsin Pharmacal (Potable Aqua)","Gardner Standard LLC (capital p
 
 
 B = []  # (marca, grupo, alias..., ) ; un "!" delante = solo cuenta si viene del campo «marca», no del título
-def b(grupo, *names): 
-    for n in names: B.append((n, grupo))
+def b(grupo, *names, **kwargs): 
+    for n in names:
+        if kwargs:
+            B.append((n, grupo, kwargs))
+        else:
+            B.append((n, grupo))
 
 b("walmart","Great Value","Equate","Member's Mark","Marketside","Mainstays","!Parent's Choice")
 b("amazon","Amazon Basics","AmazonBasics","Amazon Essentials","Solimo","Presto!","Echo","Kindle","Fire TV","Ring","Blink","eero")

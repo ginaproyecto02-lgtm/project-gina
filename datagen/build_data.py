@@ -26,18 +26,43 @@ AMBIG = {x.lower() for x in ["Mi","Poco","Sol","Indio","Victoria","Corona","Mode
 
 def entries(pairs, kind):
     out, seen = [], set()
-    for n, gid in pairs:
-        strict = n.startswith("!") or n.lower().lstrip("!") in AMBIG
+    for item in pairs:
+        if isinstance(item, dict):
+            n = item["n"]
+            gid = item["g"]
+            extra = {k: v for k, v in item.items() if k not in ("n", "g", "s")}
+            strict = item.get("s", False) or n.startswith("!") or n.lower().lstrip("!") in AMBIG
+        else:
+            n, gid = item[0], item[1]
+            extra = item[2] if len(item) > 2 and isinstance(item[2], dict) else {}
+            strict = n.startswith("!") or n.lower().lstrip("!") in AMBIG
         n = n.lstrip("!")
         assert gid in base.G, f"{kind}: grupo desconocido {gid} ({n})"
         k = n.lower()
         if k in seen: raise SystemExit(f"{kind} duplicada: {n}")
         seen.add(k)
-        out.append({"n": n, "g": gid, **({"s": 1} if strict else {})})
+        entry = {"n": n, "g": gid, **extra}
+        if strict: entry["s"] = 1
+        out.append(entry)
     return out
 
 marcas = entries(base.B, "marca")
 aerolineas = entries(mundo.AIR, "aerolínea")
+
+sitios_path = os.path.join(os.path.dirname(__file__), "sitios_oficiales.json")
+if os.path.exists(sitios_path):
+    sitios_data = json.load(open(sitios_path, encoding="utf-8"))
+    for gid, s in sitios_data.get("grupos", {}).items():
+        if gid in base.G:
+            for k in ("sitio_oficial", "busqueda_oficial", "paises", "fuente", "verificado"):
+                if k in s: base.G[gid][k] = s[k]
+    marcas_map = {m["n"].lower(): m for m in marcas}
+    for mname, s in sitios_data.get("marcas", {}).items():
+        m_entry = marcas_map.get(mname.lower())
+        if m_entry:
+            for k in ("sitio_oficial", "busqueda_oficial", "paises", "fuente", "verificado"):
+                if k in s: m_entry[k] = s[k]
+
 for e in S:
     assert e["g"] in base.G, f"sitio con grupo desconocido: {e}"
 for gid, grp in base.G.items():
@@ -172,7 +197,18 @@ if os.path.exists(prev_path):
                 brands["grupos"][gid] = g; kept["grupos"] += 1
         elif g.get("investigado") and g.get("investigado", "") > brands["grupos"][gid].get("investigado", ""):
             brands["grupos"][gid] = g; kept["grupos"] += 1   # revalidado por el job después de la última edición
+        if gid in brands["grupos"]:
+            for f in ("sitio_oficial", "busqueda_oficial", "paises", "verificado"):
+                if f in g and f not in brands["grupos"][gid]:
+                    brands["grupos"][gid][f] = g[f]
     names = {norm(m["n"]) for m in brands["marcas"]}
+    prev_marcas_by_name = {norm(m["n"]): m for m in prev.get("marcas", [])}
+    for m in brands["marcas"]:
+        pm = prev_marcas_by_name.get(norm(m["n"]))
+        if pm:
+            for f in ("sitio_oficial", "busqueda_oficial", "paises", "fuente", "verificado"):
+                if f in pm and f not in m:
+                    m[f] = pm[f]
     for m in prev.get("marcas", []):
         if m.get("job") and norm(m["n"]) not in names and m.get("g") in brands["grupos"]:
             brands["marcas"].append(m); names.add(norm(m["n"])); kept["marcas"] += 1
@@ -244,6 +280,29 @@ for gid, grp in brands["grupos"].items():
     assert "Conocimiento del modelo" not in fuente, f"Grupo '{gid}' tiene 'Conocimiento del modelo'"
     if grp.get("confianza") in ("Alta", "Verificado"):
         assert grp.get("url") and grp["url"].startswith("https://"), f"Grupo '{gid}' con confianza {grp.get('confianza')} sin URL válida"
+
+# ---- E3: Validación estricta de sitios oficiales y buscadores
+def validate_sitios_oficiales(obj, context="datos"):
+    sitio = obj.get("sitio_oficial")
+    busqueda = obj.get("busqueda_oficial")
+    if sitio is not None or busqueda is not None:
+        assert sitio and isinstance(sitio, str) and sitio.startswith("https://"), (
+            f"{context}: sitio_oficial debe comenzar con 'https://', obtenido: '{sitio}'"
+        )
+        assert obj.get("verificado"), f"{context}: falta fecha de verificación para sitio oficial"
+        assert obj.get("fuente"), f"{context}: falta fuente para sitio oficial"
+        if busqueda is not None:
+            assert isinstance(busqueda, str) and busqueda.startswith("https://"), (
+                f"{context}: busqueda_oficial debe comenzar con 'https://', obtenido: '{busqueda}'"
+            )
+            assert "{q}" in busqueda, (
+                f"{context}: busqueda_oficial debe contener '{{q}}', obtenido: '{busqueda}'"
+            )
+
+for gid, grp in brands["grupos"].items():
+    validate_sitios_oficiales(grp, f"grupo '{gid}'")
+for m in brands["marcas"]:
+    validate_sitios_oficiales(m, f"marca '{m.get('n')}'")
 
 json.dump(brands, open(prev_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("conservado del job:", kept)

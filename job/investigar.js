@@ -546,7 +546,7 @@ async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun,
   } catch (_) {}
 
   const files = Array.from(diffSet);
-  const ALLOWED_REGEX = /^(extension\/data\/brands\.json|datagen\/evidencias\.csv|job\/estado\.json|job\/reportes\/|datagen\/fuentes\/)/;
+  const ALLOWED_REGEX = /^(extension\/data\/brands\.json|datagen\/evidencias\.csv|datagen\/sitios_oficiales\.json|job\/estado\.json|job\/reportes\/|datagen\/fuentes\/)/;
   const disallowed = files.filter((f) => !ALLOWED_REGEX.test(f));
   if (disallowed.length > 0) {
     throw new Error(`Rutas no permitidas modificadas antes del push: ${disallowed.join(", ")}`);
