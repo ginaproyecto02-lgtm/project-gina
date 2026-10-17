@@ -1,0 +1,31 @@
+{
+  "site_id": "MLM",
+  "query": "samsung galaxy s24 ultra",
+  "paging": {
+    "total": 50,
+    "offset": 0,
+    "limit": 3
+  },
+  "results": [
+    {
+      "id": "MLM12345678",
+      "title": "Samsung Galaxy S24 Ultra 256GB Gris Titanio",
+      "price": 19999.00,
+      "currency_id": "MXN",
+      "permalink": "https://articulo.mercadolibre.com.mx/MLM-12345678-samsung-s24-ultra",
+      "official_store_id": 123,
+      "seller": {
+        "nickname": "SAMSUNG_OFICIAL"
+      },
+      "reviews": {
+        "rating_average": 4.8,
+        "total": 1250
+      },
+      "attributes": [
+        { "id": "BRAND", "value_name": "Samsung" },
+        { "id": "MODEL", "value_name": "SM-S928B" },
+        { "id": "GTIN", "value_name": "8806095300000" }
+      ]
+    }
+  ]
+}
