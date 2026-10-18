@@ -18,7 +18,7 @@
     if (!packaged) packaged = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
     if (!registry) registry = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
     if (!QED.PROJECT) { try { QED.PROJECT = await (await fetch(api.runtime.getURL("data/proyecto.json"))).json(); } catch (e) { QED.PROJECT = {}; } }
-    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory", "userSuggestions"]);
+    const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory", "userSuggestions", "compareConsent"]);
     prefs.enabled = st.enabled !== false;
     prefs.minimized = !!st.minimized;
     prefs.aiEnabled = !!(st.settings && st.settings.aiEnabled && st.settings.classify && st.settings.classify.key);
@@ -27,6 +27,8 @@
     prefs.showAlternatives = !(st.settings && st.settings.showAlternatives === false);
     prefs.priceHistory = !(st.settings && st.settings.priceHistory === false);
     prefs.useGitHubIssues = !!(st.settings && st.settings.useGitHubIssues);
+    prefs.compareConsent = !!st.compareConsent;
+    prefs.compareEnabled = !(st.settings && st.settings.compareEnabled === false);
     cachedUserSuggestions = st.userSuggestions || [];
     cachedPriceHistory = prefs.priceHistory ? QED.prunePriceHistory(st.priceHistory || {}) : {};
     const remote = st.remoteBase && st.remoteBase.data;
@@ -227,6 +229,9 @@
     QED.showCard(lastResult, {
       minimized: prefs.minimized, values: prefs.values, showLobbying: prefs.showLobbying,
       index: index, userSuggestions: cachedUserSuggestions, useGitHubIssues: prefs.useGitHubIssues,
+      compareConsent: prefs.compareConsent,
+      compareEnabled: prefs.compareEnabled,
+      storesTable: (packaged && packaged.tiendas_comparar) || {},
       onToggle: (m) => { prefs.minimized = m; api.storage.local.set({ minimized: m }); draw(); },
       onClose: () => { closedFor = location.pathname; }
     });
@@ -238,7 +243,8 @@
     // El historial solo se sincroniza en memoria (p. ej. al borrarlo desde Opciones); no redibuja la tarjeta.
     if (ch.priceHistory) cachedPriceHistory = prefs.priceHistory ? QED.prunePriceHistory(ch.priceHistory.newValue || {}) : {};
     if (ch.userSuggestions) cachedUserSuggestions = ch.userSuggestions.newValue || [];
-    if (ch.customBrands || ch.enabled || ch.remoteBase || ch.verified || ch.groupPatches || ch.settings || ch.repPatches) { await load(); schedule(true); }
+    if (ch.compareConsent) prefs.compareConsent = !!ch.compareConsent.newValue;
+    if (ch.customBrands || ch.enabled || ch.remoteBase || ch.verified || ch.groupPatches || ch.settings || ch.repPatches || ch.compareConsent) { await load(); schedule(true); }
   });
 
   api.runtime.onMessage.addListener((msg, _sender, reply) => {

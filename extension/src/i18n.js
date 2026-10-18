@@ -974,7 +974,6 @@
       ja: "サードパーティ出品者"
     },
     summary_mkt_one: { es: "1 alternativa local", en: "1 local alternative", de: "1 lokale Alternative", fr: "1 alternative locale", it: "1 alternativa locale", ja: "地域資本の代替案1件" },
-    btn_search_store: { es: "Buscar", en: "Search", de: "Suchen", fr: "Chercher", it: "Cerca", ja: "検索" },
     summary_mkt_count: {
       es: "{count} alternativas locales",
       en: "{count} local alternatives",
@@ -1154,14 +1153,85 @@
     },
     lbl_price: { es: "PRECIO EN ESTA PÁGINA", en: "PRICE ON THIS PAGE", de: "PREIS AUF DIESER SEITE", fr: "PRIX SUR CETTE PAGE", it: "PREZZO IN QUESTA PAGINA", ja: "このページの価格" },
     lbl_rating: { es: "CALIFICACIÓN DE LA TIENDA", en: "STORE RATING", de: "SHOP-BEWERTUNG", fr: "NOTE DE LA BOUTIQUE", it: "VALUTAZIONE DEL NEGOZIO", ja: "ストア評価" },
-    lbl_compare_other: { es: "BUSCAR EN OTRA TIENDA", en: "SEARCH ANOTHER STORE", de: "IN ANDEREM SHOP SUCHEN", fr: "CHERCHER DANS UNE AUTRE BOUTIQUE", it: "CERCA IN UN ALTRO NEGOZIO", ja: "他のストアで検索" },
-    compare_hint: {
-      es: "Abre la otra tienda para comparar precio, meses sin intereses y calificación.",
-      en: "Open the other store to compare price, installments and rating.",
-      de: "Öffne den anderen Shop, um Preis, Raten und Bewertung zu vergleichen.",
-      fr: "Ouvrez l'autre boutique pour comparer prix, paiement en plusieurs fois et note.",
-      it: "Apri l'altro negozio per confrontare prezzo, rate e valutazione.",
-      ja: "他ストアを開いて価格・分割・評価を比較してください。"
+    lbl_in_other_stores: {
+      es: "EN OTRAS TIENDAS",
+      en: "IN OTHER STORES",
+      de: "IN ANDEREN SHOPS",
+      fr: "DANS D'AUTRES BOUTIQUES",
+      it: "IN ALTRI NEGOZI",
+      ja: "他のストアで"
+    },
+    compare_same_product: {
+      es: "Mismo producto",
+      en: "Same product",
+      de: "Gleiches Produkt",
+      fr: "Même produit",
+      it: "Stesso prodotto",
+      ja: "同一商品"
+    },
+    compare_badge_cheapest: {
+      es: "El más barato que encontramos",
+      en: "Cheapest found",
+      de: "Günstigstes Angebot",
+      fr: "Le moins cher trouvé",
+      it: "Il più economico trovato",
+      ja: "最安値"
+    },
+    compare_similar_product: {
+      es: "Parecidos",
+      en: "Similar products",
+      de: "Ähnliche Produkte",
+      fr: "Produits similaires",
+      it: "Prodotti simili",
+      ja: "類似商品"
+    },
+    compare_similar_notice: {
+      es: "Parecido, revisa el modelo",
+      en: "Similar, check model",
+      de: "Ähnlich, Modell prüfen",
+      fr: "Similaire, vérifier modèle",
+      it: "Simile, controlla modello",
+      ja: "類似品、型番を確認してください"
+    },
+    compare_read_mins_ago: {
+      es: "leído hace {n} min",
+      en: "read {n} min ago",
+      de: "vor {n} Min. gelesen",
+      fr: "lu il y a {n} min",
+      it: "letto {n} min fa",
+      ja: "{n}分前に取得"
+    },
+    compare_no_matches: {
+      es: "No encontramos este producto en otras tiendas",
+      en: "We did not find this product in other stores",
+      de: "Keine Angebote in anderen Shops gefunden",
+      fr: "Aucun produit trouvé dans d'autres boutiques",
+      it: "Nessun prodotto trovato in altri negozi",
+      ja: "他のストアではこの商品が見つかりませんでした"
+    },
+    compare_btn_activate: {
+      es: "Ver este producto en otras tiendas",
+      en: "See this product in other stores",
+      de: "Dieses Produkt in anderen Shops ansehen",
+      fr: "Voir ce produit dans d'autres boutiques",
+      it: "Vedi questo prodotto in altri negozi",
+      ja: "他のストアでこの商品を見る"
+    },
+    compare_consent_desc: {
+      es: "Consulta el precio en tiendas locales directamente aquí, sin cookies ni salir de la página.",
+      en: "Check prices at local stores right here, with no cookies and without leaving the page.",
+      de: "Preise lokaler Shops direkt hier prüfen, ohne Cookies und ohne die Seite zu verlassen.",
+      fr: "Consultez les prix des boutiques locales directement ici, sans cookies et sans quitter la page.",
+      it: "Controlla i prezzi nei negozi locali direttamente qui, senza cookie e senza lasciare la pagina.",
+      ja: "クッキーなしで、ページを離れずに他のストアの価格を直接確認できます。"
+    },
+    compare_cant_read: {
+      es: "No pudimos leer: {store}",
+      en: "Could not read: {store}",
+      de: "Konnte nicht gelesen werden: {store}",
+      fr: "Impossible de lire : {store}",
+      it: "Impossibile leggere: {store}",
+      ja: "読み込めませんでした: {store}"
     },
     lbl_price_trackers: { es: "HISTORIAL REAL DE PRECIOS (SITIOS EXTERNOS)", en: "REAL PRICE HISTORY (EXTERNAL SITES)", de: "ECHTER PREISVERLAUF (EXTERNE SEITEN)", fr: "HISTORIQUE RÉEL DES PRIX (SITES EXTERNES)", it: "STORICO REALE DEI PREZZI (SITI ESTERNI)", ja: "実際の価格履歴（外部サイト）" },
     keepa_btn: {
@@ -1480,6 +1550,22 @@
       fr: "Suggérer des alternatives locales (coopératives, salariés, familiales) pour le produit consulté",
       it: "Suggerisci alternative a proprietà locale (cooperative, dipendenti, familiari) per il prodotto visualizzato",
       ja: "閲覧中の商品に対して地域資本の代替案（協同組合・従業員所有・同族企業）を提案"
+    },
+    opt_chk_compare_enabled: {
+      es: "Comparar en otras tiendas",
+      en: "Compare in other stores",
+      de: "In anderen Shops vergleichen",
+      fr: "Comparer dans d'autres boutiques",
+      it: "Confronta in altri negozi",
+      ja: "他のストアと比較"
+    },
+    opt_help_compare: {
+      es: "Busca el mismo producto o parecidos en tiendas locales y muestra los precios en la tarjeta sin salir de la página.",
+      en: "Searches for the same or similar products in local stores and shows prices in the card without leaving the page.",
+      de: "Sucht nach demselben oder ähnlichen Produkten in lokalen Shops und zeigt Preise in der Karte an, ohne die Seite zu verlassen.",
+      fr: "Recherche le même produit ou des équivalents dans les boutiques locales et affiche les prix dans la fiche sans quitter la page.",
+      it: "Cerca lo stesso prodotto o simili nei negozi locali e mostra i prezzi nella scheda senza lasciare la pagina.",
+      ja: "同一商品または類似品を他のストアで検索し、ページを離れずにカード内に価格を表示します。"
     },
     msg_values_saved: {
       es: "Guardado. Las tarjetas ya usan tus valores.",

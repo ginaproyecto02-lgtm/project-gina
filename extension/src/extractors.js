@@ -510,15 +510,6 @@
     return out;
   }
 
-  // table = brands.json → tiendas_comparar { pais: [{ nombre, dominio, url_busqueda }] }. Máximo 2, nunca la tienda actual.
-  function getCompareLinks(host, country, query, table) {
-    if (!query || !table) return [];
-    const list = table[String(country || "").trim()] || [];
-    return list
-      .filter((s) => s && s.url_busqueda && !hostMatches(host, s.dominio))
-      .slice(0, 2)
-      .map((s) => ({ name: s.nombre, url: fill(s.url_busqueda, { q: query }) }));
-  }
 
   // Detección de certificaciones mencionadas en texto o especificaciones
   function extractCertifications(doc, title) {
@@ -1004,7 +995,6 @@
     const priceComp = rel.price ? computePriceComparison(options.priceHistory, rel.price.amount, options.now) : null;
     const targetPrice = rel.price ? computeTargetPrice(options.priceHistory, rel.price.amount, options.now) : null;
     const trackers = getTrackerLinks(host, rel.productId, query, options.rastreadores);
-    const compareLinks = getCompareLinks(host, country, query, options.tiendasComparar);
 
     return {
       level,
@@ -1032,8 +1022,7 @@
       targetPrice,
       priceHistory: options.priceHistory || null,
       historyEnabled: options.historyEnabled !== false,
-      trackers,
-      compareLinks
+      trackers
     };
   }
 
@@ -1131,7 +1120,6 @@
   QED.computePriceComparison = computePriceComparison;
   QED.computeTargetPrice = computeTargetPrice;
   QED.getTrackerLinks = getTrackerLinks;
-  QED.getCompareLinks = getCompareLinks;
   QED.searchQuery = searchQuery;
   QED.extractModelAndGtin = extractModelAndGtin;
   QED.priceHistoryKey = priceHistoryKey;

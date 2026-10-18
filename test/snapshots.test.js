@@ -17,7 +17,7 @@ function check(name, ok, detail) { total++; if (ok) pass++; console.log(`${ok ? 
 
 function load(html, url) {
   const dom = new JSDOM(html, { url, runScripts: "outside-only" });
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/i18n.js"]) {
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/comparador.js", "src/i18n.js"]) {
     vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
   }
   dom.window.QED.I18N.setLang("es");
@@ -65,5 +65,32 @@ for (const f of files) {
   }
 }
 
-console.log(`\n${pass}/${total} pruebas de instantáneas correctas (${files.length} páginas)`);
+// Instantáneas de resultados de tiendas para el comparador en la tarjeta (F1)
+const COMPARE_DIR = path.join(__dirname, "fixtures", "comparar");
+const allCompareStores = Object.values(db.tiendas_comparar || {}).reduce((acc, list) => acc.concat(list), []);
+
+const compareFixtures = [
+  { file: "mercadolibre_resultado.html", domain: "mercadolibre.com.mx" },
+  { file: "amazon_resultado.html", domain: "amazon.com.mx" },
+  { file: "walmart_resultado.html", domain: "walmart.com.mx" },
+  { file: "ebay_resultado.html", domain: "ebay.com" }
+];
+
+for (const cf of compareFixtures) {
+  const p = path.join(COMPARE_DIR, cf.file);
+  if (!fs.existsSync(p)) {
+    check(`Comparar fixture ${cf.file}: archivo existe`, false);
+    continue;
+  }
+  const html = fs.readFileSync(p, "utf8");
+  const storeConfig = allCompareStores.find((s) => (s.fixture && s.fixture.endsWith(cf.file)) || s.dominio === cf.domain) || { dominio: cf.domain, nombre: cf.domain };
+  const w = load(html, `https://${storeConfig.dominio}/search`);
+  const items = w.QED.extractStoreItems(html, w.document, storeConfig);
+  check(`Comparar fixture: ${storeConfig.nombre} extrae resultados (${cf.file})`,
+    items.length > 0 && items[0].title && (items[0].price !== null || items[0].url),
+    `extraídos ${items.length} productos, primero: ${items[0] && items[0].title}`
+  );
+}
+
+console.log(`\n${pass}/${total} pruebas de instantáneas correctas (${files.length} páginas de producto, ${compareFixtures.length} de búsqueda)`);
 process.exit(pass === total ? 0 : 1);

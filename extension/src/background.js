@@ -2,7 +2,7 @@
 // Gina — service worker (Chrome/Edge) o página de eventos (Firefox):
 // memoria (caché, pendientes, verificados), clasificación con IA y job semanal de investigación.
 // En Chrome se cargan las dependencias con importScripts; en Firefox ya vienen en background.scripts del manifiesto.
-if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "alternativas.js", "i18n.js", "ai.js");
+if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "alternativas.js", "i18n.js", "comparador.js", "ai.js");
 const QED = globalThis.QED, AI = globalThis.QEDAI;
 const api = chrome;
 const IS_FIREFOX = typeof browser !== "undefined" && !!(browser.runtime && browser.runtime.getBrowserInfo);
@@ -508,6 +508,178 @@ async function recordAlternativeSuggestion(alt) {
   return { ok: true };
 }
 
+let offscreenCreating = null;
+async function ensureOffscreenDocument() {
+  if (typeof chrome === "undefined" || !chrome.offscreen) return;
+  const offscreenUrl = chrome.runtime.getURL("src/offscreen.html");
+  if (chrome.runtime.getContexts) {
+    const existingContexts = await chrome.runtime.getContexts({
+      contextTypes: ["OFFSCREEN_DOCUMENT"],
+      documentUrls: [offscreenUrl]
+    });
+    if (existingContexts && existingContexts.length > 0) return;
+  }
+  if (offscreenCreating) {
+    await offscreenCreating;
+    return;
+  }
+  offscreenCreating = chrome.offscreen.createDocument({
+    url: offscreenUrl,
+    reasons: ["DOM_PARSER"],
+    justification: "Parse HTML for product comparison"
+  }).catch(() => {});
+  await offscreenCreating;
+  offscreenCreating = null;
+}
+
+async function parseStoreHtml(htmlText, storeConfig) {
+  if (typeof DOMParser !== "undefined") {
+    try {
+      const doc = new DOMParser().parseFromString(htmlText, "text/html");
+      return QED.extractStoreItems(htmlText, doc, storeConfig);
+    } catch (_) {}
+  }
+  if (typeof chrome !== "undefined" && chrome.offscreen && chrome.runtime && chrome.runtime.sendMessage) {
+    try {
+      await ensureOffscreenDocument();
+      const r = await chrome.runtime.sendMessage({
+        type: "qed:offscreen_parse",
+        html: htmlText,
+        storeConfig
+      });
+      if (r && r.ok && Array.isArray(r.items)) return r.items;
+    } catch (_) {}
+  }
+  return QED.extractStoreItems(htmlText, null, storeConfig);
+}
+
+async function safeFetchCompare(url, expectedDomain) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    let curUrl = url;
+    for (let hops = 0; hops < 2; hops++) {
+      const res = await fetch(curUrl, {
+        method: "GET",
+        headers: { "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" },
+        credentials: "omit",
+        referrerPolicy: "no-referrer",
+        redirect: "manual",
+        signal: controller.signal
+      });
+
+      if (res.status === 301 || res.status === 302 || res.status === 307 || res.status === 308) {
+        const loc = res.headers.get("Location");
+        if (!loc) return { ok: false, error: "redirect_no_location" };
+        const nextUrl = new URL(loc, curUrl);
+        if (nextUrl.protocol !== "https:") return { ok: false, error: "redirect_not_https" };
+        const nextHost = nextUrl.hostname.replace(/^www\./, "").toLowerCase();
+        const expHost = expectedDomain.replace(/^www\./, "").toLowerCase();
+        if (nextHost !== expHost && !nextHost.endsWith("." + expHost)) {
+          return { ok: false, error: "redirect_different_domain" };
+        }
+        curUrl = nextUrl.toString();
+        continue;
+      }
+
+      if (!res.ok) {
+        return { ok: false, status: res.status };
+      }
+
+      const cl = res.headers.get("Content-Length");
+      if (cl && parseInt(cl, 10) > 2 * 1024 * 1024) {
+        return { ok: false, error: "response_too_large" };
+      }
+
+      const text = await res.text();
+      const clippedText = text.slice(0, 2 * 1024 * 1024);
+      return { ok: true, text: clippedText, status: res.status };
+    }
+    return { ok: false, error: "too_many_redirects" };
+  } catch (e) {
+    return { ok: false, error: e.name === "AbortError" ? "timeout" : String(e) };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function comparePricesForProduct(product, host, country) {
+  const s = await settings();
+  if (s.compareEnabled === false) return { ok: false, reason: "disabled" };
+  const { compareConsent } = await get("compareConsent");
+  if (!compareConsent) return { ok: false, reason: "no_consent" };
+
+  const { db } = await effectiveBase();
+  const storesTable = (db && db.tiendas_comparar) || {};
+  const countryStores = (storesTable[String(country || "").trim()] || []).filter(
+    (st) => st && st.dominio && !QED.hostMatches(host, st.dominio)
+  );
+
+  const targetStores = countryStores.slice(0, 4);
+  const query = QED.queryForCompare(product);
+  if (!query) return { ok: true, same: [], similar: [], unreadable: [] };
+
+  const allCandidates = [];
+  const unreadable = [];
+
+  for (const st of targetStores) {
+    const cacheKey = QED.buildCompareCacheKey(st.dominio, query);
+    const cachedData = await get(cacheKey);
+    const cachedEntry = cachedData && cachedData[cacheKey];
+
+    if (cachedEntry && cachedEntry.timestamp && Date.now() - cachedEntry.timestamp < 12 * 60 * 60 * 1000) {
+      if (cachedEntry.unreadable) {
+        unreadable.push(st.nombre);
+      } else {
+        allCandidates.push(...(cachedEntry.items || []));
+      }
+      continue;
+    }
+
+    const searchUrl = st.url_busqueda.replace("{q}", encodeURIComponent(query));
+    const res = await safeFetchCompare(searchUrl, st.dominio);
+
+    if (!res.ok || QED.isBlockedOrCaptcha(res.text, res.status)) {
+      await set({ [cacheKey]: { timestamp: Date.now(), items: [], unreadable: true } });
+      unreadable.push(st.nombre);
+      continue;
+    }
+
+    let items = await parseStoreHtml(res.text, st);
+
+    if (product.gtin && items.length > 0 && !items.some((it) => it.gtin)) {
+      const fichas = items.slice(0, 2);
+      for (const f of fichas) {
+        if (!f.url) continue;
+        const fRes = await safeFetchCompare(f.url, st.dominio);
+        if (fRes.ok && fRes.text) {
+          const detailProducts = await parseStoreHtml(fRes.text, st);
+          if (detailProducts && detailProducts.length > 0) {
+            const dp = detailProducts[0];
+            if (dp.gtin) f.gtin = dp.gtin;
+            if (dp.mpn && !f.mpn) f.mpn = dp.mpn;
+            if (dp.price && !f.price) f.price = dp.price;
+          }
+        }
+      }
+    }
+
+    items.forEach((it) => { it.storeName = st.nombre; });
+    await set({ [cacheKey]: { timestamp: Date.now(), items } });
+    allCandidates.push(...items);
+  }
+
+  const ranked = QED.groupAndRankComparison(product, allCandidates);
+  return {
+    ok: true,
+    same: ranked.same,
+    similar: ranked.similar,
+    unreadable,
+    query,
+    timestamp: Date.now()
+  };
+}
+
 // Comunicación (auditoría 2026-10-16): solo mensajes de esta extensión; las órdenes que gastan clave o cambian la base
 // solo desde páginas propias (popup/opciones), nunca desde un script que corre dentro de una tienda.
 const PRIVILEGED = new Set(["qed:updateBase", "qed:runJob", "qed:testKey"]);
@@ -530,6 +702,10 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
   }
   if (msg.type === "qed:suggest_alternative") {
     recordAlternativeSuggestion(msg.alternative).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    return true;
+  }
+  if (msg.type === "qed:compare_prices") {
+    comparePricesForProduct(msg.product, msg.host, msg.country).then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
   if (msg.type === "qed:updateBase") {

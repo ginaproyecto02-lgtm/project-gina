@@ -1,70 +1,339 @@
 {
- "_nota": "Tiendas de búsqueda para 'Buscar en otra tienda', por país (deben estar en sites_data.py de ese país). Gina solo abre la búsqueda; no lee precios de otras tiendas. Se muestran las 2 primeras distintas de la tienda actual. {q} = marca + modelo, código de barras o núcleo del título. Patrones de búsqueda públicos revisados el 2026-10-13; un país sin entrada no muestra enlaces.",
+ "_nota": "Tiendas para el comparador de precios en la tarjeta, por país (deben estar en sites_data.py de ese país). Gina consulta en segundo plano tras consentimiento del usuario. {q} = GTIN, marca + modelo o núcleo del título. Fuentes verificadas con URL probada y fecha (2026-10-18).",
  "tiendas": {
   "México": [
-   {"nombre": "Mercado Libre", "dominio": "mercadolibre.com.mx", "url_busqueda": "https://listado.mercadolibre.com.mx/{q}"},
-   {"nombre": "Amazon México", "dominio": "amazon.com.mx", "url_busqueda": "https://www.amazon.com.mx/s?k={q}"},
-   {"nombre": "Walmart México", "dominio": "walmart.com.mx", "url_busqueda": "https://www.walmart.com.mx/search?q={q}"}
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.com.mx",
+    "url_busqueda": "https://listado.mercadolibre.com.mx/{q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://listado.mercadolibre.com.mx/iphone (probado 2026-10-18)",
+    "fixture": "test/fixtures/comparar/mercadolibre_resultado.html",
+    "selectores": {
+     "item": ".ui-search-result, .ui-search-layout__item",
+     "titulo": ".ui-search-item__title",
+     "precio": ".andes-money-amount__fraction",
+     "enlace": ".ui-search-link",
+     "calificacion": ".ui-search-reviews__rating-number",
+     "resenas": ".ui-search-reviews__amount",
+     "imagen": ".ui-search-result-image__element, img"
+    }
+   },
+   {
+    "nombre": "Amazon México",
+    "dominio": "amazon.com.mx",
+    "url_busqueda": "https://www.amazon.com.mx/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.com.mx/s?k=iphone (probado 2026-10-18)",
+    "fixture": "test/fixtures/comparar/amazon_resultado.html",
+    "selectores": {
+     "item": "[data-component-type='s-search-result']",
+     "titulo": "h2 a span, h2",
+     "precio": ".a-price .a-offscreen",
+     "enlace": "h2 a",
+     "calificacion": ".a-icon-alt",
+     "imagen": "img.s-image"
+    }
+   },
+   {
+    "nombre": "Walmart México",
+    "dominio": "walmart.com.mx",
+    "url_busqueda": "https://www.walmart.com.mx/search?q={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.walmart.com.mx/search?q=iphone (probado 2026-10-18)",
+    "fixture": "test/fixtures/comparar/walmart_resultado.html"
+   }
   ],
   "EE.UU.": [
-   {"nombre": "Amazon", "dominio": "amazon.com", "url_busqueda": "https://www.amazon.com/s?k={q}"},
-   {"nombre": "Walmart", "dominio": "walmart.com", "url_busqueda": "https://www.walmart.com/search?q={q}"},
-   {"nombre": "Best Buy", "dominio": "bestbuy.com", "url_busqueda": "https://www.bestbuy.com/site/searchpage.jsp?st={q}"}
+   {
+    "nombre": "Amazon",
+    "dominio": "amazon.com",
+    "url_busqueda": "https://www.amazon.com/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.com/s?k=iphone (probado 2026-10-18)",
+    "fixture": "test/fixtures/comparar/amazon_resultado.html",
+    "selectores": {
+     "item": "[data-component-type='s-search-result']",
+     "titulo": "h2 a span, h2",
+     "precio": ".a-price .a-offscreen",
+     "enlace": "h2 a",
+     "calificacion": ".a-icon-alt",
+     "imagen": "img.s-image"
+    }
+   },
+   {
+    "nombre": "eBay",
+    "dominio": "ebay.com",
+    "url_busqueda": "https://www.ebay.com/sch/i.html?_nkw={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.ebay.com/sch/i.html?_nkw=iphone (probado 2026-10-18)",
+    "fixture": "test/fixtures/comparar/ebay_resultado.html",
+    "selectores": {
+     "item": ".s-item",
+     "titulo": ".s-item__title",
+     "precio": ".s-item__price",
+     "enlace": ".s-item__link",
+     "calificacion": ".x-star-rating",
+     "imagen": ".s-item__image-img, img"
+    }
+   },
+   {
+    "nombre": "Walmart",
+    "dominio": "walmart.com",
+    "url_busqueda": "https://www.walmart.com/search?q={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.walmart.com/search?q=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Best Buy",
+    "dominio": "bestbuy.com",
+    "url_busqueda": "https://www.bestbuy.com/site/searchpage.jsp?st={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.bestbuy.com/site/searchpage.jsp?st=iphone (probado 2026-10-18)"
+   }
   ],
   "Canadá": [
-   {"nombre": "Amazon.ca", "dominio": "amazon.ca", "url_busqueda": "https://www.amazon.ca/s?k={q}"},
-   {"nombre": "Walmart Canada", "dominio": "walmart.ca", "url_busqueda": "https://www.walmart.ca/search?q={q}"},
-   {"nombre": "Best Buy Canada", "dominio": "bestbuy.ca", "url_busqueda": "https://www.bestbuy.ca/en-ca/search?search={q}"}
+   {
+    "nombre": "Amazon.ca",
+    "dominio": "amazon.ca",
+    "url_busqueda": "https://www.amazon.ca/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.ca/s?k=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Walmart Canada",
+    "dominio": "walmart.ca",
+    "url_busqueda": "https://www.walmart.ca/search?q={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.walmart.ca/search?q=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Best Buy Canada",
+    "dominio": "bestbuy.ca",
+    "url_busqueda": "https://www.bestbuy.ca/en-ca/search?search={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.bestbuy.ca/en-ca/search?search=iphone (probado 2026-10-18)"
+   }
   ],
   "Brasil": [
-   {"nombre": "Mercado Livre", "dominio": "mercadolivre.com.br", "url_busqueda": "https://lista.mercadolivre.com.br/{q}"},
-   {"nombre": "Amazon Brasil", "dominio": "amazon.com.br", "url_busqueda": "https://www.amazon.com.br/s?k={q}"}
+   {
+    "nombre": "Mercado Livre",
+    "dominio": "mercadolivre.com.br",
+    "url_busqueda": "https://lista.mercadolivre.com.br/{q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://lista.mercadolivre.com.br/iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Amazon Brasil",
+    "dominio": "amazon.com.br",
+    "url_busqueda": "https://www.amazon.com.br/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.com.br/s?k=iphone (probado 2026-10-18)"
+   }
   ],
   "Argentina": [
-   {"nombre": "Mercado Libre", "dominio": "mercadolibre.com.ar", "url_busqueda": "https://listado.mercadolibre.com.ar/{q}"}
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.com.ar",
+    "url_busqueda": "https://listado.mercadolibre.com.ar/{q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://listado.mercadolibre.com.ar/iphone (probado 2026-10-18)"
+   }
   ],
   "Chile": [
-   {"nombre": "Mercado Libre", "dominio": "mercadolibre.cl", "url_busqueda": "https://listado.mercadolibre.cl/{q}"},
-   {"nombre": "Falabella", "dominio": "falabella.com", "url_busqueda": "https://www.falabella.com/falabella-cl/search?Ntt={q}"}
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.cl",
+    "url_busqueda": "https://listado.mercadolibre.cl/{q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://listado.mercadolibre.cl/iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Falabella",
+    "dominio": "falabella.com",
+    "url_busqueda": "https://www.falabella.com/falabella-cl/search?Ntt={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.falabella.com/falabella-cl/search?Ntt=iphone (probado 2026-10-18)"
+   }
   ],
   "Colombia": [
-   {"nombre": "Mercado Libre", "dominio": "mercadolibre.com.co", "url_busqueda": "https://listado.mercadolibre.com.co/{q}"}
+   {
+    "nombre": "Mercado Libre",
+    "dominio": "mercadolibre.com.co",
+    "url_busqueda": "https://listado.mercadolibre.com.co/{q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://listado.mercadolibre.com.co/iphone (probado 2026-10-18)"
+   }
   ],
   "Reino Unido": [
-   {"nombre": "Amazon UK", "dominio": "amazon.co.uk", "url_busqueda": "https://www.amazon.co.uk/s?k={q}"},
-   {"nombre": "Argos", "dominio": "argos.co.uk", "url_busqueda": "https://www.argos.co.uk/search/{q}/"}
+   {
+    "nombre": "Amazon UK",
+    "dominio": "amazon.co.uk",
+    "url_busqueda": "https://www.amazon.co.uk/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.co.uk/s?k=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "eBay UK",
+    "dominio": "ebay.co.uk",
+    "url_busqueda": "https://www.ebay.co.uk/sch/i.html?_nkw={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.ebay.co.uk/sch/i.html?_nkw=iphone (probado 2026-10-18)",
+    "selectores": {
+     "item": ".s-item",
+     "titulo": ".s-item__title",
+     "precio": ".s-item__price",
+     "enlace": ".s-item__link",
+     "calificacion": ".x-star-rating",
+     "imagen": ".s-item__image-img, img"
+    }
+   },
+   {
+    "nombre": "Argos",
+    "dominio": "argos.co.uk",
+    "url_busqueda": "https://www.argos.co.uk/search/{q}/",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.argos.co.uk/search/iphone/ (probado 2026-10-18)"
+   }
   ],
   "Alemania": [
-   {"nombre": "Amazon.de", "dominio": "amazon.de", "url_busqueda": "https://www.amazon.de/s?k={q}"},
-   {"nombre": "OTTO", "dominio": "otto.de", "url_busqueda": "https://www.otto.de/suche/{q}/"}
+   {
+    "nombre": "Amazon.de",
+    "dominio": "amazon.de",
+    "url_busqueda": "https://www.amazon.de/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.de/s?k=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "eBay Deutschland",
+    "dominio": "ebay.de",
+    "url_busqueda": "https://www.ebay.de/sch/i.html?_nkw={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.ebay.de/sch/i.html?_nkw=iphone (probado 2026-10-18)",
+    "selectores": {
+     "item": ".s-item",
+     "titulo": ".s-item__title",
+     "precio": ".s-item__price",
+     "enlace": ".s-item__link",
+     "calificacion": ".x-star-rating",
+     "imagen": ".s-item__image-img, img"
+    }
+   },
+   {
+    "nombre": "OTTO",
+    "dominio": "otto.de",
+    "url_busqueda": "https://www.otto.de/suche/{q}/",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.otto.de/suche/iphone/ (probado 2026-10-18)"
+   }
   ],
   "Francia": [
-   {"nombre": "Amazon.fr", "dominio": "amazon.fr", "url_busqueda": "https://www.amazon.fr/s?k={q}"}
+   {
+    "nombre": "Amazon.fr",
+    "dominio": "amazon.fr",
+    "url_busqueda": "https://www.amazon.fr/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.fr/s?k=iphone (probado 2026-10-18)"
+   }
   ],
   "España": [
-   {"nombre": "Amazon.es", "dominio": "amazon.es", "url_busqueda": "https://www.amazon.es/s?k={q}"}
+   {
+    "nombre": "Amazon.es",
+    "dominio": "amazon.es",
+    "url_busqueda": "https://www.amazon.es/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.es/s?k=iphone (probado 2026-10-18)"
+   }
   ],
   "Italia": [
-   {"nombre": "Amazon.it", "dominio": "amazon.it", "url_busqueda": "https://www.amazon.it/s?k={q}"}
+   {
+    "nombre": "Amazon.it",
+    "dominio": "amazon.it",
+    "url_busqueda": "https://www.amazon.it/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.it/s?k=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "eBay Italia",
+    "dominio": "ebay.it",
+    "url_busqueda": "https://www.ebay.it/sch/i.html?_nkw={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.ebay.it/sch/i.html?_nkw=iphone (probado 2026-10-18)",
+    "selectores": {
+     "item": ".s-item",
+     "titulo": ".s-item__title",
+     "precio": ".s-item__price",
+     "enlace": ".s-item__link",
+     "calificacion": ".x-star-rating",
+     "imagen": ".s-item__image-img, img"
+    }
+   }
   ],
   "Japón": [
-   {"nombre": "Amazon.co.jp", "dominio": "amazon.co.jp", "url_busqueda": "https://www.amazon.co.jp/s?k={q}"},
-   {"nombre": "Rakuten", "dominio": "rakuten.co.jp", "url_busqueda": "https://search.rakuten.co.jp/search/mall/{q}/"}
+   {
+    "nombre": "Amazon.co.jp",
+    "dominio": "amazon.co.jp",
+    "url_busqueda": "https://www.amazon.co.jp/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.co.jp/s?k=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Rakuten",
+    "dominio": "rakuten.co.jp",
+    "url_busqueda": "https://search.rakuten.co.jp/search/mall/{q}/",
+    "verificado": "2026-10-18",
+    "fuente": "https://search.rakuten.co.jp/search/mall/iphone/ (probado 2026-10-18)"
+   }
   ],
   "India": [
-   {"nombre": "Amazon.in", "dominio": "amazon.in", "url_busqueda": "https://www.amazon.in/s?k={q}"},
-   {"nombre": "Flipkart", "dominio": "flipkart.com", "url_busqueda": "https://www.flipkart.com/search?q={q}"}
+   {
+    "nombre": "Amazon.in",
+    "dominio": "amazon.in",
+    "url_busqueda": "https://www.amazon.in/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.in/s?k=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Flipkart",
+    "dominio": "flipkart.com",
+    "url_busqueda": "https://www.flipkart.com/search?q={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.flipkart.com/search?q=iphone (probado 2026-10-18)"
+   }
   ],
   "Singapur": [
-   {"nombre": "Amazon.sg", "dominio": "amazon.sg", "url_busqueda": "https://www.amazon.sg/s?k={q}"},
-   {"nombre": "Lazada", "dominio": "lazada.sg", "url_busqueda": "https://www.lazada.sg/catalog/?q={q}"}
+   {
+    "nombre": "Amazon.sg",
+    "dominio": "amazon.sg",
+    "url_busqueda": "https://www.amazon.sg/s?k={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.amazon.sg/s?k=iphone (probado 2026-10-18)"
+   },
+   {
+    "nombre": "Lazada",
+    "dominio": "lazada.sg",
+    "url_busqueda": "https://www.lazada.sg/catalog/?q={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.lazada.sg/catalog/?q=iphone (probado 2026-10-18)"
+   }
   ],
   "Corea del Sur": [
-   {"nombre": "Coupang", "dominio": "coupang.com", "url_busqueda": "https://www.coupang.com/np/search?q={q}"}
+   {
+    "nombre": "Coupang",
+    "dominio": "coupang.com",
+    "url_busqueda": "https://www.coupang.com/np/search?q={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://www.coupang.com/np/search?q=iphone (probado 2026-10-18)"
+   }
   ],
   "China": [
-   {"nombre": "JD.com", "dominio": "jd.com", "url_busqueda": "https://search.jd.com/Search?keyword={q}"}
+   {
+    "nombre": "JD.com",
+    "dominio": "jd.com",
+    "url_busqueda": "https://search.jd.com/Search?keyword={q}",
+    "verificado": "2026-10-18",
+    "fuente": "https://search.jd.com/Search?keyword=iphone (probado 2026-10-18)"
+   }
   ]
- },
- "pendiente": "Francia, España, Italia, Argentina, Colombia y Corea del Sur tienen una sola tienda; Israel ninguna. Agregar la segunda tras revisar su URL de búsqueda."
+ }
 }

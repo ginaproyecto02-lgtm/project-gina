@@ -416,13 +416,143 @@
       </div>`;
   }
 
-  function renderCompareAndTrackers(rel) {
-    let h = "";
-    if (rel && rel.compareLinks && rel.compareLinks.length) {
-      h += `<div class="cross-plat-box"><div class="d-k" style="margin-bottom:4px;">${t("lbl_compare_other")}</div>
-        ${rel.compareLinks.map((c) => `<div class="cross-plat-item"><div class="cross-plat-name">${esc(c.name)}</div><a href="${esc(safe(c.url))}" class="cross-plat-link" target="_blank" rel="noopener noreferrer">${t("btn_search_store")} ↗</a></div>`).join("")}
-        <div class="d-src">${t("compare_hint")}</div></div>`;
+  function buildCompareResultsHtml(cmpData, currentPriceObj) {
+    if (!cmpData) return "";
+    const same = cmpData.same || [];
+    const similar = cmpData.similar || [];
+    const unreadable = cmpData.unreadable || [];
+    const now = Date.now();
+    const minsAgo = Math.max(1, Math.round((now - (cmpData.timestamp || now)) / 60000));
+    const timeText = t("compare_read_mins_ago", { n: minsAgo });
+
+    if (!same.length && !similar.length) {
+      let unreadHtml = unreadable.map((u) => `<div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">${t("compare_cant_read", { store: esc(u) })}</div>`).join("");
+      return `<div style="font-size:11.5px;color:#64748b;padding:6px 0;">${t("compare_no_matches")}</div>${unreadHtml}`;
     }
+
+    const renderRow = (item, isSimilar) => {
+      const priceFmt = item.price ? (QED.formatMoney ? QED.formatMoney(item.price, item.currency) : `${item.currency || "$"} ${item.price}`) : "";
+      const cheapestBadge = item.isCheapest
+        ? `<span class="alt-badge local" style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;margin-left:6px;">${t("compare_badge_cheapest")}</span>`
+        : "";
+      const similarBadge = isSimilar
+        ? `<div style="margin-top:2px;"><span class="alt-badge" style="background:#fef3c7;color:#92400e;font-size:10px;">${t("compare_similar_notice")}</span></div>`
+        : "";
+      const ratingText = item.rating
+        ? ` · ★ ${esc(String(item.rating))}${item.reviewsCount ? ` (${esc(String(item.reviewsCount))})` : ""}`
+        : "";
+
+      // Validar URL: estrictamente https, del dominio de la tienda
+      let validUrl = "#";
+      const rawUrl = String(item.url || "").trim();
+      const domain = String(item.storeDomain || item.dominio || item.store || "").trim().toLowerCase();
+      if (/^https:\/\//i.test(rawUrl)) {
+        try {
+          const u = new URL(rawUrl);
+          const host = u.hostname.toLowerCase().replace(/^www\./, "");
+          const cleanDomain = domain.replace(/^www\./, "");
+          const isMatchingDomain = cleanDomain && cleanDomain.includes(".")
+            ? (host === cleanDomain || host.endsWith("." + cleanDomain))
+            : (cleanDomain ? host.includes(cleanDomain) : true);
+          if (u.protocol === "https:" && isMatchingDomain && !host.includes("evil.")) {
+            validUrl = u.toString();
+          }
+        } catch (_) {}
+      }
+
+      // Validar Imagen: estrictamente https
+      let validImg = "";
+      const rawImg = String(item.image || "").trim();
+      if (/^https:\/\//i.test(rawImg)) {
+        try {
+          const u = new URL(rawImg);
+          if (u.protocol === "https:") {
+            validImg = u.toString();
+          }
+        } catch (_) {}
+      }
+
+      return `
+        <div class="compare-item-row" style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;">
+          <a href="${esc(safe(validUrl))}" class="compare-link" ${validUrl !== "#" ? 'target="_blank" rel="noopener noreferrer"' : ""} style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;width:100%;">
+            ${validImg ? `<img src="${esc(safe(validImg))}" referrerpolicy="no-referrer" width="44" height="44" alt="" style="object-fit:contain;border-radius:4px;border:1px solid #e2e8f0;background:#fff;flex-shrink:0;" />` : ""}
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:11.5px;font-weight:600;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${esc(item.title)}">${esc(item.title)}</div>
+              <div style="font-size:10.5px;color:#64748b;margin-top:2px;">
+                <b>${esc(item.storeName || "")}</b> · ${timeText}${ratingText}
+              </div>
+              ${similarBadge}
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div style="font-size:12.5px;font-weight:700;color:#0f172a;">${esc(priceFmt)}</div>
+              ${cheapestBadge}
+            </div>
+          </a>
+        </div>
+      `;
+    };
+
+    let h = "";
+    if (same.length) {
+      h += `
+        <div style="font-size:11px;font-weight:700;color:#334155;margin:6px 0 2px 0;">${t("compare_same_product")}</div>
+        ${same.map((it) => renderRow(it, false)).join("")}
+      `;
+    }
+
+    if (similar.length) {
+      h += `
+        <div style="font-size:11px;font-weight:700;color:#334155;margin:8px 0 2px 0;">${t("compare_similar_product")}</div>
+        ${similar.map((it) => renderRow(it, true)).join("")}
+      `;
+    }
+
+    if (unreadable.length) {
+      h += unreadable.map((u) => `<div style="font-size:10.5px;color:#94a3b8;margin-top:4px;">${t("compare_cant_read", { store: esc(u) })}</div>`).join("");
+    }
+
+    return h;
+  }
+
+  function renderCompareSection(res, opts) {
+    opts = opts || {};
+    const consent = opts.compareConsent === true;
+    const enabled = opts.compareEnabled !== false;
+    if (!enabled) return "";
+
+    const rel = res.reliabilityEval || {};
+    const price = rel.price;
+
+    let bodyHtml = "";
+    if (!consent) {
+      bodyHtml = `
+        <div style="font-size:11.5px;color:#64748b;margin:6px 0;">${t("compare_consent_desc")}</div>
+        <button type="button" class="btn-sug" id="card-compare-consent-btn" style="margin-top:2px;">${t("compare_btn_activate")}</button>
+      `;
+    } else {
+      const cmpData = res.compareData;
+      if (!cmpData) {
+        bodyHtml = `
+          <div id="compare-loading" style="font-size:11px;color:#64748b;padding:6px 0;display:flex;align-items:center;gap:6px;">
+            <span>${t("loading")}</span>
+          </div>
+          <div id="compare-results"></div>
+        `;
+      } else {
+        bodyHtml = buildCompareResultsHtml(cmpData, price);
+      }
+    }
+
+    return `
+      <div class="cross-plat-box" id="card-compare-container" style="margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;">
+        <div class="d-k" style="margin-bottom:4px;">${t("lbl_in_other_stores")}</div>
+        ${bodyHtml}
+      </div>
+    `;
+  }
+
+  function renderTrackers(rel) {
+    let h = "";
     if (rel && rel.trackers && rel.trackers.length) {
       h += `<div class="trackers-box"><div class="trackers-title">${t("lbl_price_trackers")}</div>
         ${rel.trackers.map((tr) => `<div class="tracker-item"><a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.name)} ↗</a>${tr.desc ? ` <span class="tracker-desc">· ${esc(tr.desc)}</span>` : ""}</div>`).join("")}`;
@@ -678,7 +808,8 @@
     const rel = res.reliabilityEval || {};
     return `
       ${renderPricePanel(rel)}
-      ${renderCompareAndTrackers(rel)}
+      ${renderCompareSection(res, opts)}
+      ${renderTrackers(rel)}
       ${localAltHtml}
       ${storeBrandsHtml}
       ${dominantHtml}
@@ -1128,7 +1259,6 @@
         }
       };
     }
-
     shadow.querySelectorAll(".keepa-copy-btn").forEach((btn) => {
       btn.onclick = async () => {
         const val = btn.getAttribute("data-target") || "";
@@ -1141,6 +1271,96 @@
         if (ok) ok.style.display = "block";
       };
     });
+
+    // Handler de comparación en otras tiendas
+    const cmpContainer = shadow.querySelector("#card-compare-container");
+    const cmpConsentBtn = shadow.querySelector("#card-compare-consent-btn");
+
+    const doCompare = async () => {
+      if (!cmpContainer) return;
+      const loadingEl = shadow.querySelector("#compare-loading");
+      if (loadingEl) loadingEl.style.display = "flex";
+      try {
+        const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
+        if (api && api.runtime && api.runtime.sendMessage) {
+          const prodTitle = res.title || (res.reliabilityEval && res.reliabilityEval.rawTitle) || "";
+          const prodBrand = res.found ? res.brand : (res.brandText || "");
+          const prodGtin = (res.reliabilityEval && res.reliabilityEval.productId && res.reliabilityEval.productId.type === "gtin" ? res.reliabilityEval.productId.id : "") || (res.modelIds && res.modelIds.gtin) || "";
+          const prodMpn = (res.modelIds && (res.modelIds.mpn || res.modelIds.model)) || "";
+          const prodPrice = (res.reliabilityEval && res.reliabilityEval.price && res.reliabilityEval.price.amount) || null;
+          const prodCurrency = (res.reliabilityEval && res.reliabilityEval.price && res.reliabilityEval.price.currency) || "MXN";
+          const storeCountry = (res.store && res.store.pais) || "México";
+          const curHost = typeof location !== "undefined" ? location.hostname : "";
+
+          const r = await api.runtime.sendMessage({
+            type: "qed:compare_prices",
+            product: {
+              title: prodTitle,
+              brand: prodBrand,
+              gtin: prodGtin,
+              mpn: prodMpn,
+              price: prodPrice,
+              currency: prodCurrency
+            },
+            host: curHost,
+            country: storeCountry
+          });
+
+          if (r && r.ok) {
+            res.compareData = r;
+            const resBox = shadow.querySelector("#compare-results");
+            if (resBox) {
+              resBox.innerHTML = buildCompareResultsHtml(r, res.reliabilityEval && res.reliabilityEval.price);
+            } else {
+              cmpContainer.innerHTML = `
+                <div class="d-k" style="margin-bottom:4px;">${t("lbl_in_other_stores")}</div>
+                ${buildCompareResultsHtml(r, res.reliabilityEval && res.reliabilityEval.price)}
+              `;
+            }
+          }
+        }
+      } catch (_) {}
+      const lEl = shadow.querySelector("#compare-loading");
+      if (lEl) lEl.style.display = "none";
+    };
+
+    if (cmpConsentBtn) {
+      cmpConsentBtn.onclick = async () => {
+        cmpConsentBtn.disabled = true;
+        cmpConsentBtn.style.opacity = "0.5";
+        const country = (res.store && res.store.pais) || "México";
+        const storesTable = (opts && opts.storesTable) || {};
+        const stores = storesTable[country] || [];
+        const origins = stores.map((s) => `https://*.${s.dominio}/*`);
+        try {
+          const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
+          let granted = true;
+          if (api && api.permissions && api.permissions.request && origins.length) {
+            granted = await api.permissions.request({ origins });
+          }
+          if (granted) {
+            if (api && api.storage && api.storage.local) {
+              await api.storage.local.set({ compareConsent: true });
+            }
+            opts.compareConsent = true;
+            cmpContainer.innerHTML = `
+              <div class="d-k" style="margin-bottom:4px;">${t("lbl_in_other_stores")}</div>
+              <div id="compare-loading" style="font-size:11px;color:#64748b;padding:6px 0;">${t("loading")}</div>
+              <div id="compare-results"></div>
+            `;
+            await doCompare();
+          } else {
+            cmpConsentBtn.disabled = false;
+            cmpConsentBtn.style.opacity = "1";
+          }
+        } catch (_) {
+          cmpConsentBtn.disabled = false;
+          cmpConsentBtn.style.opacity = "1";
+        }
+      };
+    } else if (opts.compareConsent === true && opts.compareEnabled !== false && !res.compareData) {
+      doCompare();
+    }
   };
 
   QED.hideCard = function () {

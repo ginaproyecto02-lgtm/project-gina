@@ -8,7 +8,7 @@ const registry = JSON.parse(fs.readFileSync(path.join(EXT, "data/sites.json"), "
 function env(html, url) {
   const dom = new JSDOM(`<!doctype html><html><head></head><body>${html}</body></html>`, { url, runScripts: "outside-only" });
   dom.window.__GINA_SHADOW_OPEN__ = true; // las pruebas leen la tarjeta por host.shadowRoot
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/comparador.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
   if (dom.window.QED.I18N) dom.window.QED.I18N.setLang("es"); // las pruebas verifican los textos en español
   return dom.window;
 }
@@ -834,12 +834,14 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       ![...mx, ...us, ...ali, ...wm].some((x) => /waltrack/i.test(x.name + x.url)));
     check("D1. Sin enlace universal a Google Shopping (sin HARPA)", !us.some((x) => x.universal || /google\.com\/search\?tbm=shop/.test(x.url)) && !/HARPA/.test(card + i18n));
 
-    // Otras tiendas: solo enlaces, 2 por país, nunca la tienda actual, sin afirmar precios
-    const links = QED.getCompareLinks("www.amazon.com.mx", "México", "Sony WH-1000XM5", db.tiendas_comparar);
-    const linksDe = QED.getCompareLinks("www.amazon.de", "Alemania", "Bosch GSR 12V", db.tiendas_comparar);
-    check("D1. «Buscar en otra tienda»: 2 enlaces del país, sin la tienda actual; amazon.de nunca manda a tiendas de EE.UU.",
-      links.length === 2 && !links.some((l) => /amazon\.com\.mx/.test(l.url)) && links[0].url.includes("Sony%20WH-1000XM5") &&
-      linksDe.length === 1 && /otto\.de/.test(linksDe[0].url));
+    // F1. Comparador: tiendas_comparar como fuente de lectura, sin enlaces externos de búsqueda
+    const storesMx = (db.tiendas_comparar["México"] || []).filter((s) => !/amazon\.com\.mx/.test(s.dominio));
+    const storesDe = (db.tiendas_comparar["Alemania"] || []).filter((s) => !/amazon\.de/.test(s.dominio));
+    check("F1. Tiendas a consultar: del país, sin la tienda actual; amazon.de nunca consulta tiendas de EE.UU.",
+      storesMx.length >= 2 && !storesMx.some((l) => /amazon\.com\.mx/.test(l.dominio)) &&
+      storesDe.length >= 1 && storesDe.some((s) => /otto\.de/.test(s.dominio)) && !storesDe.some((s) => /walmart\.com/.test(s.dominio)));
+    check("F1. Sin enlaces de búsqueda 'Buscar en otra tienda' en tarjeta ni extractores",
+      !/btn_search_store|lbl_compare_other|getCompareLinks/.test(card + i18n + fs.readFileSync(path.join(EXT, "src/extractors.js"), "utf8")));
     check("D1. Ningún texto afirma «más barato en» / «mismo precio» de otra tienda",
       !/Más barato en|Mismo precio|crossPlatformHistory/.test(card + i18n + fs.readFileSync(path.join(EXT, "src/extractors.js"), "utf8")));
 

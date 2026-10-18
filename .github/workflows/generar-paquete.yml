@@ -106,6 +106,7 @@ jobs:
           node test/e2e_ciclo.test.js
           node test/snapshots.test.js
           node test/seguridad.test.js
+          node test/comparador.test.js
           node test/sugerencias_gs.test.js
           node test/sugerencias_robot.test.js
 

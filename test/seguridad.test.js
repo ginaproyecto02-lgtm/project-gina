@@ -26,7 +26,7 @@ const ALL = Object.values(X).join(" ");
 
 function env(html, url) {
   const dom = new JSDOM(`<!doctype html><html><head></head><body>${html}</body></html>`, { url, runScripts: "outside-only" });
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/comparador.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
   if (dom.window.QED.I18N) dom.window.QED.I18N.setLang("es");
   return dom.window;
 }
@@ -363,6 +363,102 @@ function fakeImap(messages) {
     check("Sitios oficiales: sin página de Wikipedia propia no se adivina por nombre (Gain ≠ primera entidad que coincide)", !r, JSON.stringify(r));
     const r2 = await so.investigateBrandOfficialSite({ brand: "Olay", url: "https://en.wikipedia.org/wiki/Procter_%26_Gamble" }, { fetchImpl: fetchX });
     check("Sitios oficiales: el sitio del DUEÑO no se asigna como tienda oficial de cada marca", !r2, JSON.stringify(r2));
+  }
+
+  // ---------------------------------------------------------------- 8. Comparador en la tarjeta: resultados hostiles
+  {
+    const w = env("<div></div>", "https://www.mercadolibre.com.mx/MLM-123");
+    const QED = w.QED;
+
+    // 8a. Saneamiento de URLs de tiendas:
+    check("Comparador: URL javascript: rechazada por sanitizeStoreUrl",
+      !QED.sanitizeStoreUrl("javascript:window.__pwned=1", "walmart.com.mx"));
+    check("Comparador: URL http: no segura rechazada por sanitizeStoreUrl",
+      !QED.sanitizeStoreUrl("http://www.walmart.com.mx/p/123", "walmart.com.mx"));
+    check("Comparador: URL de otro dominio (evil.com) rechazada por sanitizeStoreUrl",
+      !QED.sanitizeStoreUrl("https://evil.com/phishing", "walmart.com.mx"));
+    check("Comparador: URL válida https del dominio de la tienda aceptada",
+      QED.sanitizeStoreUrl("https://www.walmart.com.mx/ip/123", "walmart.com.mx") === "https://www.walmart.com.mx/ip/123");
+
+    // 8b. Saneamiento de imágenes de productos de otras tiendas:
+    check("Comparador: imagen http: rechazada por sanitizeImageUrl",
+      QED.sanitizeImageUrl("http://images.walmart.com/pic.jpg") === "");
+    check("Comparador: imagen javascript: o data: rechazada por sanitizeImageUrl",
+      QED.sanitizeImageUrl("javascript:alert(1)") === "" && QED.sanitizeImageUrl("data:image/svg+xml,...") === "");
+    check("Comparador: imagen https válida aceptada",
+      QED.sanitizeImageUrl("https://images.walmart.com/pic.jpg") === "https://images.walmart.com/pic.jpg");
+
+    // 8c. Renderizado en Shadow DOM de un resultado hostil:
+    const hostileResult = {
+      store: { nombre: "Mercado Libre", pais: "México", d: "mercadolibre.com.mx" },
+      found: true,
+      brand: "Sony",
+      title: "Audífonos Sony",
+      reliabilityEval: { price: { amount: 7000, currency: "MXN" } },
+      compareData: {
+        same: [
+          {
+            title: `Audífonos <img src=x onerror="window.__pwned=1">`,
+            price: 6500,
+            currency: "MXN",
+            store: "Walmart",
+            storeDomain: "walmart.com.mx",
+            url: "javascript:window.__pwned=1",
+            image: "http://evil.com/pic.jpg",
+            isCheapest: true
+          },
+          {
+            title: `Audífonos ${X.tag}`,
+            price: 6800,
+            currency: "MXN",
+            store: "Liverpool",
+            storeDomain: "liverpool.com.mx",
+            url: "https://evil.example.com/pwn",
+            image: "https://liverpool.com.mx/pic.jpg"
+          }
+        ],
+        similar: [],
+        unreadable: ["Tienda <script>alert(1)</script>"]
+      }
+    };
+
+    QED.showCard(hostileResult, { compareConsent: true, compareEnabled: true });
+    const cardShadow = rootOf(w);
+
+    check("Comparador: script hostil en título no ejecuta código (window.__pwned undefined)",
+      w.__pwned === undefined);
+
+    const compareLinks = Array.from((cardShadow && cardShadow.querySelectorAll("a.compare-link")) || []);
+    const anyJsLink = compareLinks.some((a) => /^javascript:/i.test(a.getAttribute("href") || ""));
+    check("Comparador: ningún enlace de comparación tiene href javascript:", !anyJsLink);
+
+    const anyEvilLink = compareLinks.some((a) => /evil\.example/i.test(a.getAttribute("href") || ""));
+    check("Comparador: URL de otro dominio no se muestra en el enlace (neutralizada a #)", !anyEvilLink);
+
+    const compareImgs = Array.from((cardShadow && cardShadow.querySelectorAll(".compare-item-row img")) || []);
+    const anyHttpImg = compareImgs.some((img) => /^http:/i.test(img.getAttribute("src") || ""));
+    check("Comparador: ninguna imagen tiene protocolo inseguro http:", !anyHttpImg);
+
+    // Auditoría de seguridad del árbol renderizado con datos hostiles
+    const badNodes = [];
+    for (const el of cardShadow.querySelectorAll("*")) {
+      const tag = el.tagName.toLowerCase();
+      if (["script", "iframe", "object", "embed", "form", "meta", "link", "base", "foreignobject"].includes(tag)) badNodes.push(`<${tag}>`);
+      for (const a of Array.from(el.attributes)) {
+        const n = a.name.toLowerCase(), v = a.value.trim().toLowerCase();
+        if (n.startsWith("on")) badNodes.push(`${tag}[${n}]`);
+        if (/javascript:|data:text\/html/.test(v)) badNodes.push(`${tag}[${n}] con ${v.slice(0, 30)}`);
+        if (/evil\.example/.test(v)) badNodes.push(`${tag}[${n}] apunta a evil.example`);
+      }
+      if (tag === "img") {
+        const ref = el.getAttribute("referrerpolicy");
+        const src = el.getAttribute("src") || "";
+        if (ref !== "no-referrer") badNodes.push("img sin referrerpolicy=no-referrer");
+        if (!src.startsWith("https://")) badNodes.push("img src no https");
+      }
+    }
+    check("Comparador: el árbol de la tarjeta con datos hostiles pasa la auditoría de seguridad",
+      badNodes.length === 0, badNodes.join("; "));
   }
 
   console.log(`\n${pass}/${total} pruebas de seguridad correctas`);

@@ -34,13 +34,13 @@ function makeEnv(responder) {
       const body = fs.readFileSync(path.join(EXT, String(url).slice(6)), "utf8");
       return { ok: true, status: 200, json: async () => JSON.parse(body), text: async () => body };
     }
-    const req = { url: String(url), headers: (opts && opts.headers) || {}, body: opts && opts.body ? JSON.parse(opts.body) : null };
+    const req = { url: String(url), headers: (opts && opts.headers) || {}, body: opts && opts.body ? (typeof opts.body === "string" && opts.body.startsWith("{") ? JSON.parse(opts.body) : opts.body) : null, credentials: opts && opts.credentials, referrerPolicy: opts && opts.referrerPolicy, redirect: opts && opts.redirect };
     calls.push(req);
     const res = await responder(req);
-    const txt = JSON.stringify(res.body);
-    return { ok: (res.status || 200) < 400, status: res.status || 200, statusText: "", json: async () => res.body, text: async () => txt };
+    const txt = typeof res.body === "string" ? res.body : JSON.stringify(res.body);
+    return { ok: (res.status || 200) < 400, status: res.status || 200, statusText: "", headers: new Map([["content-type", typeof res.body === "string" ? "text/html" : "application/json"]]), json: async () => res.body, text: async () => txt };
   };
-  const ctx = vm.createContext({ chrome, fetch: fetchMock, console, URL, setTimeout, clearTimeout, Date, JSON, Promise, Math, Object, Array, String, Number, Set, Map, RegExp, Error });
+  const ctx = vm.createContext({ chrome, fetch: fetchMock, console, URL, AbortController, setTimeout, clearTimeout, Date, JSON, Promise, Math, Object, Array, String, Number, Set, Map, RegExp, Error });
   ctx.globalThis = ctx;
   ctx.importScripts = (...files) => { for (const f of files) vm.runInContext(fs.readFileSync(path.join(EXT, "src", f), "utf8"), ctx, { filename: f }); };
   vm.runInContext(fs.readFileSync(path.join(EXT, "src", "background.js"), "utf8"), ctx, { filename: "background.js" });
@@ -313,6 +313,69 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
       const openedGh = e.chrome.tabs.created.map((o) => o.url);
       check("Sugerencia en modo GitHub con url javascript: neutralizada por SAFE_OPEN (solo abre GitHub)", openedGh.length === 1 && /^https:\/\/github\.com\//.test(openedGh[0]) && !openedGh.some((u) => /^javascript:/i.test(u)), JSON.stringify(openedGh));
     }
+  }
+
+  // ---------------------------------------------------------------- Comparador en background (F1)
+  {
+    // 1) Sin consentimiento: no hace peticiones y devuelve error claro
+    const noConsentEnv = makeEnv(async () => ({ status: 200, body: "" }));
+    const rNoConsent = await noConsentEnv.send({
+      type: "qed:compare_prices",
+      product: { title: "Sony WH-1000XM5", brand: "Sony" },
+      host: "www.amazon.com.mx",
+      country: "México"
+    });
+    const externalCalls = noConsentEnv.calls.filter((c) => !c.url.startsWith("ext://"));
+    check("Comparador: sin consentimiento → error y 0 peticiones de red",
+      rNoConsent && rNoConsent.ok === false && (rNoConsent.error || rNoConsent.reason) && externalCalls.length === 0,
+      JSON.stringify({ rNoConsent, externalCalls }));
+
+    // 2) Con consentimiento: consulta tiendas (excluye la tienda actual), con credentials: 'omit', referrerPolicy: 'no-referrer' y caché 12h
+    const sampleHtml = `
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Sony WH-1000XM5 Audífonos",
+        "offers": { "@type": "Offer", "price": "6800", "priceCurrency": "MXN", "url": "https://www.liverpool.com.mx/tienda/pdp/123" }
+      }
+      </script>
+    `;
+    const consentEnv = makeEnv(async (req) => {
+      if (req.url.includes("liverpool.com.mx")) {
+        return { status: 200, body: sampleHtml };
+      }
+      return { status: 403, body: "Blocked" };
+    });
+    consentEnv.store.compareConsent = true;
+
+    const rConsent = await consentEnv.send({
+      type: "qed:compare_prices",
+      product: { title: "Sony WH-1000XM5", brand: "Sony", mpn: "WH-1000XM5", price: 7500, currency: "MXN" },
+      host: "www.amazon.com.mx",
+      country: "México"
+    });
+
+    const cmpCalls = consentEnv.calls.filter((c) => !c.url.startsWith("ext://"));
+    const noSelfCall = !cmpCalls.some((c) => c.url.includes("amazon.com.mx"));
+    const allOmitCredentials = cmpCalls.every((c) => c.credentials === "omit");
+    const allNoReferrer = cmpCalls.every((c) => c.referrerPolicy === "no-referrer");
+
+    check("Comparador: consulta tiendas excluyendo la actual, con credentials: 'omit' y referrerPolicy: 'no-referrer'",
+      rConsent && rConsent.ok === true && cmpCalls.length > 0 && noSelfCall && allOmitCredentials && allNoReferrer,
+      JSON.stringify({ rConsent, cmpCallsCount: cmpCalls.length, noSelfCall, allOmitCredentials, allNoReferrer }));
+
+    // 3) Caché 12h: una segunda consulta idéntica no genera peticiones adicionales
+    const callsBefore = consentEnv.calls.length;
+    const rCache = await consentEnv.send({
+      type: "qed:compare_prices",
+      product: { title: "Sony WH-1000XM5", brand: "Sony", mpn: "WH-1000XM5", price: 7500, currency: "MXN" },
+      host: "www.amazon.com.mx",
+      country: "México"
+    });
+    const callsAfter = consentEnv.calls.length;
+    check("Comparador: segunda consulta sale de caché de 12h sin llamadas de red",
+      rCache && rCache.ok === true && callsAfter === callsBefore);
   }
 
   console.log(`\n${pass}/${total} pruebas correctas`);
