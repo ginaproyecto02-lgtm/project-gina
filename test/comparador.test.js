@@ -267,5 +267,27 @@ console.log("\n--- 5. Detección de bloqueos y captchas ---");
   );
 }
 
+console.log("\n--- 6. Validación 2026-10-18: precios y moneda por país ---");
+{
+  const casos = [["$20,499.00", 20499], ["1.299,00 €", 1299], ["1 299,99", 1299.99], ["¥12,800", 12800], ["R$ 3.499,90", 3499.9], ["US $45.00", 45], ["EUR 12.99", 12.99], ["1.299", 1299]];
+  const malos = casos.filter(([txt, n]) => QED.parsePriceText(txt) !== n).map(([txt]) => `${txt}→${QED.parsePriceText(txt)}`);
+  check("Precio de texto en formatos de México, EE.UU., Europa, Brasil y Japón", malos.length === 0, malos.join(", "));
+
+  const html = fs.readFileSync(path.join(__dirname, "fixtures/comparar/ebay_resultado.html"), "utf8");
+  const doc = new JSDOM(html).window.document;
+  const sel = { item: ".s-item", titulo: ".s-item__title", precio: ".s-item__price", enlace: ".s-item__link" };
+  const us = QED.extractStoreItems(html, doc, { dominio: "ebay.com", pais: "EE.UU.", selectores: sel });
+  const de = QED.extractStoreItems(html.replace("$899.99", "899,99 €").replace("www.ebay.com", "www.ebay.de"), new JSDOM(html.replace("$899.99", "899,99 €").replace("www.ebay.com", "www.ebay.de")).window.document, { dominio: "ebay.de", pais: "Alemania", selectores: sel });
+  check("Selectores: eBay EE.UU. sale en USD y eBay Alemania en EUR con 899,99 bien leído (antes todo era MXN)",
+    us[0] && us[0].currency === "USD" && us[0].price === 899.99 && de[0] && de[0].currency === "EUR" && de[0].price === 899.99,
+    JSON.stringify([us[0], de[0]]));
+
+  const sinPais = QED.extractStoreItems(html, doc, { dominio: "ebay.com", selectores: sel });
+  const r = QED.groupAndRankComparison({ title: "Samsung Galaxy S24 Ultra", brand: "Samsung", mpn: "S24", price: 20000, currency: "MXN" },
+    sinPais.map((x) => Object.assign({}, x, { matchType: "same" })));
+  check("Sin moneda conocida no hay insignia de «más barato» (no se compara contra MXN)",
+    r.same[0] && r.same[0].currency === "" && r.same[0].isCheapest === false, JSON.stringify(r.same[0]));
+}
+
 console.log(`\n${pass}/${total} pruebas de comparador correctas`);
 process.exit(pass === total ? 0 : 1);

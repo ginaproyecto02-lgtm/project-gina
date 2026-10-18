@@ -603,6 +603,37 @@ async function safeFetchCompare(url, expectedDomain) {
   }
 }
 
+// Validación 2026-10-18: la URL de búsqueda viene de la base (que puede ser remota): solo https, con {q}
+// y en el dominio declarado de esa tienda. Si no, esa tienda no se consulta.
+function compareSearchUrlOk(st) {
+  if (!st || typeof st.url_busqueda !== "string" || typeof st.dominio !== "string") return false;
+  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(st.dominio) || (st.url_busqueda.match(/\{q\}/g) || []).length !== 1) return false;
+  try {
+    const u = new URL(st.url_busqueda.replace("{q}", "x"));
+    return u.protocol === "https:" && !u.username && !u.password && !u.port && QED.hostMatches(u.hostname, st.dominio);
+  } catch (_) { return false; }
+}
+
+const compareOrigin = (dominio) => `https://*.${dominio}/*`;
+
+// El permiso de host lo da el usuario en una página de la extensión (los scripts de contenido no pueden pedirlo).
+// Sin permiso concedido para esa tienda, no se hace ninguna petición.
+async function hasCompareHostPermission(dominio) {
+  try {
+    if (!api.permissions || !api.permissions.contains) return false;
+    return !!(await api.permissions.contains({ origins: [compareOrigin(dominio)] }));
+  } catch (_) { return false; }
+}
+
+async function openCompareConsent(pais) {
+  const { db } = await effectiveBase();
+  const table = (db && db.tiendas_comparar) || {};
+  const p = String(pais || "").trim();
+  if (!p || !Object.prototype.hasOwnProperty.call(table, p)) return { ok: false, error: "pais_sin_tiendas" };
+  await api.tabs.create({ url: api.runtime.getURL("options/comparar.html") + "?pais=" + encodeURIComponent(p) });
+  return { ok: true };
+}
+
 async function comparePricesForProduct(product, host, country) {
   const s = await settings();
   if (s.compareEnabled === false) return { ok: false, reason: "disabled" };
@@ -612,7 +643,7 @@ async function comparePricesForProduct(product, host, country) {
   const { db } = await effectiveBase();
   const storesTable = (db && db.tiendas_comparar) || {};
   const countryStores = (storesTable[String(country || "").trim()] || []).filter(
-    (st) => st && st.dominio && !QED.hostMatches(host, st.dominio)
+    (st) => st && st.dominio && !QED.hostMatches(host, st.dominio) && compareSearchUrlOk(st)
   );
 
   const targetStores = countryStores.slice(0, 4);
@@ -622,7 +653,8 @@ async function comparePricesForProduct(product, host, country) {
   const allCandidates = [];
   const unreadable = [];
 
-  for (const st of targetStores) {
+  for (const st0 of targetStores) {
+    const st = Object.assign({}, st0, { pais: String(country || "").trim() });
     const cacheKey = QED.buildCompareCacheKey(st.dominio, query);
     const cachedData = await get(cacheKey);
     const cachedEntry = cachedData && cachedData[cacheKey];
@@ -635,6 +667,8 @@ async function comparePricesForProduct(product, host, country) {
       }
       continue;
     }
+
+    if (!(await hasCompareHostPermission(st.dominio))) { unreadable.push(st.nombre); continue; }
 
     const searchUrl = st.url_busqueda.replace("{q}", encodeURIComponent(query));
     const res = await safeFetchCompare(searchUrl, st.dominio);
@@ -664,7 +698,7 @@ async function comparePricesForProduct(product, host, country) {
       }
     }
 
-    items.forEach((it) => { it.storeName = st.nombre; });
+    items.forEach((it) => { it.storeName = st.nombre; it.storeDomain = st.dominio; });
     await set({ [cacheKey]: { timestamp: Date.now(), items } });
     allCandidates.push(...items);
   }
@@ -718,6 +752,10 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
   }
   if (msg.type === "qed:suggest_alternative") {
     recordAlternativeSuggestion(msg.alternative).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    return true;
+  }
+  if (msg.type === "qed:open_compare_consent") {
+    openCompareConsent(clip(msg.pais, 40)).then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
   if (msg.type === "qed:compare_prices") {

@@ -461,6 +461,74 @@ function fakeImap(messages) {
       badNodes.length === 0, badNodes.join("; "));
   }
 
+  // ---------------------------------------------------------------- 12b. Validación 2026-10-18: permiso, enlaces y rastreadores en la tarjeta
+  {
+    const w = env("<div></div>", "https://www.mercadolibre.com.mx/MLM-123");
+    const sent = [];
+    const stored = {};
+    // Un script de contenido real NO tiene chrome.permissions: así se simula.
+    w.chrome = { runtime: { sendMessage: async (m) => { sent.push(m); return { ok: true }; } }, storage: { local: { set: async (o) => Object.assign(stored, o) } } };
+    const base = { store: { nombre: "Mercado Libre", pais: "México", d: "mercadolibre.com.mx" }, found: true, brand: "Sony", title: "Audífonos Sony", reliabilityEval: { price: { amount: 7000, currency: "MXN" } } };
+    w.QED.showCard(Object.assign({}, base), { compareConsent: false, compareEnabled: true });
+    const btn = rootOf(w).querySelector("#card-compare-consent-btn");
+    if (btn) btn.click();
+    await new Promise((r) => setTimeout(r, 20));
+    check("Comparador: el botón de la tarjeta pide abrir la página de permiso y NO se da el consentimiento a sí mismo",
+      !!btn && sent.some((m) => m.type === "qed:open_compare_consent" && m.pais === "México") && stored.compareConsent === undefined,
+      JSON.stringify({ sent, stored }));
+
+    const w2 = env("<div></div>", "https://www.mercadolibre.com.mx/MLM-123");
+    w2.QED.showCard(Object.assign({}, base, { compareData: { same: [
+      { title: "Sin dominio", price: 6500, currency: "MXN", url: "https://cualquier-sitio.example/p", storeName: "X" },
+      { title: "Amazon India", price: 6600, currency: "MXN", url: "https://www.amazon.in/dp/B0ABCDEF12", storeName: "Amazon.in", storeDomain: "amazon.in" },
+      { title: "Amazon MX", price: 6700, currency: "MXN", url: "https://www.amazon.com.mx/dp/B0ABCDEF12", storeName: "Amazon México", storeDomain: "amazon.com.mx" }
+    ], similar: [], unreadable: [] } }), { compareConsent: true, compareEnabled: true });
+    const root2 = rootOf(w2);
+    const links = Array.from(root2.querySelectorAll("a.compare-link")).map((a) => a.getAttribute("href"));
+    const keepa = Array.from(root2.querySelectorAll(".btn-follow-price-mini")).map((a) => a.getAttribute("href"));
+    check("Comparador: un resultado sin dominio de tienda conocido no lleva enlace", links[0] === "#", JSON.stringify(links));
+    check("Comparador: Keepa solo para Amazon con código conocido (amazon.in sin botón; amazon.com.mx → 11)",
+      keepa.length === 1 && keepa[0] === "https://keepa.com/#!product/11-B0ABCDEF12", JSON.stringify(keepa));
+
+    // Clic en un rastreador: una sola pestaña (la del fondo), no también la del enlace
+    const sent2 = [];
+    w2.chrome = { runtime: { sendMessage: async (m) => { sent2.push(m); return { ok: true }; } } };
+    const a = root2.querySelector(".btn-follow-price-mini");
+    const ev = new w2.MouseEvent("click", { bubbles: true, cancelable: true });
+    a.dispatchEvent(ev);
+    check("Rastreador: el clic se abre solo por el fondo (sin pestaña doble)", ev.defaultPrevented === true && sent2.length === 1 && sent2[0].type === "qed:open_tracker");
+  }
+
+  // ---------------------------------------------------------------- 12c. Página de permiso del comparador (options/comparar.html)
+  {
+    const runPage = async (pais, grant) => {
+      const html = fs.readFileSync(path.join(EXT, "options/comparar.html"), "utf8").replace(/<script[\s\S]*?<\/script>/g, "");
+      const dom = new JSDOM(html, { url: "chrome-extension://gina/options/comparar.html?pais=" + encodeURIComponent(pais), runScripts: "outside-only" });
+      const w = dom.window, stored = {}, asked = [];
+      w.chrome = {
+        runtime: { getURL: (p) => "ext://" + p },
+        storage: { local: { get: async () => ({}), set: async (o) => Object.assign(stored, o) } },
+        permissions: { request: async (req) => { asked.push(req); return grant; } }
+      };
+      w.fetch = async (u) => ({ json: async () => JSON.parse(fs.readFileSync(path.join(EXT, String(u).slice(6)), "utf8")) });
+      for (const f of ["src/i18n.js", "options/comparar.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+      await new Promise((r) => setTimeout(r, 30));
+      const btn = w.document.getElementById("cmp_allow");
+      if (!btn.disabled) btn.click();
+      await new Promise((r) => setTimeout(r, 30));
+      return { stored, asked, items: w.document.querySelectorAll("#cmp_stores li").length };
+    };
+    const ok = await runPage("México", true);
+    const origins = (ok.asked[0] && ok.asked[0].origins) || [];
+    check("Página de permiso: pide solo los dominios del país y guarda el consentimiento al concederse",
+      ok.stored.compareConsent === true && ok.items >= 1 && origins.length === ok.items && origins.every((o) => /^https:\/\/\*\.[a-z0-9.-]+\/\*$/.test(o)) && !origins.includes("https://*/*"),
+      JSON.stringify(ok));
+    const no = await runPage("México", false);
+    check("Página de permiso: si el usuario lo niega, no se guarda consentimiento", no.stored.compareConsent === undefined);
+    const none = await runPage("Atlántida", true);
+    check("Página de permiso: país sin tiendas → no pide permisos", none.asked.length === 0 && none.stored.compareConsent === undefined);
+  }
+
   // ---------------------------------------------------------------- 13. F2. Rastreadores y SAFE_OPEN
   {
     const bgCode = fs.readFileSync(path.join(EXT, "src/background.js"), "utf8");

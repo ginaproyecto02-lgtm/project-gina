@@ -464,10 +464,9 @@
           const u = new URL(rawUrl);
           const host = u.hostname.toLowerCase().replace(/^www\./, "");
           const cleanDomain = domain.replace(/^www\./, "");
-          const isMatchingDomain = cleanDomain && cleanDomain.includes(".")
-            ? (host === cleanDomain || host.endsWith("." + cleanDomain))
-            : (cleanDomain ? host.includes(cleanDomain) : true);
-          if (u.protocol === "https:" && isMatchingDomain && !host.includes("evil.")) {
+          // Sin dominio de tienda conocido no hay enlace (validación 2026-10-18: antes cualquier host pasaba).
+          const isMatchingDomain = !!cleanDomain && cleanDomain.includes(".") && (host === cleanDomain || host.endsWith("." + cleanDomain));
+          if (u.protocol === "https:" && isMatchingDomain) {
             validUrl = u.toString();
           }
         } catch (_) {}
@@ -504,15 +503,16 @@
               "amazon.it": "8",
               "amazon.es": "9"
             };
-            let code = "1";
-            for (const [d, c] of Object.entries(domainCodeMap)) {
-              if (storeDom.includes(d) || rawItemUrl.includes(d)) {
-                code = c;
-                break;
-              }
-            }
+            // Solo dominios de Amazon con código de Keepa conocido; si no, sin botón (antes caía en amazon.com).
+            let code = "";
+            try {
+              const h = new URL(rawItemUrl).hostname.toLowerCase().replace(/^www\./, "");
+              for (const [d, c] of Object.entries(domainCodeMap)) if (h === d) { code = c; break; }
+            } catch (_) {}
+            if (code) {
             const keepaUrl = `https://keepa.com/#!product/${code}-${asin}`;
             amazonTrackerBtn = `<a href="${esc(safe(keepaUrl))}" class="btn-follow-price-mini tracker-link" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:3px;padding:2px 6px;font-size:10px;font-weight:600;color:#0284c7;background:#f0f9ff;border:1px solid #bae6fd;border-radius:4px;text-decoration:none;">${t("btn_follow_price")} ↗</a>`;
+            }
           }
         }
       }
@@ -1381,26 +1381,19 @@
         cmpConsentBtn.disabled = true;
         cmpConsentBtn.style.opacity = "0.5";
         const country = (res.store && res.store.pais) || "México";
-        const storesTable = (opts && opts.storesTable) || {};
-        const stores = storesTable[country] || [];
-        const origins = stores.map((s) => `https://*.${s.dominio}/*`);
+        // Un script de contenido no tiene chrome.permissions: el permiso se pide en una página de la extensión
+        // (options/comparar.html), que guarda compareConsent; content.js redibuja al detectar el cambio.
         try {
           const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
-          let granted = true;
-          if (api && api.permissions && api.permissions.request && origins.length) {
-            granted = await api.permissions.request({ origins });
-          }
-          if (granted) {
-            if (api && api.storage && api.storage.local) {
-              await api.storage.local.set({ compareConsent: true });
-            }
-            opts.compareConsent = true;
-            cmpContainer.innerHTML = `
-              <div class="d-k" style="margin-bottom:4px;">${t("lbl_in_other_stores")}</div>
-              <div id="compare-loading" style="font-size:11px;color:#64748b;padding:6px 0;">${t("loading")}</div>
-              <div id="compare-results"></div>
-            `;
-            await doCompare();
+          const r = api && api.runtime && api.runtime.sendMessage
+            ? await api.runtime.sendMessage({ type: "qed:open_compare_consent", pais: country })
+            : null;
+          if (r && r.ok) {
+            cmpConsentBtn.style.display = "none";
+            const note = document.createElement("div");
+            note.style.cssText = "font-size:11px;color:#64748b;margin-top:4px;";
+            note.textContent = t("compare_consent_opened");
+            cmpConsentBtn.insertAdjacentElement("afterend", note);
           } else {
             cmpConsentBtn.disabled = false;
             cmpConsentBtn.style.opacity = "1";
@@ -1420,6 +1413,8 @@
         const url = btn.getAttribute("href") || (btn.dataset && btn.dataset.trackerUrl);
         const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
         if (api && api.runtime && api.runtime.sendMessage && url) {
+          // Sin esto se abrían dos pestañas: la del <a target=_blank> y la del fondo.
+          e.preventDefault();
           api.runtime.sendMessage({ type: "qed:open_tracker", url }).catch(() => {});
         }
       }

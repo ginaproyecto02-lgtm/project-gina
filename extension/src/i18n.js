@@ -1225,6 +1225,70 @@
       it: "Controlla i prezzi nei negozi locali direttamente qui, senza cookie e senza lasciare la pagina.",
       ja: "クッキーなしで、ページを離れずに他のストアの価格を直接確認できます。"
     },
+    compare_consent_opened: {
+      es: "Se abrió una pestaña de Gina para que des el permiso. Al aceptarlo, la comparación aparece aquí.",
+      en: "A Gina tab opened so you can grant permission. Once you accept, the comparison appears here.",
+      de: "Ein Gina-Tab wurde geöffnet, um die Berechtigung zu erteilen. Danach erscheint der Vergleich hier.",
+      fr: "Un onglet Gina s'est ouvert pour accorder l'autorisation. Une fois acceptée, la comparaison apparaît ici.",
+      it: "Si è aperta una scheda di Gina per concedere il permesso. Dopo averlo accettato, il confronto appare qui.",
+      ja: "許可のためのGinaタブを開きました。許可すると、ここに比較が表示されます。"
+    },
+    cmp_page_title: {
+      es: "Gina: comparar en otras tiendas",
+      en: "Gina: compare in other stores",
+      de: "Gina: in anderen Shops vergleichen",
+      fr: "Gina : comparer dans d'autres boutiques",
+      it: "Gina: confronta in altri negozi",
+      ja: "Gina：他のストアで比較"
+    },
+    cmp_page_stores: {
+      es: "Tiendas que Gina consultará ({pais}):",
+      en: "Stores Gina will check ({pais}):",
+      de: "Shops, die Gina abfragt ({pais}):",
+      fr: "Boutiques que Gina consultera ({pais}) :",
+      it: "Negozi che Gina consulterà ({pais}):",
+      ja: "Ginaが確認するストア（{pais}）："
+    },
+    cmp_page_privacy: {
+      es: "La consulta sale de tu navegador, sin cookies ni sesión. La tienda ve la búsqueda (marca y modelo), no quién eres. Puedes apagarlo en Opciones.",
+      en: "The request leaves your browser with no cookies or session. The store sees the search (brand and model), not who you are. You can turn it off in Options.",
+      de: "Die Anfrage geht ohne Cookies oder Sitzung von deinem Browser aus. Der Shop sieht die Suche (Marke und Modell), nicht dich. In den Optionen abschaltbar.",
+      fr: "La requête part de ton navigateur, sans cookies ni session. La boutique voit la recherche (marque et modèle), pas qui tu es. Désactivable dans les Options.",
+      it: "La richiesta parte dal tuo browser, senza cookie né sessione. Il negozio vede la ricerca (marca e modello), non chi sei. Puoi disattivarlo nelle Opzioni.",
+      ja: "リクエストはクッキーやセッションなしでブラウザから送信されます。ストアに見えるのは検索（ブランドと型番）だけで、あなたが誰かは分かりません。オプションでオフにできます。"
+    },
+    cmp_page_allow: {
+      es: "Permitir y comparar",
+      en: "Allow and compare",
+      de: "Erlauben und vergleichen",
+      fr: "Autoriser et comparer",
+      it: "Consenti e confronta",
+      ja: "許可して比較する"
+    },
+    cmp_page_done: {
+      es: "Listo. Regresa a la tienda: la comparación ya aparece en la tarjeta.",
+      en: "Done. Go back to the store: the comparison now appears in the card.",
+      de: "Fertig. Zurück zum Shop: Der Vergleich erscheint jetzt in der Karte.",
+      fr: "C'est fait. Reviens à la boutique : la comparaison apparaît dans la carte.",
+      it: "Fatto. Torna al negozio: il confronto ora appare nella scheda.",
+      ja: "完了しました。ストアに戻ると、カードに比較が表示されます。"
+    },
+    cmp_page_denied: {
+      es: "No se concedió el permiso. Gina no consultará otras tiendas.",
+      en: "Permission was not granted. Gina will not check other stores.",
+      de: "Berechtigung nicht erteilt. Gina fragt keine anderen Shops ab.",
+      fr: "Autorisation refusée. Gina ne consultera pas d'autres boutiques.",
+      it: "Permesso non concesso. Gina non consulterà altri negozi.",
+      ja: "許可されませんでした。Ginaは他のストアを確認しません。"
+    },
+    cmp_page_none: {
+      es: "No hay tiendas de comparación para este país.",
+      en: "There are no comparison stores for this country.",
+      de: "Für dieses Land gibt es keine Vergleichsshops.",
+      fr: "Aucune boutique de comparaison pour ce pays.",
+      it: "Nessun negozio di confronto per questo paese.",
+      ja: "この国には比較対象のストアがありません。"
+    },
     compare_cant_read: {
       es: "No pudimos leer: {store}",
       en: "Could not read: {store}",

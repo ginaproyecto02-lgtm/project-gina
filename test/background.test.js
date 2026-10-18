@@ -26,6 +26,7 @@ function makeEnv(responder) {
       onStartup: { addListener: (f) => listeners.startup.push(f) }
     },
     tabs: { create: async (opts) => { chrome.tabs.created.push(opts); return { id: 1, ...opts }; }, created: [] },
+    permissions: { granted: new Set(), contains: async ({ origins }) => (origins || []).every((o) => chrome.permissions.granted.has(o)) },
     alarms: { create: () => {}, onAlarm: { addListener: (f) => listeners.alarm.push(f) } },
     action: { setBadgeText: async () => {}, setBadgeBackgroundColor: async () => {} }
   };
@@ -357,12 +358,13 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
       </script>
     `;
     const consentEnv = makeEnv(async (req) => {
-      if (req.url.includes("liverpool.com.mx")) {
-        return { status: 200, body: sampleHtml };
+      if (req.url.includes("walmart.com.mx")) {
+        return { status: 200, body: sampleHtml.replace("https://www.liverpool.com.mx/tienda/pdp/123", "https://www.walmart.com.mx/ip/sony-wh-1000xm5/123") };
       }
       return { status: 403, body: "Blocked" };
     });
     consentEnv.store.compareConsent = true;
+    for (const d of ["mercadolibre.com.mx", "amazon.com.mx", "walmart.com.mx"]) consentEnv.chrome.permissions.granted.add(`https://*.${d}/*`);
 
     const rConsent = await consentEnv.send({
       type: "qed:compare_prices",
@@ -376,9 +378,14 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
     const allOmitCredentials = cmpCalls.every((c) => c.credentials === "omit");
     const allNoReferrer = cmpCalls.every((c) => c.referrerPolicy === "no-referrer");
 
+    const sameW = (rConsent && rConsent.same || [])[0];
     check("Comparador: consulta tiendas excluyendo la actual, con credentials: 'omit' y referrerPolicy: 'no-referrer'",
       rConsent && rConsent.ok === true && cmpCalls.length > 0 && noSelfCall && allOmitCredentials && allNoReferrer,
       JSON.stringify({ rConsent, cmpCallsCount: cmpCalls.length, noSelfCall, allOmitCredentials, allNoReferrer }));
+
+    check("Comparador: el resultado de Walmart llega como «mismo producto», con su dominio, MXN e insignia de más barato",
+      sameW && sameW.storeDomain === "walmart.com.mx" && sameW.currency === "MXN" && sameW.price === 6800 && sameW.isCheapest === true,
+      JSON.stringify(rConsent && rConsent.same));
 
     // 3) Caché 12h: una segunda consulta idéntica no genera peticiones adicionales
     const callsBefore = consentEnv.calls.length;
@@ -391,6 +398,42 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
     const callsAfter = consentEnv.calls.length;
     check("Comparador: segunda consulta sale de caché de 12h sin llamadas de red",
       rCache && rCache.ok === true && callsAfter === callsBefore);
+  }
+
+  // ---------------------------------------------------------------- Validación 2026-10-18: permisos y URLs del comparador
+  {
+    // Consentimiento guardado pero sin permiso de host concedido → ninguna petición a tiendas
+    const npEnv = makeEnv(async () => ({ status: 200, body: "<html></html>" }));
+    npEnv.store.compareConsent = true;
+    const rNp = await npEnv.send({ type: "qed:compare_prices", product: { title: "Sony WH-1000XM5", brand: "Sony", mpn: "WH-1000XM5" }, host: "www.amazon.com.mx", country: "México" });
+    const npCalls = npEnv.calls.filter((c) => !c.url.startsWith("ext://"));
+    check("Comparador: sin permiso de host concedido no hay ninguna petición (la tienda sale como no leída)",
+      npCalls.length === 0 && rNp && rNp.ok === true && (rNp.unreadable || []).length > 0, JSON.stringify(npCalls.map((c) => c.url)));
+
+    // Base remota con una URL de búsqueda fuera del dominio declarado → esa tienda no se consulta
+    const hostileEnv = makeEnv(async () => ({ status: 200, body: "<html></html>" }));
+    hostileEnv.store.compareConsent = true;
+    const base = JSON.parse(fs.readFileSync(path.join(EXT, "data", "brands.json"), "utf8"));
+    base.tiendas_comparar = { "México": [
+      { nombre: "Fuga", dominio: "walmart.com.mx", url_busqueda: "https://169.254.169.254/latest?q={q}" },
+      { nombre: "HTTP", dominio: "walmart.com.mx", url_busqueda: "http://www.walmart.com.mx/search?q={q}" },
+      { nombre: "Otro", dominio: "walmart.com.mx", url_busqueda: "https://walmart.com.mx.evil.example/s?q={q}" }
+    ] };
+    base.version = String(base.version) + "z"; // más nueva que la empaquetada, para que se use
+    hostileEnv.store.remoteBase = { data: base, version: base.version };
+    hostileEnv.chrome.permissions.granted.add("https://*.walmart.com.mx/*");
+    await hostileEnv.send({ type: "qed:compare_prices", product: { title: "Sony WH-1000XM5", brand: "Sony", mpn: "WH-1000XM5" }, host: "www.amazon.com.mx", country: "México" });
+    const hCalls = hostileEnv.calls.filter((c) => !c.url.startsWith("ext://"));
+    check("Comparador: URL de búsqueda de la base fuera del dominio, http o IP interna → no se consulta",
+      hCalls.length === 0, JSON.stringify(hCalls.map((c) => c.url)));
+
+    // La tarjeta pide abrir la página de permiso: se abre comparar.html del país; un país desconocido no abre nada
+    const pgEnv = makeEnv(async () => ({ status: 200, body: {} }));
+    const rPg = await pgEnv.send({ type: "qed:open_compare_consent", pais: "México" });
+    const rBad = await pgEnv.send({ type: "qed:open_compare_consent", pais: "Atlántida" });
+    const tabs = pgEnv.chrome.tabs.created.map((o) => o.url);
+    check("Comparador: el permiso se pide en options/comparar.html del país (y nada para un país sin tiendas)",
+      rPg && rPg.ok === true && rBad && rBad.ok === false && tabs.length === 1 && tabs[0] === "ext://options/comparar.html?pais=M%C3%A9xico", JSON.stringify(tabs));
   }
 
   console.log(`\n${pass}/${total} pruebas correctas`);

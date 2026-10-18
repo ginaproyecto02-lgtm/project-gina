@@ -37,6 +37,38 @@
     }
   }
 
+  // Moneda por país de la tienda (validación 2026-10-18): antes todo resultado sin moneda explícita
+  // se marcaba como MXN, también en eBay EE.UU. o Amazon Alemania.
+  const COUNTRY_CURRENCY = {
+    "México": "MXN", "EE.UU.": "USD", "Canadá": "CAD", "Brasil": "BRL", "Argentina": "ARS", "Chile": "CLP",
+    "Colombia": "COP", "Reino Unido": "GBP", "Alemania": "EUR", "Francia": "EUR", "España": "EUR", "Italia": "EUR",
+    "Japón": "JPY", "India": "INR", "Singapur": "SGD", "Corea del Sur": "KRW", "China": "CNY"
+  };
+  function storeCurrency(cfg) {
+    const c = cfg && (cfg.moneda || COUNTRY_CURRENCY[String(cfg.pais || "").trim()]);
+    return c ? String(c).toUpperCase() : "";
+  }
+
+  // Precio de texto con separadores de cualquier país: «$20,499.00», «1.299,00 €», «1 299,99», «¥12,800».
+  function parsePriceText(raw) {
+    let v = String(raw == null ? "" : raw).replace(/[^0-9.,]/g, "");
+    if (!v) return null;
+    const lastDot = v.lastIndexOf("."), lastComma = v.lastIndexOf(",");
+    if (lastDot >= 0 && lastComma >= 0) {
+      // El separador que aparece al final es el decimal
+      v = lastComma > lastDot ? v.replace(/\./g, "").replace(",", ".") : v.replace(/,/g, "");
+    } else if (lastComma >= 0) {
+      const dec = v.length - lastComma - 1;
+      v = (dec === 1 || dec === 2) && v.indexOf(",") === lastComma ? v.replace(",", ".") : v.replace(/,/g, "");
+    } else if (lastDot >= 0) {
+      const dec = v.length - lastDot - 1;
+      // «1.299» (miles, estilo europeo) frente a «12.99»
+      if (dec === 3 || v.indexOf(".") !== lastDot) v = v.replace(/\./g, "");
+    }
+    const n = parseFloat(v);
+    return !isNaN(n) && n > 0 ? n : null;
+  }
+
   // Limpieza de GTIN/EAN/UPC (8 a 14 dígitos)
   function cleanGtin(raw) {
     if (!raw) return "";
@@ -109,7 +141,7 @@
   }
 
   // Parsea productos desde objetos JSON-LD
-  function parseProductsFromJsonLd(ldObj, storeDomain) {
+  function parseProductsFromJsonLd(ldObj, storeDomain, defCurrency) {
     if (!ldObj || typeof ldObj !== "object") return [];
     const type = String(ldObj["@type"] || "");
     const results = [];
@@ -117,7 +149,7 @@
     if (type === "ItemList" && Array.isArray(ldObj.itemListElement)) {
       for (const el of ldObj.itemListElement) {
         const item = el.item || el;
-        const sub = parseProductsFromJsonLd(item, storeDomain);
+        const sub = parseProductsFromJsonLd(item, storeDomain, defCurrency);
         results.push(...sub);
       }
       return results;
@@ -126,15 +158,16 @@
     if (type.includes("Product") || ldObj.offers || ldObj.name) {
       const title = clip(ldObj.name || ldObj.title || "", 150);
       let price = null;
-      let currency = "MXN";
+      let currency = defCurrency || "";
       let offerUrl = "";
 
       const rawOffers = ldObj.offers;
       const offersList = Array.isArray(rawOffers) ? rawOffers : (rawOffers ? [rawOffers] : []);
       if (offersList.length) {
         for (const o of offersList) {
-          const p = parseFloat(String(o.price || o.lowPrice || "").replace(/[^0-9.]/g, ""));
-          if (!isNaN(p) && p > 0 && (price === null || p < price)) {
+          const rawP = o.price != null && o.price !== "" ? o.price : o.lowPrice;
+          const p = typeof rawP === "number" ? rawP : parsePriceText(rawP);
+          if (p != null && !isNaN(p) && p > 0 && (price === null || p < price)) {
             price = p;
             if (o.priceCurrency) currency = String(o.priceCurrency).trim().toUpperCase();
             if (o.url) offerUrl = o.url;
@@ -186,7 +219,7 @@
   }
 
   // Parsea selectores HTML si se dispone de DOM
-  function parseStoreWithSelectors(doc, selectors, storeDomain) {
+  function parseStoreWithSelectors(doc, selectors, storeDomain, defCurrency) {
     if (!doc || !selectors || !selectors.item) return [];
     const items = doc.querySelectorAll(selectors.item);
     const results = [];
@@ -197,9 +230,7 @@
       const priceEl = selectors.precio ? it.querySelector(selectors.precio) : null;
       let price = null;
       if (priceEl) {
-        const rawP = priceEl.textContent.replace(/[^0-9.]/g, "");
-        const numP = parseFloat(rawP);
-        if (!isNaN(numP) && numP > 0) price = numP;
+        price = parsePriceText(priceEl.textContent);
       }
 
       const linkEl = selectors.enlace ? it.querySelector(selectors.enlace) : null;
@@ -241,7 +272,7 @@
         results.push({
           title,
           price,
-          currency: "MXN",
+          currency: defCurrency || "",
           url: validUrl,
           image: validImg,
           rating,
@@ -269,12 +300,13 @@
     cfg = cfg || {};
     if (!htmlText && !doc) return [];
     const domain = cfg.dominio || "";
+    const cur = storeCurrency(cfg);
 
     // 1. JSON-LD
     const jsonLds = extractJsonLd(doc || htmlText);
     const ldItems = [];
     for (const ld of jsonLds) {
-      ldItems.push(...parseProductsFromJsonLd(ld, domain));
+      ldItems.push(...parseProductsFromJsonLd(ld, domain, cur));
     }
     if (ldItems.length > 0) return ldItems;
 
@@ -283,14 +315,14 @@
     if (nextData && nextData.props && nextData.props.pageProps) {
       const p = nextData.props.pageProps.initialData || nextData.props.pageProps.product;
       if (p) {
-        const pSub = parseProductsFromJsonLd(p, domain);
+        const pSub = parseProductsFromJsonLd(p, domain, cur);
         if (pSub.length > 0) return pSub;
       }
     }
 
     // 3. Selectores (si hay doc disponible)
-    if (doc && storeConfig.selectores) {
-      const selItems = parseStoreWithSelectors(doc, storeConfig.selectores, domain);
+    if (doc && cfg.selectores) {
+      const selItems = parseStoreWithSelectors(doc, cfg.selectores, domain, cur);
       if (selItems.length > 0) return selItems;
     }
 
@@ -442,6 +474,8 @@
   QED.sanitizeStoreUrl = sanitizeStoreUrl;
   QED.sanitizeImageUrl = sanitizeImageUrl;
   QED.cleanGtin = cleanGtin;
+  QED.parsePriceText = parsePriceText;
+  QED.storeCurrency = storeCurrency;
   QED.cleanModel = cleanModel;
   QED.isBlockedOrCaptcha = isBlockedOrCaptcha;
   QED.extractJsonLd = extractJsonLd;
