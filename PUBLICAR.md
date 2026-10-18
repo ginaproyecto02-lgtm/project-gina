@@ -1,8 +1,8 @@
 # Cómo publicar Gina (Project Gina)
 
-Guía para publicar la versión 3.1.0 en **Chrome Web Store**, **Microsoft Edge Add-ons** y **Firefox Add-ons**. Un solo paquete sirve para las tres tiendas (el manifest ya es compatible). Los textos para copiar y pegar (en inglés y español) están en `store/ficha-tienda.md` y las imágenes en `store/imagenes/`.
+Guía para publicar la versión 3.2.0 en **Chrome Web Store**, **Microsoft Edge Add-ons** y **Firefox Add-ons**. Un solo paquete sirve para las tres tiendas (el manifest ya es compatible). Los textos para copiar y pegar (en inglés y español) están en `store/ficha-tienda.md` y las imágenes en `store/imagenes/`.
 
-Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirma cada punto en el enlace oficial al registrarte.
+Datos revisados el 18 de octubre de 2026. Las tiendas cambian sus reglas: confirma cada punto en el enlace oficial al registrarte.
 
 ---
 
@@ -21,9 +21,57 @@ Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirm
 
 ---
 
+## 0b. Despliegue del servicio de sugerencias (Google Apps Script + Google Drive)
+
+Para recibir sugerencias de marcas y alternativas sin obligar a los usuarios a abrir su correo ni exponer credenciales en la extensión, se utiliza un Web App en **Google Apps Script** vinculado a la cuenta `gina.proyecto02@gmail.com` que escribe en una Hoja de cálculo privada.
+
+### Paso a paso para el despliegue
+
+1. **Crear la Hoja de cálculo en Google Drive:**
+   - Inicia sesión con la cuenta del proyecto (`gina.proyecto02@gmail.com`).
+   - Crea una nueva Hoja de cálculo de Google llamada `Gina - Sugerencias`.
+   - Renombra la primera pestaña de la hoja a `sugerencias`.
+   - Agrega los encabezados en la fila 1:
+     `id` | `fecha` | `tipo` | `marca` | `tienda` | `producto` | `pais` | `ext` | `veces` | `estado`
+   - Copia el ID de la hoja desde la URL de la barra de direcciones (`https://docs.google.com/spreadsheets/d/<SHEET_ID>/edit`).
+
+2. **Crear el proyecto de Apps Script:**
+   - En la hoja de cálculo, ve a **Extensiones → Apps Script**.
+   - Reemplaza el contenido de `Code.gs` por el código de `servicios/sugerencias/Code.gs`.
+   - Ve a **Configuración del proyecto** (ícono de engranaje) y activa **«Mostrar el archivo de manifiesto appsscript.json en el editor»**.
+   - En el editor, abre `appsscript.json` y pega el contenido de `servicios/sugerencias/appsscript.json` (alcances mínimos: `https://www.googleapis.com/auth/spreadsheets`, sin permisos a Gmail ni al Drive completo).
+
+3. **Configurar las Propiedades de la secuencia de comandos (Script Properties):**
+   - En la misma pantalla de **Configuración del proyecto**, baja a **Propiedades de la secuencia de comandos** y añade dos propiedades:
+     - `SHEET_ID`: El ID de la hoja que copiaste en el paso 1.
+     - `ROBOT_TOKEN`: Un token secreto aleatorio y seguro (cadena de al menos 32 caracteres alfanuméricos) que usará el robot de GitHub Actions para leer y confirmar las sugerencias pendientes.
+
+4. **Implementar como aplicación web (Web App):**
+   - Pulsa en **Implementar → Nueva implementación**.
+   - Haz clic en el ícono de engranaje junto a «Seleccionar tipo» y elige **Aplicación web**.
+   - Descripción: `Gina Sugerencias v1`.
+   - **Ejecutar como:** *Yo (`gina.proyecto02@gmail.com`)*.
+   - **Quién tiene acceso:** *Cualquier usuario* (permite llamadas anónimas de la extensión sin exigir inicio de sesión de Google al usuario).
+   - Pulsa **Implementar** y autoriza los permisos cuando Google lo solicite.
+   - Copia la **URL de la aplicación web** generada (formato: `https://script.google.com/macros/s/.../exec`).
+
+5. **Configurar el proyecto y GitHub Actions:**
+   - En `datagen/proyecto.json`, coloca la URL obtenida en `"sugerencias_url"`.
+   - Ejecuta `python3 datagen/build_data.py` para sincronizar la base.
+   - En GitHub → Tu repositorio → **Settings → Secrets and variables → Actions**:
+     - Agrega el secreto `GINA_SUGERENCIAS_TOKEN` con el valor exacto de `ROBOT_TOKEN` configurado en Apps Script.
+     - (Opcional) Variable de entorno o repositorio `GINA_SITIOS`: dominios delimitados por coma si deseas restringir las tiendas analizadas por el robot.
+     - Los secretos `GINA_IMAP_*` (`GINA_IMAP_USER`, `GINA_IMAP_PASS`, `GINA_IMAP_HOST`) ahora son **opcionales** y solo se requieren si mantienes activo el flujo secundario de lectura por correo IMAP.
+
+> [!NOTE]
+> **Nota sobre arquitectura futura (Cloud Storage + Cloud Run):**
+> La alternativa con almacenamiento de objetos (Cloud Run con cuenta de servicio limitada a `roles/storage.objectCreator`, emisión de URLs firmadas V4 por objeto y bucket privado sin lectura pública) queda documentada como opción futura de migración si el volumen diario supera las capacidades gratuitas de Apps Script (300 sugerencias/día). Actualmente Apps Script no requiere tarjeta de crédito ni facturación en la nube.
+
+---
+
 > [!IMPORTANT]
 > **Archivo para subir a las tiendas (ojo con los Artifacts de GitHub Actions):**
-> - Si descargas el paquete desde los **Releases** de GitHub (etiqueta `v*`): el archivo `.zip` (`gina-extension-3.1.0.zip`) se sube tal cual.
+> - Si descargas el paquete desde los **Releases** de GitHub (etiqueta `v*`): el archivo `.zip` (`gina-extension-3.2.0.zip`) se sube tal cual.
 > - Si descargas el paquete desde los **Artifacts** del flujo de GitHub Actions: GitHub siempre envuelve los artefactos dentro de otro archivo `.zip` (zip dentro de zip). Las tiendas rechazan ese archivo anidado. **Descomprime una vez el archivo descargado de Artifacts; sube el `gina-extension-X.Y.Z.zip` de adentro.**
 
 ## 1. Chrome Web Store (también cubre Brave, Opera y otros navegadores basados en Chromium)
@@ -32,7 +80,7 @@ Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirm
 
 1. Entra en el **Chrome Developer Dashboard** con una cuenta de Google y paga el registro.
 2. Completa la cuenta: nombre del editor (*publisher name*), correo verificado y la declaración de **comerciante o no comerciante**. Si te declaras comerciante (requisito de la Ley de Servicios Digitales de la UE), debes dar dirección, teléfono (verificado por SMS) y nombre legal, y se muestran públicamente en la ficha.
-3. **Nuevo elemento** → sube `gina-extension-3.1.0.zip` (si lo descargaste de GitHub Actions Artifacts, descomprime primero una vez para extraer el zip interno; no subas el zip contenedor).
+3. **Nuevo elemento** → sube `gina-extension-3.2.0.zip` (si lo descargaste de GitHub Actions Artifacts, descomprime primero una vez para extraer el zip interno; no subas el zip contenedor).
 4. Pestaña **Ficha de la tienda**: descripción larga, categoría *Compras*, idioma, ícono 128, mosaico promocional pequeño 440×280 (obligatorio), marquesina 1400×560 (opcional) y de 1 a 5 capturas de 1280×800.
 5. Pestaña **Prácticas de privacidad**: propósito único, justificación de cada permiso, «no usa código remoto», casilla de *Contenido del sitio web*, las tres certificaciones y la URL de la política (todo en el bloque 5 de `store/ficha-tienda.md`).
 6. Pestaña **Distribución**: gratis; visibilidad *Pública* (o *No listada* para probar con amigos primero); países: todos, o al menos los 17 que cubre.
@@ -44,7 +92,7 @@ Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirm
 
 1. Entra en **Partner Center** con una **cuenta Microsoft personal** (Outlook/Hotmail; no una cuenta del trabajo o la escuela) y regístrate en el programa *Microsoft Edge*.
 2. Elige **Individual** o **Empresa** (no se puede cambiar) y completa los datos de contacto.
-3. **Crear nueva extensión** → sube el mismo zip (`gina-extension-3.1.0.zip`, descomprimido una vez si vino de Artifacts).
+3. **Crear nueva extensión** → sube el mismo zip (`gina-extension-3.2.0.zip`, descomprimido una vez si vino de Artifacts).
 4. **Disponibilidad:** pública, en todos los mercados.
 5. **Propiedades:** categoría *Compras*, URL de la política, sitio web y correo de soporte.
 6. **Ficha de la tienda** (por idioma): descripción (de 250 a 10.000 caracteres; la larga cumple), logotipo 300×300 (`logo-300.png`), hasta 6 capturas, mosaico pequeño 440×280 opcional.
@@ -56,7 +104,7 @@ Datos revisados el 8 de octubre de 2026. Las tiendas cambian sus reglas: confirm
 **Costo:** gratis. **Requisito:** Firefox 140 o superior (ya está en el manifest). **Revisión:** automática al subir, más una revisión manual que puede tardar más con permisos amplios.
 
 1. Crea una cuenta en **addons.mozilla.org** → *Developer Hub* → **Submit a New Add-on** → *On this site*.
-2. Sube el mismo zip (`gina-extension-3.1.0.zip`, descomprimido una vez si vino de Artifacts). La validación automática debe dar **0 errores**. Hoy da 0 errores y 14 avisos esperados (`service_worker` no lo usa Firefox; los `innerHTML` pasan por una función de escape).
+2. Sube el mismo zip (`gina-extension-3.2.0.zip`, descomprimido una vez si vino de Artifacts). La validación automática debe dar **0 errores**. Hoy da 0 errores y 14 avisos esperados (`service_worker` no lo usa Firefox; los `innerHTML` pasan por una función de escape).
 3. Si pregunta por el código fuente: no hay paso de compilación ni minificación, así que responde que no hace falta.
 4. Completa la ficha (puedes reutilizar los textos), elige la licencia y pega las notas para revisores del bloque 7.
 5. El ID del complemento ya está fijado: `gina-who-your-money-backs@extension`. No lo cambies después de publicar.

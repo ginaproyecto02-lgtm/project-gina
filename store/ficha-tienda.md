@@ -11,7 +11,7 @@ The listing is **English first**, with Spanish as a second language. The extensi
 |---|---|
 | Name (from `_locales`) | EN: **Gina: Know Who Your Money Backs** · ES: **Gina: sabe a quién apoya tu dinero** |
 | Short name | Gina |
-| Version | 3.1.0 |
+| Version | 3.2.0 |
 | Category | Chrome: **Shopping** · Edge: **Shopping** · Firefox: **Shopping** |
 | Listing languages | English (default), Spanish (the interface also has German, French, Italian and Japanese) |
 | Price | Free |
@@ -118,10 +118,12 @@ Help shoppers make informed purchases: seller and product reliability shown on t
 
 | Permission | Justification |
 |---|---|
-| `storage` | Saves the user's preferences and values, the cache of identified brands, the list of pending brands, reputation records from the optional weekly research, a local count of which companies the user sees (used only to prioritize that research), an optional local price history (product ID, price and date only; at most 300 products and 90 days; the user can turn it off and clear it in Options) and the API keys the user enters. Nothing of this is sent anywhere. |
-| `alarms` | Schedules the weekly download of the project's updated data file and the optional personal research. |
+| `storage` | Saves the user's preferences and values, the cache of identified brands, the list of pending brands, reputation records from the optional weekly research, a local count of which companies the user sees (used only to prioritize that research), an optional local price history (product ID, price and date only; at most 300 products and 90 days; the user can turn it off and clear it in Options), a 12-hour local comparison cache, and the API keys the user enters. Nothing of this is sent anywhere. |
+| `alarms` | Schedules the weekly download of the project's updated data file, suggestion retries, and the optional personal research. |
+| `offscreen` | In Chromium browsers, runs a dedicated, sandboxed offscreen document containing `DOMParser` to parse HTML structures and JSON-LD metadata for background price comparison safely without exposing extension privileges. |
 | Host permissions (content-script sites) | The extension runs only on 335 specific shopping and travel sites to read the product brand or the airline names and show the card. It does not run on other sites. |
-| Optional host permissions (api.anthropic.com, generativelanguage.googleapis.com, api.groq.com, api.x.ai, https://*/*) | Requested only when the user saves their own AI key, to call the API of the provider they choose. A specific origin under `https://*/*` is requested only if the user configures an OpenAI-compatible provider at their own address or a remote data file on their own server. |
+| Host permissions (`https://script.google.com/*`, `https://script.googleusercontent.com/*`) | Required exclusively to send voluntary user suggestions (brand, store domain, country, version and random installation UUID) directly to the project's Google Apps Script Web App without needing an email client. |
+| Optional host permissions (AI providers and country comparison store domains) | Requested only with explicit user action: 1) AI APIs (`api.anthropic.com`, `generativelanguage.googleapis.com`, `api.groq.com`, `api.x.ai`, `https://*/*`) when the user saves an AI key; 2) Shopping store domains for the user's country only when clicking "Activate comparison in other stores" to read public offers in the background with `credentials: 'omit'`. |
 
 **Remote code?** No. All JavaScript ships in the package. The weekly download from the project's GitHub repository is a JSON data file with no logic.
 

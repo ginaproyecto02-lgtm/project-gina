@@ -382,7 +382,7 @@ m["default_locale"] = "en"
 m["name"] = "__MSG_extName__"
 m["short_name"] = "__MSG_extShortName__"
 m["description"] = "__MSG_extDescription__"
-m["version"] = "3.1.0"
+m["version"] = "3.2.0"
 m["action"]["default_title"] = "__MSG_actionTitle__"
 # Chrome 121+ usa service_worker; Firefox 121+ usa scripts (página de eventos). Ambos con el mismo archivo.
 m["background"] = {"service_worker": "src/background.js", "scripts": ["src/matcher.js", "src/reputation.js", "src/ai.js", "src/background.js"]}

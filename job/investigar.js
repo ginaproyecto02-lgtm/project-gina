@@ -192,7 +192,7 @@ async function checkSafeBrowsing(url, apiKey, fetchImpl = fetch) {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        client: { clientId: "project-gina", clientVersion: "3.1.0" },
+        client: { clientId: "project-gina", clientVersion: "3.2.0" },
         threatInfo: {
           threatTypes: ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
           platformTypes: ["ANY_PLATFORM"],
