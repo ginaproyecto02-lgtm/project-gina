@@ -328,16 +328,13 @@ $("#addForm").addEventListener("submit", async (e) => {
   e.target.reset(); renderCustom();
 });
 
-// Sugerencia de marca: correo en 1 clic (con opciones Gmail, mailto, copiar)
+// Sugerencia de marca: envío directo al proyecto
 $("#suggest").onclick = async () => {
   if (!pageRes) return;
   const brand = pageRes.brandText || "";
   const title = pageRes.title || "";
-  const site = pageRes.site ? `${pageRes.site.nombre} (${pageRes.site.pais})` : "";
-  const projectObj = (typeof PROJ !== "undefined" ? PROJ : QED.PROJECT) || {};
-  const sugData = (QED.ALT && QED.ALT.suggestionMailData)
-    ? QED.ALT.suggestionMailData(projectObj, "marca", [{ marca: brand, tienda: site, producto: title }])
-    : { mailto: "", gmail: "", gh: "", text: "" };
+  const site = pageRes.site ? pageRes.site.nombre : "";
+  const pais = pageRes.site ? pageRes.site.pais : "";
 
   let showGh = false;
   try {
@@ -345,49 +342,42 @@ $("#suggest").onclick = async () => {
     showGh = !!s.useGitHubIssues;
   } catch (_) {}
 
-  $("#suggest").hidden = true;
-  const fb = $("#suggestFeedback");
-  fb.hidden = false;
+  if (showGh) {
+    const projectObj = (typeof PROJ !== "undefined" ? PROJ : QED.PROJECT) || {};
+    const sugData = (QED.ALT && QED.ALT.suggestionMailData)
+      ? QED.ALT.suggestionMailData(projectObj, "marca", [{ marca: brand, tienda: site, producto: title }])
+      : { gh: "" };
+    if (sugData.gh) {
+      $("#suggest").hidden = true;
+      const fb = $("#suggestFeedback");
+      fb.hidden = false;
+      fb.innerHTML = `
+        <div style="font-size:11px;color:#64748b;margin-bottom:6px;">${t("sug_privacy_notice_drive")}</div>
+        <a href="${esc(sugData.gh)}" id="pop-gh" class="btn ghost" style="text-align:left;" target="_blank" rel="noopener noreferrer">${t("sug_opt_github")}</a>
+      `;
+      return;
+    }
+  }
 
-  fb.innerHTML = `
-    <div style="font-size:11px;color:#64748b;margin-bottom:6px;">${t("sug_privacy_notice")}</div>
-    <div style="display:flex;flex-direction:column;gap:5px;">
-      <a href="${esc(sugData.mailto)}" id="pop-mailto" class="btn ghost" style="text-align:left;" target="_blank" rel="noopener noreferrer">${t("sug_opt_mailto")}</a>
-      <a href="${esc(sugData.gmail)}" id="pop-gmail" class="btn ghost" style="text-align:left;" target="_blank" rel="noopener noreferrer">${t("sug_opt_gmail")}</a>
-      <button type="button" id="pop-copy" class="btn ghost" style="text-align:left;">${t("sug_opt_copy")}</button>
-      ${showGh && sugData.gh ? `<a href="${esc(sugData.gh)}" id="pop-gh" class="btn ghost" style="text-align:left;" target="_blank" rel="noopener noreferrer">${t("sug_opt_github")}</a>` : ""}
-    </div>
-    <div id="pop-copy-ok" style="display:none;color:#166534;font-size:11px;margin-top:4px;font-weight:600;">${t("sug_copied")}</div>
-  `;
-
-  const record = (targetUrl) => {
-    api.runtime.sendMessage({
+  $("#suggest").disabled = true;
+  $("#suggest").style.opacity = "0.5";
+  try {
+    await api.runtime.sendMessage({
       type: "qed:suggest_brand",
       brand: brand,
       title: title,
       site: site,
-      url: targetUrl
+      pais: pais
     });
-  };
-
-  const mailLink = $("#pop-mailto");
-  if (mailLink) mailLink.onclick = () => record(null);
-  const gmailLink = $("#pop-gmail");
-  if (gmailLink) gmailLink.onclick = () => record(null);
-  const ghLink = $("#pop-gh");
-  if (ghLink) ghLink.onclick = () => record(sugData.gh);
-  const copyBtn = $("#pop-copy");
-  if (copyBtn) {
-    copyBtn.onclick = async () => {
-      try {
-        if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(sugData.text);
-        }
-      } catch (_) {}
-      const ok = $("#pop-copy-ok");
-      if (ok) ok.style.display = "block";
-      record(null);
-    };
+    $("#suggest").hidden = true;
+    const fb = $("#suggestFeedback");
+    fb.hidden = false;
+    fb.innerHTML = `
+      <div style="color:#166534;font-size:12px;font-weight:600;margin-top:6px;">${t("suggest_sent_thanks")}</div>
+    `;
+  } catch (_) {
+    $("#suggest").disabled = false;
+    $("#suggest").style.opacity = "1";
   }
 };
 

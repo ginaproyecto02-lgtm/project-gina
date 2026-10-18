@@ -584,28 +584,12 @@
 
     let localAltHtml = "";
     if (!a || !a.items || !a.items.length) {
-      const brandName = res.found ? res.brand : (res.brandText || "");
-      const storeName = res.store ? res.store.nombre : "";
-      const proj = QED.PROJECT || {};
-      const sugData = (QED.ALT && QED.ALT.suggestionMailData)
-        ? QED.ALT.suggestionMailData(proj, "marca", [{ marca: brandName, tienda: storeName, producto: res.title || "" }])
-        : { mailto: "", gmail: "", gh: "", text: "" };
-
       localAltHtml = `
         <div class="alt-empty-box">
           <div>${t("no_local_alternatives")}</div>
+          <div class="sug-privacy-notice" style="color:#64748b;font-size:10.5px;margin-top:6px;margin-bottom:6px;">${t("sug_privacy_notice_drive")}</div>
           <button id="card-suggest-btn" class="btn-sug">${t("suggest_btn")}</button>
-          <div id="card-suggest-box" class="sug-box" style="display:none;margin-top:8px;padding:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:11.5px;text-align:left;">
-            <div class="sug-privacy-notice" style="color:#64748b;font-size:10.5px;margin-bottom:6px;">${t("sug_privacy_notice")}</div>
-            <div class="sug-options" style="display:flex;flex-direction:column;gap:5px;">
-              <a href="${esc(sugData.mailto)}" class="sug-opt-link sug-action-mailto" style="display:block;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;text-decoration:none;" target="_blank" rel="noopener noreferrer">${t("sug_opt_mailto")}</a>
-              <a href="${esc(sugData.gmail)}" class="sug-opt-link sug-action-gmail" style="display:block;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;text-decoration:none;" target="_blank" rel="noopener noreferrer">${t("sug_opt_gmail")}</a>
-              <button type="button" class="sug-opt-link sug-action-copy" style="text-align:left;width:100%;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;cursor:pointer;">${t("sug_opt_copy")}</button>
-              ${opts && opts.useGitHubIssues && sugData.gh ? `<a href="${esc(sugData.gh)}" class="sug-opt-link sug-action-gh" style="display:block;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;text-decoration:none;" target="_blank" rel="noopener noreferrer">${t("sug_opt_github")}</a>` : ""}
-            </div>
-            <div class="sug-copy-feedback" style="display:none;color:#166534;font-size:11px;margin-top:4px;font-weight:600;">${t("sug_copied")}</div>
-          </div>
-          <div id="card-suggest-ok" class="sug-ok" style="display:none;">${t("suggest_success")}</div>
+          <div id="card-suggest-ok" class="sug-ok" style="display:none;margin-top:6px;">${t("suggest_sent_thanks")}</div>
         </div>
       `;
     } else {
@@ -717,25 +701,11 @@
         if (alreadySuggested) {
           sugHtml = `<div class="sug-already" style="color:#0284c7;font-size:11px;margin-top:6px;font-weight:500;">${t("suggest_already_submitted")}</div>`;
         } else {
-          const proj = QED.PROJECT || {};
-          const site = res.store ? res.store.nombre : "";
-          const sugData = (QED.ALT && QED.ALT.suggestionMailData)
-            ? QED.ALT.suggestionMailData(proj, "marca", [{ marca: brandText, tienda: site, producto: res.title || "" }])
-            : { mailto: "", gmail: "", gh: "", text: "" };
           sugHtml = `
             <div class="sug-container" style="margin-top:8px;">
+              <div class="sug-privacy-notice" style="color:#64748b;font-size:10.5px;margin-bottom:6px;">${t("sug_privacy_notice_drive")}</div>
               <button type="button" class="btn-sug" id="card-suggest-btn">${t("suggest_btn")}</button>
-              <div id="card-suggest-box" class="sug-box" style="display:none;margin-top:8px;padding:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:11.5px;text-align:left;">
-                <div class="sug-privacy-notice" style="color:#64748b;font-size:10.5px;margin-bottom:6px;">${t("sug_privacy_notice")}</div>
-                <div class="sug-options" style="display:flex;flex-direction:column;gap:5px;">
-                  <a href="${esc(sugData.mailto)}" class="sug-opt-link sug-action-mailto" style="display:block;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;text-decoration:none;" target="_blank" rel="noopener noreferrer">${t("sug_opt_mailto")}</a>
-                  <a href="${esc(sugData.gmail)}" class="sug-opt-link sug-action-gmail" style="display:block;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;text-decoration:none;" target="_blank" rel="noopener noreferrer">${t("sug_opt_gmail")}</a>
-                  <button type="button" class="sug-opt-link sug-action-copy" style="text-align:left;width:100%;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;cursor:pointer;">${t("sug_opt_copy")}</button>
-                  ${opts && opts.useGitHubIssues && sugData.gh ? `<a href="${esc(sugData.gh)}" class="sug-opt-link sug-action-gh" style="display:block;padding:5px 8px;background:#fff;border:1px solid #cbd5e1;border-radius:4px;color:#1e293b;text-decoration:none;" target="_blank" rel="noopener noreferrer">${t("sug_opt_github")}</a>` : ""}
-                </div>
-                <div class="sug-copy-feedback" style="display:none;color:#166534;font-size:11px;margin-top:4px;font-weight:600;">${t("sug_copied")}</div>
-              </div>
-              <div id="card-suggest-ok" class="sug-ok" style="display:none;">${t("suggest_success")}</div>
+              <div id="card-suggest-ok" class="sug-ok" style="display:none;margin-top:6px;">${t("suggest_sent_thanks")}</div>
             </div>
           `;
         }
@@ -1126,74 +1096,34 @@
 
     // Handler de sugerencia de marca
     const sugBtn = shadow.querySelector("#card-suggest-btn");
-    const sugBox = shadow.querySelector("#card-suggest-box");
     const sugOk = shadow.querySelector("#card-suggest-ok");
+    const sugNotice = shadow.querySelector(".sug-privacy-notice");
     const site = res.store ? `${res.store.nombre}` : (typeof location !== "undefined" ? location.hostname : "");
     const brandName = res.found ? res.brand : (res.brandText || "");
-    const proj = QED.PROJECT || {};
-    const sugData = (QED.ALT && QED.ALT.suggestionMailData)
-      ? QED.ALT.suggestionMailData(proj, "marca", [{ marca: brandName, tienda: site, producto: res.title || "" }])
-      : { mailto: "", gmail: "", gh: "", text: "" };
-
-    const recordSuggestion = async (targetUrl) => {
-      try {
-        const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
-        if (api && api.runtime && api.runtime.sendMessage) {
-          await api.runtime.sendMessage({
-            type: "qed:suggest_brand",
-            brand: brandName,
-            title: res.title || "",
-            site: site,
-            url: targetUrl
-          });
-        }
-      } catch (_) {}
-    };
+    const pais = (res.store && res.store.pais) || "";
 
     if (sugBtn) {
       sugBtn.onclick = async () => {
-        if (sugBox) {
-          sugBtn.style.display = "none";
-          sugBox.style.display = "block";
-        } else {
-          sugBtn.disabled = true;
-          sugBtn.style.opacity = "0.5";
-          try {
-            let targetUrl = "";
-            if (QED.ALT && QED.ALT.suggestionLink) {
-              targetUrl = QED.ALT.suggestionLink(proj, "marca", [{ marca: brandName, tienda: site, producto: res.title || "" }]);
-            }
-            await recordSuggestion(targetUrl);
-            sugBtn.style.display = "none";
-            if (sugOk) sugOk.style.display = "block";
-          } catch (e) {
-            sugBtn.disabled = false;
-            sugBtn.style.opacity = "1";
-          }
-        }
-      };
-    }
-
-    const mailtoLink = shadow.querySelector(".sug-action-mailto");
-    if (mailtoLink) mailtoLink.onclick = () => { recordSuggestion(null); };
-
-    const gmailLink = shadow.querySelector(".sug-action-gmail");
-    if (gmailLink) gmailLink.onclick = () => { recordSuggestion(null); };
-
-    const ghLink = shadow.querySelector(".sug-action-gh");
-    if (ghLink) ghLink.onclick = () => { recordSuggestion(sugData.gh); };
-
-    const copyBtn = shadow.querySelector(".sug-action-copy");
-    const copyFb = shadow.querySelector(".sug-copy-feedback");
-    if (copyBtn) {
-      copyBtn.onclick = async () => {
+        sugBtn.disabled = true;
+        sugBtn.style.opacity = "0.5";
         try {
-          if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(sugData.text);
+          const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
+          if (api && api.runtime && api.runtime.sendMessage) {
+            await api.runtime.sendMessage({
+              type: "qed:suggest_brand",
+              brand: brandName,
+              title: res.title || "",
+              site: site,
+              pais: pais
+            });
           }
-        } catch (_) {}
-        if (copyFb) copyFb.style.display = "block";
-        recordSuggestion(null);
+          sugBtn.style.display = "none";
+          if (sugNotice) sugNotice.style.display = "none";
+          if (sugOk) sugOk.style.display = "block";
+        } catch (e) {
+          sugBtn.disabled = false;
+          sugBtn.style.opacity = "1";
+        }
       };
     }
 

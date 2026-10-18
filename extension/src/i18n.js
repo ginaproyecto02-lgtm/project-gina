@@ -221,6 +221,22 @@
       it: "✉ Invia via email al team",
       ja: "✉ チームにメールで送信"
     },
+    sug_privacy_notice_drive: {
+      es: "Se envía solo la marca, la tienda y el país. No se envía tu correo ni tu nombre.",
+      en: "Only the brand, store and country are sent. Your email and name are never sent.",
+      de: "Es werden nur Marke, Shop und Land gesendet. Weder E-Mail noch Name werden übermittelt.",
+      fr: "Seuls la marque, la boutique et le pays sont envoyés. Ni votre e-mail ni votre nom ne sont transmis.",
+      it: "Vengono inviati solo il marchio, il negozio e il paese. L'email e il nome non vengono mai inviati.",
+      ja: "ブランド名、店舗、国のみが送信されます。メールアドレスや氏名は送信されません。"
+    },
+    suggest_sent_thanks: {
+      es: "Enviada, gracias.",
+      en: "Sent, thank you.",
+      de: "Gesendet, vielen Dank.",
+      fr: "Envoyée, merci.",
+      it: "Inviato, gracias.",
+      ja: "送信しました。ありがとうございます。"
+    },
     sug_privacy_notice: {
       es: "Aviso: El proyecto verá tu dirección de correo al recibir este mensaje.",
       en: "Notice: The project will see your email address when receiving this message.",

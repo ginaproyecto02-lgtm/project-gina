@@ -324,8 +324,14 @@ PROY = json.load(open(os.path.join(os.path.dirname(__file__), "proyecto.json"), 
 repo, rama = PROY.get("repo", "").strip(), PROY.get("rama", "main") or "main"
 assert not repo or re.fullmatch(r"[A-Za-z0-9-]+/[A-Za-z0-9._-]+", repo), "«repo» debe ser usuario/repositorio"
 contacto = PROY.get("contacto", "").strip()
+sugerencias_url = PROY.get("sugerencias_url", "").strip()
+if sugerencias_url:
+    assert re.match(r"^https://script\.google\.com/macros/s/[A-Za-z0-9_-]+/exec$", sugerencias_url), (
+        f"sugerencias_url debe ser 'https://script.google.com/macros/s/.../exec', obtenido: {sugerencias_url}"
+    )
 json.dump({
     "nombre": PROY.get("nombre", "Project Gina"), "repo": repo, "contacto": contacto,
+    "sugerencias_url": sugerencias_url,
     "remoteUrl": f"https://raw.githubusercontent.com/{repo}/{rama}/extension/data/brands.json" if repo else "",
     "issuesUrl": f"https://github.com/{repo}/issues/new" if repo else "",
     "repoUrl": f"https://github.com/{repo}" if repo else ""

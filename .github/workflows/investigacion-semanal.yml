@@ -53,10 +53,22 @@ jobs:
           git config user.name "gina-bot"
           git config user.email "gina-bot@users.noreply.github.com"
 
-      # E1: correos con «[gina:sugerencia]» en el asunto → issues «sugerencia» (sin remitente). No toca el resto del buzón.
-      # No corre en el canario del domingo. Si el buzón falla, se avisa pero la investigación sigue.
-      - name: Sugerencias por correo → issues
+      # F3: sugerencias enviadas a Google Sheets/Drive → issues de GitHub.
+      - name: Sugerencias (Drive) → issues
         if: github.event.schedule != '17 9 * * 0' && !inputs.dry_run
+        continue-on-error: true
+        env:
+          GINA_SUGERENCIAS_TOKEN: ${{ secrets.GINA_SUGERENCIAS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$GINA_SUGERENCIAS_TOKEN" ]; then
+            echo "::add-mask::$GINA_SUGERENCIAS_TOKEN"
+          fi
+          node job/sugerencias.js
+
+      # E1: correos con «[gina:sugerencia]» en el asunto → issues «sugerencia» (lector opcional, apagado por defecto salvo que exista GINA_IMAP_USER).
+      - name: Sugerencias por correo → issues (opcional)
+        if: github.event.schedule != '17 9 * * 0' && !inputs.dry_run && secrets.GINA_IMAP_USER != ''
         continue-on-error: true
         env:
           GINA_IMAP_USER: ${{ secrets.GINA_IMAP_USER }}

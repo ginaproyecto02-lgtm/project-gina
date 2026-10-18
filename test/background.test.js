@@ -182,13 +182,48 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
   r = await bad.send({ type: "qed:resolve", brandText: "Algo", title: "Algo", site: "x" });
   check("Clave inválida: error claro y queda pendiente", r.status === "error" && /revisa la clave/.test(r.error) && bad.store.pending["b:algo"], r.error);
 
-  // P1 (E1): «Sugerir» abre por defecto un correo al proyecto con el bloque gina:sugerencia; GitHub solo si se activó en Opciones.
+  // P1 (F3): «Sugerir» envía directo a Google Apps Script sin correo; GitHub solo si se activó en Opciones.
   {
-    const sugEnv = makeEnv(async () => ({ status: 200, body: {} }));
-    await sugEnv.send({ type: "qed:suggest_brand", brand: "Original Nature's Oils", title: "Kit de aceites", site: "Amazon México" });
-    const lastTab = sugEnv.ctx.chrome.tabs.created[0];
-    const okSug = lastTab && lastTab.url && /^mailto:/.test(lastTab.url) && lastTab.url.includes("gina%3Asugerencia");
-    check("El clic en «Sugerir» abre un correo al proyecto con el bloque gina:sugerencia", okSug, lastTab && lastTab.url);
+    let postedReq = null;
+    const sugEnv = makeEnv(async (req) => {
+      if (req.url.includes("script.google.com")) {
+        postedReq = req;
+        return { status: 200, body: { ok: true } };
+      }
+      return { status: 200, body: {} };
+    });
+    await sugEnv.send({ type: "qed:suggest_brand", brand: "Original Nature's Oils", title: "Kit de aceites", site: "https://www.amazon.com.mx/dp/B01234?ref=xyz", pais: "MX" });
+    const tabCount = sugEnv.ctx.chrome.tabs.created.length;
+    const p = postedReq && postedReq.body;
+    const okPayload = p && p.v === 1 && p.tipo === "marca" && p.marca === "Original Nature's Oils" &&
+      p.tienda === "amazon.com.mx" && p.producto === "Kit de aceites" && p.pais === "MX" &&
+      typeof p.inst === "string" && p.inst.length === 36 &&
+      !JSON.stringify(p).includes("@") && !JSON.stringify(p).includes("ref=xyz");
+    check("El clic en «Sugerir» envía directo a Apps Script sin abrir pestañas ni correo", tabCount === 0 && okPayload, JSON.stringify(p));
+
+    // Sin red → se guarda en cola local y nunca abre correo
+    const failEnv = makeEnv(async (req) => {
+      if (req.url.includes("script.google.com")) return { status: 500, body: { ok: false, e: "error" } };
+      return { status: 200, body: {} };
+    });
+    await failEnv.send({ type: "qed:suggest_brand", brand: "Marca Offline", title: "Producto", site: "tienda.com", pais: "MX" });
+    const queue = (await failEnv.ctx.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
+    check("Fallo de red en sugerencia: se encola en suggestionsQueue sin abrir correo", failEnv.ctx.chrome.tabs.created.length === 0 && queue.length === 1 && queue[0].marca === "Marca Offline");
+
+    // Alarma diaria vacía la cola si hay red
+    let flushedCount = 0;
+    const flushEnv = makeEnv(async (req) => {
+      if (req.url.includes("script.google.com")) {
+        flushedCount++;
+        return { status: 200, body: { ok: true } };
+      }
+      return { status: 200, body: {} };
+    });
+    await flushEnv.ctx.chrome.storage.local.set({ suggestionsQueue: [{ v: 1, tipo: "marca", marca: "Encolada", tienda: "tienda.com", producto: "P", pais: "MX", inst: "12345678-1234-4234-8234-123456789abc" }] });
+    for (const l of flushEnv.listeners.alarm) await l({ name: "qed-tick" });
+    const queueAfter = (await flushEnv.ctx.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
+    check("Alarma qed-tick procesa y vacía la cola de sugerencias pendientes", flushedCount === 1 && queueAfter.length === 0);
+
     const ghEnv = makeEnv(async () => ({ status: 200, body: {} }));
     ghEnv.store.settings = { useGitHubIssues: true };
     await ghEnv.send({ type: "qed:suggest_brand", brand: "Original Nature's Oils", title: "Kit de aceites", site: "Amazon México" });
@@ -256,7 +291,12 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
       e.chrome.tabs.created.length = 0;
       await new Promise((resolve) => { for (const f of e.listeners.message) f({ type: "qed:suggest_brand", brand: "X", title: "Y", site: "Z", url: "javascript:alert(1)" }, { tab: { id: 9 } }, resolve); });
       const opened = e.chrome.tabs.created.map((o) => o.url);
-      check("Sugerencia con url javascript: no abre esa url; abre el correo al proyecto (GitHub solo si se activó)", opened.length === 1 && /^mailto:/.test(opened[0]) && !opened.some((u) => /^javascript:/i.test(u)), JSON.stringify(opened));
+      check("Sugerencia con url javascript: no abre pestañas en modo directo", opened.length === 0, JSON.stringify(opened));
+
+      e.store.settings = { useGitHubIssues: true };
+      await new Promise((resolve) => { for (const f of e.listeners.message) f({ type: "qed:suggest_brand", brand: "X", title: "Y", site: "Z", url: "javascript:alert(1)" }, { tab: { id: 9 } }, resolve); });
+      const openedGh = e.chrome.tabs.created.map((o) => o.url);
+      check("Sugerencia en modo GitHub con url javascript: neutralizada por SAFE_OPEN (solo abre GitHub)", openedGh.length === 1 && /^https:\/\/github\.com\//.test(openedGh[0]) && !openedGh.some((u) => /^javascript:/i.test(u)), JSON.stringify(openedGh));
     }
   }
 

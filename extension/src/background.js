@@ -350,15 +350,84 @@ async function researchReputation(s, cfg, log) {
 // ---------- Programación ----------
 api.runtime.onInstalled.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); updateBadge(); });
 api.runtime.onStartup.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); });
-// Revisión diaria: si pasaron 7 días desde el último job, lo ejecuta (si el navegador estuvo cerrado, se pone al día al abrirlo).
+// Revisión diaria: vacía cola de sugerencias y si pasaron 7 días ejecuta job semanal.
 api.alarms.onAlarm.addListener(async (a) => {
   if (a.name !== "qed-tick") return;
+  await flushSuggestionsQueue().catch(() => {});
   const s = await settings();
   const { jobState = {} } = await get("jobState");
   if ((s.jobEnabled || (await remoteUrlOf(s))) && Date.now() - (jobState.lastRun || 0) >= 7 * DAY) runJob("semanal");
 });
 
-async function recordBrandSuggestion(brand, title, site, url) {
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+function generateUUID() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+async function getInstallationId() {
+  const { inst } = await get("inst");
+  if (inst && UUID_RE.test(inst)) return inst;
+  const newInst = generateUUID();
+  await set({ inst: newInst });
+  return newInst;
+}
+
+function extractDomain(s) {
+  if (!s) return "";
+  try {
+    const raw = String(s).trim();
+    const u = raw.startsWith("http://") || raw.startsWith("https://") ? new URL(raw) : new URL("https://" + raw);
+    return u.hostname.replace(/^www\./, "").toLowerCase();
+  } catch (_) {
+    return String(s).split("/")[0].replace(/^www\./, "").toLowerCase().slice(0, 120);
+  }
+}
+
+async function postSuggestion(payload, endpoint) {
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload),
+    credentials: "omit",
+    referrerPolicy: "no-referrer"
+  });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const data = await res.json();
+  if (!data || data.ok !== true) throw new Error((data && data.e) || "error");
+  return data;
+}
+
+async function enqueueSuggestion(item) {
+  await locked(async () => {
+    const { suggestionsQueue = [] } = await get("suggestionsQueue");
+    suggestionsQueue.push(item);
+    await set({ suggestionsQueue: suggestionsQueue.slice(-20) });
+  });
+}
+
+async function flushSuggestionsQueue() {
+  const proj = await project();
+  const endpoint = proj.sugerencias_url;
+  if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) return;
+  const { suggestionsQueue = [] } = await get("suggestionsQueue");
+  if (!suggestionsQueue.length) return;
+
+  const remaining = [];
+  for (const item of suggestionsQueue) {
+    try {
+      await postSuggestion(item, endpoint);
+    } catch (_) {
+      remaining.push(item);
+    }
+  }
+  await set({ suggestionsQueue: remaining.slice(-20) });
+}
+
+async function recordBrandSuggestion(brand, title, site, url, pais) {
   const key = keyFor(brand, title);
   await locked(async () => {
     const { pending = {}, userSuggestions = [] } = await get(["pending", "userSuggestions"]);
@@ -366,7 +435,7 @@ async function recordBrandSuggestion(brand, title, site, url) {
     p.count = (p.count || 0) + 1;
     p.lastSeen = Date.now();
     p.userSuggested = true;
-    p.status = "enviada"; // Guarda en local con estado "enviada" (P1.10)
+    p.status = "enviada";
     if (site) p.site = site;
     if (title && !p.title) p.title = title;
     pending[key] = p;
@@ -378,22 +447,46 @@ async function recordBrandSuggestion(brand, title, site, url) {
     await set({ pending, userSuggestions: filtered.slice(0, 100) });
   });
 
-  // Abre el issue prellenado en una pestaña nueva vía background (tabs.create) (P1.10)
-  if (!url) {
-    // Por defecto la sugerencia va por correo; GitHub solo si el usuario lo activó en Opciones (E1).
-    const proj = Object.assign({}, await project());
-    const s = await settings();
-    if (!(s && s.useGitHubIssues)) delete proj.issuesUrl;
-    if (typeof QED !== "undefined" && QED.ALT && QED.ALT.suggestionLink) {
-      url = QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]);
-    }
-  }
-  if (url) {
-    try {
-      if (api.tabs && api.tabs.create) {
-        await api.tabs.create({ url });
+  const s = await settings();
+  if (s && s.useGitHubIssues) {
+    if (!url) {
+      const proj = Object.assign({}, await project());
+      if (typeof QED !== "undefined" && QED.ALT && QED.ALT.suggestionLink) {
+        url = QED.ALT.suggestionLink(proj, "marca", [{ marca: brand, tienda: site, producto: title }]);
       }
-    } catch (_) {}
+    }
+    if (url && SAFE_OPEN.test(url)) {
+      try {
+        if (api.tabs && api.tabs.create) {
+          await api.tabs.create({ url });
+        }
+      } catch (_) {}
+    }
+  } else {
+    const proj = await project();
+    const endpoint = proj.sugerencias_url;
+    const inst = await getInstallationId();
+    const manifestVer = (api.runtime && api.runtime.getManifest) ? api.runtime.getManifest().version : "3.2.0";
+    const payload = {
+      v: 1,
+      tipo: "marca",
+      marca: clip(brand, 80),
+      tienda: extractDomain(site),
+      producto: clip(title, 200),
+      pais: clip(pais || "MX", 10),
+      ext: manifestVer,
+      inst: inst
+    };
+
+    if (endpoint && /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) {
+      try {
+        await postSuggestion(payload, endpoint);
+      } catch (err) {
+        await enqueueSuggestion(payload);
+      }
+    } else {
+      await enqueueSuggestion(payload);
+    }
   }
 
   await updateBadge();
@@ -414,7 +507,7 @@ async function recordAlternativeSuggestion(alt) {
 // solo desde páginas propias (popup/opciones), nunca desde un script que corre dentro de una tienda.
 const PRIVILEGED = new Set(["qed:updateBase", "qed:runJob", "qed:testKey"]);
 const clip = (v, n) => String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f]+/g, " ").slice(0, n);
-// Lo único que el fondo abre por encargo: correo al proyecto, redacción en Gmail o un issue nuevo del repositorio.
+// Lo único que el fondo abre por encargo: redacción en Gmail o un issue nuevo del repositorio.
 const SAFE_OPEN = /^(mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\?|https:\/\/mail\.google\.com\/mail\/\?view=cm&|https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/issues\/new\?)/;
 
 api.runtime.onMessage.addListener((msg, _sender, reply) => {
@@ -422,12 +515,12 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (_sender && _sender.id && api.runtime && api.runtime.id && _sender.id !== api.runtime.id) return false;
   if (PRIVILEGED.has(msg.type) && _sender && _sender.tab) { reply({ ok: false, error: "No permitido desde una página" }); return false; }
   if (msg.type === "qed:suggest_brand") {
-    msg = Object.assign({}, msg, { brand: clip(msg.brand, 120), title: clip(msg.title, 300), site: clip(msg.site, 120),
+    msg = Object.assign({}, msg, { brand: clip(msg.brand, 120), title: clip(msg.title, 300), site: clip(msg.site, 120), pais: clip(msg.pais, 10),
       url: SAFE_OPEN.test(String(msg.url || "")) ? String(msg.url).slice(0, 8000) : "" });
   }
   if (msg.type === "qed:resolve") { resolve(msg).then(reply, (e) => reply({ status: "error", error: String(e) })); return true; }
   if (msg.type === "qed:suggest_brand") {
-    recordBrandSuggestion(msg.brand, msg.title, msg.site, msg.url).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    recordBrandSuggestion(msg.brand, msg.title, msg.site, msg.url, msg.pais).then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
   if (msg.type === "qed:suggest_alternative") {
