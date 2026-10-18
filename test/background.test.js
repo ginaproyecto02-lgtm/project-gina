@@ -210,6 +210,21 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
     const queue = (await failEnv.ctx.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
     check("Fallo de red en sugerencia: se encola en suggestionsQueue sin abrir correo", failEnv.ctx.chrome.tabs.created.length === 0 && queue.length === 1 && queue[0].marca === "Marca Offline");
 
+    // Rechazo definitivo del servicio (dato inválido) → no se encola para reintentar cada día
+    const rejEnv = makeEnv(async (req) => {
+      if (req.url.includes("script.google.com")) return { status: 200, body: { ok: false, e: "tienda_invalida" } };
+      return { status: 200, body: {} };
+    });
+    await rejEnv.send({ type: "qed:suggest_brand", brand: "Marca Rechazada", title: "Producto", site: "www.amazon.com.mx", pais: "México" });
+    const rejQueue = (await rejEnv.ctx.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
+    check("Rechazo definitivo del servicio (tienda_invalida): no se encola para reintentos infinitos", rejQueue.length === 0, JSON.stringify(rejQueue));
+
+    // La tarjeta manda el hostname: «www.amazon.com.mx» llega como «amazon.com.mx» y el país completo
+    let hostReq = null;
+    const hostEnv = makeEnv(async (req) => { if (req.url.includes("script.google.com")) { hostReq = req; return { status: 200, body: { ok: true } }; } return { status: 200, body: {} }; });
+    await hostEnv.send({ type: "qed:suggest_brand", brand: "Marca Host", title: "P", site: "www.amazon.com.mx", pais: "Reino Unido" });
+    check("Sugerencia: hostname con www → dominio limpio y país sin recortar", hostReq && hostReq.body.tienda === "amazon.com.mx" && hostReq.body.pais === "Reino Unido", JSON.stringify(hostReq && hostReq.body));
+
     // Alarma diaria vacía la cola si hay red
     let flushedCount = 0;
     const flushEnv = makeEnv(async (req) => {

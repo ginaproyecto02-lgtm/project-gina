@@ -6,6 +6,9 @@ var SCHEMA_KEYS = ["v", "tipo", "marca", "tienda", "producto", "pais", "ext", "i
 var BRAND_OK = /^[\p{L}\p{N}][\p{L}\p{N}\p{M} &'’.,+\-/()]{0,79}$/u;
 var DANGER = /<|>|`|\]\(|!\[|:\/\/|javascript:|data:|@\w|\{\{|\$\{/i;
 var UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+var EXT_RE = /^\d{1,4}(\.\d{1,4}){0,3}$/;
+var PAIS_RE = /^[\p{L}][\p{L} .]{0,19}$/u;
+var DAILY_MAX = 300;
 var DOMAIN_RE = /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/i;
 
 function plausibleBrand(s) {
@@ -25,6 +28,21 @@ function safeText(s, n) {
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, n);
+}
+
+// Sheets interpreta como fórmula todo lo que empieza con = + - @ (p. ej. =IMPORTXML("sitio.com",…)).
+// Un apóstrofo inicial lo guarda como texto literal.
+function cell(s) {
+  var v = String(s == null ? "" : s);
+  return /^[=+\-@\t\r]/.test(v) ? "'" + v : v;
+}
+
+// Contador diario en PropertiesService: CacheService expira como máximo a las 6 h, así que no sirve para un tope por día.
+function readDaily(props, today) {
+  try {
+    var o = JSON.parse(props.getProperty("DAILY") || "{}");
+    return o && o.d === today ? (parseInt(o.n, 10) || 0) : 0;
+  } catch (_) { return 0; }
 }
 
 function constantTimeCompare(a, b) {
@@ -87,8 +105,8 @@ function doPost(e) {
       return jsonResponse({ ok: false, e: "tienda_invalida" });
     }
     if (typeof data.producto !== "string" || data.producto.length > 200) return jsonResponse({ ok: false, e: "producto" });
-    if (typeof data.pais !== "string" || data.pais.length > 10) return jsonResponse({ ok: false, e: "pais" });
-    if (typeof data.ext !== "string" || data.ext.length > 30) return jsonResponse({ ok: false, e: "ext" });
+    if (typeof data.pais !== "string" || !PAIS_RE.test(data.pais)) return jsonResponse({ ok: false, e: "pais" });
+    if (typeof data.ext !== "string" || !EXT_RE.test(data.ext)) return jsonResponse({ ok: false, e: "ext" });
     if (typeof data.inst !== "string" || !UUID_RE.test(data.inst)) return jsonResponse({ ok: false, e: "inst_invalido" });
 
     // Límites de tasa con CacheService
@@ -100,11 +118,7 @@ function doPost(e) {
     }
 
     var today = new Date().toISOString().slice(0, 10);
-    var dayKey = "day:" + today;
-    var dayCount = parseInt(cache.get(dayKey) || "0", 10);
-    if (dayCount >= 300) {
-      return jsonResponse({ ok: false, e: "limite_dia" });
-    }
+    var props = PropertiesService.getScriptProperties();
 
     var lock = LockService.getScriptLock();
     if (!lock.tryLock(15000)) {
@@ -115,10 +129,9 @@ function doPost(e) {
       // Re-verificar tras obtener el bloqueo
       instCount = parseInt(cache.get(instKey) || "0", 10);
       if (instCount >= 5) return jsonResponse({ ok: false, e: "limite_hora" });
-      dayCount = parseInt(cache.get(dayKey) || "0", 10);
-      if (dayCount >= 300) return jsonResponse({ ok: false, e: "limite_dia" });
+      var dayCount = readDaily(props, today);
+      if (dayCount >= DAILY_MAX) return jsonResponse({ ok: false, e: "limite_dia" });
 
-      var props = PropertiesService.getScriptProperties();
       var sheetId = props.getProperty("SHEET_ID");
       if (!sheetId) {
         return jsonResponse({ ok: false, e: "config" });
@@ -154,23 +167,23 @@ function doPost(e) {
         var id = Utilities.getUuid ? Utilities.getUuid() : (Date.now() + "_" + Math.floor(Math.random() * 10000));
         var cleanProd = safeText(data.producto, 200);
         var cleanStore = safeText(data.tienda, 120);
-        var cleanCountry = safeText(data.pais, 10);
+        var cleanCountry = safeText(data.pais, 20);
         sheet.appendRow([
-          id,
+          cell(id),
           new Date().toISOString(),
-          data.tipo,
-          data.marca.trim(),
-          cleanStore,
-          cleanProd,
-          cleanCountry,
-          data.ext.trim(),
+          cell(data.tipo),
+          cell(data.marca.trim()),
+          cell(cleanStore),
+          cell(cleanProd),
+          cell(cleanCountry),
+          cell(data.ext.trim()),
           1,
           "pendiente"
         ]);
       }
 
       cache.put(instKey, String(instCount + 1), 3600);
-      cache.put(dayKey, String(dayCount + 1), 86400);
+      props.setProperty("DAILY", JSON.stringify({ d: today, n: dayCount + 1 }));
 
       return jsonResponse({ ok: true });
     } finally {
@@ -265,6 +278,7 @@ if (typeof module !== "undefined" && module.exports) {
     doGet: doGet,
     plausibleBrand: plausibleBrand,
     safeText: safeText,
-    constantTimeCompare: constantTimeCompare
+    constantTimeCompare: constantTimeCompare,
+    cell: cell
   };
 }

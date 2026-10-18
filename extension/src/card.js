@@ -1101,6 +1101,8 @@
     const site = res.store ? `${res.store.nombre}` : (typeof location !== "undefined" ? location.hostname : "");
     const brandName = res.found ? res.brand : (res.brandText || "");
     const pais = (res.store && res.store.pais) || "";
+    // El servicio de sugerencias exige un dominio («amazon.com.mx»), no el nombre de la tienda («Amazon México»).
+    const siteDomain = (typeof location !== "undefined" && location.hostname) ? location.hostname : ((res.store && res.store.d) || "");
 
     if (sugBtn) {
       sugBtn.onclick = async () => {
@@ -1113,7 +1115,7 @@
               type: "qed:suggest_brand",
               brand: brandName,
               title: res.title || "",
-              site: site,
+              site: siteDomain,
               pais: pais
             });
           }

@@ -68,13 +68,16 @@ jobs:
 
       # E1: correos con «[gina:sugerencia]» en el asunto → issues «sugerencia» (lector opcional, apagado por defecto salvo que exista GINA_IMAP_USER).
       - name: Sugerencias por correo → issues (opcional)
-        if: github.event.schedule != '17 9 * * 0' && !inputs.dry_run && secrets.GINA_IMAP_USER != ''
+        # «secrets» no se puede usar en «if:» (invalida todo el workflow); se revisa dentro del paso.
+        if: github.event.schedule != '17 9 * * 0' && !inputs.dry_run
         continue-on-error: true
         env:
           GINA_IMAP_USER: ${{ secrets.GINA_IMAP_USER }}
           GINA_IMAP_PASS: ${{ secrets.GINA_IMAP_PASS }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node job/correo.js
+        run: |
+          if [ -z "$GINA_IMAP_USER" ]; then echo "Lector de correo apagado (sin GINA_IMAP_USER)"; exit 0; fi
+          node job/correo.js
 
       - name: Investigar, verificar fuentes y proponer cambios
         env:

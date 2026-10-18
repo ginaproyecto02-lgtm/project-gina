@@ -401,6 +401,11 @@ async function postSuggestion(payload, endpoint) {
   return data;
 }
 
+// Rechazos definitivos del servicio: reintentar no sirve, la sugerencia se descarta.
+// Los demás (red, «bloqueo», «servidor», «config», límites) se reintentan al día siguiente.
+const SUG_PERMANENT = new Set(["esquema", "version", "tipo", "marca", "marca_invalida", "tienda_invalida", "producto", "pais", "ext", "inst_invalido", "json_invalido", "tamano_excedido", "sin_datos"]);
+const isPermanentSugError = (err) => SUG_PERMANENT.has(String((err && err.message) || ""));
+
 async function enqueueSuggestion(item) {
   await locked(async () => {
     const { suggestionsQueue = [] } = await get("suggestionsQueue");
@@ -420,8 +425,8 @@ async function flushSuggestionsQueue() {
   for (const item of suggestionsQueue) {
     try {
       await postSuggestion(item, endpoint);
-    } catch (_) {
-      remaining.push(item);
+    } catch (err) {
+      if (!isPermanentSugError(err)) remaining.push(item);
     }
   }
   await set({ suggestionsQueue: remaining.slice(-20) });
@@ -473,7 +478,7 @@ async function recordBrandSuggestion(brand, title, site, url, pais) {
       marca: clip(brand, 80),
       tienda: extractDomain(site),
       producto: clip(title, 200),
-      pais: clip(pais || "MX", 10),
+      pais: clip(pais || "MX", 20),
       ext: manifestVer,
       inst: inst
     };
@@ -482,7 +487,7 @@ async function recordBrandSuggestion(brand, title, site, url, pais) {
       try {
         await postSuggestion(payload, endpoint);
       } catch (err) {
-        await enqueueSuggestion(payload);
+        if (!isPermanentSugError(err)) await enqueueSuggestion(payload);
       }
     } else {
       await enqueueSuggestion(payload);
@@ -515,7 +520,7 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (_sender && _sender.id && api.runtime && api.runtime.id && _sender.id !== api.runtime.id) return false;
   if (PRIVILEGED.has(msg.type) && _sender && _sender.tab) { reply({ ok: false, error: "No permitido desde una página" }); return false; }
   if (msg.type === "qed:suggest_brand") {
-    msg = Object.assign({}, msg, { brand: clip(msg.brand, 120), title: clip(msg.title, 300), site: clip(msg.site, 120), pais: clip(msg.pais, 10),
+    msg = Object.assign({}, msg, { brand: clip(msg.brand, 120), title: clip(msg.title, 300), site: clip(msg.site, 120), pais: clip(msg.pais, 20),
       url: SAFE_OPEN.test(String(msg.url || "")) ? String(msg.url).slice(0, 8000) : "" });
   }
   if (msg.type === "qed:resolve") { resolve(msg).then(reply, (e) => reply({ status: "error", error: String(e) })); return true; }
