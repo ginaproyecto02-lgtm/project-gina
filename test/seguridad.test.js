@@ -461,6 +461,41 @@ function fakeImap(messages) {
       badNodes.length === 0, badNodes.join("; "));
   }
 
+  // ---------------------------------------------------------------- 13. F2. Rastreadores y SAFE_OPEN
+  {
+    const bgCode = fs.readFileSync(path.join(EXT, "src/background.js"), "utf8");
+    const mSafeOpen = bgCode.match(/const SAFE_OPEN = (\/[^\n]+\/);/);
+    const SAFE_OPEN = mSafeOpen ? eval(mSafeOpen[1]) : null;
+
+    check("F2. SAFE_OPEN está definido en background.js", !!SAFE_OPEN);
+
+    // Dominios válidos de rastreadores.json
+    check("F2. SAFE_OPEN permite Keepa https://", SAFE_OPEN.test("https://keepa.com/#!product/11-B0ABCDEF12"));
+    check("F2. SAFE_OPEN permite CamelCamelCamel https://", SAFE_OPEN.test("https://camelcamelcamel.com/product/B0ABCDEF12"));
+    check("F2. SAFE_OPEN permite subdominios por país de CamelCamelCamel (de.camelcamelcamel.com)",
+      SAFE_OPEN.test("https://de.camelcamelcamel.com/product/B0ABCDEF12") && SAFE_OPEN.test("https://uk.camelcamelcamel.com/product/B0ABCDEF12"));
+    check("F2. SAFE_OPEN permite Pricearchive https://", SAFE_OPEN.test("https://www.pricearchive.org/search/aliexpress.com/reloj/1"));
+    check("F2. SAFE_OPEN permite Alitools https://", SAFE_OPEN.test("https://alitools.io/"));
+
+    // URLs hostiles o no permitidas
+    check("F2. SAFE_OPEN rechaza Keepa sobre protocolo inseguro http://", !SAFE_OPEN.test("http://keepa.com/#!product/11-B0ABCDEF12"));
+    check("F2. SAFE_OPEN rechaza dominio impostor en subdirectorio (evil.example/keepa.com)", !SAFE_OPEN.test("https://evil.example/keepa.com/product"));
+    check("F2. SAFE_OPEN rechaza subdominio atacante (keepa.com.evil.example)", !SAFE_OPEN.test("https://keepa.com.evil.example/product"));
+    check("F2. SAFE_OPEN rechaza javascript:", !SAFE_OPEN.test("javascript:alert(1)"));
+    check("F2. SAFE_OPEN rechaza rastreador excluido / no autorizado (waltrack.net)", !SAFE_OPEN.test("https://waltrack.net/search"));
+
+    // Botón «Seguir precio» en tarjeta
+    const urlAmz = "https://www.amazon.com.mx/dp/B0ABCDEF12";
+    const wAmz = env(`<span id="productTitle">Nutella 650 g</span><a id="bylineInfo">Visita la tienda de Ferrero</a><div id="corePriceDisplay_desktop_feature_div"><span class="a-price"><span class="a-offscreen">$100.00</span></span></div>`, urlAmz);
+    analyze(wAmz, urlAmz, baseDb);
+    const rootAmz = rootOf(wAmz);
+    const followBtn = rootAmz && rootAmz.querySelector("a.btn-follow-price");
+    check("F2. Tarjeta muestra botón «Seguir precio» en la fila del precio del producto actual",
+      !!followBtn && followBtn.getAttribute("href") === "https://keepa.com/#!product/11-B0ABCDEF12" &&
+      followBtn.getAttribute("rel") === "noopener noreferrer" &&
+      SAFE_OPEN.test(followBtn.getAttribute("href")));
+  }
+
   console.log(`\n${pass}/${total} pruebas de seguridad correctas`);
   process.exit(pass === total ? 0 : 1);
 })();

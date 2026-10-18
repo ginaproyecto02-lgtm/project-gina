@@ -405,10 +405,23 @@
     const ratBox = rat && rat.score != null
       ? `<div style="text-align:right;"><div class="price-cur-lbl">${t("lbl_rating")}</div><div style="font-weight:700;font-size:12px;color:#1c2233;">${esc(String(rat.score))} / ${esc(String(rat.max || 5))}${rat.count ? ` <span style="font-size:10px;color:#535d70;font-weight:normal;">(${esc(String(rat.count))})</span>` : ""}</div></div>`
       : "";
+    const primTracker = (rel.trackers && rel.trackers.length)
+      ? (rel.trackers.find((t) => t && t.name === "Keepa") || rel.trackers[0])
+      : null;
+    let followBtnHtml = "";
+    if (primTracker && primTracker.url) {
+      followBtnHtml = `<a href="${esc(safe(primTracker.url))}" class="btn-follow-price tracker-link" target="_blank" rel="noopener noreferrer" style="margin-left:8px;padding:2px 7px;font-size:11px;font-weight:600;color:#0284c7;background:#f0f9ff;border:1px solid #bae6fd;border-radius:4px;text-decoration:none;vertical-align:middle;display:inline-block;">${t("btn_follow_price")} ↗</a>`;
+    }
     return `
       <div class="price-panel">
         <div class="price-main">
-          <div><div class="price-cur-lbl">${t("lbl_price")}</div><div class="price-current">${priceFmt}</div></div>
+          <div>
+            <div class="price-cur-lbl">${t("lbl_price")}</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span class="price-current">${priceFmt}</span>
+              ${followBtnHtml}
+            </div>
+          </div>
           ${ratBox}
         </div>
         ${msiHtml}
@@ -472,9 +485,41 @@
         } catch (_) {}
       }
 
+      let amazonTrackerBtn = "";
+      if (!isSimilar) {
+        const storeDom = String(item.storeDomain || item.dominio || item.store || "").toLowerCase();
+        const rawItemUrl = String(item.url || "");
+        if (storeDom.includes("amazon") || rawItemUrl.includes("amazon.")) {
+          const asinMatch = rawItemUrl.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i) || (item.asin ? [null, item.asin] : null);
+          if (asinMatch && asinMatch[1]) {
+            const asin = asinMatch[1];
+            const domainCodeMap = {
+              "amazon.com.mx": "11",
+              "amazon.com": "1",
+              "amazon.co.uk": "2",
+              "amazon.de": "3",
+              "amazon.fr": "4",
+              "amazon.co.jp": "5",
+              "amazon.ca": "6",
+              "amazon.it": "8",
+              "amazon.es": "9"
+            };
+            let code = "1";
+            for (const [d, c] of Object.entries(domainCodeMap)) {
+              if (storeDom.includes(d) || rawItemUrl.includes(d)) {
+                code = c;
+                break;
+              }
+            }
+            const keepaUrl = `https://keepa.com/#!product/${code}-${asin}`;
+            amazonTrackerBtn = `<a href="${esc(safe(keepaUrl))}" class="btn-follow-price-mini tracker-link" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:3px;padding:2px 6px;font-size:10px;font-weight:600;color:#0284c7;background:#f0f9ff;border:1px solid #bae6fd;border-radius:4px;text-decoration:none;">${t("btn_follow_price")} ↗</a>`;
+          }
+        }
+      }
+
       return `
         <div class="compare-item-row" style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;">
-          <a href="${esc(safe(validUrl))}" class="compare-link" ${validUrl !== "#" ? 'target="_blank" rel="noopener noreferrer"' : ""} style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;width:100%;">
+          <a href="${esc(safe(validUrl))}" class="compare-link" ${validUrl !== "#" ? 'target="_blank" rel="noopener noreferrer"' : ""} style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex:1;min-width:0;">
             ${validImg ? `<img src="${esc(safe(validImg))}" referrerpolicy="no-referrer" width="44" height="44" alt="" style="object-fit:contain;border-radius:4px;border:1px solid #e2e8f0;background:#fff;flex-shrink:0;" />` : ""}
             <div style="flex:1;min-width:0;">
               <div style="font-size:11.5px;font-weight:600;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${esc(item.title)}">${esc(item.title)}</div>
@@ -488,6 +533,7 @@
               ${cheapestBadge}
             </div>
           </a>
+          ${amazonTrackerBtn ? `<div style="flex-shrink:0;">${amazonTrackerBtn}</div>` : ""}
         </div>
       `;
     };
@@ -557,15 +603,21 @@
       h += `<div class="trackers-box"><div class="trackers-title">${t("lbl_price_trackers")}</div>
         ${rel.trackers.map((tr) => `<div class="tracker-item"><a href="${esc(safe(tr.url))}" class="tracker-link" target="_blank" rel="noopener noreferrer">${esc(tr.name)} ↗</a>${tr.desc ? ` <span class="tracker-desc">· ${esc(tr.desc)}</span>` : ""}</div>`).join("")}`;
 
-      // Tarea E5: Seguimiento en Keepa ya armado con precio objetivo sugerido
+      // Tarea E5: Seguimiento en Keepa ya armado con precio objetivo sugerido (y CamelCamelCamel en Amazon)
       const keepaTr = rel.trackers.find((tr) => tr && tr.name === "Keepa");
-      if (keepaTr && rel.price && rel.price.amount) {
+      const camelTr = rel.trackers.find((tr) => tr && tr.name === "CamelCamelCamel");
+      if ((keepaTr || camelTr) && rel.price && rel.price.amount) {
         const targetPrice = rel.targetPrice != null ? rel.targetPrice : (QED.computeTargetPrice ? QED.computeTargetPrice(rel.priceHistory, rel.price.amount) : Math.round(rel.price.amount * 0.9 * 100) / 100);
         const formattedTarget = QED.formatMoney ? QED.formatMoney(targetPrice, rel.price.currency) : (rel.price.currency ? `${rel.price.currency} ${targetPrice}` : `$${targetPrice}`);
+        const keepaBtnHtml = keepaTr ? `<a href="${esc(safe(keepaTr.url))}" class="btn-sug keepa-follow-btn tracker-link" target="_blank" rel="noopener noreferrer" style="margin-top:0;text-decoration:none;">${t("keepa_btn")} ↗</a>` : "";
+        const camelBtnHtml = camelTr ? `<a href="${esc(safe(camelTr.url))}" class="btn-sug camel-follow-btn tracker-link" target="_blank" rel="noopener noreferrer" style="margin-top:0;text-decoration:none;">CamelCamelCamel ↗</a>` : "";
         h += `
           <div class="keepa-alert-box" style="margin-top:8px;padding:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:11.5px;">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-              <a href="${esc(safe(keepaTr.url))}" class="btn-sug keepa-follow-btn" target="_blank" rel="noopener noreferrer" style="margin-top:0;text-decoration:none;">${t("keepa_btn")} ↗</a>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                ${keepaBtnHtml}
+                ${camelBtnHtml}
+              </div>
               <div style="font-size:11px;color:#1e293b;">
                 ${t("keepa_target_label")}: <b>${esc(formattedTarget)}</b>
                 <button type="button" class="sug-opt-link keepa-copy-btn" data-target="${esc(String(targetPrice))}" style="margin-left:4px;padding:2px 6px;cursor:pointer;">${t("btn_copy")}</button>
@@ -1361,6 +1413,17 @@
     } else if (opts.compareConsent === true && opts.compareEnabled !== false && !res.compareData) {
       doCompare();
     }
+
+    shadow.addEventListener("click", (e) => {
+      const btn = e.target && e.target.closest && e.target.closest(".tracker-link, .btn-follow-price, .btn-follow-price-mini");
+      if (btn) {
+        const url = btn.getAttribute("href") || (btn.dataset && btn.dataset.trackerUrl);
+        const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
+        if (api && api.runtime && api.runtime.sendMessage && url) {
+          api.runtime.sendMessage({ type: "qed:open_tracker", url }).catch(() => {});
+        }
+      }
+    });
   };
 
   QED.hideCard = function () {

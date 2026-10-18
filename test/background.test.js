@@ -312,6 +312,21 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
       await new Promise((resolve) => { for (const f of e.listeners.message) f({ type: "qed:suggest_brand", brand: "X", title: "Y", site: "Z", url: "javascript:alert(1)" }, { tab: { id: 9 } }, resolve); });
       const openedGh = e.chrome.tabs.created.map((o) => o.url);
       check("Sugerencia en modo GitHub con url javascript: neutralizada por SAFE_OPEN (solo abre GitHub)", openedGh.length === 1 && /^https:\/\/github\.com\//.test(openedGh[0]) && !openedGh.some((u) => /^javascript:/i.test(u)), JSON.stringify(openedGh));
+
+      // F2: apertura segura de rastreadores vía qed:open_tracker
+      e.chrome.tabs.created.length = 0;
+      const rTrackOk = await new Promise((resolve) => {
+        for (const f of e.listeners.message) f({ type: "qed:open_tracker", url: "https://keepa.com/#!product/11-B0ABCDEF12" }, { tab: { id: 9 } }, resolve);
+      });
+      const openedTrack = e.chrome.tabs.created.map((o) => o.url);
+      check("F2. qed:open_tracker abre enlace permitido de Keepa", rTrackOk && rTrackOk.ok === true && openedTrack.length === 1 && openedTrack[0] === "https://keepa.com/#!product/11-B0ABCDEF12");
+
+      e.chrome.tabs.created.length = 0;
+      const rTrackBad = await new Promise((resolve) => {
+        for (const f of e.listeners.message) f({ type: "qed:open_tracker", url: "javascript:alert(1)" }, { tab: { id: 9 } }, resolve);
+      });
+      const openedTrackBad = e.chrome.tabs.created.map((o) => o.url);
+      check("F2. qed:open_tracker rechaza URL hostil y no abre pestaña", rTrackBad && rTrackBad.ok === false && rTrackBad.error === "url_no_permitida" && openedTrackBad.length === 0);
     }
   }
 

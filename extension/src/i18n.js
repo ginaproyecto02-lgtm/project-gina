@@ -1258,6 +1258,14 @@
       it: "Keepa richiederà un account gratuito per inviarti avvisi via email o Telegram.",
       ja: "KeepaはメールまたはTelegramで通知を送信するために無料アカウントを要求します。"
     },
+    btn_follow_price: {
+      es: "Seguir precio",
+      en: "Track price",
+      de: "Preis verfolgen",
+      fr: "Suivre le prix",
+      it: "Traccia prezzo",
+      ja: "価格を追跡"
+    },
     btn_copy: {
       es: "Copiar",
       en: "Copy",

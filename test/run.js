@@ -825,13 +825,15 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     const tr = db.rastreadores;
     const mx = QED.getTrackerLinks("www.amazon.com.mx", { id: "B0TEST00000", type: "asin" }, "Audífonos Sony", tr);
     const us = QED.getTrackerLinks("www.amazon.com", { id: "B0TEST00000", type: "asin" }, "Audífonos Sony", tr);
+    const de = QED.getTrackerLinks("www.amazon.de", { id: "B0TEST00000", type: "asin" }, "Audífonos Sony", tr);
     const ali = QED.getTrackerLinks("es.aliexpress.com", { id: "", type: "none" }, "reloj inteligente", tr);
     const wm = QED.getTrackerLinks("www.walmart.com", { id: "999999", type: "walmart_id" }, "café", tr);
-    check("D1. Rastreadores: CamelCamelCamel en amazon.com y no en amazon.com.mx; Pricearchive y Alitools en AliExpress; Waltrack nunca",
+    check("D1. Rastreadores: CamelCamelCamel en amazon.com y amazon.de; ausente en amazon.com.mx; Pricearchive y Alitools en AliExpress; Waltrack nunca",
       us.some((x) => x.name === "CamelCamelCamel" && x.url === "https://camelcamelcamel.com/product/B0TEST00000") &&
+      de.some((x) => x.name === "CamelCamelCamel" && x.url === "https://de.camelcamelcamel.com/product/B0TEST00000") &&
       !mx.some((x) => x.name === "CamelCamelCamel") &&
       ali.some((x) => x.name === "Pricearchive") && ali.some((x) => x.name === "Alitools") &&
-      ![...mx, ...us, ...ali, ...wm].some((x) => /waltrack/i.test(x.name + x.url)));
+      ![...mx, ...us, ...de, ...ali, ...wm].some((x) => /waltrack/i.test(x.name + x.url)));
     check("D1. Sin enlace universal a Google Shopping (sin HARPA)", !us.some((x) => x.universal || /google\.com\/search\?tbm=shop/.test(x.url)) && !/HARPA/.test(card + i18n));
 
     // F1. Comparador: tiendas_comparar como fuente de lectura, sin enlaces externos de búsqueda

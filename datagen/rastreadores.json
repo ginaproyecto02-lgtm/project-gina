@@ -26,11 +26,15 @@
    "dominios": {
     "amazon.com": "https://camelcamelcamel.com/product/{asin}",
     "amazon.ca": "https://ca.camelcamelcamel.com/product/{asin}",
-    "amazon.co.uk": "https://uk.camelcamelcamel.com/product/{asin}"
+    "amazon.co.uk": "https://uk.camelcamelcamel.com/product/{asin}",
+    "amazon.de": "https://de.camelcamelcamel.com/product/{asin}",
+    "amazon.fr": "https://fr.camelcamelcamel.com/product/{asin}",
+    "amazon.es": "https://es.camelcamelcamel.com/product/{asin}",
+    "amazon.it": "https://it.camelcamelcamel.com/product/{asin}"
    },
-   "verificado": "2026-10-13",
-   "fuente": "https://camelcamelcamel.com/features · https://ca.camelcamelcamel.com/features · https://uk.camelcamelcamel.com/features",
-   "pendiente": "amazon.com.mx, amazon.de, amazon.fr, amazon.it, amazon.es, amazon.co.jp: no se confirmó soporte en su sitio; sin enlace hasta confirmarlo."
+   "verificado": "2026-10-18",
+   "fuente": "https://camelcamelcamel.com/ · https://ca.camelcamelcamel.com/ · https://uk.camelcamelcamel.com/ · https://de.camelcamelcamel.com/ · https://fr.camelcamelcamel.com/ · https://es.camelcamelcamel.com/ · https://it.camelcamelcamel.com/ (probado 2026-10-18)",
+   "pendiente": "amazon.com.mx, amazon.co.jp: CamelCamelCamel no ofrece cobertura para México ni Japón (verificado 2026-10-18)."
   },
   {
    "nombre": "Pricearchive",
@@ -58,6 +62,11 @@
    "nombre": "Waltrack",
    "excluido": "waltrack.net redirige a waltrack.com, que el 2026-10-13 mostraba un sitio de casino en línea sin relación con Walmart. No se enlaza.",
    "verificado": "2026-10-13"
+  },
+  {
+   "nombre": "Mercado Libre (Rastreadores)",
+   "excluido": "No existe rastreador público abierto con enlaces directos por URL/ID de producto exacto sin autenticación previa o extensión propietaria (investigado 2026-10-18).",
+   "verificado": "2026-10-18"
   }
  ]
 }

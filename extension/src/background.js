@@ -684,13 +684,29 @@ async function comparePricesForProduct(product, host, country) {
 // solo desde páginas propias (popup/opciones), nunca desde un script que corre dentro de una tienda.
 const PRIVILEGED = new Set(["qed:updateBase", "qed:runJob", "qed:testKey"]);
 const clip = (v, n) => String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f]+/g, " ").slice(0, n);
-// Lo único que el fondo abre por encargo: redacción en Gmail o un issue nuevo del repositorio.
-const SAFE_OPEN = /^(mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\?|https:\/\/mail\.google\.com\/mail\/\?view=cm&|https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/issues\/new\?)/;
+// Lo único que el fondo abre por encargo: redacción en Gmail, issue nuevo del repositorio o rastreadores verificados en rastreadores.json.
+const SAFE_OPEN = /^(mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\?|https:\/\/mail\.google\.com\/mail\/\?view=cm&|https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/issues\/new\?|https:\/\/(?:[a-z0-9.-]+\.)?(?:keepa\.com|camelcamelcamel\.com|pricearchive\.org|alitools\.io)\/)/;
 
 api.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (!msg || !msg.type) return false;
   if (_sender && _sender.id && api.runtime && api.runtime.id && _sender.id !== api.runtime.id) return false;
   if (PRIVILEGED.has(msg.type) && _sender && _sender.tab) { reply({ ok: false, error: "No permitido desde una página" }); return false; }
+  if (msg.type === "qed:open_tracker") {
+    const rawUrl = String(msg.url || "").trim();
+    if (SAFE_OPEN.test(rawUrl)) {
+      if (api.tabs && api.tabs.create) {
+        api.tabs.create({ url: rawUrl }).then(
+          () => reply({ ok: true }),
+          (e) => reply({ ok: false, error: String(e) })
+        );
+      } else {
+        reply({ ok: true });
+      }
+    } else {
+      reply({ ok: false, error: "url_no_permitida" });
+    }
+    return true;
+  }
   if (msg.type === "qed:suggest_brand") {
     msg = Object.assign({}, msg, { brand: clip(msg.brand, 120), title: clip(msg.title, 300), site: clip(msg.site, 120), pais: clip(msg.pais, 20),
       url: SAFE_OPEN.test(String(msg.url || "")) ? String(msg.url).slice(0, 8000) : "" });
