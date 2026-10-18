@@ -37,6 +37,7 @@ const DOMINIOS_PATH = path.join(DATAGEN, "dominios.json");
 const EVIDENCIAS_PATH = path.join(DATAGEN, "evidencias.csv");
 
 const DAY = 86400000;
+const SUG = require("./sugerencias_comun.js");
 const env = (k, d) => process.env["GINA_" + k] || process.env["AWARENESS_" + k] || process.env["QED_" + k] || d;
 const readJSON = (f, def) => { try { return JSON.parse(fs.readFileSync(f, "utf8")); } catch (e) { return def; } };
 const slug = (s) => QED.norm(s).normalize("NFD").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 40) || "grupo";
@@ -764,6 +765,31 @@ async function loadIssues(repo, token, execFileImpl = defaultExecFile, fetchImpl
   return results;
 }
 
+// ---------------------------------------------------------------- Sugerencias de la hoja de Google (Apps Script)
+// Cada corrida: 1) borra las filas que quedaron «procesado» en la corrida anterior, 2) lee las filas con estado
+// vacío o «pendiente», 3) las investiga junto con los issues y pendientes, 4) marca «procesado» las que revisó.
+// URL: variable GINA_SUGERENCIAS_URL (o «sugerencias_url» de proyecto.json). Token: secreto GINA_SUGERENCIAS_TOKEN.
+const SHEET_URL_RE = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/;
+function sheetConfig(options = {}, rootDir = ROOT) {
+  let url = options.sheetUrl !== undefined ? options.sheetUrl : (process.env.GINA_SUGERENCIAS_URL || "");
+  if (!url && options.sheetUrl === undefined) {
+    try { url = JSON.parse(fs.readFileSync(path.join(rootDir, "datagen", "proyecto.json"), "utf8")).sugerencias_url || ""; } catch (_) {}
+  }
+  const token = options.sheetToken !== undefined ? options.sheetToken : (process.env.GINA_SUGERENCIAS_TOKEN || "");
+  url = String(url || "").trim();
+  if (!token || !SHEET_URL_RE.test(url) || /AKfycbz_project_gina_sugerencias/.test(url)) return null;
+  return { url, token };
+}
+
+async function sheetCall(sheet, params, fetchImpl = fetch) {
+  const qs = new URLSearchParams(Object.assign({ token: sheet.token }, params || {})).toString();
+  const res = await fetchImpl(`${sheet.url}?${qs}`, { method: "GET", headers: { accept: "application/json" }, redirect: "follow" });
+  if (!res || !res.ok) throw new Error("hoja: HTTP " + (res && res.status));
+  const data = await res.json();
+  if (!data || data.ok !== true) throw new Error("hoja: " + ((data && data.e) || "respuesta inválida"));
+  return data;
+}
+
 // ---------------------------------------------------------------- Función principal de ejecución
 // ---------------------------------------------------------------- C4: revalidación de evidencias
 // CSV mínimo con comillas dobles ("" = comilla literal).
@@ -958,6 +984,35 @@ async function main(options = {}) {
       }
       seenBrands.set(nb, iss.number);
       queue.push(Object.assign({}, it, { issueNumber: iss.number, issueLabels: iss.labels, issueCreatedAt: iss.createdAt }));
+    }
+  }
+
+  // Sugerencias de la hoja de Google: primero se borran las «procesado» de la corrida anterior
+  const sheet = sheetConfig(options, rootDir);
+  const sheetAck = [];
+  report.hoja = { leidas: 0, borradas: 0, procesadas: 0 };
+  if (sheet) {
+    try {
+      if (!dry) report.hoja.borradas = (await sheetCall(sheet, { op: "purge" }, fetchImpl)).borradas || 0;
+      const filas = (await sheetCall(sheet, {}, fetchImpl)).filas || [];
+      report.hoja.leidas = filas.length;
+      for (const f of filas) {
+        if (!f || !f.id) continue;
+        if ((f.tipo || "marca") !== "marca") continue; // las alternativas se revisan a mano en la hoja
+        const brand = String(f.marca || "").trim();
+        if (!SUG.plausibleBrand(brand)) { sheetAck.push(f.id); addRejectReason(brand.slice(0, 40) || "(vacía)", "Sugerencia de la hoja con texto inválido"); continue; }
+        const nb = QED.norm(brand);
+        if (seenBrands.has(nb)) {
+          const ex = queue.find((q) => QED.norm(q.brand) === nb);
+          if (ex) ex.count = (ex.count || 1) + (Number(f.veces) || 1);
+          sheetAck.push(f.id);
+          continue;
+        }
+        seenBrands.set(nb, null);
+        queue.push({ brand: brand.slice(0, 80), site: String(f.tienda || "").slice(0, 60), title: String(f.producto || "").slice(0, 160), count: Number(f.veces) || 1, sheetId: String(f.id) });
+      }
+    } catch (e) {
+      report.errores.push(`Hoja de sugerencias: ${e.message}`);
     }
   }
 
@@ -1196,7 +1251,21 @@ async function main(options = {}) {
         }
       }
     } catch (e) {
+      item.sheetRetry = true; // error de red o de la IA: la fila sigue pendiente para la próxima corrida
       report.errores.push(`${item.brand || item.title}: ${e.message}`);
+    }
+  }
+
+  // Hoja: marcar «procesado» lo que se revisó en esta corrida (se borra al inicio de la siguiente).
+  // Lo que no alcanzó el límite o falló por error sigue pendiente.
+  if (sheet && !dry) {
+    for (const item of toProcess) if (item.sheetId && !item.sheetRetry) sheetAck.push(item.sheetId);
+    if (sheetAck.length) {
+      try {
+        report.hoja.procesadas = (await sheetCall(sheet, { op: "ack", ids: sheetAck.join(",") }, fetchImpl)).procesados || 0;
+      } catch (e) {
+        report.errores.push(`Hoja de sugerencias (marcar procesado): ${e.message}`);
+      }
     }
   }
 
@@ -1451,6 +1520,7 @@ module.exports = {
   createReviewPR,
   loadIssues,
   parseIssueContent,
+  sheetConfig,
   main
 };
 

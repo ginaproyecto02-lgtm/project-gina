@@ -648,10 +648,12 @@ async function comparePricesForProduct(product, host, country) {
 
   const targetStores = countryStores.slice(0, 4);
   const query = QED.queryForCompare(product);
-  if (!query) return { ok: true, same: [], similar: [], unreadable: [] };
+  if (!query) return { ok: true, same: [], similar: [], unreadable: [], searchLinks: [] };
 
   const allCandidates = [];
   const unreadable = [];
+  // Enlace de búsqueda de cada tienda consultada: va debajo de los resultados para ir a ver más.
+  const searchLinks = targetStores.map((st) => ({ nombre: st.nombre, dominio: st.dominio, url: st.url_busqueda.replace("{q}", encodeURIComponent(query)) }));
 
   for (const st0 of targetStores) {
     const st = Object.assign({}, st0, { pais: String(country || "").trim() });
@@ -709,6 +711,7 @@ async function comparePricesForProduct(product, host, country) {
     same: ranked.same,
     similar: ranked.similar,
     unreadable,
+    searchLinks,
     query,
     timestamp: Date.now()
   };

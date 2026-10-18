@@ -148,7 +148,20 @@ jobs:
       - name: Crear zip para las tiendas
         if: github.event_name != 'pull_request' && (github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v'))
         id: zip
+        env:
+          # URL de la aplicación web de Apps Script (variable del repositorio, no es secreta: va dentro de la extensión)
+          GINA_SUGERENCIAS_URL: ${{ vars.GINA_SUGERENCIAS_URL }}
         run: |
+          if [ -n "$GINA_SUGERENCIAS_URL" ]; then
+            node -e '
+              const fs = require("fs"), f = "extension/data/proyecto.json", u = process.env.GINA_SUGERENCIAS_URL.trim();
+              if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(u)) { console.error("::error::GINA_SUGERENCIAS_URL no es una URL /exec de Apps Script"); process.exit(1); }
+              const p = JSON.parse(fs.readFileSync(f, "utf8")); p.sugerencias_url = u; fs.writeFileSync(f, JSON.stringify(p, null, 1) + "\n");
+              console.log("Sugerencias → " + u);
+            '
+          else
+            echo "::warning::Sin la variable GINA_SUGERENCIAS_URL el paquete no puede enviar sugerencias"
+          fi
           mkdir -p dist
           ZIP="gina-extension-${{ steps.v.outputs.version }}.zip"
           (cd extension && zip -r -X "../dist/$ZIP" . -x "README.md" -x "*.DS_Store")

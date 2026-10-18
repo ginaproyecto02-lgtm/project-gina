@@ -438,9 +438,23 @@
     const minsAgo = Math.max(1, Math.round((now - (cmpData.timestamp || now)) / 60000));
     const timeText = t("compare_read_mins_ago", { n: minsAgo });
 
+    // Debajo de los resultados: «Ver en <tienda> ↗» con la búsqueda de cada tienda consultada (solo https del dominio de esa tienda).
+    const searchLinksHtml = (() => {
+      const links = (cmpData.searchLinks || []).map((l) => {
+        try {
+          const u = new URL(String(l.url || ""));
+          const d = String(l.dominio || "").toLowerCase().replace(/^www\./, "");
+          const h = u.hostname.toLowerCase().replace(/^www\./, "");
+          if (u.protocol !== "https:" || !d.includes(".") || !(h === d || h.endsWith("." + d))) return "";
+          return `<a href="${esc(u.toString())}" class="compare-search-link" target="_blank" rel="noopener noreferrer" style="font-size:11px;color:#0284c7;text-decoration:none;margin-right:10px;white-space:nowrap;">${t("compare_see_in", { store: esc(l.nombre || d) })} ↗</a>`;
+        } catch (_) { return ""; }
+      }).filter(Boolean);
+      return links.length ? `<div class="compare-search-links" style="margin-top:6px;padding-top:6px;border-top:1px dashed #e2e8f0;line-height:1.8;">${links.join("")}</div>` : "";
+    })();
+
     if (!same.length && !similar.length) {
       let unreadHtml = unreadable.map((u) => `<div style="font-size:10.5px;color:#94a3b8;margin-top:2px;">${t("compare_cant_read", { store: esc(u) })}</div>`).join("");
-      return `<div style="font-size:11.5px;color:#64748b;padding:6px 0;">${t("compare_no_matches")}</div>${unreadHtml}`;
+      return `<div style="font-size:11.5px;color:#64748b;padding:6px 0;">${t("compare_no_matches")}</div>${unreadHtml}${searchLinksHtml}`;
     }
 
     const renderRow = (item, isSimilar) => {
@@ -557,7 +571,7 @@
       h += unreadable.map((u) => `<div style="font-size:10.5px;color:#94a3b8;margin-top:4px;">${t("compare_cant_read", { store: esc(u) })}</div>`).join("");
     }
 
-    return h;
+    return h + searchLinksHtml;
   }
 
   function renderCompareSection(res, opts) {

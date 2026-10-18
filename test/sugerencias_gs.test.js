@@ -55,7 +55,8 @@ function createMockEnvironment() {
     },
     appendRow: (rowArr) => {
       sheetData.push(rowArr.slice());
-    }
+    },
+    deleteRow: (n) => { sheetData.splice(n - 1, 1); }
   };
 
   const ssMock = {
@@ -280,6 +281,32 @@ function createMockEnvironment() {
     const { code } = createMockEnvironment();
     const res = code.doPost({ postData: { contents: JSON.stringify(Object.assign({}, validPayload, { tienda: "amazon méxico" })) } });
     check("Contrato: un nombre de tienda («Amazon México») en vez de dominio se rechaza", res.json.ok === false && res.json.e === "tienda_invalida");
+  }
+
+  // 15. Filas escritas a mano (sin id ni estado) cuentan como pendientes y reciben id
+  {
+    const { code, sheetData } = createMockEnvironment();
+    sheetData.push(["", "", "", "Marca Manual", "", "", "", "", "", ""]);
+    sheetData.push(["", "", "", "", "", "", "", "", "", ""]); // fila vacía: se ignora
+    const res = code.doGet({ parameter: { token: "secreto-robot-12345" } });
+    const f = (res.json.filas || [])[0];
+    check("doGet: una fila escrita a mano sin estado es pendiente, recibe id y tipo «marca»",
+      res.json.filas.length === 1 && f.marca === "Marca Manual" && f.tipo === "marca" && f.id && sheetData[1][0] === f.id, JSON.stringify(res.json));
+  }
+
+  // 16. op=purge borra solo las filas «procesado»
+  {
+    const { code, sheetData } = createMockEnvironment();
+    sheetData.push(["a", "", "marca", "Uno", "", "", "", "", 1, "procesado"]);
+    sheetData.push(["b", "", "marca", "Dos", "", "", "", "", 1, "pendiente"]);
+    sheetData.push(["c", "", "marca", "Tres", "", "", "", "", 1, "Procesado"]);
+    sheetData.push(["d", "", "marca", "Cuatro", "", "", "", "", 1, ""]);
+    const res = code.doGet({ parameter: { token: "secreto-robot-12345", op: "purge" } });
+    const restantes = sheetData.slice(1).map((r) => r[3]);
+    check("doGet op=purge: borra las filas «procesado» y deja las pendientes y sin estado",
+      res.json.ok === true && res.json.borradas === 2 && JSON.stringify(restantes) === JSON.stringify(["Dos", "Cuatro"]) && sheetData[0][0] === "ID", JSON.stringify(restantes));
+    const bad = code.doGet({ parameter: { token: "malo", op: "purge" } });
+    check("doGet op=purge sin token válido no borra nada", bad.json.ok === false && sheetData.length === 3);
   }
 
   console.log(`\n${pass}/${total} pruebas de Apps Script sugerencias correctas`);

@@ -32,7 +32,11 @@ function makeEnv(responder) {
   };
   const fetchMock = async (url, opts) => {
     if (String(url).startsWith("ext://")) {
-      const body = fs.readFileSync(path.join(EXT, String(url).slice(6)), "utf8");
+      let body = fs.readFileSync(path.join(EXT, String(url).slice(6)), "utf8");
+      // El repositorio trae «sugerencias_url» vacío (la URL real llega en el paquete desde la variable GINA_SUGERENCIAS_URL).
+      if (String(url) === "ext://data/proyecto.json" && !chrome.__sinUrlSugerencias) {
+        const pj = JSON.parse(body); pj.sugerencias_url = pj.sugerencias_url || "https://script.google.com/macros/s/AKfycbxPRUEBApruebaPRUEBA1234567890/exec"; body = JSON.stringify(pj);
+      }
       return { ok: true, status: 200, json: async () => JSON.parse(body), text: async () => body };
     }
     const req = { url: String(url), headers: (opts && opts.headers) || {}, body: opts && opts.body ? (typeof opts.body === "string" && opts.body.startsWith("{") ? JSON.parse(opts.body) : opts.body) : null, credentials: opts && opts.credentials, referrerPolicy: opts && opts.referrerPolicy, redirect: opts && opts.redirect };
@@ -226,6 +230,14 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
     await hostEnv.send({ type: "qed:suggest_brand", brand: "Marca Host", title: "P", site: "www.amazon.com.mx", pais: "Reino Unido" });
     check("Sugerencia: hostname con www → dominio limpio y país sin recortar", hostReq && hostReq.body.tienda === "amazon.com.mx" && hostReq.body.pais === "Reino Unido", JSON.stringify(hostReq && hostReq.body));
 
+    // Sin URL configurada (repositorio sin la variable): no hay red, la sugerencia queda en cola
+    const noUrlEnv = makeEnv(async () => ({ status: 200, body: { ok: true } }));
+    noUrlEnv.chrome.__sinUrlSugerencias = true;
+    await noUrlEnv.send({ type: "qed:suggest_brand", brand: "Marca Sin URL", title: "P", site: "www.amazon.com.mx", pais: "México" });
+    const nuQueue = (await noUrlEnv.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
+    check("Sugerencia sin URL de servicio configurada: 0 peticiones y queda en cola local",
+      noUrlEnv.calls.filter((c) => !c.url.startsWith("ext://")).length === 0 && nuQueue.length === 1);
+
     // Alarma diaria vacía la cola si hay red
     let flushedCount = 0;
     const flushEnv = makeEnv(async (req) => {
@@ -386,6 +398,10 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
     check("Comparador: el resultado de Walmart llega como «mismo producto», con su dominio, MXN e insignia de más barato",
       sameW && sameW.storeDomain === "walmart.com.mx" && sameW.currency === "MXN" && sameW.price === 6800 && sameW.isCheapest === true,
       JSON.stringify(rConsent && rConsent.same));
+
+    const sl = (rConsent && rConsent.searchLinks) || [];
+    check("Comparador: devuelve el enlace de búsqueda de cada tienda consultada (sin la tienda actual) para ponerlo debajo",
+      sl.length === 2 && sl.every((l) => /^https:\/\//.test(l.url) && l.url.includes("Sony%20WH-1000XM5")) && !sl.some((l) => /amazon/.test(l.dominio)), JSON.stringify(sl));
 
     // 3) Caché 12h: una segunda consulta idéntica no genera peticiones adicionales
     const callsBefore = consentEnv.calls.length;

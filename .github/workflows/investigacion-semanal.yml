@@ -9,7 +9,8 @@
 #   Variable GINA_REVALIDATE       = evidencias a revalidar por ejecución (5 por defecto)
 #   Variable GINA_URL_CHECK        = safebrowsing | webrisk
 #   Variable GINA_SITIOS           = marcas por ejecución para buscar sitio oficial y buscador (50 por defecto; 0 = apagado)
-#   Secreto  GINA_IMAP_USER / GINA_IMAP_PASS = buzón de sugerencias (contraseña de aplicación de Gmail; opcional)
+#   Variable GINA_SUGERENCIAS_URL  = URL /exec de la aplicación web de Apps Script de la hoja de sugerencias
+#   Secreto  GINA_SUGERENCIAS_TOKEN = el mismo valor que ROBOT_TOKEN en las propiedades del Apps Script
 name: Project Gina — investigación
 
 on:
@@ -53,32 +54,8 @@ jobs:
           git config user.name "gina-bot"
           git config user.email "gina-bot@users.noreply.github.com"
 
-      # F3: sugerencias enviadas a Google Sheets/Drive → issues de GitHub.
-      - name: Sugerencias (Drive) → issues
-        if: github.event.schedule != '17 9 * * 0' && !inputs.dry_run
-        continue-on-error: true
-        env:
-          GINA_SUGERENCIAS_TOKEN: ${{ secrets.GINA_SUGERENCIAS_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -n "$GINA_SUGERENCIAS_TOKEN" ]; then
-            echo "::add-mask::$GINA_SUGERENCIAS_TOKEN"
-          fi
-          node job/sugerencias.js
-
-      # E1: correos con «[gina:sugerencia]» en el asunto → issues «sugerencia» (lector opcional, apagado por defecto salvo que exista GINA_IMAP_USER).
-      - name: Sugerencias por correo → issues (opcional)
-        # «secrets» no se puede usar en «if:» (invalida todo el workflow); se revisa dentro del paso.
-        if: github.event.schedule != '17 9 * * 0' && !inputs.dry_run
-        continue-on-error: true
-        env:
-          GINA_IMAP_USER: ${{ secrets.GINA_IMAP_USER }}
-          GINA_IMAP_PASS: ${{ secrets.GINA_IMAP_PASS }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -z "$GINA_IMAP_USER" ]; then echo "Lector de correo apagado (sin GINA_IMAP_USER)"; exit 0; fi
-          node job/correo.js
-
+      # Las sugerencias ya no pasan por correo ni por issues: investigar.js lee la hoja de Google
+      # (GINA_SUGERENCIAS_URL + secreto GINA_SUGERENCIAS_TOKEN), investiga las pendientes y borra las procesadas.
       - name: Investigar, verificar fuentes y proponer cambios
         env:
           GINA_API_KEY: ${{ secrets.GINA_API_KEY }}
@@ -92,6 +69,8 @@ jobs:
           GINA_REVALIDATE: ${{ vars.GINA_REVALIDATE || '5' }}
           GINA_REP_LIMIT: ${{ vars.GINA_REP_LIMIT || '0' }}
           GINA_SITIOS: ${{ vars.GINA_SITIOS || '50' }}
+          GINA_SUGERENCIAS_URL: ${{ vars.GINA_SUGERENCIAS_URL }}
+          GINA_SUGERENCIAS_TOKEN: ${{ secrets.GINA_SUGERENCIAS_TOKEN }}
           GINA_MAX_SEARCHES: "3"
           GINA_EVERY_DAYS: ${{ vars.GINA_EVERY_DAYS || '6' }}
           GINA_DRY_RUN: ${{ (github.event.schedule == '17 9 * * 0' || inputs.dry_run) && '1' || '' }}

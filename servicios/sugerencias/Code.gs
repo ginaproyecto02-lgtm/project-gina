@@ -45,6 +45,21 @@ function readDaily(props, today) {
   } catch (_) { return 0; }
 }
 
+// La hoja: la del SHEET_ID de las propiedades o, si el script se creó desde la hoja
+// (Extensiones → Apps Script), la hoja a la que está ligado. Siempre la primera pestaña.
+function openSheet(props) {
+  var sheetId = props.getProperty("SHEET_ID");
+  var ss = sheetId ? SpreadsheetApp.openById(sheetId) : SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) return null;
+  return ss.getSheets ? ss.getSheets()[0] : ss.getActiveSheet();
+}
+
+// Pendiente = estado vacío o «pendiente» (también filas escritas a mano en la hoja).
+function isPending(estado) {
+  var v = String(estado || "").trim().toLowerCase();
+  return v === "" || v === "pendiente";
+}
+
 function constantTimeCompare(a, b) {
   if (typeof a !== "string" || typeof b !== "string") return false;
   var lenA = a.length;
@@ -132,13 +147,8 @@ function doPost(e) {
       var dayCount = readDaily(props, today);
       if (dayCount >= DAILY_MAX) return jsonResponse({ ok: false, e: "limite_dia" });
 
-      var sheetId = props.getProperty("SHEET_ID");
-      if (!sheetId) {
-        return jsonResponse({ ok: false, e: "config" });
-      }
-
-      var ss = SpreadsheetApp.openById(sheetId);
-      var sheet = ss.getActiveSheet();
+      var sheet = openSheet(props);
+      if (!sheet) return jsonResponse({ ok: false, e: "config" });
       var lastRow = sheet.getLastRow();
 
       var marcaNorm = data.marca.trim().toLowerCase();
@@ -153,7 +163,7 @@ function doPost(e) {
           var rowTipo = String(rowData[2] || "").trim();
           var rowMarca = String(rowData[3] || "").trim().toLowerCase();
           var rowEstado = String(rowData[9] || "").trim();
-          if (rowEstado === "pendiente" && rowTipo === data.tipo && rowMarca === marcaNorm) {
+          if (isPending(rowEstado) && (rowTipo || "marca") === data.tipo && rowMarca === marcaNorm) {
             rowToUpdate = r + 2;
             currentVeces = parseInt(rowData[8] || "1", 10) + 1;
             break;
@@ -204,14 +214,32 @@ function doGet(e) {
       return jsonResponse({ ok: false, e: "no_encontrado" });
     }
 
-    var sheetId = props.getProperty("SHEET_ID");
-    if (!sheetId) return jsonResponse({ ok: false, e: "config" });
-
-    var ss = SpreadsheetApp.openById(sheetId);
-    var sheet = ss.getActiveSheet();
+    var sheet = openSheet(props);
+    if (!sheet) return jsonResponse({ ok: false, e: "config" });
     var lastRow = sheet.getLastRow();
 
     var op = (e && e.parameter && e.parameter.op) || "";
+
+    // Borra las filas que el robot dejó en «procesado» en la corrida anterior (de abajo hacia arriba).
+    if (op === "purge") {
+      var plock = LockService.getScriptLock();
+      if (!plock.tryLock(15000)) return jsonResponse({ ok: false, e: "bloqueo" });
+      try {
+        var borradas = 0;
+        if (lastRow > 1) {
+          var pv = sheet.getRange(2, 1, lastRow - 1, 10).getValues();
+          for (var k = pv.length - 1; k >= 0; k--) {
+            if (String(pv[k][9] || "").trim().toLowerCase() === "procesado") {
+              sheet.deleteRow(k + 2);
+              borradas++;
+            }
+          }
+        }
+        return jsonResponse({ ok: true, borradas: borradas });
+      } finally {
+        plock.releaseLock();
+      }
+    }
 
     if (op === "ack") {
       var idsStr = (e && e.parameter && e.parameter.ids) || "";
@@ -244,25 +272,37 @@ function doGet(e) {
       }
     }
 
-    // Listar pendientes (nunca incluye inst)
+    // Listar pendientes (estado vacío o «pendiente»; nunca incluye inst).
+    // Una fila escrita a mano sin id recibe uno aquí, para poder marcarla después.
     var pendientes = [];
     if (lastRow > 1) {
+      var llock = LockService.getScriptLock();
+      if (!llock.tryLock(15000)) return jsonResponse({ ok: false, e: "bloqueo" });
+      try {
       var values = sheet.getRange(2, 1, lastRow - 1, 10).getValues();
       for (var i = 0; i < values.length; i++) {
         var row = values[i];
         var estado = String(row[9] || "").trim();
-        if (estado === "pendiente") {
+        if (!String(row[3] || "").trim()) continue; // fila sin marca
+        if (isPending(estado)) {
+          if (!String(row[0] || "").trim()) {
+            row[0] = Utilities.getUuid ? Utilities.getUuid() : (Date.now() + "_" + i);
+            sheet.getRange(i + 2, 1).setValue(row[0]);
+          }
           pendientes.push({
             id: String(row[0] || ""),
             fecha: String(row[1] || ""),
-            tipo: String(row[2] || ""),
+            tipo: String(row[2] || "").trim() || "marca",
             marca: String(row[3] || ""),
             tienda: String(row[4] || ""),
             producto: String(row[5] || ""),
             pais: String(row[6] || ""),
-            veces: parseInt(row[8] || "1", 10)
+            veces: parseInt(row[8] || "1", 10) || 1
           });
         }
+      }
+      } finally {
+        llock.releaseLock();
       }
     }
 

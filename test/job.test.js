@@ -357,6 +357,48 @@ finally:
       cambios.length === 1 && /Logitech → sitio oficial https:\/\/www\.logitech\.com\/ · buscador https:\/\/www\.logitech\.com\/search\?q=\{q\}/.test(cambios[0]), JSON.stringify(cambios));
   }
 
+  // 16c. Hoja de sugerencias: borra «procesado» al inicio, investiga pendientes y marca «procesado» solo lo revisado
+  {
+    const tmp = fs.mkdtempSync(path.join(require("os").tmpdir(), "gina-hoja-"));
+    const brandsTmp = path.join(tmp, "brands.json");
+    fs.writeFileSync(brandsTmp, JSON.stringify({ version: "x", grupos: { logi: { empresa: "Logitech International", confianza: "Alta" } }, marcas: [{ n: "Logitech", g: "logi" }] }));
+    const URL_OK = "https://script.google.com/macros/s/AKfycbxPRUEBApruebaPRUEBA1234567890/exec";
+    const llamadas = [];
+    const fetchH = async (u) => {
+      const url = new URL(u);
+      if (url.origin + url.pathname !== URL_OK) throw new Error("red no permitida en la prueba: " + u);
+      const op = url.searchParams.get("op") || "list";
+      llamadas.push({ op, token: url.searchParams.get("token"), ids: url.searchParams.get("ids") });
+      const body = op === "purge" ? { ok: true, borradas: 2 }
+        : op === "ack" ? { ok: true, procesados: url.searchParams.get("ids").split(",").length }
+        : { ok: true, filas: [
+          { id: "r1", tipo: "marca", marca: "Logitech", tienda: "amazon.com.mx", veces: 1 },
+          { id: "r2", tipo: "marca", marca: "<script>alert(1)</script>", veces: 1 },
+          { id: "r3", tipo: "marca", marca: "Zuzu Nueva", veces: 1 },
+          { id: "r4", tipo: "alternativa", marca: "Alt Local", veces: 1 } ] };
+      return { ok: true, status: 200, json: async () => body, text: async () => JSON.stringify(body), headers: { get: () => null } };
+    };
+    const res = await job.main({ dryRun: false, force: true, limit: 1, sitiosLimit: 0, revalidate: 0, repLimit: 0,
+      brandsPath: brandsTmp, statePath: path.join(tmp, "estado.json"), reportsDir: tmp, pendDir: path.join(tmp, "pend"),
+      sheetUrl: URL_OK, sheetToken: "tok-prueba", execFileImpl: () => { throw new Error("sin gh"); }, fetchImpl: fetchH });
+    const ops = llamadas.map((l) => l.op).join(",");
+    const ack = (llamadas.find((l) => l.op === "ack") || {}).ids || "";
+    check("16c. Hoja: purge → lista → ack; marca procesado lo revisado (Logitech existente y el texto inválido), no lo que no alcanzó el límite ni las alternativas",
+      ops === "purge,list,ack" && ack.split(",").sort().join(",") === "r1,r2" && llamadas.every((l) => l.token === "tok-prueba") && res.report.hoja.borradas === 2,
+      JSON.stringify({ ops, ack, hoja: res.report.hoja }));
+
+    llamadas.length = 0;
+    await job.main({ dryRun: true, force: true, limit: 1, sitiosLimit: 0, revalidate: 0, repLimit: 0,
+      brandsPath: brandsTmp, statePath: path.join(tmp, "estado2.json"), reportsDir: tmp, pendDir: path.join(tmp, "pend"),
+      sheetUrl: URL_OK, sheetToken: "tok-prueba", execFileImpl: () => { throw new Error("sin gh"); }, fetchImpl: fetchH });
+    check("16c. Hoja en prueba en seco (canario del domingo): solo lee, no borra ni marca", llamadas.map((l) => l.op).join(",") === "list");
+
+    llamadas.length = 0;
+    await job.main({ dryRun: true, force: true, limit: 0, brandsPath: brandsTmp, statePath: path.join(tmp, "estado3.json"), reportsDir: tmp, pendDir: path.join(tmp, "pend"),
+      sheetUrl: "https://script.google.com/macros/s/AKfycbz_project_gina_sugerencias/exec", sheetToken: "tok", execFileImpl: () => { throw new Error("sin gh"); }, fetchImpl: fetchH });
+    check("16c. Hoja: con la URL de ejemplo o sin token no se llama a nada", llamadas.length === 0);
+  }
+
   // 17. factcheck: sin clave → 'na', nunca 'ok' fijo.
   {
     const origKey = process.env.GINA_FACTCHECK_KEY;

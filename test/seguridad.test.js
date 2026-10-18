@@ -499,6 +499,26 @@ function fakeImap(messages) {
     check("Rastreador: el clic se abre solo por el fondo (sin pestaña doble)", ev.defaultPrevented === true && sent2.length === 1 && sent2[0].type === "qed:open_tracker");
   }
 
+  // ---------------------------------------------------------------- 12d. Enlaces «Ver en <tienda>» debajo de los resultados
+  {
+    const w = env("<div></div>", "https://www.mercadolibre.com.mx/MLM-123");
+    w.QED.showCard({ store: { nombre: "Mercado Libre", pais: "México", d: "mercadolibre.com.mx" }, found: true, brand: "Sony", title: "Audífonos Sony",
+      reliabilityEval: { price: { amount: 7000, currency: "MXN" } },
+      compareData: { same: [{ title: "Sony WH-1000XM5", price: 6500, currency: "MXN", rating: 4.6, reviewsCount: 120, url: "https://www.walmart.com.mx/ip/1", storeName: "Walmart México", storeDomain: "walmart.com.mx" }], similar: [], unreadable: ["Amazon México"],
+        searchLinks: [
+          { nombre: "Walmart México", dominio: "walmart.com.mx", url: "https://www.walmart.com.mx/search?q=Sony%20WH-1000XM5" },
+          { nombre: "Amazon México", dominio: "amazon.com.mx", url: "https://www.amazon.com.mx/s?k=Sony%20WH-1000XM5" },
+          { nombre: "<img src=x onerror=alert(1)>", dominio: "amazon.com.mx", url: "javascript:alert(1)" },
+          { nombre: "Fuga", dominio: "walmart.com.mx", url: "https://evil.example/s?q=x" } ] } },
+      { compareConsent: true, compareEnabled: true });
+    const root = rootOf(w);
+    const links = Array.from(root.querySelectorAll("a.compare-search-link")).map((a) => [a.textContent.trim(), a.getAttribute("href")]);
+    const fila = (root.querySelector(".compare-item-row") || {}).textContent || "";
+    check("Comparador: precio y estrellas en la tarjeta, y debajo «Ver en <tienda>» solo con enlaces https del dominio de cada tienda",
+      links.length === 2 && links[0][0].startsWith("Ver en Walmart México") && links[1][1].startsWith("https://www.amazon.com.mx/s?k=") &&
+      /6,?500/.test(fila) && /★ 4\.6 \(120\)/.test(fila), JSON.stringify({ links, fila: fila.replace(/\s+/g, " ").slice(0, 160) }));
+  }
+
   // ---------------------------------------------------------------- 12c. Página de permiso del comparador (options/comparar.html)
   {
     const runPage = async (pais, grant) => {

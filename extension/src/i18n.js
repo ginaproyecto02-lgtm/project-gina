@@ -1289,6 +1289,14 @@
       it: "Nessun negozio di confronto per questo paese.",
       ja: "この国には比較対象のストアがありません。"
     },
+    compare_see_in: {
+      es: "Ver en {store}",
+      en: "See on {store}",
+      de: "Auf {store} ansehen",
+      fr: "Voir sur {store}",
+      it: "Vedi su {store}",
+      ja: "{store}で見る"
+    },
     compare_cant_read: {
       es: "No pudimos leer: {store}",
       en: "Could not read: {store}",

@@ -43,7 +43,7 @@ Para recibir sugerencias de marcas y alternativas sin obligar a los usuarios a a
 
 3. **Configurar las Propiedades de la secuencia de comandos (Script Properties):**
    - En la misma pantalla de **Configuración del proyecto**, baja a **Propiedades de la secuencia de comandos** y añade dos propiedades:
-     - `SHEET_ID`: El ID de la hoja que copiaste en el paso 1.
+     - `SHEET_ID` (opcional): el ID de la hoja. Si creaste el Apps Script desde la hoja (Extensiones → Apps Script), no hace falta: usa esa hoja.
      - `ROBOT_TOKEN`: Un token secreto aleatorio y seguro (cadena de al menos 32 caracteres alfanuméricos) que usará el robot de GitHub Actions para leer y confirmar las sugerencias pendientes.
 
 4. **Implementar como aplicación web (Web App):**
@@ -55,13 +55,14 @@ Para recibir sugerencias de marcas y alternativas sin obligar a los usuarios a a
    - Pulsa **Implementar** y autoriza los permisos cuando Google lo solicite.
    - Copia la **URL de la aplicación web** generada (formato: `https://script.google.com/macros/s/.../exec`).
 
-5. **Configurar el proyecto y GitHub Actions:**
-   - En `datagen/proyecto.json`, coloca la URL obtenida en `"sugerencias_url"`.
-   - Ejecuta `python3 datagen/build_data.py` para sincronizar la base.
-   - En GitHub → Tu repositorio → **Settings → Secrets and variables → Actions**:
-     - Agrega el secreto `GINA_SUGERENCIAS_TOKEN` con el valor exacto de `ROBOT_TOKEN` configurado en Apps Script.
-     - (Opcional) Variable de entorno o repositorio `GINA_SITIOS`: dominios delimitados por coma si deseas restringir las tiendas analizadas por el robot.
-     - Los secretos `GINA_IMAP_*` (`GINA_IMAP_USER`, `GINA_IMAP_PASS`, `GINA_IMAP_HOST`) ahora son **opcionales** y solo se requieren si mantienes activo el flujo secundario de lectura por correo IMAP.
+5. **Configurar GitHub (Settings → Secrets and variables → Actions):**
+   - Pestaña **Variables** → `GINA_SUGERENCIAS_URL` = la URL `/exec` del paso 4. No es secreta: el paquete de la extensión la lleva dentro (el flujo «generar-paquete» la escribe en `extension/data/proyecto.json` al armar el zip) y el robot la usa para leer la hoja.
+   - Pestaña **Secrets** → `GINA_SUGERENCIAS_TOKEN` = el mismo valor que `ROBOT_TOKEN`.
+   - Prueba: abre `URL/exec?token=TU_TOKEN` en el navegador; debe responder `{"ok":true,"filas":[]}`.
+
+6. **Comparte la hoja solo contigo.** El Apps Script escribe con tu identidad, así que la hoja **no** necesita estar compartida. En **Compartir → Acceso general** déjala en **Restringido**: con «Cualquier persona con el enlace puede editar», cualquiera que tenga el enlace puede borrarla o llenarla de basura.
+
+**Ciclo de cada fila:** la extensión escribe la sugerencia con estado `pendiente` (si la misma marca ya está pendiente, suma 1 en `veces`). También puedes escribir filas a mano: con estado vacío cuentan como pendientes. Cada lunes el robot (`job/investigar.js`) 1) borra las filas en `procesado` de la corrida anterior, 2) investiga las pendientes (hasta el límite por corrida; las demás esperan) y 3) las marca `procesado`. Las alternativas (`tipo = alternativa`) no se tocan: se revisan a mano. Ya no hay correo ni issues de por medio.
 
 > [!NOTE]
 > **Nota sobre arquitectura futura (Cloud Storage + Cloud Run):**
