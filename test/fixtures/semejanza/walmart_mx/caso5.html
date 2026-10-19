@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang=es><head> <meta charset=utf-8 /> <meta name=viewport content="width=device-width, initial-scale=1"/> <title>Verifica tu identidad</title>  <script>function getUrlVars(){var vars={};var parts=window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(m,key,value){vars[key]=value;});return vars;}
+function getUrlParam(parameter,defaultvalue){var urlparameter=defaultvalue;if(window.location.href.indexOf(parameter)>-1){urlparameter=getUrlVars()[parameter];}
+return urlparameter;}
+function sanitizeUuid(uuid){var regex=new RegExp("^\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b$","g");var match=regex.exec(uuid);return match!=null?uuid:"";}
+function addBlockID(){var blockId=sanitizeUuid(getUrlParam('uuid',''));document.getElementById("blockId1").innerHTML="ID: "+blockId;}
+function getCookie(name){var cookieArr=document.cookie.split(";");for(var i=0;i<cookieArr.length;i++){var cookiePair=cookieArr[i].split("=");if(name==cookiePair[0].trim()){return decodeURIComponent(cookiePair[1]);}}
+return null;}</script> <script id=launchScript></script> <script type="text/javascript">window.walmart=window.walmart||{};window.walmart.analytics=window.walmart.analytics||{};window.walmart.analytics.dataLayer={channel:"Bot Page",host:window.location.host,pageName:"Bot Protection Page",pageType:"Bot Protection Page",language:(window.language||"en").indexOf("es")==="0"?"Spanish":"English",persistentID:getCookie("walmart.id"),referrer:document.referrer};var launchScript=document.getElementById("launchScript");launchScript.async=true;launchScript.onload=function(){if(window._satellite&&window._satellite.track){window._satellite.track("pageLoadComplete");}}
+launchScript.src="//assets.adobedtm.com/launch-ENfb37050f8353467585a9c329ed5a579e-staging.min.js";</script>
+<style>
+@import url(https://i5.walmartimages.com/dfw/3ccc2d91-bfab/k2-_6cc06a08-7441-417b-884c-2b370aebeaea.v1.awoff);html,
+body{font-family:Bogle;font-style:normal;font-weight:400;margin:0;padding:0;color:#000}
+a{color:#c5c5c5;text-decoration:none}
+header{padding:20px 25px;background:#0071dc;margin-bottom:80px}
+.container{align-items:center;display:flex;flex:1;justify-content:space-between;flex-direction:column}
+.container>div{width:100%;display:flex;justify-content:center}
+.page-title-wrapper{flex-grow:2}
+.page-title{flex-direction:column-reverse}
+.Verifica-tu-identida{font-size:24px;font-weight:normal;margin:0;padding:0}
+.Mantn-presionado-el{text-align:center;width:328px;line-height:1.5}
+#px-captcha{margin-top:20px}
+.content-wrapper{flex-grow:5}
+.content{flex-direction:column}
+#px-captcha > p{color:#C00D1E}
+@media (min-width: 768px){
+html,
+body{height:100%}
+}
+</style></head> <body> <header> <svg width=130px height=31px viewBox="0 0 130 31" version=1.1 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <title>wm-logo-white</title> <g id=Page-1 stroke=none stroke-width=1 fill=none fill-rule=evenodd> <g id="D2/Verify-Identity-Copy" transform="translate(-24.000000, -22.000000)" fill-rule=nonzero> <g id=wm-logo-white transform="translate(24.000000, 22.000000)"> <path d="M71.6572352,19.5285942 C71.6572352,19.7755743 71.6361032,20.0304788 71.5674242,20.2550061 C71.2887462,21.1834927 70.3298825,21.9693383 69.1319631,21.9693383 C68.1321562,21.9693383 67.338386,21.4014162 67.338386,20.1955724 C67.338386,18.3518069 69.359132,17.8419978 71.6572352,17.8538845 L71.6572352,19.5285942 L71.6572352,19.5285942 Z M75.2642006,16.3165327 C75.2642006,13.2748479 73.9711874,10.6003312 69.6034705,10.6003312 C67.359518,10.6003312 65.5791484,11.2342907 64.6083979,11.7969298 L65.3189609,14.2403154 C66.2065042,13.678997 67.6223471,13.2127727 68.9615865,13.2127727 C71.1778033,13.2061689 71.5410093,14.4727672 71.5410093,15.283707 L71.5410093,15.4765364 C66.7097095,15.4686119 63.6561379,17.1486046 63.6561379,20.5746274 C63.6561379,22.6640523 65.2106595,24.6240437 67.9142326,24.6240437 C69.5770555,24.6240437 70.9678042,23.9570655 71.7998761,22.8899003 L71.8817625,22.8899003 C71.8817625,22.8899003 72.4338356,25.2091355 75.4755204,24.3215922 C75.3157098,23.3574455 75.2642006,22.3272613 75.2642006,21.0883987 L75.2642006,16.3165327 Z M0,6.45978319 C0,6.45978319 3.15659003,19.455953 3.65979539,21.5651891 C4.24752868,24.0270652 5.3080901,24.933099 8.36166171,24.3215922 L10.3335399,16.2650235 C10.832783,14.2627681 11.1682533,12.8363592 11.4891953,10.7997643 L11.5459875,10.7997643 C11.7705148,12.8561704 12.0927775,14.2693718 12.5035305,16.2716273 C12.5035305,16.2716273 13.3052251,19.9287812 13.7172988,21.8491501 C14.1280517,23.7708399 15.2757825,24.9793252 18.267279,24.3215922 L22.9638623,6.45978319 L19.171992,6.45978319 L17.5686027,14.1822024 C17.1367178,16.4301171 16.7457761,18.1867133 16.4446454,20.2431194 L16.3918154,20.2431194 C16.1170996,18.2065245 15.7684219,16.5199281 15.3299333,14.3301263 L13.6605066,6.45846245 L9.7101464,6.45846245 L7.9244938,14.1320139 C7.41864694,16.4631359 6.94449806,18.3452031 6.6433673,20.3316096 L6.59053734,20.3316096 C6.28148208,18.4614291 5.87072916,16.0959677 5.42563675,13.8388077 C5.42563675,13.8388077 4.36507533,8.35109571 3.99262413,6.45978319 L0,6.45978319 M30.1328877,19.5285942 C30.1328877,19.7755743 30.1117557,20.0304788 30.0430767,20.2550061 C29.7643987,21.1834927 28.805535,21.9693383 27.6062949,21.9693383 C26.6078087,21.9693383 25.8140385,21.4014162 25.8140385,20.1955724 C25.8140385,18.3518069 27.8347845,17.8419978 30.1328877,17.8538845 L30.1328877,19.5285942 Z M33.7385323,16.3165327 C33.7385323,13.2748479 32.4468399,10.6003312 28.079123,10.6003312 C25.8338498,10.6003312 24.0548009,11.2342907 23.0840504,11.7969298 L23.7932926,14.2403154 C24.6821567,13.678997 26.0966788,13.2127727 27.4359183,13.2127727 C29.6547765,13.2061689 30.0166618,14.4727672 30.0166618,15.283707 L30

@@ -107,6 +107,7 @@ jobs:
           node test/snapshots.test.js
           node test/seguridad.test.js
           node test/comparador.test.js
+          node test/semejanza.test.js
           node test/sugerencias_gs.test.js
           node test/sugerencias_robot.test.js
 
