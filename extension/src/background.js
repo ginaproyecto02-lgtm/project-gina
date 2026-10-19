@@ -348,8 +348,8 @@ async function researchReputation(s, cfg, log) {
 }
 
 // ---------- Programación ----------
-api.runtime.onInstalled.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); updateBadge(); });
-api.runtime.onStartup.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); });
+api.runtime.onInstalled.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); updateBadge(); flushSuggestionsQueue().catch(() => {}); });
+api.runtime.onStartup.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); flushSuggestionsQueue().catch(() => {}); });
 // Revisión diaria: vacía cola de sugerencias y si pasaron 7 días ejecuta job semanal.
 api.alarms.onAlarm.addListener(async (a) => {
   if (a.name !== "qed-tick") return;
@@ -376,14 +376,49 @@ async function getInstallationId() {
   return newInst;
 }
 
-function extractDomain(s) {
-  if (!s) return "";
+const DOMAIN_OK = /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/;
+let sitesCache = null;
+// Dominio de la tienda para la hoja. Acepta URL, hostname o el nombre de la tienda («Amazon México», «Amazon (México)»),
+// que se busca en sites.json. Si no se puede saber, va vacío (el servicio lo acepta) en vez de rechazar la sugerencia.
+async function extractDomain(s) {
+  const raw = String(s || "").trim();
+  if (!raw) return "";
   try {
-    const raw = String(s).trim();
-    const u = raw.startsWith("http://") || raw.startsWith("https://") ? new URL(raw) : new URL("https://" + raw);
-    return u.hostname.replace(/^www\./, "").toLowerCase();
-  } catch (_) {
-    return String(s).split("/")[0].replace(/^www\./, "").toLowerCase().slice(0, 120);
+    const u = /^https?:\/\//i.test(raw) ? new URL(raw) : new URL("https://" + raw);
+    const h = u.hostname.replace(/^www\./, "").toLowerCase();
+    if (DOMAIN_OK.test(h)) return h;
+  } catch (_) {}
+  try {
+    if (!sitesCache) sitesCache = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
+    const list = Array.isArray(sitesCache.sitios) ? sitesCache.sitios : Object.values(sitesCache.sitios || {});
+    // «Amazon (México)» (lista de pendientes), «Amazon México» o «Amazon»
+    const m = raw.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+    const base = QED.norm(m ? m[1] : raw), paisP = m ? QED.norm(m[2]) : "", full = QED.norm(raw.replace(/[()]/g, " "));
+    const hit = list.find((st) => st && st.d && QED.norm(st.nombre || "") === base && (!paisP || QED.norm(st.pais || "") === paisP))
+      || list.find((st) => st && st.d && QED.norm(`${st.nombre || ""} ${st.pais || ""}`) === full)
+      || list.find((st) => st && st.d && QED.norm(st.nombre || "") === full);
+    if (hit && DOMAIN_OK.test(String(hit.d).toLowerCase())) return String(hit.d).toLowerCase();
+  } catch (_) {}
+  return "";
+}
+
+// Envía a la hoja (o deja en cola). Devuelve el estado real para que la tarjeta y el popup no digan «enviada» sin serlo:
+// «enviada» = la hoja la guardó; «en_cola» = sin URL configurada o sin conexión (se reintenta); «rechazada» = dato inválido.
+async function sendToSheet(payload) {
+  const proj = await project();
+  const endpoint = proj.sugerencias_url;
+  if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) {
+    await enqueueSuggestion(payload);
+    return { ok: true, status: "en_cola", reason: "sin_url" };
+  }
+  try {
+    await postSuggestion(payload, endpoint);
+    flushSuggestionsQueue().catch(() => {}); // de paso, lo que quedó en cola
+    return { ok: true, status: "enviada" };
+  } catch (err) {
+    if (isPermanentSugError(err)) return { ok: false, status: "rechazada", error: String(err.message || err) };
+    await enqueueSuggestion(payload);
+    return { ok: true, status: "en_cola", reason: String(err.message || err) };
   }
 }
 
@@ -414,22 +449,33 @@ async function enqueueSuggestion(item) {
   });
 }
 
+let flushing = false;
 async function flushSuggestionsQueue() {
   const proj = await project();
   const endpoint = proj.sugerencias_url;
   if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) return;
-  const { suggestionsQueue = [] } = await get("suggestionsQueue");
-  if (!suggestionsQueue.length) return;
-
-  const remaining = [];
-  for (const item of suggestionsQueue) {
-    try {
-      await postSuggestion(item, endpoint);
-    } catch (err) {
-      if (!isPermanentSugError(err)) remaining.push(item);
+  if (flushing) return;
+  flushing = true;
+  try {
+    const { suggestionsQueue = [] } = await get("suggestionsQueue");
+    if (!suggestionsQueue.length) return;
+    const done = new Set();
+    for (const item of suggestionsQueue) {
+      try {
+        await postSuggestion(item, endpoint);
+        done.add(JSON.stringify(item));
+      } catch (err) {
+        if (isPermanentSugError(err)) done.add(JSON.stringify(item));
+      }
     }
+    // Se vuelve a leer la cola: lo que se encoló mientras se enviaba no se pierde.
+    await locked(async () => {
+      const { suggestionsQueue: q = [] } = await get("suggestionsQueue");
+      await set({ suggestionsQueue: q.filter((it) => !done.has(JSON.stringify(it))).slice(-20) });
+    });
+  } finally {
+    flushing = false;
   }
-  await set({ suggestionsQueue: remaining.slice(-20) });
 }
 
 async function recordBrandSuggestion(brand, title, site, url, pais) {
@@ -468,44 +514,47 @@ async function recordBrandSuggestion(brand, title, site, url, pais) {
       } catch (_) {}
     }
   } else {
-    const proj = await project();
-    const endpoint = proj.sugerencias_url;
     const inst = await getInstallationId();
     const manifestVer = (api.runtime && api.runtime.getManifest) ? api.runtime.getManifest().version : "3.2.0";
+    const marca = clip(brand, 80).trim();
+    if (!marca) { await updateBadge(); return { ok: false, status: "rechazada", error: "marca_vacia" }; }
     const payload = {
       v: 1,
       tipo: "marca",
-      marca: clip(brand, 80),
-      tienda: extractDomain(site),
+      marca,
+      tienda: await extractDomain(site),
       producto: clip(title, 200),
-      pais: clip(pais || "MX", 20),
+      pais: clip(pais || "México", 20).replace(/[^\p{L} .]/gu, "").trim() || "México",
       ext: manifestVer,
       inst: inst
     };
-
-    if (endpoint && /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) {
-      try {
-        await postSuggestion(payload, endpoint);
-      } catch (err) {
-        if (!isPermanentSugError(err)) await enqueueSuggestion(payload);
-      }
-    } else {
-      await enqueueSuggestion(payload);
-    }
+    const r = await sendToSheet(payload);
+    await updateBadge();
+    return r;
   }
 
   await updateBadge();
-  return { ok: true };
+  return { ok: true, status: "github" };
 }
 
 async function recordAlternativeSuggestion(alt) {
+  alt = alt || {};
   await locked(async () => {
     const { suggestedAlternatives = [] } = await get("suggestedAlternatives");
-    const entry = Object.assign({ date: Date.now() }, alt || {});
+    const entry = Object.assign({ date: Date.now() }, alt);
     suggestedAlternatives.unshift(entry);
     await set({ suggestedAlternatives: suggestedAlternatives.slice(0, 100) });
   });
-  return { ok: true };
+  // También va a la hoja (tipo «alternativa»): se revisa a mano, el robot no la toca.
+  const marca = clip(alt.marca, 80).trim();
+  if (!marca) return { ok: false, status: "rechazada", error: "marca_vacia" };
+  const detalle = [alt.categoria && `categoría: ${alt.categoria}`, alt.dueno && `dueño: ${alt.dueno}`, alt.fuente && `fuente: ${alt.fuente}`].filter(Boolean).join(" · ");
+  const manifestVer = (api.runtime && api.runtime.getManifest) ? api.runtime.getManifest().version : "3.2.0";
+  return sendToSheet({
+    v: 1, tipo: "alternativa", marca, tienda: "", producto: clip(detalle, 200),
+    pais: clip(alt.pais || "México", 20).replace(/[^\p{L} .]/gu, "").trim() || "México",
+    ext: manifestVer, inst: await getInstallationId()
+  });
 }
 
 let offscreenCreating = null;

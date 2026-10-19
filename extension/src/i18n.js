@@ -229,12 +229,28 @@
       it: "Vengono inviati solo il marchio, il negozio e il paese. L'email e il nome non vengono mai inviati.",
       ja: "ブランド名、店舗、国のみが送信されます。メールアドレスや氏名は送信されません。"
     },
+    suggest_queued: {
+      es: "Guardada en tu navegador. Se enviará sola en cuanto el servicio de sugerencias de Gina responda.",
+      en: "Saved in your browser. It will be sent automatically as soon as Gina's suggestion service responds.",
+      de: "Im Browser gespeichert. Wird automatisch gesendet, sobald Ginas Vorschlagsdienst antwortet.",
+      fr: "Enregistrée dans ton navigateur. Elle sera envoyée dès que le service de suggestions de Gina répondra.",
+      it: "Salvata nel browser. Verrà inviata da sola appena il servizio di suggerimenti di Gina risponde.",
+      ja: "ブラウザに保存しました。Ginaの提案サービスが応答しだい自動で送信されます。"
+    },
+    suggest_rejected: {
+      es: "No se pudo enviar: el nombre de la marca no es válido.",
+      en: "Could not send: the brand name is not valid.",
+      de: "Senden nicht möglich: Der Markenname ist ungültig.",
+      fr: "Envoi impossible : le nom de la marque n'est pas valide.",
+      it: "Invio non riuscito: il nome del marchio non è valido.",
+      ja: "送信できません：ブランド名が無効です。"
+    },
     suggest_sent_thanks: {
       es: "Enviada, gracias.",
       en: "Sent, thank you.",
       de: "Gesendet, vielen Dank.",
       fr: "Envoyée, merci.",
-      it: "Inviato, gracias.",
+      it: "Inviato, grazie.",
       ja: "送信しました。ありがとうございます。"
     },
     sug_privacy_notice: {

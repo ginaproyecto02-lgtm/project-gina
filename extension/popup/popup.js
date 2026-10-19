@@ -4,6 +4,8 @@ const QED = globalThis.QED;
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 let proj = {}, pageRes = null;
+// Ajustes guardados (antes se llamaba a settings() sin definirla y el modo GitHub nunca se activaba aquí).
+async function settings() { try { return (await api.storage.local.get("settings")).settings || {}; } catch (_) { return {}; } }
 let db, index, custom = [], extra = { verified: {}, patches: {} }, registry = { sitios: [] }, corpus = [];
 
 const I18N = () => QED.I18N || {
@@ -183,7 +185,7 @@ async function loadPage() {
       return;
     }
     const res = r.result;
-    pageRes = Object.assign({ site: r.site }, res);
+    pageRes = Object.assign({ site: r.site, pageUrl: r.url || "" }, res);
     if (res.mode) {
       $("#pageOut").innerHTML = travelHtml(res);
       $("#suggest").hidden = true;
@@ -258,15 +260,18 @@ function renderBatchSection(pending) {
       producto: c.title || ""
     }));
 
-    const ghUrl = (QED.ALT && QED.ALT.suggestionLink)
-      ? QED.ALT.suggestionLink(proj, "marca", itemsPayload)
-      : "";
-
-    if (ghUrl) {
-      if (api.tabs && api.tabs.create) {
-        await api.tabs.create({ url: ghUrl });
-      } else {
-        window.open(ghUrl, "_blank");
+    let useGh = false;
+    try { useGh = !!(await settings()).useGitHubIssues; } catch (_) {}
+    if (useGh) {
+      const ghUrl = (QED.ALT && QED.ALT.suggestionLink) ? QED.ALT.suggestionLink(proj, "marca", itemsPayload) : "";
+      if (ghUrl) {
+        if (api.tabs && api.tabs.create) await api.tabs.create({ url: ghUrl });
+        else window.open(ghUrl, "_blank");
+      }
+    } else {
+      // A la hoja, una por una (el fondo resuelve el dominio por el nombre de la tienda; lo que pase del límite queda en cola).
+      for (const c of chosen) {
+        try { await api.runtime.sendMessage({ type: "qed:suggest_brand", brand: c.brand || "", title: c.title || "", site: c.site || "", pais: "" }); } catch (_) {}
       }
     }
 
@@ -333,7 +338,9 @@ $("#suggest").onclick = async () => {
   if (!pageRes) return;
   const brand = pageRes.brandText || "";
   const title = pageRes.title || "";
-  const site = pageRes.site ? pageRes.site.nombre : "";
+  // Dominio real de la página (la hoja exige dominio, no el nombre de la tienda).
+  let site = "";
+  try { site = new URL(pageRes.pageUrl).hostname; } catch (_) { site = pageRes.site ? (pageRes.site.d || "") : ""; }
   const pais = pageRes.site ? pageRes.site.pais : "";
 
   let showGh = false;
@@ -362,18 +369,25 @@ $("#suggest").onclick = async () => {
   $("#suggest").disabled = true;
   $("#suggest").style.opacity = "0.5";
   try {
-    await api.runtime.sendMessage({
+    const r = await api.runtime.sendMessage({
       type: "qed:suggest_brand",
       brand: brand,
       title: title,
       site: site,
       pais: pais
     });
-    $("#suggest").hidden = true;
+    const st = (r && r.status) || "";
     const fb = $("#suggestFeedback");
     fb.hidden = false;
+    if (st === "rechazada") {
+      $("#suggest").disabled = false;
+      $("#suggest").style.opacity = "1";
+      fb.innerHTML = `<div style="color:#b91c1c;font-size:12px;margin-top:6px;">${t("suggest_rejected")}</div>`;
+      return;
+    }
+    $("#suggest").hidden = true;
     fb.innerHTML = `
-      <div style="color:#166534;font-size:12px;font-weight:600;margin-top:6px;">${t("suggest_sent_thanks")}</div>
+      <div style="color:#166534;font-size:12px;font-weight:600;margin-top:6px;">${st === "enviada" || st === "github" ? t("suggest_sent_thanks") : t("suggest_queued")}</div>
     `;
   } catch (_) {
     $("#suggest").disabled = false;
@@ -385,24 +399,18 @@ $("#suggest").onclick = async () => {
 $("#altForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(e.target).entries());
-  await api.runtime.sendMessage({
-    type: "qed:suggest_alternative",
-    alternative: f
-  });
-  e.target.reset();
+  // Va directo a la hoja del proyecto (sin correo ni texto para copiar).
+  let r = null;
+  try { r = await api.runtime.sendMessage({ type: "qed:suggest_alternative", alternative: f }); } catch (_) {}
+  const st = (r && r.status) || "";
   const fb = $("#altFeedback");
   fb.hidden = false;
-  const subj = encodeURIComponent(`Alternativa local sugerida: ${f.marca}`);
-  const body = encodeURIComponent(`Alternativa: ${f.marca}\nCategoría: ${f.categoria || ""}\nPaís: ${f.pais || ""}\nDueño: ${f.dueno || ""}\nFuente: ${f.fuente || ""}\n`);
-  const mailto = `mailto:${proj.contacto || ""}?subject=${subj}&body=${body}`;
-  const ghUrl = proj.issuesUrl ? QED.ALT.suggestionLink(proj, "alternativa", [f]) : "";
-
-  fb.innerHTML = `
-    <div><b>✔ ¡Gracias! Alternativa registrada para verificarla e incluirla en la base.</b></div>
-    <div style="margin-top:6px;font-size:11px;color:#5a6478;">
-      <a href="${mailto}" target="_blank">✉ Enviar por correo al equipo</a>
-      ${ghUrl ? ` · <a href="${ghUrl}" target="_blank">GitHub</a>` : ""}
-    </div>`;
+  if (st === "rechazada") {
+    fb.innerHTML = `<div style="color:#b91c1c;">${esc(t("suggest_rejected"))}</div>`;
+    return;
+  }
+  e.target.reset();
+  fb.innerHTML = `<div><b>${esc(st === "enviada" ? t("suggest_sent_thanks") : t("suggest_queued"))}</b></div>`;
 });
 
 if ($("#btnUpdateBase")) {

@@ -309,6 +309,15 @@ function createMockEnvironment() {
     check("doGet op=purge sin token válido no borra nada", bad.json.ok === false && sheetData.length === 3);
   }
 
+  // 17. Tienda vacía (alternativas o dominio desconocido) se acepta; una tienda con espacios no
+  {
+    const { code, sheetData } = createMockEnvironment();
+    const a = code.doPost({ postData: { contents: JSON.stringify(Object.assign({}, validPayload, { tipo: "alternativa", tienda: "" })) } });
+    const { code: c2 } = createMockEnvironment();
+    const b = c2.doPost({ postData: { contents: JSON.stringify(Object.assign({}, validPayload, { tienda: "amazon méxico" })) } });
+    check("doPost: tienda vacía se acepta (alternativas); un nombre con espacios se rechaza", a.json.ok === true && sheetData[1][2] === "alternativa" && b.json.ok === false);
+  }
+
   console.log(`\n${pass}/${total} pruebas de Apps Script sugerencias correctas`);
   process.exit(pass === total ? 0 : 1);
 })();

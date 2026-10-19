@@ -116,7 +116,8 @@ function doPost(e) {
     if (data.tipo !== "marca" && data.tipo !== "alternativa") return jsonResponse({ ok: false, e: "tipo" });
     if (typeof data.marca !== "string" || !data.marca || data.marca.length > 80) return jsonResponse({ ok: false, e: "marca" });
     if (!plausibleBrand(data.marca)) return jsonResponse({ ok: false, e: "marca_invalida" });
-    if (typeof data.tienda !== "string" || data.tienda.length > 120 || !DOMAIN_RE.test(data.tienda.trim())) {
+    // La tienda es opcional (vacía en alternativas o si no se pudo saber el dominio); si viene, debe ser un dominio.
+    if (typeof data.tienda !== "string" || data.tienda.length > 120 || (data.tienda.trim() !== "" && !DOMAIN_RE.test(data.tienda.trim()))) {
       return jsonResponse({ ok: false, e: "tienda_invalida" });
     }
     if (typeof data.producto !== "string" || data.producto.length > 200) return jsonResponse({ ok: false, e: "producto" });

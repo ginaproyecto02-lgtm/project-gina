@@ -452,6 +452,64 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
       rPg && rPg.ok === true && rBad && rBad.ok === false && tabs.length === 1 && tabs[0] === "ext://options/comparar.html?pais=M%C3%A9xico", JSON.stringify(tabs));
   }
 
+  // ---------------------------------------------------------------- Sugerencias de punta a punta: extensión → Code.gs real (validación 2026-10-18)
+  // Antes las pruebas mandaban datos «bonitos» a mano; en el navegador la tarjeta y el popup mandaban el nombre de la tienda,
+  // el servicio lo rechazaba y la tarjeta decía «Enviada». Aquí el fondo habla con el Code.gs real (con Sheets simulado).
+  {
+    const sheet = [["id", "fecha", "tipo", "marca", "tienda", "producto", "pais", "ext", "veces", "estado"]];
+    const cache = {}, props = { ROBOT_TOKEN: "tok" };
+    global.ContentService = { MimeType: { JSON: "json" }, createTextOutput: (txt) => ({ txt, setMimeType: () => {} }) };
+    global.CacheService = { getScriptCache: () => ({ get: (k) => cache[k] || null, put: (k, v) => { cache[k] = String(v); } }) };
+    global.PropertiesService = { getScriptProperties: () => ({ getProperty: (k) => props[k] || null, setProperty: (k, v) => { props[k] = String(v); } }) };
+    global.LockService = { getScriptLock: () => ({ tryLock: () => true, releaseLock: () => {} }) };
+    global.Utilities = { getUuid: () => "u" + sheet.length };
+    global.SpreadsheetApp = { getActiveSpreadsheet: () => ({ getSheets: () => [{
+      getLastRow: () => sheet.length,
+      getRange: (r, c, nr, nc) => ({ getValues: () => sheet.slice(r - 1, r - 1 + (nr || 1)).map((row) => row.slice(c - 1, c - 1 + (nc || 1))), setValue: (v) => { sheet[r - 1][c - 1] = v; } }),
+      appendRow: (row) => sheet.push(row.slice()), deleteRow: (n) => sheet.splice(n - 1, 1) }] }) };
+    delete require.cache[require.resolve("../servicios/sugerencias/Code.gs")];
+    const GS = require("../servicios/sugerencias/Code.gs");
+    const viaGs = async (req) => {
+      if (!req.url.includes("script.google.com")) return { status: 200, body: {} };
+      const out = GS.doPost({ postData: { contents: JSON.stringify(req.body) } });
+      return { status: 200, body: JSON.parse(out.txt) };
+    };
+
+    const e1 = makeEnv(viaGs);
+    // Como el popup antes: nombre de la tienda en vez de dominio
+    const r1 = await e1.send({ type: "qed:suggest_brand", brand: "Marca Popup", title: "Producto X", site: "Amazon México", pais: "México" });
+    // Como la tarjeta: hostname
+    const r2 = await e1.send({ type: "qed:suggest_brand", brand: "Marca Tarjeta", title: "Producto Y", site: "www.walmart.com.mx", pais: "México" });
+    // Como la lista de pendientes: «Tienda (País)» desconocida → sin dominio, pero se guarda
+    const r3 = await e1.send({ type: "qed:suggest_brand", brand: "Marca Pendiente", title: "", site: "Tiendita Desconocida (México)", pais: "" });
+    // Alternativa desde el popup
+    const r4 = await e1.send({ type: "qed:suggest_alternative", alternative: { marca: "Café Local", categoria: "café", pais: "México", dueno: "Familia X", fuente: "https://ejemplo.mx/nota" } });
+    const filas = sheet.slice(1).map((r) => [r[2], r[3], r[4], r[9]].join("|"));
+    check("Sugerencias de punta a punta: popup, tarjeta, pendientes y alternativa llegan a la hoja con estado «enviada»",
+      [r1, r2, r3, r4].every((r) => r && r.status === "enviada") &&
+      filas.includes("marca|Marca Popup|amazon.com.mx|pendiente") && filas.includes("marca|Marca Tarjeta|walmart.com.mx|pendiente") &&
+      filas.includes("marca|Marca Pendiente||pendiente") && filas.some((f) => f.startsWith("alternativa|Café Local||")),
+      JSON.stringify({ estados: [r1, r2, r3, r4].map((r) => r && r.status), filas }));
+
+    // Marca inválida → «rechazada» (la tarjeta lo dice) y no se encola
+    const r5 = await e1.send({ type: "qed:suggest_brand", brand: "<script>x</script>", title: "", site: "www.walmart.com.mx", pais: "México" });
+    const q5 = (await e1.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
+    check("Sugerencia con marca inválida: estado «rechazada» y sin cola", r5 && r5.status === "rechazada" && q5.length === 0, JSON.stringify(r5));
+
+    // Sin URL configurada → «en_cola»; al configurarse, la cola sale sola al arrancar el navegador
+    const e2 = makeEnv(viaGs);
+    e2.chrome.__sinUrlSugerencias = true;
+    const r6 = await e2.send({ type: "qed:suggest_brand", brand: "Marca En Cola", title: "", site: "www.amazon.com.mx", pais: "México" });
+    e2.chrome.__sinUrlSugerencias = false;
+    const e3 = makeEnv(viaGs);
+    await e3.chrome.storage.local.set({ suggestionsQueue: (await e2.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue });
+    for (const l of e3.listeners.startup) l();
+    await new Promise((r) => setTimeout(r, 30));
+    const q6 = (await e3.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
+    check("Sugerencia sin URL: estado «en_cola» y se envía sola al arrancar cuando ya hay URL",
+      r6 && r6.status === "en_cola" && q6.length === 0 && sheet.some((r) => r[3] === "Marca En Cola"), JSON.stringify({ r6, q6 }));
+  }
+
   console.log(`\n${pass}/${total} pruebas correctas`);
   process.exit(pass === total ? 0 : 1);
 })();

@@ -519,6 +519,29 @@ function fakeImap(messages) {
       /6,?500/.test(fila) && /★ 4\.6 \(120\)/.test(fila), JSON.stringify({ links, fila: fila.replace(/\s+/g, " ").slice(0, 160) }));
   }
 
+  // ---------------------------------------------------------------- 12e. «Sugerir» en la tarjeta: el mensaje dice lo que de verdad pasó
+  {
+    const probar = async (respuesta) => {
+      const w = env("<div></div>", "https://www.amazon.com.mx/dp/B0ABCDEF12");
+      const sent = [];
+      w.chrome = { runtime: { sendMessage: async (m) => { sent.push(m); return respuesta; } } };
+      w.QED.showCard({ found: false, brandText: "Marca Nueva Prueba", title: "Producto de prueba", store: { nombre: "Amazon", pais: "México", d: "amazon.com.mx" } }, {});
+      const root = rootOf(w);
+      const btn = root.querySelector("#card-suggest-btn");
+      if (btn) btn.click();
+      await new Promise((r) => setTimeout(r, 20));
+      const ok = root.querySelector("#card-suggest-ok");
+      return { hayBoton: !!btn, msg: ok ? ok.textContent.trim() : "", visible: ok ? ok.style.display : "", sent };
+    };
+    const env1 = await probar({ ok: true, status: "enviada" });
+    const env2 = await probar({ ok: true, status: "en_cola" });
+    const env3 = await probar({ ok: false, status: "rechazada" });
+    check("Tarjeta: «Sugerir» manda el dominio real (amazon.com.mx) y no el nombre de la tienda",
+      env1.hayBoton && env1.sent[0] && env1.sent[0].site === "www.amazon.com.mx" && env1.sent[0].brand === "Marca Nueva Prueba", JSON.stringify(env1.sent));
+    check("Tarjeta: «Enviada» solo si la hoja la guardó; en cola o rechazada lo dice",
+      /Enviada/.test(env1.msg) && /Guardada en tu navegador/.test(env2.msg) && /no es válido/.test(env3.msg), JSON.stringify([env1.msg, env2.msg, env3.msg]));
+  }
+
   // ---------------------------------------------------------------- 12c. Página de permiso del comparador (options/comparar.html)
   {
     const runPage = async (pais, grant) => {

@@ -1307,8 +1307,9 @@
         sugBtn.style.opacity = "0.5";
         try {
           const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : null);
+          let r = null;
           if (api && api.runtime && api.runtime.sendMessage) {
-            await api.runtime.sendMessage({
+            r = await api.runtime.sendMessage({
               type: "qed:suggest_brand",
               brand: brandName,
               title: res.title || "",
@@ -1316,9 +1317,20 @@
               pais: pais
             });
           }
+          // Mensaje según lo que de verdad pasó (antes decía «Enviada» aunque no saliera nada).
+          const st = (r && r.status) || "";
+          if (st === "rechazada") {
+            sugBtn.disabled = false;
+            sugBtn.style.opacity = "1";
+            if (sugOk) { sugOk.textContent = t("suggest_rejected"); sugOk.style.display = "block"; sugOk.style.color = "#b91c1c"; }
+            return;
+          }
           sugBtn.style.display = "none";
           if (sugNotice) sugNotice.style.display = "none";
-          if (sugOk) sugOk.style.display = "block";
+          if (sugOk) {
+            sugOk.textContent = st === "enviada" || st === "github" ? t("suggest_sent_thanks") : t("suggest_queued");
+            sugOk.style.display = "block";
+          }
         } catch (e) {
           sugBtn.disabled = false;
           sugBtn.style.opacity = "1";
