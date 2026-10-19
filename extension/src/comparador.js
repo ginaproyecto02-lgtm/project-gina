@@ -44,8 +44,21 @@
     "Colombia": "COP", "Reino Unido": "GBP", "Alemania": "EUR", "Francia": "EUR", "España": "EUR", "Italia": "EUR",
     "Japón": "JPY", "India": "INR", "Singapur": "SGD", "Corea del Sur": "KRW", "China": "CNY"
   };
+  const DOMAIN_CURRENCY = {
+    ".mx": "MXN", ".com.mx": "MXN", ".ca": "CAD", ".br": "BRL", ".com.br": "BRL",
+    ".ar": "ARS", ".com.ar": "ARS", ".cl": "CLP", ".co": "COP", ".com.co": "COP",
+    ".uk": "GBP", ".co.uk": "GBP", ".de": "EUR", ".fr": "EUR", ".es": "EUR", ".it": "EUR",
+    ".jp": "JPY", ".co.jp": "JPY", ".in": "INR", ".sg": "SGD", "coupang.com": "KRW", "jd.com": "CNY"
+  };
   function storeCurrency(cfg) {
-    const c = cfg && (cfg.moneda || COUNTRY_CURRENCY[String(cfg.pais || "").trim()]);
+    if (!cfg) return "";
+    let c = cfg.moneda || COUNTRY_CURRENCY[String(cfg.pais || "").trim()];
+    if (!c && cfg.dominio) {
+      const d = String(cfg.dominio).toLowerCase().trim();
+      for (const [k, v] of Object.entries(DOMAIN_CURRENCY)) {
+        if (d.endsWith(k) || d === k) { c = v; break; }
+      }
+    }
     return c ? String(c).toUpperCase() : "";
   }
 
@@ -138,6 +151,158 @@
     } catch (_) {
       return null;
     }
+  }
+
+  // Extrae __PRELOADED_STATE__ si la tienda lo usa
+  function extractPreloadedState(htmlOrDoc) {
+    let raw = "";
+    if (typeof htmlOrDoc === "string") {
+      const m = /window\.__PRELOADED_STATE__\s*=\s*({[\s\S]*?});/i.exec(htmlOrDoc)
+        || /<script[^>]*id=["']__PRELOADED_STATE__["'][^>]*>([\s\S]*?)<\/script>/i.exec(htmlOrDoc);
+      if (m) raw = m[1];
+    } else if (htmlOrDoc && htmlOrDoc.querySelector) {
+      const el = htmlOrDoc.querySelector("#__PRELOADED_STATE__");
+      if (el) raw = el.textContent;
+    }
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Parsea productos desde objetos JSON embebidos (__NEXT_DATA__, e.g. Walmart, o __PRELOADED_STATE__)
+  function parseProductsFromNextData(nextData, storeDomain, defCurrency) {
+    if (!nextData || typeof nextData !== "object") return [];
+    const pageProps = (nextData.props && nextData.props.pageProps) || nextData.pageProps || nextData;
+    const initialData = pageProps.initialData || pageProps;
+    const results = [];
+
+    // 1. Resultados de búsqueda (e.g. Walmart props.pageProps.initialData.searchResult.itemStacks[*].items)
+    const searchResult = initialData.searchResult || pageProps.searchResult;
+    if (searchResult && Array.isArray(searchResult.itemStacks)) {
+      for (const stack of searchResult.itemStacks) {
+        if (!stack || !Array.isArray(stack.items)) continue;
+        for (const it of stack.items) {
+          if (!it || typeof it !== "object") continue;
+          const title = clip(it.name || it.title || "", 150);
+          if (!title) continue;
+
+          let price = null;
+          let currency = defCurrency || "";
+          if (it.priceInfo && it.priceInfo.currentPrice) {
+            const cp = it.priceInfo.currentPrice;
+            if (typeof cp.price === "number") price = cp.price;
+            else if (cp.price) price = parsePriceText(cp.price);
+            else if (cp.priceText) price = parsePriceText(cp.priceText);
+            if (cp.currencyUnit) currency = String(cp.currencyUnit).trim().toUpperCase();
+          } else if (typeof it.price === "number") {
+            price = it.price;
+          } else if (it.price) {
+            price = parsePriceText(it.price);
+          }
+
+          const rawUrl = it.canonicalUrl || it.productUrl || (it.usItemId ? "/ip/" + it.usItemId : (it.id ? "/ip/" + it.id : ""));
+          const validUrl = sanitizeStoreUrl(rawUrl, storeDomain);
+
+          let rating = null;
+          let reviewsCount = null;
+          if (it.rating) {
+            const rVal = parseFloat(it.rating.averageRating || it.rating.ratingValue || it.rating.score);
+            if (!isNaN(rVal)) rating = rVal;
+            const rCnt = parseInt(it.rating.numberOfReviews || it.rating.reviewCount || it.rating.count, 10);
+            if (!isNaN(rCnt)) reviewsCount = rCnt;
+          }
+
+          let image = "";
+          if (it.imageInfo) {
+            image = it.imageInfo.thumbnailUrl || it.imageInfo.imageUrl || "";
+          } else if (typeof it.image === "string") {
+            image = it.image;
+          }
+          const validImg = sanitizeImageUrl(image);
+
+          const gtin = cleanGtin(it.upc || it.gtin || it.gtin13 || it.gtin14);
+          const mpn = cleanModel(it.model || it.mpn || it.modelNumber);
+          const brand = clip(it.brand || (it.brandName ? it.brandName : ""), 60);
+
+          if (title && (price !== null || validUrl)) {
+            results.push({
+              title,
+              price,
+              currency,
+              url: validUrl,
+              image: validImg,
+              rating,
+              reviewsCount,
+              gtin,
+              mpn,
+              model: mpn,
+              brand
+            });
+          }
+        }
+      }
+    }
+
+    // 2. Ficha de producto en initialData.product
+    const product = initialData.product || pageProps.product;
+    if (product && typeof product === "object") {
+      const pItems = parseProductsFromJsonLd(product, storeDomain, defCurrency);
+      if (pItems.length > 0) {
+        results.push(...pItems);
+      } else if (product.name || product.title) {
+        const title = clip(product.name || product.title || "", 150);
+        let price = null;
+        let currency = defCurrency || "";
+        if (product.priceInfo && product.priceInfo.currentPrice) {
+          const cp = product.priceInfo.currentPrice;
+          if (typeof cp.price === "number") price = cp.price;
+          else if (cp.price) price = parsePriceText(cp.price);
+          else if (cp.priceText) price = parsePriceText(cp.priceText);
+          if (cp.currencyUnit) currency = String(cp.currencyUnit).trim().toUpperCase();
+        } else if (typeof product.price === "number") {
+          price = product.price;
+        } else if (product.price) {
+          price = parsePriceText(product.price);
+        }
+        const rawUrl = product.canonicalUrl || product.productUrl || (product.usItemId ? "/ip/" + product.usItemId : "");
+        const validUrl = sanitizeStoreUrl(rawUrl, storeDomain);
+        const validImg = sanitizeImageUrl(product.imageInfo?.thumbnailUrl || product.image || "");
+        const gtin = cleanGtin(product.upc || product.gtin13 || product.gtin);
+        const mpn = cleanModel(product.model || product.mpn);
+        const brand = clip(product.brand || "", 60);
+        if (title && (price !== null || validUrl)) {
+          results.push({
+            title,
+            price,
+            currency,
+            url: validUrl,
+            image: validImg,
+            rating: parseFloat(product.rating?.averageRating) || null,
+            reviewsCount: parseInt(product.rating?.numberOfReviews, 10) || null,
+            gtin,
+            mpn,
+            model: mpn,
+            brand
+          });
+        }
+      }
+    }
+
+    return results;
+  }
+
+  function parseProductsFromPreloadedState(state, storeDomain, defCurrency) {
+    if (!state || typeof state !== "object") return [];
+    if (state.searchResults || state.items || state.products) {
+      const list = state.searchResults || state.items || state.products;
+      if (Array.isArray(list)) {
+        return parseProductsFromNextData({ props: { pageProps: { initialData: { searchResult: { itemStacks: [{ items: list }] } } } } }, storeDomain, defCurrency);
+      }
+    }
+    return [];
   }
 
   // Parsea productos desde objetos JSON-LD
@@ -268,6 +433,24 @@
       }
       const validImg = sanitizeImageUrl(image);
 
+      let gtin = cleanGtin(it.getAttribute("data-gtin") || it.getAttribute("data-asin") || "");
+      if (!gtin && selectors.gtin) {
+        const gEl = it.querySelector(selectors.gtin);
+        if (gEl) gtin = cleanGtin(gEl.textContent || gEl.getAttribute("content") || "");
+      }
+
+      let brand = it.getAttribute("data-brand") || "";
+      if (!brand && selectors.marca) {
+        const bEl = it.querySelector(selectors.marca);
+        if (bEl) brand = clip(bEl.textContent || bEl.getAttribute("content") || "", 60);
+      }
+
+      let model = cleanModel(it.getAttribute("data-model") || "");
+      if (!model && selectors.modelo) {
+        const mEl = it.querySelector(selectors.modelo);
+        if (mEl) model = cleanModel(mEl.textContent || mEl.getAttribute("content") || "");
+      }
+
       if (title && (price !== null || validUrl)) {
         results.push({
           title,
@@ -277,17 +460,21 @@
           image: validImg,
           rating,
           reviewsCount,
-          gtin: "",
-          mpn: "",
-          brand: ""
+          gtin,
+          mpn: model,
+          model,
+          brand
         });
       }
     }
     return results;
   }
 
-  // Extrae productos de una tienda usando el orden de prioridad:
-  // 1. JSON-LD -> 2. __NEXT_DATA__ -> 3. Selectores
+  // Extrae productos de una tienda usando el orden de prioridad estricto (G2):
+  // 1. JSON embebido (__NEXT_DATA__, __PRELOADED_STATE__)
+  // 2. JSON-LD
+  // 3. Selectores
+  // Lee hasta 10 resultados de la página de búsqueda.
   function extractStoreItems(htmlText, docOrStore, storeConfig) {
     let doc = null;
     let cfg = storeConfig;
@@ -302,28 +489,31 @@
     const domain = cfg.dominio || "";
     const cur = storeCurrency(cfg);
 
-    // 1. JSON-LD
+    // 1. JSON embebido (__NEXT_DATA__, __PRELOADED_STATE__)
+    const nextData = extractNextData(doc || htmlText);
+    if (nextData) {
+      const nextItems = parseProductsFromNextData(nextData, domain, cur);
+      if (nextItems.length > 0) return nextItems.slice(0, 10);
+    }
+
+    const preloadedState = extractPreloadedState(doc || htmlText);
+    if (preloadedState) {
+      const preItems = parseProductsFromPreloadedState(preloadedState, domain, cur);
+      if (preItems.length > 0) return preItems.slice(0, 10);
+    }
+
+    // 2. JSON-LD
     const jsonLds = extractJsonLd(doc || htmlText);
     const ldItems = [];
     for (const ld of jsonLds) {
       ldItems.push(...parseProductsFromJsonLd(ld, domain, cur));
     }
-    if (ldItems.length > 0) return ldItems;
-
-    // 2. __NEXT_DATA__
-    const nextData = extractNextData(doc || htmlText);
-    if (nextData && nextData.props && nextData.props.pageProps) {
-      const p = nextData.props.pageProps.initialData || nextData.props.pageProps.product;
-      if (p) {
-        const pSub = parseProductsFromJsonLd(p, domain, cur);
-        if (pSub.length > 0) return pSub;
-      }
-    }
+    if (ldItems.length > 0) return ldItems.slice(0, 10);
 
     // 3. Selectores (si hay doc disponible)
     if (doc && cfg.selectores) {
       const selItems = parseStoreWithSelectors(doc, cfg.selectores, domain, cur);
-      if (selItems.length > 0) return selItems;
+      if (selItems.length > 0) return selItems.slice(0, 10);
     }
 
     return [];
@@ -480,6 +670,9 @@
   QED.isBlockedOrCaptcha = isBlockedOrCaptcha;
   QED.extractJsonLd = extractJsonLd;
   QED.extractNextData = extractNextData;
+  QED.extractPreloadedState = extractPreloadedState;
+  QED.parseProductsFromNextData = parseProductsFromNextData;
+  QED.parseProductsFromPreloadedState = parseProductsFromPreloadedState;
   QED.parseProductsFromJsonLd = parseProductsFromJsonLd;
   QED.parseStoreWithSelectors = parseStoreWithSelectors;
   QED.extractStoreItems = extractStoreItems;

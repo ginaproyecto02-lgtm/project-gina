@@ -1,5 +1,5 @@
 {
- "version": "2026-10-18T0739",
+ "version": "2026-10-19T0249",
  "licencia": "CC BY 4.0",
  "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -26979,16 +26979,16 @@
     "dominio": "mercadolibre.com.mx",
     "url_busqueda": "https://listado.mercadolibre.com.mx/{q}",
     "verificado": "2026-10-18",
-    "fuente": "https://listado.mercadolibre.com.mx/iphone (probado 2026-10-18)",
+    "fuente": "https://listado.mercadolibre.com.mx/nutella-1-kg (probado 2026-10-18)",
     "fixture": "test/fixtures/comparar/mercadolibre_resultado.html",
     "selectores": {
-     "item": ".ui-search-result, .ui-search-layout__item",
-     "titulo": ".ui-search-item__title",
+     "item": ".poly-card, .ui-search-result, .ui-search-layout__item",
+     "titulo": ".poly-component__title, .ui-search-item__title",
      "precio": ".andes-money-amount__fraction",
-     "enlace": ".ui-search-link",
-     "calificacion": ".ui-search-reviews__rating-number",
-     "resenas": ".ui-search-reviews__amount",
-     "imagen": ".ui-search-result-image__element, img"
+     "enlace": "a.poly-component__title, a.ui-search-link, a",
+     "calificacion": ".poly-reviews__rating, .ui-search-reviews__rating-number",
+     "resenas": ".poly-reviews__total, .ui-search-reviews__amount",
+     "imagen": "img.poly-component__picture, .ui-search-result-image__element, img"
     }
    },
    {
@@ -26996,14 +26996,15 @@
     "dominio": "amazon.com.mx",
     "url_busqueda": "https://www.amazon.com.mx/s?k={q}",
     "verificado": "2026-10-18",
-    "fuente": "https://www.amazon.com.mx/s?k=iphone (probado 2026-10-18)",
+    "fuente": "https://www.amazon.com.mx/s?k=nutella+1+kg (probado 2026-10-18)",
     "fixture": "test/fixtures/comparar/amazon_resultado.html",
     "selectores": {
-     "item": "[data-component-type='s-search-result']",
-     "titulo": "h2 a span, h2",
+     "item": "[data-component-type=\"s-search-result\"]",
+     "titulo": "h2 a span, h2 span, h2",
      "precio": ".a-price .a-offscreen",
-     "enlace": "h2 a",
+     "enlace": "h2 a.a-link-normal, a.a-link-normal[href*=\"/dp/\"], a.a-link-normal[href*=\"/sspa/click\"], h2 a",
      "calificacion": ".a-icon-alt",
+     "resenas": "span[aria-label*=\"calificaciones\"], .s-underline-text",
      "imagen": "img.s-image"
     }
    },
@@ -27012,8 +27013,15 @@
     "dominio": "walmart.com.mx",
     "url_busqueda": "https://www.walmart.com.mx/search?q={q}",
     "verificado": "2026-10-18",
-    "fuente": "https://www.walmart.com.mx/search?q=iphone (probado 2026-10-18)",
-    "fixture": "test/fixtures/comparar/walmart_resultado.html"
+    "fuente": "https://www.walmart.com.mx/search?q=nutella+1+kg (probado 2026-10-18)",
+    "fixture": "test/fixtures/comparar/walmart_resultado.html",
+    "selectores": {
+     "item": "[data-item-id], [data-automation-id=\"product-tile\"], .sans-serif.mid-gray.relative.flex.flex-column",
+     "titulo": "span[data-automation-id=\"product-title\"], a.w-100.h-100",
+     "precio": "[data-automation-id=\"product-price\"] .f2, [itemprop=\"price\"]",
+     "enlace": "a[href*=\"/ip/\"]",
+     "imagen": "img[data-automation-id=\"product-image\"], img"
+    }
    }
   ],
   "EE.UU.": [
