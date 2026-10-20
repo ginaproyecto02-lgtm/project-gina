@@ -459,11 +459,15 @@
 
     const renderRow = (item, isSimilar) => {
       const priceFmt = item.price ? (QED.formatMoney ? QED.formatMoney(item.price, item.currency) : `${item.currency || "$"} ${item.price}`) : "";
+      const unitPriceHtml = item.unitPrice && item.unitPrice.text
+        ? `<div class="compare-unit-price" style="font-size:10px;color:#64748b;margin-top:1px;">${esc(item.unitPrice.text)}</div>`
+        : "";
       const cheapestBadge = item.isCheapest
         ? `<span class="alt-badge local" style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;margin-left:6px;">${t("compare_badge_cheapest")}</span>`
         : "";
-      const similarBadge = isSimilar
-        ? `<div style="margin-top:2px;"><span class="alt-badge" style="background:#fef3c7;color:#92400e;font-size:10px;">${t("compare_similar_notice")}</span></div>`
+      const diffText = item.difference || item.label || "";
+      const differenceBadge = isSimilar
+        ? `<div style="margin-top:2px;"><span class="alt-badge compare-diff-tag" style="background:#fef3c7;color:#92400e;font-size:10px;">${diffText ? esc(diffText) : t("compare_similar_notice")}</span></div>`
         : "";
       const ratingText = item.rating
         ? ` · ★ ${esc(String(item.rating))}${item.reviewsCount ? ` (${esc(String(item.reviewsCount))})` : ""}`
@@ -540,10 +544,11 @@
               <div style="font-size:10.5px;color:#64748b;margin-top:2px;">
                 <b>${esc(item.storeName || "")}</b> · ${timeText}${ratingText}
               </div>
-              ${similarBadge}
+              ${differenceBadge}
             </div>
             <div style="text-align:right;flex-shrink:0;">
               <div style="font-size:12.5px;font-weight:700;color:#0f172a;">${esc(priceFmt)}</div>
+              ${unitPriceHtml}
               ${cheapestBadge}
             </div>
           </a>
@@ -556,15 +561,42 @@
     if (same.length) {
       h += `
         <div style="font-size:11px;font-weight:700;color:#334155;margin:6px 0 2px 0;">${t("compare_same_product")}</div>
-        ${same.map((it) => renderRow(it, false)).join("")}
+        ${same.slice(0, 5).map((it) => renderRow(it, false)).join("")}
       `;
     }
 
     if (similar.length) {
-      h += `
-        <div style="font-size:11px;font-weight:700;color:#334155;margin:8px 0 2px 0;">${t("compare_similar_product")}</div>
-        ${similar.map((it) => renderRow(it, true)).join("")}
-      `;
+      const limitedSimilar = similar.slice(0, 4);
+      const presentaciones = limitedSimilar.filter((it) => it.reason === "otra_presentacion" || it.matchBy === "otra_presentacion");
+      const variantes = limitedSimilar.filter((it) => it.reason === "variante" || it.matchBy === "variante");
+      const otros = limitedSimilar.filter((it) => !presentaciones.includes(it) && !variantes.includes(it));
+
+      if (presentaciones.length && variantes.length) {
+        h += `
+          <div style="font-size:11px;font-weight:700;color:#334155;margin:8px 0 2px 0;">${t("compare_other_presentation")}</div>
+          ${presentaciones.map((it) => renderRow(it, true)).join("")}
+          <div style="font-size:11px;font-weight:700;color:#334155;margin:8px 0 2px 0;">${t("compare_different_variant")}</div>
+          ${variantes.map((it) => renderRow(it, true)).join("")}
+        `;
+      } else if (presentaciones.length && !variantes.length) {
+        h += `
+          <div style="font-size:11px;font-weight:700;color:#334155;margin:8px 0 2px 0;">${t("compare_other_presentation")}</div>
+          ${presentaciones.map((it) => renderRow(it, true)).join("")}
+        `;
+      } else if (variantes.length && !presentaciones.length) {
+        h += `
+          <div style="font-size:11px;font-weight:700;color:#334155;margin:8px 0 2px 0;">${t("compare_different_variant")}</div>
+          ${variantes.map((it) => renderRow(it, true)).join("")}
+        `;
+      } else {
+        h += `
+          <div style="font-size:11px;font-weight:700;color:#334155;margin:8px 0 2px 0;">${t("compare_similar_product")}</div>
+          ${limitedSimilar.map((it) => renderRow(it, true)).join("")}
+        `;
+      }
+      if (otros.length && (presentaciones.length || variantes.length)) {
+        h += otros.map((it) => renderRow(it, true)).join("");
+      }
     }
 
     if (unreadable.length) {
@@ -573,6 +605,7 @@
 
     return h + searchLinksHtml;
   }
+  QED.buildCompareResultsHtml = buildCompareResultsHtml;
 
   function renderCompareSection(res, opts) {
     opts = opts || {};

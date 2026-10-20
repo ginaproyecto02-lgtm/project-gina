@@ -607,6 +607,126 @@ function fakeImap(messages) {
       SAFE_OPEN.test(followBtn.getAttribute("href")));
   }
 
+  // ---------------------------------------------------------------- 14. G4. Comparador en tarjeta: escape hostil, precio unitario y grupos
+  {
+    const w = env("", "https://www.amazon.com.mx/dp/B0ABCDEF12");
+    const QED = w.QED;
+
+    const hostileDiff = `<img src=x onerror="window.__pwned=1">Otra presentación: 350 g<script>window.__pwned=1</script>`;
+    const hostileUnitPrice = `$218.00/kg <svg onload="window.__pwned=1">`;
+    const hostileTitle = `Nutella <script>window.__pwned=1</script>`;
+
+    const sameItems = Array.from({ length: 7 }, (_, i) => ({
+      title: `Nutella 1 kg item ${i}`,
+      storeName: "Amazon",
+      storeDomain: "amazon.com.mx",
+      url: `https://www.amazon.com.mx/dp/B00000000${i}`,
+      price: 199 + i,
+      currency: "MXN",
+      unitPrice: { value: 199 + i, unit: "kg", text: `$${199 + i}.00/kg` },
+      isCheapest: i === 0,
+      rating: 4.8,
+      reviewsCount: 150
+    }));
+
+    const similarItems = [
+      {
+        title: hostileTitle,
+        storeName: "Walmart",
+        storeDomain: "walmart.com.mx",
+        url: "https://www.walmart.com.mx/ip/nutella/123",
+        price: 89,
+        currency: "MXN",
+        difference: hostileDiff,
+        reason: "otra_presentacion",
+        unitPrice: { text: hostileUnitPrice }
+      },
+      {
+        title: "Bosch GSB 13 RE 127 V",
+        storeName: "Mercado Libre",
+        storeDomain: "mercadolibre.com.mx",
+        url: "https://articulo.mercadolibre.com.mx/MLM-999",
+        price: 1250,
+        currency: "MXN",
+        difference: "Otro voltaje: 127 V",
+        reason: "variante"
+      },
+      {
+        title: "Extra 1",
+        storeName: "Walmart",
+        storeDomain: "walmart.com.mx",
+        url: "https://www.walmart.com.mx/ip/1",
+        price: 100,
+        currency: "MXN",
+        reason: "otra_presentacion"
+      },
+      {
+        title: "Extra 2",
+        storeName: "Walmart",
+        storeDomain: "walmart.com.mx",
+        url: "https://www.walmart.com.mx/ip/2",
+        price: 110,
+        currency: "MXN",
+        reason: "variante"
+      },
+      {
+        title: "Extra 3 (debe recortarse por tope de 4)",
+        storeName: "Walmart",
+        storeDomain: "walmart.com.mx",
+        url: "https://www.walmart.com.mx/ip/3",
+        price: 120,
+        currency: "MXN",
+        reason: "otra_presentacion"
+      }
+    ];
+
+    const searchLinks = [
+      { storeId: "walmart_mx", nombre: "Walmart", url: "https://www.walmart.com.mx/search?q=nutella", dominio: "walmart.com.mx" }
+    ];
+
+    const html = QED.buildCompareResultsHtml({
+      same: sameItems,
+      similar: similarItems,
+      unreadable: [],
+      searchLinks
+    });
+
+    const container = w.document.createElement("div");
+    container.innerHTML = html;
+
+    // 1. Escapado de texto hostil
+    const scripts = container.querySelectorAll("script");
+    const imgs = container.querySelectorAll("img[onerror]");
+    const svgs = container.querySelectorAll("svg");
+    check("G4. Comparador: texto hostil en diferencia, título y precio unitario no inserta etiquetas maliciosas",
+      scripts.length === 0 && imgs.length === 0 && svgs.length === 0 && !w.__pwned);
+    check("G4. Comparador: etiqueta de diferencia con HTML malicioso se muestra escapada como texto",
+      container.innerHTML.includes("&lt;img src=x onerror=") && !container.innerHTML.includes("<img src=x onerror="));
+    check("G4. Comparador: precio unitario hostil se muestra escapado como texto",
+      container.innerHTML.includes("&lt;svg onload=") && !container.innerHTML.includes("<svg onload="));
+
+    // 2. Precio unitario visible en clase .compare-unit-price
+    const unitPriceEls = container.querySelectorAll(".compare-unit-price");
+    check("G4. Comparador: precio unitario se muestra en elementos .compare-unit-price",
+      unitPriceEls.length > 0 && unitPriceEls[0].textContent.includes("/kg"));
+
+    // 3. Tope de 5 'mismo' y 4 'parecidos'
+    const rows = container.querySelectorAll(".compare-item-row");
+    // 5 mismo + 4 similar = 9 filas en total
+    check("G4. Comparador: respeta tope de 5 productos 'mismo' y 4 'parecidos'",
+      rows.length === 9, `filas encontradas: ${rows.length}`);
+
+    // 4. Orden de secciones: Mismo -> Otra presentación / Variante distinta -> Enlaces
+    const textAll = container.textContent;
+    const posSame = textAll.indexOf("Mismo producto");
+    const posPres = textAll.indexOf("Otra presentación");
+    const posVar = textAll.indexOf("Variante distinta");
+    const posLinks = container.querySelector(".compare-search-links") ? container.innerHTML.indexOf("compare-search-links") : -1;
+    check("G4. Comparador: orden correcto de grupos (Mismo → Otra presentación → Variante distinta → Enlaces)",
+      posSame !== -1 && posPres !== -1 && posVar !== -1 && posLinks !== -1 &&
+      posSame < posPres && posPres < posVar && container.innerHTML.indexOf("Mismo producto") < posLinks);
+  }
+
   console.log(`\n${pass}/${total} pruebas de seguridad correctas`);
   process.exit(pass === total ? 0 : 1);
 })();

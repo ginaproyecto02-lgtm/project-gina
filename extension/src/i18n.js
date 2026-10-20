@@ -1193,6 +1193,22 @@
       it: "Il più economico trovato",
       ja: "最安値"
     },
+    compare_other_presentation: {
+      es: "Otra presentación",
+      en: "Other presentation",
+      de: "Andere Ausführung",
+      fr: "Autre présentation",
+      it: "Altra presentazione",
+      ja: "別の仕様"
+    },
+    compare_different_variant: {
+      es: "Variante distinta",
+      en: "Different variant",
+      de: "Andere Variante",
+      fr: "Variante différente",
+      it: "Variante diversa",
+      ja: "異なるバリエーション"
+    },
     compare_similar_product: {
       es: "Parecidos",
       en: "Similar products",
