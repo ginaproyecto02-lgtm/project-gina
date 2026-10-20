@@ -385,7 +385,9 @@ m["description"] = "__MSG_extDescription__"
 m["version"] = "3.2.0"
 m["action"]["default_title"] = "__MSG_actionTitle__"
 # Chrome 121+ usa service_worker; Firefox 121+ usa scripts (página de eventos). Ambos con el mismo archivo.
-m["background"] = {"service_worker": "src/background.js", "scripts": ["src/matcher.js", "src/reputation.js", "src/ai.js", "src/background.js"]}
+# Firefox no tiene importScripts: aquí van TODOS los módulos que background.js carga en Chrome (antes faltaban
+# alternativas, i18n, semejanza y comparador, y en Firefox el comparador y las sugerencias fallaban).
+m["background"] = {"service_worker": "src/background.js", "scripts": ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/i18n.js", "src/semejanza.js", "src/comparador.js", "src/ai.js", "src/background.js"]}
 m["minimum_chrome_version"] = "121"
 m.pop("homepage_url", None)
 m["browser_specific_settings"] = {"gecko": {

@@ -563,6 +563,7 @@ for (const entry of GOLDEN_SET) {
   }
 }
 
+if (process.env.GINA_VER_ORO) console.log(goldenDetails.join("\n"));
 const precision = TP + FP > 0 ? TP / (TP + FP) : 1;
 const recall = TP + FN > 0 ? TP / (TP + FN) : 1;
 
@@ -574,6 +575,56 @@ console.log(`Precisión: ${(precision * 100).toFixed(1)}% | Cobertura (Recall): 
 
 check("G3: Precisión de «mismo» = 100% (ningún falso positivo)", precision === 1.0 && FP === 0, goldenDetails.join("; "));
 check("G3: Cobertura de «mismo» >= 90%", recall >= 0.90, `recall: ${(recall * 100).toFixed(1)}%`);
+
+console.log("\n=== Validación 2026-10-19: casos fuera del conjunto de oro (el motor no debe estar ajustado solo a él) ===");
+{
+  // [actual, candidato, tipo esperado («same» | «similar» | «different»)]
+  const FUERA = [
+    [{ brand: "Nutella", title: "Nutella Crema de Avellanas con Cacao 1 kg" }, "Nutella 2 Tarros De 1 Kg", "similar"],
+    [{ brand: "Nutella", title: "Nutella Crema de Avellanas con Cacao 1 kg" }, "Crema de avellanas tipo Nutella 1 kg Kirkland", "different"],
+    [{ brand: "Nutella", title: "Nutella Crema de Avellanas con Cacao 1 kg" }, "Nutella Biscuits 304 g", "similar"],
+    [{ brand: "Nutella", title: "Nutella Crema de Avellanas con Cacao 1 kg" }, "Nutella crema de avellana 1000g", "same"],
+    [{ brand: "Coca-Cola", title: "Coca-Cola Original Lata 355 ml" }, "Coca Cola Original 355 ml", "same"],
+    [{ brand: "Coca-Cola", title: "Coca-Cola Original Lata 355 ml" }, "Coca-Cola Light Lata 355 ml", "similar"],
+    [{ brand: "Bosch", title: "Bosch Rotomartillo GSB 13 RE 750W 220V, 5 brocas y maletín" }, "Bosch GSB 130 Rotomartillo", "different"],
+    [{ brand: "Bosch", title: "Bosch Rotomartillo GSB 13 RE 750W 220V, 5 brocas y maletín" }, "Bosch Rotomartillo GSB 13 RE Professional 750W 127V con maletín", "similar"],
+    [{ brand: "Nupec", title: "Nupec Comida para Felino Adul Indoor, 5 kg" }, "Nupec Felino Senior Indoor 5 kg", "different"],
+    [{ brand: "Nupec", title: "Nupec Comida para Felino Adul Indoor, 5 kg" }, "Nupec Felino Kitten 1.5 kg", "different"],
+    [{ brand: "Nupec", title: "Nupec Felino Indoor 1.5 kg" }, "Nupec Felino Indoor 7.5 kg", "similar"],
+    [{ brand: "Samsung", title: "Samsung Galaxy S23 128 GB Negro" }, "Samsung Galaxy S23 Ultra 128 GB", "similar"],
+    [{ brand: "Samsung", title: "Samsung Galaxy S23 128 GB Negro" }, "Samsung Galaxy S23 FE 128 GB", "similar"],
+    [{ brand: "Samsung", title: "Samsung Galaxy S23 128 GB Negro" }, "Samsung Galaxy S24 128 GB", "different"],
+    [{ brand: "Samsung", title: "Samsung Galaxy S23 128 GB Negro" }, "Samsung Galaxy S23 128GB Negro", "same"],
+    [{ brand: "Apple", title: "Apple iPhone 15 128 GB Negro" }, "Apple iPhone 15 Pro 128 GB", "similar"],
+    [{ brand: "Apple", title: "Apple iPhone 15 128 GB Negro" }, "Apple iPhone 15 256 GB", "similar"],
+    [{ brand: "Apple", title: "Apple iPhone 15 128 GB Negro" }, "Apple iPhone 14 128 GB", "different"],
+    [{ brand: "LG", title: "LG Monitor 27GN800 27 pulgadas" }, "Colgate Pasta dental 27 g", "different"],
+    [{ brand: "LG", title: "LG Monitor 27GN800 27 pulgadas" }, "LG UltraGear 27GN800-B Monitor 27\"", "same"]
+  ];
+  const malos = [];
+  for (const [cur, t, esperado] of FUERA) {
+    const r = Semejanza.classifyProductMatch(cur, { title: t, price: 100 });
+    if (r.type !== esperado) malos.push(`${cur.title} vs «${t}»: ${r.type} (${r.label || r.reason}), se esperaba ${esperado}`);
+  }
+  check(`Fuera del oro: ${FUERA.length} casos (packs, imitaciones, Pro/Ultra/FE, capacidad, modelos, etapa, marca dentro de otra palabra)`, malos.length === 0, malos.join("; "));
+
+  const consultas = [
+    [{ brand: "Apple", title: "Apple iPhone 15 128 GB Negro" }, /iphone 15 128 GB/i],
+    [{ brand: "Samsung", title: "Samsung Galaxy S23 128 GB Negro" }, /s23 128 GB/i],
+    [{ brand: "LG", title: "LG Monitor 27GN800 27 pulgadas" }, /27gn800/i]
+  ];
+  const qm = consultas.filter(([p, re]) => !re.test(Semejanza.queryForCompare(p))).map(([p]) => `${p.title} → ${Semejanza.queryForCompare(p)}`);
+  check("Consulta: conserva el número de modelo y la capacidad (iPhone 15 128 GB, S23, 27GN800)", qm.length === 0, qm.join("; "));
+
+  const walmart = fs.readFileSync(path.join(__dirname, "fixtures/semejanza/walmart_mx/caso1.html"), "utf8");
+  check("Walmart con PerimeterX («Verifica tu identidad») se detecta como bloqueo", QED.isBlockedOrCaptcha(walmart, 200) === true);
+
+  const man = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "extension", "manifest.json"), "utf8"));
+  const bg = fs.readFileSync(path.join(__dirname, "..", "extension", "src", "background.js"), "utf8");
+  const imp = (bg.match(/importScripts\(([^)]*)\)/) || [, ""])[1].match(/"([^"]+)"/g).map((x) => "src/" + x.replace(/"/g, ""));
+  const faltan = imp.filter((f) => !(man.background.scripts || []).includes(f));
+  check("Firefox: background.scripts del manifest trae los mismos módulos que importScripts de Chrome", faltan.length === 0, faltan.join(", "));
+}
 
 console.log(`\n${pass}/${total} pruebas de semejanza correctas`);
 if (pass !== total) {

@@ -459,8 +459,12 @@
 
     const renderRow = (item, isSimilar) => {
       const priceFmt = item.price ? (QED.formatMoney ? QED.formatMoney(item.price, item.currency) : `${item.currency || "$"} ${item.price}`) : "";
-      const unitPriceHtml = item.unitPrice && item.unitPrice.text
-        ? `<div class="compare-unit-price" style="font-size:10px;color:#64748b;margin-top:1px;">${esc(item.unitPrice.text)}</div>`
+      // Precio por unidad con la moneda de la tienda (el motor lo arma con «$» fijo)
+      const unitTxt = item.unitPrice && typeof item.unitPrice.unitPrice === "number" && item.currency && QED.formatMoney
+        ? `${QED.formatMoney(item.unitPrice.unitPrice, item.currency)}${item.unitPrice.unitLabel || ""}`
+        : (item.unitPrice && item.unitPrice.text) || "";
+      const unitPriceHtml = unitTxt
+        ? `<div class="compare-unit-price" style="font-size:10px;color:#64748b;margin-top:1px;">${esc(unitTxt)}</div>`
         : "";
       const cheapestBadge = item.isCheapest
         ? `<span class="alt-badge local" style="background:#dcfce7;color:#166534;font-size:10px;font-weight:700;margin-left:6px;">${t("compare_badge_cheapest")}</span>`

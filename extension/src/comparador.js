@@ -104,6 +104,8 @@
     if (/opfcaptcha|images-amazon\.com\/captcha|validateCaptcha/i.test(htmlText)) return true;
     if (/cf-chl-|Cloudflare Ray ID|Attention Required!|Just a moment\.\.\./i.test(htmlText)) return true;
     if (/g-recaptcha|recaptcha\.net|datadome/i.test(htmlText)) return true;
+    // PerimeterX (Walmart): «Verifica tu identidad» / «Bot Protection Page» (validación 2026-10-19: no se detectaba)
+    if (/px-captcha|perimeterx|_pxAppId|Bot Protection Page|<title>\s*Verifica tu identidad\s*<\/title>/i.test(htmlText)) return true;
     return false;
   }
 

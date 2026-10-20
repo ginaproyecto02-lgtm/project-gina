@@ -45,7 +45,7 @@
   const DICT_ETAPA = {
     cachorro: ["cachorro", "cachorros", "puppy", "puppies", "filhote", "filhotes"],
     kitten: ["kitten", "gatito", "gatitos", "gatinho", "gatinhos"],
-    adulto: ["adulto", "adultos", "adult", "adults", "adulte"],
+    adulto: ["adulto", "adultos", "adult", "adults", "adulte", "adul", "adto"],
     senior: ["senior", "maduro", "mature", "7+", "8+", "11+", "edad avanzada", "geriatrico", "idoso"]
   };
 
@@ -177,7 +177,7 @@
       /\b(?:paquete|caja|kit|combo|bultos?|mangas?)\s*(?:de|con|x)?\s*(\d+)\b/i,
       /\b(?:c\/|x\s*)(\d+)\b/i,
       /\b(\d+)\s*x\s*(?:\d+)/i,
-      /\b(\d+)\s*(?:latas|botellas|piezas|pzas|bultos|mangas|sobres)\b/i
+      /\b(\d+)\s*(?:latas|botellas|piezas|pzas|bultos|mangas|sobres|tarros|frascos|bolsas|unidades|paquetes|cajas|envases|potes)\b/i
     ];
     for (const pat of packPatterns) {
       const m = rawTitle.match(pat);
@@ -314,9 +314,36 @@
       return true;
     });
 
+    // I. Capacidad de memoria (celulares, laptops, USB…): 128 GB, 1 TB
+    let capacidad = null;
+    const capM = rawTitle.match(/\b(\d+(?:[.,]\d+)?)\s*(gb|tb)\b/i);
+    if (capM) {
+      const v = parseFloat(capM[1].replace(",", "."));
+      capacidad = { valor: /tb/i.test(capM[2]) ? v * 1024 : v, texto: `${capM[1]} ${capM[2].toUpperCase()}` };
+    }
+
+    // J. Códigos del producto: palabras con dígitos que no son cantidad, paquete, voltaje, potencia ni capacidad
+    //    («15» de iPhone 15, «s23», «27gn800», «13» de GSB 13 RE). Si ambos los tienen y no son iguales, es otro producto.
+    // Las medidas se quitan del título original (con sus decimales: «1.5 kg» no deja un «1» suelto)
+    const sinMedidas = normalizeText(rawTitle.replace(/\d+(?:[.,]\d+)*\s?(?:kg|kilos?|kilogramos?|gr|grs|gramos|g|ml|mls|mililitros?|lt|lts|litros?|l|fl\s*oz|oz|onzas?|lbs?|libras?|gb|tb|v|volts?|w|watts?|cm|mm|pulgadas?|"|”)(?![a-z])/gi, " "))
+      .replace(/\b\d+\s?(?:gb|tb|v|volts?|w|watts?|pulgadas?|cm|mm|m)\b/g, " ")
+      .replace(/\b\d{1,3}(?:\s\d{3})?\s?(?:kg|kilos?|kilogramos?|g|gr|grs|gramos|l|lt|lts|litros?|ml|mls|mililitros?|cc|lb|lbs|libras?|oz|onzas?)\b/g, " ")
+      .replace(/\b\d+\s?(?:kg|g|gr|ml|l)\b/g, " ")
+      .replace(/\b\d+\s*(?:pack|pk|latas|botellas|piezas|pzas|bultos|mangas|sobres|tarros|frascos|bolsas|unidades|paquetes|cajas|brocas|accesorios|x)\b/g, " ")
+      .replace(/\b(?:pack|paquete|caja|kit|combo|c|x)\s*(?:de|con|x)?\s*\d+\b/g, " ")
+      .replace(/\b(?:omega)\s*\d+(?:\s*y\s*\d+)?\b/g, " ");
+    const codigos = Array.from(new Set(sinMedidas.split(/\s+/).filter((w) => /\d/.test(w) && !/^\d{5,}$/.test(w))));
+
+    // K. Calificadores que separan modelos de una misma línea (Pro, Max, Ultra, FE…) o productos de una misma marca
+    const QUALIFIERS = ["pro", "max", "plus", "ultra", "mini", "lite", "fe", "air", "neo", "prime", "biscuits", "snack", "galletas", "barra", "helado", "go"];
+    const calificadores = QUALIFIERS.filter((q) => new RegExp(`\\b${q}\\b`).test(norm));
+
     return {
       rawTitle,
       norm,
+      capacidad,
+      codigos,
+      calificadores,
       cantidad,
       paquete,
       paqueteTexto,
@@ -399,17 +426,46 @@
     const candTitleNorm = candAttr.norm;
 
     // Verificar si la marca coincide
+    // Validación 2026-10-19: la marca se busca como palabra completa («lg» no está en «colgate») y
+    // «tipo Nutella», «similar a…» o «compatible con…» es otra marca que imita, no la misma.
+    const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const brandRe = currBrandNorm ? new RegExp(`(^|\\s)${esc(currBrandNorm)}(\\s|$)`) : null;
     let brandMatches = false;
     if (currBrandNorm) {
-      if (candBrandNorm && (candBrandNorm === currBrandNorm || candBrandNorm.includes(currBrandNorm) || currBrandNorm.includes(candBrandNorm))) {
-        brandMatches = true;
-      } else if (candTitleNorm.includes(currBrandNorm)) {
-        brandMatches = true;
-      }
+      // Marca declarada por la tienda (a veces es el fabricante: «Ferrero» para Nutella) o la marca como palabra del título
+      brandMatches = brandRe.test(candTitleNorm) ||
+        (!!candBrandNorm && (candBrandNorm === currBrandNorm || brandRe.test(candBrandNorm) || new RegExp(`(^|\\s)${esc(candBrandNorm)}(\\s|$)`).test(currBrandNorm)));
+    }
+    if (brandMatches && currBrandNorm && new RegExp(`\\b(?:tipo|estilo|similar a|como|parecid[oa] a|alternativa a|imitacion|compatible con|para)\\s+${esc(currBrandNorm)}\\b`).test(candTitleNorm)) {
+      return { type: "different", reason: "imitacion", label: "Otra marca (imitación o compatible)" };
     }
 
     if (!brandMatches) {
       return { type: "different", reason: "marca_distinta", label: "Marca distinta" };
+    }
+
+    // Códigos del producto distintos (iPhone 15 vs 14, S23 vs S24, 27GN800 vs 27GL650): otro producto
+    const cc = currAttr.codigos || [], ac = candAttr.codigos || [];
+    if (cc.length && ac.length) {
+      const setC = new Set(cc), setA = new Set(ac);
+      const comunes = cc.filter((x) => setA.has(x)).length;
+      if (comunes === 0) return { type: "different", reason: "codigo_distinto", label: `Modelo distinto: ${ac.join(" ")}` };
+    }
+    // Calificador presente en uno solo (Pro, Ultra, FE, Biscuits…): variante, nunca «mismo»
+    const qc = currAttr.calificadores || [], qa = candAttr.calificadores || [];
+    const qDiff = qa.filter((x) => !qc.includes(x)).concat(qc.filter((x) => !qa.includes(x)));
+    if (qDiff.length) {
+      const lbl = qa.filter((x) => !qc.includes(x)).length ? `Versión distinta: ${qa.filter((x) => !qc.includes(x)).join(" ")}` : "Versión distinta";
+      return { type: "similar", reason: "variante", label: lbl, difference: lbl, unitPrice };
+    }
+    // Capacidad distinta (128 GB vs 256 GB)
+    if (currAttr.capacidad && candAttr.capacidad && currAttr.capacidad.valor !== candAttr.capacidad.valor) {
+      const lbl = `Otra capacidad: ${candAttr.capacidad.texto}`;
+      return { type: "similar", reason: "otra_presentacion", label: lbl, difference: lbl, unitPrice };
+    }
+    if (currAttr.capacidad && !candAttr.capacidad && cc.length) {
+      const lbl = "Capacidad no especificada";
+      return { type: "similar", reason: "otra_presentacion", label: lbl, difference: lbl, unitPrice };
     }
 
     // 4. Choque de variantes biológicas / mascotas (ESPECIE, ETAPA, TALLA) -> DESCARTAR
@@ -566,6 +622,11 @@
       };
     }
 
+    // Sin cantidad (electrónica, herramientas): los códigos del producto iguales y sin choques ya revisados → mismo
+    if (cc.length && cc.every((x) => ac.includes(x))) {
+      return { type: "same", reason: "codigo", matchBy: "codigo", unitPrice };
+    }
+
     // Si ninguno tiene cantidad, revisar coincidencia de palabras clave
     const currKeys = currAttr.palabrasClave || [];
     if (currKeys.length > 0) {
@@ -620,9 +681,15 @@
     // Si no hay variantes, usar 2 o 3 palabras clave del título que no sean la marca
     const brandTokens = new Set(normalizeText(brand).split(/\s+/));
     const nonBrandKeywords = (attr.palabrasClave || []).filter((w) => !brandTokens.has(w));
+    const codes = (attr.codigos || []).filter((c) => !normalizeText(brand).split(/\s+/).includes(c));
     if (parts.length <= 1 && nonBrandKeywords.length > 0) {
-      parts.push(...nonBrandKeywords.slice(0, 2));
+      // Con códigos (iPhone 15, Galaxy S23, 27GN800) van la primera palabra y los códigos; sin códigos, 2 palabras
+      if (codes.length) parts.push(nonBrandKeywords[0], ...codes.filter((c) => c !== nonBrandKeywords[0]));
+      else parts.push(...nonBrandKeywords.slice(0, 2));
+    } else if (codes.length) {
+      parts.push(...codes);
     }
+    if (attr.capacidad && attr.capacidad.texto) parts.push(attr.capacidad.texto);
 
     // Añadir cantidad si existe
     if (attr.cantidad && attr.cantidad.texto) {
