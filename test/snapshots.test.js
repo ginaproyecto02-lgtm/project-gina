@@ -17,7 +17,7 @@ function check(name, ok, detail) { total++; if (ok) pass++; console.log(`${ok ? 
 
 function load(html, url) {
   const dom = new JSDOM(html, { url, runScripts: "outside-only" });
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/comparador.js", "src/i18n.js"]) {
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/semejanza.js", "src/comparador.js", "src/i18n.js"]) {
     vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
   }
   dom.window.QED.I18N.setLang("es");

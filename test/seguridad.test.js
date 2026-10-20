@@ -26,7 +26,7 @@ const ALL = Object.values(X).join(" ");
 
 function env(html, url) {
   const dom = new JSDOM(`<!doctype html><html><head></head><body>${html}</body></html>`, { url, runScripts: "outside-only" });
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/comparador.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/semejanza.js", "src/comparador.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
   if (dom.window.QED.I18N) dom.window.QED.I18N.setLang("es");
   return dom.window;
 }

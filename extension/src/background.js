@@ -2,7 +2,7 @@
 // Gina — service worker (Chrome/Edge) o página de eventos (Firefox):
 // memoria (caché, pendientes, verificados), clasificación con IA y job semanal de investigación.
 // En Chrome se cargan las dependencias con importScripts; en Firefox ya vienen en background.scripts del manifiesto.
-if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "alternativas.js", "i18n.js", "comparador.js", "ai.js");
+if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "alternativas.js", "i18n.js", "semejanza.js", "comparador.js", "ai.js");
 const QED = globalThis.QED, AI = globalThis.QEDAI;
 const api = chrome;
 const IS_FIREFOX = typeof browser !== "undefined" && !!(browser.runtime && browser.runtime.getBrowserInfo);

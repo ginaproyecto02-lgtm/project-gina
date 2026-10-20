@@ -8,7 +8,7 @@ const registry = JSON.parse(fs.readFileSync(path.join(EXT, "data/sites.json"), "
 function env(html, url) {
   const dom = new JSDOM(`<!doctype html><html><head></head><body>${html}</body></html>`, { url, runScripts: "outside-only" });
   dom.window.__GINA_SHADOW_OPEN__ = true; // las pruebas leen la tarjeta por host.shadowRoot
-  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/comparador.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
+  for (const f of ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/semejanza.js", "src/comparador.js", "src/flights.js", "src/notices.js", "src/i18n.js", "src/card.js"]) vm.runInContext(fs.readFileSync(path.join(EXT, f), "utf8"), dom.getInternalVMContext());
   if (dom.window.QED.I18N) dom.window.QED.I18N.setLang("es"); // las pruebas verifican los textos en español
   return dom.window;
 }

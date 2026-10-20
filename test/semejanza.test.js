@@ -7,6 +7,7 @@ const path = require("path");
 const { JSDOM, VirtualConsole } = require("jsdom");
 
 const EXT = path.join(__dirname, "..", "extension");
+const semejanzaCode = fs.readFileSync(path.join(EXT, "src/semejanza.js"), "utf8");
 const comparadorCode = fs.readFileSync(path.join(EXT, "src/comparador.js"), "utf8");
 
 const virtualConsole = new VirtualConsole();
@@ -20,8 +21,10 @@ function createJSDOM(html, opts = {}) {
 }
 
 const dom = createJSDOM("<!doctype html><html><body></body></html>", { url: "https://www.example.com" });
+eval(`(function(globalThis) { ${semejanzaCode} })(dom.window);`);
 eval(`(function(globalThis) { ${comparadorCode} })(dom.window);`);
 const QED = dom.window.QED;
+const Semejanza = dom.window.GINA_SEMEJANZA;
 
 let pass = 0, total = 0;
 function check(name, ok, detail) {
@@ -241,6 +244,336 @@ for (const r of diagnosticoResultados) {
   const items = QED.extractStoreItems(htmlMl, docMl, storeConfigs.mercadolibre_mx);
   check("G2: extractStoreItems limita resultados a máximo 10", items.length === 10, `obtenidos: ${items.length}`);
 }
+
+console.log("\n=== G3. Motor de semejanza: Pruebas unitarias de atributos ===");
+
+// 1. Al menos 30 títulos reales con su cantidad, paquete, voltaje, modelo y variantes esperados
+const ATTR_CASES = [
+  // Cantidad y unidades
+  { t: "Nutella Crema De Avellanas Con Cacao Tarro De 1 Kg Chocolate", exp: { cantidad: 1000, unidad: "g", paquete: 1 } },
+  { t: "Crema De Avellanas Nutella 350g", exp: { cantidad: 350, unidad: "g", paquete: 1 } },
+  { t: "Nutella Ferrero crema de avellanas con cacao 995 gr frasco", exp: { cantidad: 995, unidad: "g", paquete: 1 } },
+  { t: "Crema de Avellana Nutella 1,000 g Tarro Familiar", exp: { cantidad: 1000, unidad: "g", paquete: 1 } },
+  { t: "Crema de Avellana Nutella 1.000 g Tarro Grande", exp: { cantidad: 1000, unidad: "g", paquete: 1 } },
+  { t: "Crema De Avellana Nutella Cubeta 3 Kg", exp: { cantidad: 3000, unidad: "g", paquete: 1 } },
+  { t: "Coca-Cola Refresco Original Lata Lean 355 mL", exp: { cantidad: 355, unidad: "ml", paquete: 1 } },
+  { t: "Refresco Coca-Cola Original Botella 600 ml", exp: { cantidad: 600, unidad: "ml", paquete: 1 } },
+  { t: "Coca-Cola Refresco 0.355 L en lata", exp: { cantidad: 355, unidad: "ml", paquete: 1 } },
+  { t: "Refresco Coca-Cola 1.5 L Botella No Retornable", exp: { cantidad: 1500, unidad: "ml", paquete: 1 } },
+  { t: "Bebida energética 12 fl oz can", exp: { cantidad: 355, unidad: "ml", paquete: 1 } },
+  { t: "Alimento en polvo 1 lb bolsa", exp: { cantidad: 454, unidad: "g", paquete: 1 } },
+  { t: "Nupec Felino Adulto Indoor 5 Kg - Gato, Original", exp: { cantidad: 5000, unidad: "g", paquete: 1 } },
+  { t: "Nupec Felino Adulto Indoor 1.5 kg Alimento", exp: { cantidad: 1500, unidad: "g", paquete: 1 } },
+  { t: "Alimento Seco Nupec Nutrición Científica Para Perro Adulto De Raza Pequeña Sabor Mix, 8 Kg", exp: { cantidad: 8000, unidad: "g", paquete: 1 } },
+  { t: "Nupec Perro Adulto Raza Pequeña 2 Kg Bolsa", exp: { cantidad: 2000, unidad: "g", paquete: 1 } },
+
+  // Paquetes y multipacks
+  { t: "Refresco Coca-cola Zero Sin Azúcar 6 Pack 355ml", exp: { cantidad: 355, paquete: 6 } },
+  { t: "Refresco Coca-cola Sin Azúcar 12 Pack 355ml", exp: { cantidad: 355, paquete: 12 } },
+  { t: "Coca-Cola Pack Refresco 12 x 355 mL", exp: { cantidad: 355, paquete: 12 } },
+  { t: "Pack X6 Refresco Coca-cola Bacardí En Lata 355ml", exp: { cantidad: 355, paquete: 6 } },
+  { t: "Pack X12 Refresco Coca-cola Sin Azúcar Lata Delgada De 355ml", exp: { cantidad: 355, paquete: 12 } },
+  { t: "Refresco Coca-Cola Original 355ml, 12 Latas", exp: { cantidad: 355, paquete: 12 } },
+  { t: "3 Mangas Crema De Avellanas Nutella De 1kg C/u", exp: { cantidad: 1000, paquete: 3 } },
+  { t: "2 Bultos Alimento Nupec Felino Indoor 5kg", exp: { cantidad: 5000, paquete: 2 } },
+  { t: "Kit De 2 Nupec Felino Indoor 5kg", exp: { cantidad: 5000, paquete: 2 } },
+
+  // Voltaje y potencia
+  { t: "Bosch Rotomartillo GSB 13 RE 750 W 220 V", exp: { modelo: "GSB 13 RE", potencia: 750, voltaje: "220V" } },
+  { t: "Rotomartillo Bosch Gsb 13 Re 750w 127 V con Maletín", exp: { modelo: "GSB 13 RE", potencia: 750, voltaje: "127V" } },
+  { t: "Taladro Percutor Bosch GSB 18V-50 Batería", exp: { modelo: "GSB 18V-50", voltaje: "18V" } },
+
+  // Variantes y accesorios
+  { t: "Nupec Felino Kitten 1.5 kg Alimento Gatos", exp: { especie: "gato", etapa: "kitten" } },
+  { t: "Nupec Cachorro Raza Pequeña 2 kg", exp: { especie: "perro", etapa: "cachorro", talla_raza: "pequenas" } },
+  { t: "Nupec Perro Adulto Razas Medianas 8 kg", exp: { especie: "perro", etapa: "adulto", talla_raza: "medianas" } },
+  { t: "Nupec Nutrición Especializada Sensitive Perro Adulto 2kg", exp: { formula: "sensible" } },
+  { t: "Funda de silicón para Bosch GSB 13 RE", exp: { accesorio: true } },
+  { t: "Repuesto de navajas compatible con Nutella dispenser", exp: { accesorio: true } }
+];
+
+let attrOk = 0;
+for (const tc of ATTR_CASES) {
+  const a = Semejanza.extractAttributes(tc.t);
+  let ok = true;
+  if (tc.exp.cantidad != null) {
+    if (!a.cantidad || a.cantidad.valor !== tc.exp.cantidad) ok = false;
+  }
+  if (tc.exp.unidad != null) {
+    if (!a.cantidad || a.cantidad.unidad !== tc.exp.unidad) ok = false;
+  }
+  if (tc.exp.paquete != null) {
+    if (a.paquete !== tc.exp.paquete) ok = false;
+  }
+  if (tc.exp.voltaje != null) {
+    if (!a.voltaje || a.voltaje.valor !== tc.exp.voltaje) ok = false;
+  }
+  if (tc.exp.potencia != null) {
+    if (a.potencia !== tc.exp.potencia) ok = false;
+  }
+  if (tc.exp.modelo != null) {
+    if (a.modelo !== tc.exp.modelo) ok = false;
+  }
+  if (tc.exp.especie != null) {
+    if (!a.variantes || a.variantes.especie !== tc.exp.especie) ok = false;
+  }
+  if (tc.exp.etapa != null) {
+    if (!a.variantes || a.variantes.etapa !== tc.exp.etapa) ok = false;
+  }
+  if (tc.exp.talla_raza != null) {
+    if (!a.variantes || a.variantes.talla_raza !== tc.exp.talla_raza) ok = false;
+  }
+  if (tc.exp.formula != null) {
+    if (!a.variantes || a.variantes.formula !== tc.exp.formula) ok = false;
+  }
+  if (tc.exp.accesorio != null) {
+    if (Semejanza.isAccessoryOrSpare(tc.t) !== tc.exp.accesorio) ok = false;
+  }
+  if (ok) attrOk++;
+}
+check("G3: 34 pruebas unitarias de atributos extraídos de títulos reales", attrOk === ATTR_CASES.length, `${attrOk}/${ATTR_CASES.length}`);
+
+console.log("\n=== G3. Negativos obligatorios ===");
+
+// 1. Nutella 350 g no es «mismo» (otra presentación)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso1, { title: "Nutella Crema de Avellanas con Cacao 350 g", brand: "Nutella" });
+  check("Negativo 1a: Nutella 350 g NO es «mismo» (otra presentación)", res.type === "similar" && res.reason === "otra_presentacion", `res: ${JSON.stringify(res)}`);
+}
+
+// 2. Nutella B-ready no es «mismo» (variante)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso1, { title: "Nutella B-ready Galleta Rellena", brand: "Nutella" });
+  check("Negativo 1b: Nutella B-ready NO es «mismo» (variante)", res.type === "similar" && res.reason === "variante", `res: ${JSON.stringify(res)}`);
+}
+
+// 3. Coca-Cola Zero 355 ml no es «mismo» (variante)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso2, { title: "Refresco Coca-Cola Zero Sin Azúcar 355 ml", brand: "Coca-Cola" });
+  check("Negativo 2a: Coca-Cola Zero 355 ml NO es «mismo» (variante)", res.type === "similar" && res.reason === "variante", `res: ${JSON.stringify(res)}`);
+}
+
+// 4. Coca-Cola 600 ml no es «mismo» (otra presentación)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso2, { title: "Refresco Coca-Cola Original 600 ml", brand: "Coca-Cola" });
+  check("Negativo 2b: Coca-Cola 600 ml NO es «mismo» (otra presentación)", res.type === "similar" && res.reason === "otra_presentacion", `res: ${JSON.stringify(res)}`);
+}
+
+// 5. Bosch GSB 13 RE 127 V contra 220 V no es «mismo» (otro voltaje)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso3, { title: "Rotomartillo Bosch GSB 13 RE 750 W 127 V con 5 brocas y maletín", brand: "Bosch" });
+  check("Negativo 3a: Bosch GSB 13 RE 127 V NO es «mismo» (otro voltaje)", res.type === "similar" && res.reason === "variante", `res: ${JSON.stringify(res)}`);
+}
+
+// 6. Bosch GSB 16 RE no es «mismo» (modelo distinto, descartar)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso3, { title: "Rotomartillo Bosch GSB 16 RE 750 W 220 V", brand: "Bosch" });
+  check("Negativo 3b: Bosch GSB 16 RE NO es «mismo» (modelo distinto, descartar)", res.type === "different", `res: ${JSON.stringify(res)}`);
+}
+
+// 7. Nupec Felino Kitten no es «mismo» (etapa choca, descartar)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso4, { title: "Nupec Felino Kitten 5 kg", brand: "Nupec" });
+  check("Negativo 4a: Nupec Felino Kitten NO es «mismo» (etapa distinta, descartar)", res.type === "different", `res: ${JSON.stringify(res)}`);
+}
+
+// 8. Nupec Cachorro Razas Pequeñas no es «mismo» (etapa choca, descartar)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso5, { title: "Nupec Cachorro Razas Pequeñas 8 kg", brand: "Nupec" });
+  check("Negativo 5a: Nupec Cachorro Razas Pequeñas NO es «mismo» (etapa distinta, descartar)", res.type === "different", `res: ${JSON.stringify(res)}`);
+}
+
+// 9. Nupec Adulto Razas Medianas no es «mismo» (talla choca, descartar)
+{
+  const res = Semejanza.classifyProductMatch(targets.caso5, { title: "Nupec Adulto Razas Medianas 8 kg", brand: "Nupec" });
+  check("Negativo 5b: Nupec Adulto Razas Medianas NO es «mismo» (talla distinta, descartar)", res.type === "different", `res: ${JSON.stringify(res)}`);
+}
+
+// 10. Funda o accesorio descartado
+{
+  const res = Semejanza.classifyProductMatch(targets.caso3, { title: "Funda de lona para Bosch GSB 13 RE", brand: "Bosch" });
+  check("Negativo 6: Funda o accesorio NO es «mismo» (accesorio descartado)", res.type === "different" && res.reason === "accesorio", `res: ${JSON.stringify(res)}`);
+}
+
+console.log("\n=== G3. Generación de Consultas de Búsqueda ===");
+
+// Caso 1: Nutella 1 kg
+{
+  const q = Semejanza.queryForCompare(targets.caso1);
+  check("Consulta Caso 1: Nutella 1 kg", q === "Nutella 1 kg", `q: '${q}'`);
+}
+
+// Caso 2: Coca-Cola 355 ml
+{
+  const q = Semejanza.queryForCompare(targets.caso2);
+  check("Consulta Caso 2: Coca-Cola 355 ml", q === "Coca-Cola 355 ml" || q === "Coca Cola 355 ml", `q: '${q}'`);
+}
+
+// Caso 3: Bosch GSB 13 RE (con espacios conservados)
+{
+  const q = Semejanza.queryForCompare(targets.caso3);
+  check("Consulta Caso 3: Bosch GSB 13 RE (conserva espacios originales)", q === "Bosch GSB 13 RE", `q: '${q}'`);
+}
+
+// Caso 4: Nupec felino adulto indoor 5 kg
+{
+  const q = Semejanza.queryForCompare(targets.caso4);
+  check("Consulta Caso 4: Nupec felino adulto indoor 5 kg", q === "Nupec felino adulto indoor 5 kg", `q: '${q}'`);
+}
+
+// Caso 5: Nupec adulto razas pequeñas 8 kg
+{
+  const q = Semejanza.queryForCompare(targets.caso5);
+  check("Consulta Caso 5: Nupec adulto razas pequeñas 8 kg", q === "Nupec adulto razas pequeñas 8 kg", `q: '${q}'`);
+}
+
+// Verificación de respaldo de consulta (sin cantidad)
+{
+  const fb1 = Semejanza.queryForCompareFallback(targets.caso1);
+  check("Consulta respaldo sin cantidad: Nutella", fb1 === "Nutella", `fallback: '${fb1}'`);
+}
+
+console.log("\n=== G3. Conjunto de Oro y Matriz de Confusión ===");
+
+// Conjunto de oro etiquetado a mano contra todos los productos extraídos de las páginas reales:
+// Cada entrada tiene la etiqueta humana esperada: 'same' | 'otra_presentacion' | 'variante' | 'descartar'
+const GOLDEN_SET = [
+  // mercadolibre_mx/caso1 (Nutella 1 kg)
+  { store: "mercadolibre_mx", caso: "caso1", idx: 0, expected: "descartar" }, // Crema De Avellanas Members Mark 1 Kg
+  { store: "mercadolibre_mx", caso: "caso1", idx: 1, expected: "same" }, // Nutella Crema De Avellanas Con Cacao Tarro De 1 Kg Chocolate
+  { store: "mercadolibre_mx", caso: "caso1", idx: 2, expected: "otra_presentacion" }, // Crema De Avellanas Nutella 350g
+  { store: "mercadolibre_mx", caso: "caso1", idx: 3, expected: "descartar" }, // 1kg Crema De Avellana Tarro Chocolate Members Mark
+  { store: "mercadolibre_mx", caso: "caso1", idx: 4, expected: "otra_presentacion" }, // 3 Mangas Crema De Avellanas Nutella De 1kg C/u
+  { store: "mercadolibre_mx", caso: "caso1", idx: 5, expected: "same" }, // Nutella Crema De Avellanas Cacao Tarro De 1 Kg Chocolate
+  { store: "mercadolibre_mx", caso: "caso1", idx: 6, expected: "same" }, // Crema De Avellana Nutella 1 Kg Cacao Ferrero Tarro Chocolate
+  { store: "mercadolibre_mx", caso: "caso1", idx: 7, expected: "descartar" }, // Crema De Avellanas Cacao Kirkland 1kg Sin Gluten Tipo Nutela
+  { store: "mercadolibre_mx", caso: "caso1", idx: 8, expected: "otra_presentacion" }, // Crema De Avellana Nutella Cubeta 3 Kg
+  { store: "mercadolibre_mx", caso: "caso1", idx: 9, expected: "same" }, // Crema De Avellanas Con Cocoa Nutella 1 Kg Manga
+
+  // mercadolibre_mx/caso2 (Coca-Cola 355 ml - lata/botella individual original)
+  { store: "mercadolibre_mx", caso: "caso2", idx: 0, expected: "variante" }, // Refresco Coca-cola Zero Sin Azúcar 6 Pack 355ml
+  { store: "mercadolibre_mx", caso: "caso2", idx: 1, expected: "variante" }, // Refresco Coca-cola Sin Azúcar 12 Pack 355ml
+  { store: "mercadolibre_mx", caso: "caso2", idx: 2, expected: "variante" }, // Pack X6 Refresco Coca-cola Bacardí En Lata 355ml
+  { store: "mercadolibre_mx", caso: "caso2", idx: 3, expected: "variante" }, // Refresco Coca Cola Soda Lata 12 Pack - Sabor Vainilla
+  { store: "mercadolibre_mx", caso: "caso2", idx: 4, expected: "variante" }, // Pack X12 Refresco Coca-cola Sin Azúcar Lata Delgada De 355ml
+  { store: "mercadolibre_mx", caso: "caso2", idx: 5, expected: "descartar" }, // Topo Chico Vidrio Pack X24 De 355ml
+  { store: "mercadolibre_mx", caso: "caso2", idx: 6, expected: "variante" }, // Pack X12 Refrescos Light 4.26l Coca-cola
+  { store: "mercadolibre_mx", caso: "caso2", idx: 7, expected: "descartar" }, // Refresco Sidral Mundet Sabor Manzana Light 6 Pack 355ml
+  { store: "mercadolibre_mx", caso: "caso2", idx: 8, expected: "otra_presentacion" }, // Refresco Coca Cola Original 355ml C/u 6 Pack
+  { store: "mercadolibre_mx", caso: "caso2", idx: 9, expected: "descartar" }, // Pack X6 Refresco Sprite Sin Azúcar Lima Limón 355ml
+
+  // mercadolibre_mx/caso3 (Bosch GSB 13 RE 750W 220V 5 brocas y maletín)
+  { store: "mercadolibre_mx", caso: "caso3", idx: 0, expected: "descartar" }, // GSB 550 RE
+  { store: "mercadolibre_mx", caso: "caso3", idx: 1, expected: "variante" }, // Combo Bosch Rotomartillo + Miniesmeriladora
+  { store: "mercadolibre_mx", caso: "caso3", idx: 2, expected: "variante" }, // GSB 13 RE + Miniesmeriladora
+  { store: "mercadolibre_mx", caso: "caso3", idx: 3, expected: "variante" }, // GSB 13 RE con 23 accesorios
+  { store: "mercadolibre_mx", caso: "caso3", idx: 4, expected: "variante" }, // GSB 13 RE en maletín (sin brocas)
+  { store: "mercadolibre_mx", caso: "caso3", idx: 5, expected: "descartar" }, // GSB 550
+  { store: "mercadolibre_mx", caso: "caso3", idx: 6, expected: "same" }, // GSB 13 RE 750w con 5 brocas y maletín
+  { store: "mercadolibre_mx", caso: "caso3", idx: 7, expected: "variante" }, // GSB 13 RE 750w sin accesorios/maletín
+  { store: "mercadolibre_mx", caso: "caso3", idx: 8, expected: "descartar" }, // GSB 550 RE
+  { store: "mercadolibre_mx", caso: "caso3", idx: 9, expected: "variante" }, // GSB 13 RE + Miniesmeriladora
+
+  // mercadolibre_mx/caso4 (Nupec Felino Adulto Indoor 5 kg)
+  { store: "mercadolibre_mx", caso: "caso4", idx: 0, expected: "same" }, // Paquete De Croquetas Gato Nupec Indoor 5kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 1, expected: "same" }, // Nupec Felino Adulto Indoor 5 Kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 2, expected: "otra_presentacion" }, // Pack X 2 Unidades
+  { store: "mercadolibre_mx", caso: "caso4", idx: 3, expected: "same" }, // Nupec Para Gato Adulto Indoor 5kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 4, expected: "otra_presentacion" }, // 2 Bultos Nupec Felino Indoor 5kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 5, expected: "same" }, // Alimento Nupec Felino Indoor Para Gato Adulto 5 Kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 6, expected: "same" }, // Nupec Felino Adulto Indoor 5 Kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 7, expected: "otra_presentacion" }, // Kit De 2 Nupec Felino Indoor 5kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 8, expected: "otra_presentacion" }, // 2 Bultos Alimento Nupec Felino Indoor 5kg
+  { store: "mercadolibre_mx", caso: "caso4", idx: 9, expected: "same" }, // Alimento Nupec Indoor Para Gato Adulto Bolsa De 5kg
+
+  // mercadolibre_mx/caso5 (Nupec Perros Adulto Razas Pequeñas 8 kg)
+  { store: "mercadolibre_mx", caso: "caso5", idx: 0, expected: "otra_presentacion" }, // 2 Kg Bolsa Seca
+  { store: "mercadolibre_mx", caso: "caso5", idx: 1, expected: "otra_presentacion" }, // Sensitive Bolsa De 2kg
+  { store: "mercadolibre_mx", caso: "caso5", idx: 2, expected: "otra_presentacion" }, // Sensible Sabor Mezcla (sin kg)
+  { store: "mercadolibre_mx", caso: "caso5", idx: 3, expected: "same" }, // Nupec Para Perro Adulto De Raza Pequeña 8 Kg
+  { store: "mercadolibre_mx", caso: "caso5", idx: 4, expected: "otra_presentacion" }, // Weight Control Bolsa De 2kg
+  { store: "mercadolibre_mx", caso: "caso5", idx: 5, expected: "descartar" }, // Senior Para Raza Pequeña 8 Kg (etapa senior != adulto)
+  { store: "mercadolibre_mx", caso: "caso5", idx: 6, expected: "same" }, // Croquetas Nupec Adulto Raza Pequeña 8kg
+  { store: "mercadolibre_mx", caso: "caso5", idx: 7, expected: "variante" }, // Weight Control 8 Kg (fórmula control de peso != regular)
+  { store: "mercadolibre_mx", caso: "caso5", idx: 8, expected: "descartar" }, // Razas Medianas Y Grandes (talla != pequeñas)
+  { store: "mercadolibre_mx", caso: "caso5", idx: 9, expected: "otra_presentacion" }, // Combo 2 Croquetas Nupec 8kg
+
+  // amazon_mx/caso1 (Nutella 1 kg)
+  { store: "amazon_mx", caso: "caso1", idx: 0, expected: "descartar" }, // Nucolato
+  { store: "amazon_mx", caso: "caso1", idx: 1, expected: "descartar" }, // Panettone
+  { store: "amazon_mx", caso: "caso1", idx: 2, expected: "descartar" }, // Miel
+  { store: "amazon_mx", caso: "caso1", idx: 3, expected: "descartar" }, // Quaker Stila
+  { store: "amazon_mx", caso: "caso1", idx: 4, expected: "same" }, // Nutella Chocolate de Avellana para Untar 1 Kg
+  { store: "amazon_mx", caso: "caso1", idx: 5, expected: "same" }, // Nutella Ferrero crema de avellanas con cacao 1 kg
+  { store: "amazon_mx", caso: "caso1", idx: 6, expected: "same" }, // Crema de Avellana con Cacao Ferrero Nutella 995 gr
+  { store: "amazon_mx", caso: "caso1", idx: 7, expected: "otra_presentacion" }, // Nutella Crema de Avellanas con Cacao, 350 G
+  { store: "amazon_mx", caso: "caso1", idx: 8, expected: "otra_presentacion" }, // Nutella Crema de Avellanas con Cacao, 200 G
+  { store: "amazon_mx", caso: "caso1", idx: 9, expected: "otra_presentacion" }, // Nutella 350 G (Paquete de 2)
+
+  // amazon_mx/caso2 (Coca-Cola 355 ml - lata individual)
+  { store: "amazon_mx", caso: "caso2", idx: 0, expected: "descartar" }, // Dr Pepper
+  { store: "amazon_mx", caso: "caso2", idx: 1, expected: "descartar" }, // Vacuum Bottle (accesorio)
+  { store: "amazon_mx", caso: "caso2", idx: 2, expected: "descartar" }, // Peñafiel
+  { store: "amazon_mx", caso: "caso2", idx: 3, expected: "descartar" }, // Dr Pepper Cream Soda
+  { store: "amazon_mx", caso: "caso2", idx: 4, expected: "otra_presentacion" }, // Pack Refresco 12 x 355 mL
+  { store: "amazon_mx", caso: "caso2", idx: 5, expected: "otra_presentacion" }, // Refresco Coca-Cola Original 355 ml, 12 Latas
+  { store: "amazon_mx", caso: "caso2", idx: 6, expected: "otra_presentacion" }, // Refresco Coca-Cola Original 355ml, 12 Latas
+  { store: "amazon_mx", caso: "caso2", idx: 7, expected: "same" }, // Coca-Cola Refresco Original Lata Lean 355 mL
+  { store: "amazon_mx", caso: "caso2", idx: 8, expected: "variante" }, // Coca-Cola Refresco Sin Azúcar 12 x 355 mL
+  { store: "amazon_mx", caso: "caso2", idx: 9, expected: "variante" }  // Coca-Cola Sin Azúcar 1 pack x 12
+];
+
+// Cargar productos extraídos de cada fixture
+const fixtureCache = {};
+function getExtractedItem(store, caso, idx) {
+  const key = `${store}/${caso}`;
+  if (!fixtureCache[key]) {
+    const htmlPath = path.join(__dirname, `fixtures/semejanza/${store}/${caso}.html`);
+    const html = fs.readFileSync(htmlPath, "utf8");
+    const cfg = storeConfigs[store] || { dominio: store };
+    const doc = createJSDOM(html, { url: `https://www.${cfg.dominio}/` }).window.document;
+    fixtureCache[key] = QED.extractStoreItems(html, doc, cfg);
+  }
+  return fixtureCache[key][idx];
+}
+
+// Evaluación del conjunto de oro
+let TP = 0, FP = 0, FN = 0, TN = 0;
+const goldenDetails = [];
+
+for (const entry of GOLDEN_SET) {
+  const target = targets[entry.caso];
+  const item = getExtractedItem(entry.store, entry.caso, entry.idx);
+  if (!item) continue;
+
+  const result = Semejanza.classifyProductMatch(target, item);
+  const isPredictedSame = result.type === "same";
+  const isExpectedSame = entry.expected === "same";
+
+  if (isExpectedSame && isPredictedSame) {
+    TP++;
+  } else if (!isExpectedSame && isPredictedSame) {
+    FP++;
+    goldenDetails.push(`FALSO POSITIVO en ${entry.store}/${entry.caso}[${entry.idx}]: '${item.title}'`);
+  } else if (isExpectedSame && !isPredictedSame) {
+    FN++;
+    goldenDetails.push(`FALSO NEGATIVO en ${entry.store}/${entry.caso}[${entry.idx}]: '${item.title}' -> clasificado: ${result.type}/${result.reason}`);
+  } else {
+    TN++;
+  }
+}
+
+const precision = TP + FP > 0 ? TP / (TP + FP) : 1;
+const recall = TP + FN > 0 ? TP / (TP + FN) : 1;
+
+console.log("\nMatriz de confusión («Mismo producto»):");
+console.log(`|                    | Real: Mismo | Real: No mismo |`);
+console.log(`| Predicho: Mismo    | TP: ${String(TP).padStart(7)} | FP: ${String(FP).padStart(10)} |`);
+console.log(`| Predicho: No mismo | FN: ${String(FN).padStart(7)} | TN: ${String(TN).padStart(10)} |`);
+console.log(`Precisión: ${(precision * 100).toFixed(1)}% | Cobertura (Recall): ${(recall * 100).toFixed(1)}%`);
+
+check("G3: Precisión de «mismo» = 100% (ningún falso positivo)", precision === 1.0 && FP === 0, goldenDetails.join("; "));
+check("G3: Cobertura de «mismo» >= 90%", recall >= 0.90, `recall: ${(recall * 100).toFixed(1)}%`);
 
 console.log(`\n${pass}/${total} pruebas de semejanza correctas`);
 if (pass !== total) {

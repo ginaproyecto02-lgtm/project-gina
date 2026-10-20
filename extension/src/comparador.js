@@ -521,6 +521,12 @@
 
   // Clasificación de concordancia de producto (Mismo producto / Parecido / Ninguno)
   function classifyProductMatch(current, candidate) {
+    if (root.GINA_SEMEJANZA && root.GINA_SEMEJANZA.classifyProductMatch) {
+      return root.GINA_SEMEJANZA.classifyProductMatch(current, candidate);
+    }
+    if (root.Semejanza && root.Semejanza.classifyProductMatch) {
+      return root.Semejanza.classifyProductMatch(current, candidate);
+    }
     if (!current || !candidate) return { type: "none" };
 
     // 1. Coincidencia por GTIN / EAN / UPC
@@ -578,11 +584,17 @@
     const similar = [];
 
     for (const it of candidateItems || []) {
-      const match = it.matchType ? { type: it.matchType, matchBy: it.matchBy } : classifyProductMatch(currentProduct, it);
+      const match = it.matchType ? { type: it.matchType, matchBy: it.matchBy, label: it.label, difference: it.difference, unitPrice: it.unitPrice } : classifyProductMatch(currentProduct, it);
       if (match.type === "same") {
-        same.push(Object.assign({}, it, { matchType: "same", matchBy: match.matchBy }));
+        same.push(Object.assign({}, it, { matchType: "same", matchBy: match.matchBy, unitPrice: match.unitPrice }));
       } else if (match.type === "similar") {
-        similar.push(Object.assign({}, it, { matchType: "similar", matchBy: match.matchBy }));
+        similar.push(Object.assign({}, it, {
+          matchType: "similar",
+          matchBy: match.matchBy,
+          label: match.label || match.difference,
+          difference: match.difference || match.label,
+          unitPrice: match.unitPrice
+        }));
       }
     }
 
@@ -615,18 +627,25 @@
       }
     }
 
-    // Parecidos: máximo 3, con etiqueta «Parecido, revisa el modelo» y sin insignia de precio
-    const parecidos = similar.slice(0, 3).map((it) => {
+    // Máximo 5 «mismo» y 4 parecidos
+    const mismos = same.slice(0, 5);
+    const parecidos = similar.slice(0, 4).map((it) => {
       const copy = Object.assign({}, it, { isSimilar: true, isCheapest: false });
       return copy;
     });
 
-    return { same, similar: parecidos };
+    return { same: mismos, similar: parecidos };
   }
 
   // Genera la consulta de búsqueda para otra tienda según la prioridad:
-  // 1. GTIN -> 2. Marca + modelo -> 3. Marca + núcleo del título (nunca título completo)
+  // 1. GTIN -> 2. Marca + modelo -> 3. Marca + 2-3 palabras de línea + cantidad
   function queryForCompare(product) {
+    if (root.GINA_SEMEJANZA && root.GINA_SEMEJANZA.queryForCompare) {
+      return root.GINA_SEMEJANZA.queryForCompare(product);
+    }
+    if (root.Semejanza && root.Semejanza.queryForCompare) {
+      return root.Semejanza.queryForCompare(product);
+    }
     if (!product) return "";
     const gtin = cleanGtin(product.gtin);
     if (gtin) return gtin;
