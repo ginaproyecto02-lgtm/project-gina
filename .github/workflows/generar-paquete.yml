@@ -110,6 +110,7 @@ jobs:
           node test/semejanza.test.js
           node test/sugerencias_gs.test.js
           node test/sugerencias_robot.test.js
+          node test/ciclo_extenso.test.js
 
       - name: Leer versiones
         id: v

@@ -76,7 +76,8 @@
   const ACCESSORY_PATTERNS = [
     /\bfunda\s+(?:para|compatible|de|protectora)\b/i,
     /\b(?:case|cover)\s+(?:for|compatible)\b/i,
-    /\bcompatible\s+con\b/i,
+    /\bcompatibles?\s+con\b/i,
+    /\b(?:mica|cristal\s+templado|protector\s+de\s+pantalla)\b/i,
     /\b(?:repuesto|repuestos)\s+(?:para|de)?\b/i,
     /\brefill\s+(?:para|de)?\b/i,
     /\baccesorio\s+para\b/i,
