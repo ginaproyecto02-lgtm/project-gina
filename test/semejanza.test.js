@@ -599,6 +599,8 @@ console.log("\n=== Validación 2026-10-19: casos fuera del conjunto de oro (el m
     [{ brand: "Apple", title: "Apple iPhone 15 128 GB Negro" }, "Apple iPhone 15 256 GB", "similar"],
     [{ brand: "Apple", title: "Apple iPhone 15 128 GB Negro" }, "Apple iPhone 14 128 GB", "different"],
     [{ brand: "LG", title: "LG Monitor 27GN800 27 pulgadas" }, "Colgate Pasta dental 27 g", "different"],
+    [{ brand: "Samsung", title: "Samsung Galaxy S24 Ultra 256 GB" }, "Mica Cristal Templado 9H Para Samsung Galaxy S24 Ultra", "different"],
+    [{ brand: "Ikea", title: "Ikea Mesa de centro Lack 90 cm" }, "Ikea Mesa de centro Lack de cristal templado 90 cm", "same"],
     [{ brand: "LG", title: "LG Monitor 27GN800 27 pulgadas" }, "LG UltraGear 27GN800-B Monitor 27\"", "same"]
   ];
   const malos = [];

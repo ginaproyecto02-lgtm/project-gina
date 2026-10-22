@@ -77,7 +77,10 @@
     /\bfunda\s+(?:para|compatible|de|protectora)\b/i,
     /\b(?:case|cover)\s+(?:for|compatible)\b/i,
     /\bcompatibles?\s+con\b/i,
-    /\b(?:mica|cristal\s+templado|protector\s+de\s+pantalla)\b/i,
+    // Solo como accesorio de otro producto: «mesa de cristal templado» o «pintura con mica» no lo son
+    /\bmicas?\s+(?:de\s+(?:cristal|vidrio|hidrogel)|para|protectora|hidrogel|templada)\b/i,
+    /\b(?:cristal|vidrio)\s+templado\s+(?:para|compatible|9h)\b/i,
+    /\bprotector\s+de\s+pantalla\b/i,
     /\b(?:repuesto|repuestos)\s+(?:para|de)?\b/i,
     /\brefill\s+(?:para|de)?\b/i,
     /\baccesorio\s+para\b/i,
