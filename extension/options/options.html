@@ -160,6 +160,25 @@
     </div>
   </section>
 
+  <section class="card" id="sec_suggestions">
+    <h2><span data-i18n="opt_sec_suggestions">Sugerencias</span></h2>
+    <div class="grid">
+      <div class="row"><b data-i18n="opt_lbl_sug_service">Servicio configurado:</b> <span id="sug_service_status">—</span></div>
+      <div class="row"><b data-i18n="opt_lbl_sug_queue">En cola:</b> <span id="sug_queue_count">0</span></div>
+      <div class="row"><b data-i18n="opt_lbl_sug_last">Último resultado:</b> <span id="sug_last_result">—</span></div>
+    </div>
+    <div id="sug_queue_wrap" class="tablewrap" hidden>
+      <table id="sugQueueTable">
+        <thead><tr><th data-i18n="th_brand">Marca</th><th data-i18n="th_product">Producto</th><th data-i18n="th_store">Tienda</th><th data-i18n="th_date">Fecha</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="actions">
+      <button class="ghost" id="btn_flush_suggestions" data-i18n="opt_btn_retry_sug">Reintentar ahora</button>
+      <span class="msg" id="msg_sug"></span>
+    </div>
+  </section>
+
   <p class="foot" id="optFootText">¿Encontraste un dato incorrecto sobre una empresa? Escríbenos para corregirlo: <span id="contacto"><a href="mailto:gina.proyecto02@gmail.com">gina.proyecto02@gmail.com</a></span>. Las claves se guardan solo en este navegador (almacenamiento local de la extensión) y se envían únicamente al proveedor que elijas. Recomendación: crea claves con límite de gasto. Información orientativa; no es una recomendación de compra ni de inversión.</p>
 </main>
 <script src="../src/matcher.js"></script>

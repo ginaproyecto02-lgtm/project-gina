@@ -2,6 +2,7 @@
 // Project Gina — Receptor y despachador de sugerencias en Apps Script (Google Drive / Sheets).
 // Se ejecuta con la identidad de la cuenta gina.proyecto02@gmail.com como Web App.
 
+var CODE_VERSION = "2026-10-22";
 var SCHEMA_KEYS = ["v", "tipo", "marca", "tienda", "producto", "pais", "ext", "inst"];
 var BRAND_OK = /^[\p{L}\p{N}][\p{L}\p{N}\p{M} &'’.,+\-/()]{0,79}$/u;
 var DANGER = /<|>|`|\]\(|!\[|:\/\/|javascript:|data:|@\w|\{\{|\$\{/i;
@@ -113,7 +114,7 @@ function doPost(e) {
     }
 
     if (data.v !== 1) return jsonResponse({ ok: false, e: "version" });
-    if (data.tipo !== "marca" && data.tipo !== "alternativa") return jsonResponse({ ok: false, e: "tipo" });
+    if (data.tipo !== "marca" && data.tipo !== "alternativa" && data.tipo !== "prueba") return jsonResponse({ ok: false, e: "tipo" });
     if (typeof data.marca !== "string" || !data.marca || data.marca.length > 80) return jsonResponse({ ok: false, e: "marca" });
     if (!plausibleBrand(data.marca)) return jsonResponse({ ok: false, e: "marca_invalida" });
     // La tienda es opcional (vacía en alternativas o si no se pudo saber el dominio); si viene, debe ser un dominio.
@@ -124,6 +125,11 @@ function doPost(e) {
     if (typeof data.pais !== "string" || !PAIS_RE.test(data.pais)) return jsonResponse({ ok: false, e: "pais" });
     if (typeof data.ext !== "string" || !EXT_RE.test(data.ext)) return jsonResponse({ ok: false, e: "ext" });
     if (typeof data.inst !== "string" || !UUID_RE.test(data.inst)) return jsonResponse({ ok: false, e: "inst_invalido" });
+
+    // Tipo prueba: pasa validaciones de esquema y datos sin escribir en la hoja ni contar cuotas
+    if (data.tipo === "prueba") {
+      return jsonResponse({ ok: true, prueba: true });
+    }
 
     // Límites de tasa con CacheService
     var cache = CacheService.getScriptCache();
@@ -221,6 +227,11 @@ function doGet(e) {
 
     var op = (e && e.parameter && e.parameter.op) || "";
 
+    if (op === "version") {
+      var filasTotal = Math.max(0, lastRow - 1);
+      return jsonResponse({ ok: true, version: CODE_VERSION, hoja: filasTotal });
+    }
+
     // Borra las filas que el robot dejó en «procesado» en la corrida anterior (de abajo hacia arriba).
     if (op === "purge") {
       var plock = LockService.getScriptLock();
@@ -315,6 +326,7 @@ function doGet(e) {
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
+    CODE_VERSION: CODE_VERSION,
     doPost: doPost,
     doGet: doGet,
     plausibleBrand: plausibleBrand,

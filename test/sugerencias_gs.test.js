@@ -318,6 +318,48 @@ function createMockEnvironment() {
     check("doPost: tienda vacía se acepta (alternativas); un nombre con espacios se rechaza", a.json.ok === true && sheetData[1][2] === "alternativa" && b.json.ok === false);
   }
 
+  // 18. H1: op=version con y sin token
+  {
+    const { code, sheetData } = createMockEnvironment();
+    sheetData.push(["id1", "2026-10-22", "marca", "Marca 1", "tienda.com", "Prod", "MX", "3.2.0", 1, "pendiente"]);
+    sheetData.push(["id2", "2026-10-22", "marca", "Marca 2", "tienda.com", "Prod", "MX", "3.2.0", 1, "pendiente"]);
+
+    const resWithToken = code.doGet({ parameter: { token: "secreto-robot-12345", op: "version" } });
+    const resNoToken = code.doGet({ parameter: { op: "version" } });
+    const resBadToken = code.doGet({ parameter: { token: "invalido", op: "version" } });
+
+    check("H1: op=version con token devuelve version y total de filas en hoja",
+      resWithToken.json.ok === true && resWithToken.json.version === "2026-10-22" && resWithToken.json.hoja === 2,
+      JSON.stringify(resWithToken.json));
+    check("H1: op=version sin token o con token erróneo es rechazado",
+      resNoToken.json.ok === false && resBadToken.json.ok === false && resNoToken.json.e === "no_encontrado");
+  }
+
+  // 19. H1: tipo='prueba' pasa validaciones sin escribir ni gastar cuota
+  {
+    const { code, sheetData, propsStore } = createMockEnvironment();
+    const pruebaPayload = Object.assign({}, validPayload, { tipo: "prueba" });
+    const res = code.doPost({ postData: { contents: JSON.stringify(pruebaPayload) } });
+
+    check("H1: doPost con tipo 'prueba' responde ok:true y prueba:true",
+      res.json.ok === true && res.json.prueba === true,
+      JSON.stringify(res.json));
+    check("H1: doPost con tipo 'prueba' no escribe filas en la hoja",
+      sheetData.length === 1);
+    check("H1: doPost con tipo 'prueba' no gasta cuota diaria",
+      !propsStore.DAILY);
+  }
+
+  // 20. H1: tipo='prueba' con datos inválidos se rechaza igual
+  {
+    const { code } = createMockEnvironment();
+    const badPrueba = Object.assign({}, validPayload, { tipo: "prueba", marca: "<script>alert()</script>" });
+    const res = code.doPost({ postData: { contents: JSON.stringify(badPrueba) } });
+    check("H1: doPost con tipo 'prueba' y marca inválida es rechazado",
+      res.json.ok === false && res.json.e === "marca_invalida",
+      JSON.stringify(res.json));
+  }
+
   console.log(`\n${pass}/${total} pruebas de Apps Script sugerencias correctas`);
   process.exit(pass === total ? 0 : 1);
 })();

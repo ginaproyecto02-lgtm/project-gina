@@ -2023,6 +2023,118 @@
       it: "Suggerimenti via GitHub",
       ja: "GitHubでの提案"
     },
+    opt_sec_suggestions: {
+      es: "Sugerencias",
+      en: "Suggestions",
+      de: "Vorschläge",
+      fr: "Suggestions",
+      it: "Suggerimenti",
+      ja: "提案"
+    },
+    opt_lbl_sug_service: {
+      es: "Servicio configurado",
+      en: "Configured service",
+      de: "Konfigurierter Dienst",
+      fr: "Service configuré",
+      it: "Servizio configurato",
+      ja: "設定済みサービス"
+    },
+    opt_sug_service_yes: {
+      es: "sí (script.google.com/…/exec)",
+      en: "yes (script.google.com/…/exec)",
+      de: "ja (script.google.com/…/exec)",
+      fr: "oui (script.google.com/…/exec)",
+      it: "sì (script.google.com/…/exec)",
+      ja: "はい (script.google.com/…/exec)"
+    },
+    opt_sug_service_no: {
+      es: "no",
+      en: "no",
+      de: "nein",
+      fr: "non",
+      it: "no",
+      ja: "いいえ"
+    },
+    opt_lbl_sug_queue: {
+      es: "En cola",
+      en: "In queue",
+      de: "In Warteschlange",
+      fr: "En file d'attente",
+      it: "In coda",
+      ja: "キュー内"
+    },
+    opt_lbl_sug_last: {
+      es: "Último resultado",
+      en: "Last result",
+      de: "Letztes Ergebnis",
+      fr: "Dernier résultat",
+      it: "Ultimo risultato",
+      ja: "最新の結果"
+    },
+    opt_btn_retry_sug: {
+      es: "Reintentar ahora",
+      en: "Retry now",
+      de: "Jetzt wiederholen",
+      fr: "Réessayer maintenant",
+      it: "Riprova ora",
+      ja: "今すぐ再試行"
+    },
+    opt_sug_status_sent: {
+      es: "enviada",
+      en: "sent",
+      de: "gesendet",
+      fr: "envoyée",
+      it: "inviata",
+      ja: "送信完了"
+    },
+    opt_sug_status_queued: {
+      es: "en cola",
+      en: "in queue",
+      de: "in Warteschlange",
+      fr: "en file d'attente",
+      it: "in coda",
+      ja: "キュー内"
+    },
+    opt_sug_status_rejected: {
+      es: "rechazada",
+      en: "rejected",
+      de: "abgelehnt",
+      fr: "rejetée",
+      it: "rifiutata",
+      ja: "拒絶"
+    },
+    opt_sug_none: {
+      es: "Ninguno",
+      en: "None",
+      de: "Keiner",
+      fr: "Aucun",
+      it: "Nessuno",
+      ja: "なし"
+    },
+    msg_sug_flushed: {
+      es: "Cola procesada.",
+      en: "Queue processed.",
+      de: "Warteschlange verarbeitet.",
+      fr: "File d'attente traitée.",
+      it: "Coda elaborata.",
+      ja: "キューが処理されました。"
+    },
+    msg_sug_err: {
+      es: "Error al procesar la cola.",
+      en: "Error processing queue.",
+      de: "Fehler beim Verarbeiten der Warteschlange.",
+      fr: "Erreur lors du traitement de la file d'attente.",
+      it: "Errore durante l'elaborazione della coda.",
+      ja: "キューの処理中にエラーが発生しました。"
+    },
+    th_product: {
+      es: "Producto",
+      en: "Product",
+      de: "Produkt",
+      fr: "Produit",
+      it: "Prodotto",
+      ja: "商品"
+    },
     opt_help_custom_remote: {
       es: "Déjalo vacío para usar la base del proyecto. Solo si mantienes tu propia copia (por ejemplo, con el job de <code>job/</code> en tu GitHub), pon aquí la URL de tu <code>brands.json</code>.",
       en: "Leave blank to use the official project database. Only enter a URL if you maintain your own <code>brands.json</code> copy (e.g., via GitHub Actions).",

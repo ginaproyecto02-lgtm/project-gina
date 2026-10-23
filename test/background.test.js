@@ -315,7 +315,8 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
       });
       const r1 = await fromTab({ type: "qed:runJob" });
       const r2 = await fromTab({ type: "qed:testKey", which: "research" });
-      check("Órdenes privilegiadas (runJob, testKey) rechazadas si vienen de una pestaña", r1 && r1.ok === false && r2 && r2.ok === false, JSON.stringify([r1, r2]));
+      const r3 = await fromTab({ type: "qed:flush_suggestions" });
+      check("Órdenes privilegiadas (runJob, testKey, flush_suggestions) rechazadas si vienen de una pestaña", r1 && r1.ok === false && r2 && r2.ok === false && r3 && r3.ok === false, JSON.stringify([r1, r2, r3]));
       e.chrome.tabs.created.length = 0;
       await new Promise((resolve) => { for (const f of e.listeners.message) f({ type: "qed:suggest_brand", brand: "X", title: "Y", site: "Z", url: "javascript:alert(1)" }, { tab: { id: 9 } }, resolve); });
       const opened = e.chrome.tabs.created.map((o) => o.url);
@@ -508,6 +509,19 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
     const q6 = (await e3.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
     check("Sugerencia sin URL: estado «en_cola» y se envía sola al arrancar cuando ya hay URL",
       r6 && r6.status === "en_cola" && q6.length === 0 && sheet.some((r) => r[3] === "Marca En Cola"), JSON.stringify({ r6, q6 }));
+
+    // H1: qed:flush_suggestions desde Opciones vacía la cola y guarda suggestionsLastResult
+    const e4 = makeEnv(viaGs);
+    await e4.chrome.storage.local.set({
+      suggestionsQueue: [{ v: 1, tipo: "marca", marca: "Marca Flush Manual", tienda: "liverpool.com.mx", producto: "Articulo F", pais: "MX", ext: "3.2.0", inst: "11111111-2222-4333-8444-555555555555" }]
+    });
+    const rFlush = await e4.send({ type: "qed:flush_suggestions" });
+    const qAfterFlush = (await e4.chrome.storage.local.get("suggestionsQueue")).suggestionsQueue || [];
+    const lrAfterFlush = (await e4.chrome.storage.local.get("suggestionsLastResult")).suggestionsLastResult || null;
+    check("H1: qed:flush_suggestions desde Opciones vacía la cola contra Code.gs y actualiza suggestionsLastResult",
+      rFlush && rFlush.ok === true && rFlush.queued === 0 && qAfterFlush.length === 0 &&
+      lrAfterFlush && lrAfterFlush.status === "enviada" && sheet.some((r) => r[3] === "Marca Flush Manual"),
+      JSON.stringify({ rFlush, qAfterFlush, lrAfterFlush }));
   }
 
   console.log(`\n${pass}/${total} pruebas correctas`);

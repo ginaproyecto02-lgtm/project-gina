@@ -409,24 +409,42 @@ async function sendToSheet(payload) {
   const endpoint = proj.sugerencias_url;
   if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) {
     await enqueueSuggestion(payload);
+    await set({ suggestionsLastResult: { date: Date.now(), status: "en_cola", error: "sin_url" } });
     return { ok: true, status: "en_cola", reason: "sin_url" };
   }
   try {
     await postSuggestion(payload, endpoint);
+    await set({ suggestionsLastResult: { date: Date.now(), status: "enviada", error: null } });
     flushSuggestionsQueue().catch(() => {}); // de paso, lo que quedó en cola
     return { ok: true, status: "enviada" };
   } catch (err) {
-    if (isPermanentSugError(err)) return { ok: false, status: "rechazada", error: String(err.message || err) };
+    if (isPermanentSugError(err)) {
+      const errMsg = String(err.message || err);
+      await set({ suggestionsLastResult: { date: Date.now(), status: "rechazada", error: errMsg } });
+      return { ok: false, status: "rechazada", error: errMsg };
+    }
     await enqueueSuggestion(payload);
-    return { ok: true, status: "en_cola", reason: String(err.message || err) };
+    const errMsg = String(err.message || err);
+    await set({ suggestionsLastResult: { date: Date.now(), status: "en_cola", error: errMsg } });
+    return { ok: true, status: "en_cola", reason: errMsg };
   }
 }
 
 async function postSuggestion(payload, endpoint) {
+  const cleanPayload = {
+    v: payload.v,
+    tipo: payload.tipo,
+    marca: payload.marca,
+    tienda: payload.tienda,
+    producto: payload.producto,
+    pais: payload.pais,
+    ext: payload.ext,
+    inst: payload.inst
+  };
   const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(cleanPayload),
     credentials: "omit",
     referrerPolicy: "no-referrer"
   });
@@ -444,7 +462,8 @@ const isPermanentSugError = (err) => SUG_PERMANENT.has(String((err && err.messag
 async function enqueueSuggestion(item) {
   await locked(async () => {
     const { suggestionsQueue = [] } = await get("suggestionsQueue");
-    suggestionsQueue.push(item);
+    const entry = Object.assign({ queuedAt: Date.now() }, item);
+    suggestionsQueue.push(entry);
     await set({ suggestionsQueue: suggestionsQueue.slice(-20) });
   });
 }
@@ -453,20 +472,36 @@ let flushing = false;
 async function flushSuggestionsQueue() {
   const proj = await project();
   const endpoint = proj.sugerencias_url;
-  if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) return;
+  if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)) {
+    const { suggestionsQueue = [] } = await get("suggestionsQueue");
+    if (suggestionsQueue.length) {
+      await set({ suggestionsLastResult: { date: Date.now(), status: "en_cola", error: "sin_url" } });
+    }
+    return;
+  }
   if (flushing) return;
   flushing = true;
   try {
     const { suggestionsQueue = [] } = await get("suggestionsQueue");
     if (!suggestionsQueue.length) return;
     const done = new Set();
+    let lastResult = null;
     for (const item of suggestionsQueue) {
       try {
         await postSuggestion(item, endpoint);
         done.add(JSON.stringify(item));
+        lastResult = { date: Date.now(), status: "enviada", error: null };
       } catch (err) {
-        if (isPermanentSugError(err)) done.add(JSON.stringify(item));
+        if (isPermanentSugError(err)) {
+          done.add(JSON.stringify(item));
+          lastResult = { date: Date.now(), status: "rechazada", error: String(err.message || err) };
+        } else {
+          lastResult = { date: Date.now(), status: "en_cola", error: String(err.message || err) };
+        }
       }
+    }
+    if (lastResult) {
+      await set({ suggestionsLastResult: lastResult });
     }
     // Se vuelve a leer la cola: lo que se encoló mientras se enviaba no se pierde.
     await locked(async () => {
@@ -768,7 +803,7 @@ async function comparePricesForProduct(product, host, country) {
 
 // Comunicación (auditoría 2026-10-16): solo mensajes de esta extensión; las órdenes que gastan clave o cambian la base
 // solo desde páginas propias (popup/opciones), nunca desde un script que corre dentro de una tienda.
-const PRIVILEGED = new Set(["qed:updateBase", "qed:runJob", "qed:testKey"]);
+const PRIVILEGED = new Set(["qed:updateBase", "qed:runJob", "qed:testKey", "qed:flush_suggestions"]);
 const clip = (v, n) => String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f]+/g, " ").slice(0, n);
 // Lo único que el fondo abre por encargo: redacción en Gmail, issue nuevo del repositorio o rastreadores verificados en rastreadores.json.
 const SAFE_OPEN = /^(mailto:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\?|https:\/\/mail\.google\.com\/mail\/\?view=cm&|https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/issues\/new\?|https:\/\/(?:[a-z0-9.-]+\.)?(?:keepa\.com|camelcamelcamel\.com|pricearchive\.org|alitools\.io)\/)/;
@@ -832,6 +867,15 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
         reply({ ok: true, model: r.model, text: r.text.slice(0, 80) });
       } catch (e) { reply({ ok: false, error: e.message }); }
     });
+    return true;
+  }
+  if (msg.type === "qed:flush_suggestions") {
+    (async () => {
+      await flushSuggestionsQueue();
+      const { suggestionsQueue = [] } = await get("suggestionsQueue");
+      const { suggestionsLastResult = null } = await get("suggestionsLastResult");
+      return { ok: true, queued: suggestionsQueue.length, lastResult: suggestionsLastResult };
+    })().then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
   if (msg.type === "qed:badge") { updateBadge().then(() => reply({ ok: true })); return true; }

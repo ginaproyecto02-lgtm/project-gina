@@ -943,6 +943,7 @@ async function main(options = {}) {
     reputacion: [],
     rechazadas: [],
     errores: [],
+    avisos: [],
     metricas,
     alertaRobot: false
   };
@@ -993,6 +994,13 @@ async function main(options = {}) {
   report.hoja = { leidas: 0, borradas: 0, procesadas: 0 };
   if (sheet) {
     try {
+      try {
+        const vRes = await sheetCall(sheet, { op: "version" }, fetchImpl);
+        const expectedVer = "2026-10-22";
+        if (vRes && vRes.ok && vRes.version !== expectedVer) {
+          report.avisos.push(`el Apps Script tiene una versión vieja de Code.gs (se esperaba ${expectedVer}, reportó ${vRes.version || "desconocida"})`);
+        }
+      } catch (_) {}
       if (!dry) report.hoja.borradas = (await sheetCall(sheet, { op: "purge" }, fetchImpl)).borradas || 0;
       const filas = (await sheetCall(sheet, {}, fetchImpl)).filas || [];
       report.hoja.leidas = filas.length;
@@ -1383,6 +1391,7 @@ async function main(options = {}) {
     `- **Resueltas por**: ya existía (${metricas.resueltasPor.yaExistia}) · biblioteca (${metricas.resueltasPor.biblioteca}) · Wikidata (${metricas.resueltasPor.wikidata}) · IA (${metricas.resueltasPor.ia})`,
     `- **Costo estimado**: US$${metricas.costoEstimadoUsd.toFixed(4)} (${metricas.llamadasIA} llamadas IA, ${metricas.busquedasWeb} búsquedas)`,
     `- **Días issue→merge**: ${metricas.diasIssueMerge}`,
+    ...((report.avisos && report.avisos.length) ? ["", "### Avisos del sistema", ...report.avisos.map((a) => `- ⚠ **Aviso**: ${a}`)] : []),
     ...closesLines,
     "",
     `Proveedor: ${report.proveedor} · Modelo: ${report.modelo} · Fecha: ${dateStr}`

@@ -310,7 +310,7 @@ if ($("#r_provider")) $("#r_provider").addEventListener("change", () => { $("#r_
 
 // ---------------------------------------------------------------- Memoria
 async function refresh() {
-  const st = await api.storage.local.get(["aiCache", "pending", "verified", "groupPatches", "runLog", "usage", "jobState", "remoteBase", "customBrands", "repPatches"]);
+  const st = await api.storage.local.get(["aiCache", "pending", "verified", "groupPatches", "runLog", "usage", "jobState", "remoteBase", "customBrands", "repPatches", "suggestionsQueue", "suggestionsLastResult"]);
   const pend = st.pending || {}, ver = st.verified || {}, cache = st.aiCache || {}, log = st.runLog || [], gp = st.groupPatches || {};
   const pendVals = Object.values(pend);
   const open = pendVals.filter((p) => ["por_investigar", "por_verificar", "reintentar", "sin_fuentes"].includes(p.status)).length;
@@ -365,6 +365,46 @@ async function refresh() {
       <td>${(l.tokensIn || 0).toLocaleString(numLoc)} / ${(l.tokensOut || 0).toLocaleString(numLoc)}${l.searches ? `<div class="small">${l.searches} búsquedas</div>` : ""}</td>
       <td>${[l.remote, ...(l.changed || []), ...(l.errors || []).map((e) => "⚠ " + e)].filter(Boolean).map((x) => `<div class="small">${esc(x)}</div>`).join("") || "—"}</td></tr>`).join("")
     : `<tr><td colspan="9" class="small">${t("msg_no_logs")}</td></tr>`;
+
+  // Sugerencias
+  const sugUrl = (PROJ && PROJ.sugerencias_url) || "";
+  const hasValidSugUrl = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(sugUrl);
+  if ($("#sug_service_status")) {
+    $("#sug_service_status").textContent = hasValidSugUrl
+      ? t("opt_sug_service_yes")
+      : t("opt_sug_service_no");
+  }
+
+  const sQueue = Array.isArray(st.suggestionsQueue) ? st.suggestionsQueue : [];
+  if ($("#sug_queue_count")) $("#sug_queue_count").textContent = String(sQueue.length);
+  const qWrap = $("#sug_queue_wrap");
+  const qTableBody = $("#sugQueueTable tbody");
+  if (qWrap && qTableBody) {
+    if (sQueue.length > 0) {
+      qWrap.hidden = false;
+      qTableBody.innerHTML = sQueue.map((it) => `<tr>
+        <td><b>${esc(it.marca || "(sin marca)")}</b></td>
+        <td>${esc(it.producto || "—")}</td>
+        <td>${esc(it.tienda || "—")}</td>
+        <td>${fmtDate(it.queuedAt || it.date)}</td>
+      </tr>`).join("");
+    } else {
+      qWrap.hidden = true;
+      qTableBody.innerHTML = "";
+    }
+  }
+
+  const lr = st.suggestionsLastResult;
+  if ($("#sug_last_result")) {
+    if (lr && lr.date) {
+      const statusKey = lr.status === "enviada" ? "opt_sug_status_sent" : lr.status === "rechazada" ? "opt_sug_status_rejected" : "opt_sug_status_queued";
+      const statusLabel = t(statusKey);
+      const errPart = lr.error ? ` (${lr.error})` : "";
+      $("#sug_last_result").textContent = `${fmtDate(lr.date)} · ${statusLabel}${errPart}`;
+    } else {
+      $("#sug_last_result").textContent = t("opt_sug_none");
+    }
+  }
 }
 
 document.addEventListener("click", async (e) => {
@@ -438,6 +478,22 @@ $("#clearCache").addEventListener("click", async () => {
   msg("msg_mem", t("msg_cache_cleared"), "ok");
   refresh();
 });
+
+if ($("#btn_flush_suggestions")) {
+  $("#btn_flush_suggestions").addEventListener("click", async () => {
+    const btn = $("#btn_flush_suggestions");
+    btn.disabled = true;
+    try {
+      const res = await api.runtime.sendMessage({ type: "qed:flush_suggestions" });
+      await refresh();
+      msg("msg_sug", res && res.ok ? t("msg_sug_flushed") : t("msg_sug_err"), res && res.ok ? "ok" : "err");
+    } catch (err) {
+      msg("msg_sug", String((err && err.message) || err), "err");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
 
 // Selector de idioma dinámico
 if ($("#lang_select")) {
