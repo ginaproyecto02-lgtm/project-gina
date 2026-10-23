@@ -736,6 +736,7 @@ async function comparePricesForProduct(product, host, country) {
 
   const allCandidates = [];
   const unreadable = [];
+  const diagStores = [];
   // Enlace de búsqueda de cada tienda consultada: va debajo de los resultados para ir a ver más.
   const searchLinks = targetStores.map((st) => ({ nombre: st.nombre, dominio: st.dominio, url: st.url_busqueda.replace("{q}", encodeURIComponent(query)) }));
 
@@ -748,13 +749,54 @@ async function comparePricesForProduct(product, host, country) {
     if (cachedEntry && cachedEntry.timestamp && Date.now() - cachedEntry.timestamp < 12 * 60 * 60 * 1000) {
       if (cachedEntry.unreadable) {
         unreadable.push(st.nombre);
+        diagStores.push({
+          tienda: st.dominio,
+          consulta: query,
+          segunda_consulta: null,
+          estado: "cache",
+          metodo: "ninguno",
+          extraidos: 0, mismo: 0, otra_presentacion: 0, variante: 0, descartados: 0
+        });
       } else {
-        allCandidates.push(...(cachedEntry.items || []));
+        const cItems = cachedEntry.items || [];
+        allCandidates.push(...cItems);
+        let mismo = 0, otra_pres = 0, variante = 0, descartados = 0;
+        for (const it of cItems) {
+          const m = QED.classifyProductMatch(product, it);
+          if (m.type === "same") mismo++;
+          else if (m.type === "similar") {
+            if (m.reason === "otra_presentacion") otra_pres++;
+            else variante++;
+          } else descartados++;
+        }
+        diagStores.push({
+          tienda: st.dominio,
+          consulta: query,
+          segunda_consulta: null,
+          estado: "cache",
+          metodo: cItems[0] && cItems[0]._extractMethod ? cItems[0]._extractMethod : (cItems.length > 0 ? "jsonld" : "ninguno"),
+          extraidos: cItems.length,
+          mismo,
+          otra_presentacion: otra_pres,
+          variante,
+          descartados
+        });
       }
       continue;
     }
 
-    if (!(await hasCompareHostPermission(st.dominio))) { unreadable.push(st.nombre); continue; }
+    if (!(await hasCompareHostPermission(st.dominio))) {
+      unreadable.push(st.nombre);
+      diagStores.push({
+        tienda: st.dominio,
+        consulta: query,
+        segunda_consulta: null,
+        estado: "sin_permiso",
+        metodo: "ninguno",
+        extraidos: 0, mismo: 0, otra_presentacion: 0, variante: 0, descartados: 0
+      });
+      continue;
+    }
 
     const searchUrl = st.url_busqueda.replace("{q}", encodeURIComponent(query));
     const res = await safeFetchCompare(searchUrl, st.dominio);
@@ -762,10 +804,37 @@ async function comparePricesForProduct(product, host, country) {
     if (!res.ok || QED.isBlockedOrCaptcha(res.text, res.status)) {
       await set({ [cacheKey]: { timestamp: Date.now(), items: [], unreadable: true } });
       unreadable.push(st.nombre);
+      let estado = "error_http";
+      if (QED.isBlockedOrCaptcha(res.text, res.status)) estado = "bloqueo";
+      else if (res.error === "timeout") estado = "tiempo_agotado";
+      else if (res.status) estado = "error_http (" + res.status + ")";
+      else if (res.error) estado = "error_http (" + res.error + ")";
+
+      diagStores.push({
+        tienda: st.dominio,
+        consulta: query,
+        segunda_consulta: null,
+        estado,
+        metodo: "ninguno",
+        extraidos: 0, mismo: 0, otra_presentacion: 0, variante: 0, descartados: 0
+      });
       continue;
     }
 
     let items = await parseStoreHtml(res.text, st);
+    let segundaConsulta = null;
+    if (items.length === 0) {
+      const fallbackQ = (QED.queryForCompareFallback && QED.queryForCompareFallback(product)) || "";
+      if (fallbackQ && fallbackQ !== query) {
+        segundaConsulta = fallbackQ;
+        const fUrl = st.url_busqueda.replace("{q}", encodeURIComponent(fallbackQ));
+        const fRes = await safeFetchCompare(fUrl, st.dominio);
+        if (fRes.ok && !QED.isBlockedOrCaptcha(fRes.text, fRes.status)) {
+          const fItems = await parseStoreHtml(fRes.text, st);
+          if (fItems && fItems.length > 0) items = fItems;
+        }
+      }
+    }
 
     if (product.gtin && items.length > 0 && !items.some((it) => it.gtin)) {
       const fichas = items.slice(0, 2);
@@ -787,7 +856,55 @@ async function comparePricesForProduct(product, host, country) {
     items.forEach((it) => { it.storeName = st.nombre; it.storeDomain = st.dominio; });
     await set({ [cacheKey]: { timestamp: Date.now(), items } });
     allCandidates.push(...items);
+
+    let mismo = 0, otra_pres = 0, variante = 0, descartados = 0;
+    for (const it of items) {
+      const m = QED.classifyProductMatch(product, it);
+      if (m.type === "same") mismo++;
+      else if (m.type === "similar") {
+        if (m.reason === "otra_presentacion") otra_pres++;
+        else variante++;
+      } else descartados++;
+    }
+
+    const metodo = items.length > 0 && items[0]._extractMethod ? items[0]._extractMethod : (items.length > 0 ? "jsonld" : "ninguno");
+    diagStores.push({
+      tienda: st.dominio,
+      consulta: query,
+      segunda_consulta: segundaConsulta,
+      estado: "leida",
+      metodo,
+      extraidos: items.length,
+      mismo,
+      otra_presentacion: otra_pres,
+      variante,
+      descartados
+    });
   }
+
+  for (const st of countryStores.slice(4)) {
+    diagStores.push({
+      tienda: st.dominio,
+      consulta: query,
+      segunda_consulta: null,
+      estado: "omitida",
+      metodo: "ninguno",
+      extraidos: 0, mismo: 0, otra_presentacion: 0, variante: 0, descartados: 0
+    });
+  }
+
+  // Registrar en compareDiagnostics (máximo 10, sin URL ni título de producto)
+  const currentHostClean = String(host || "").replace(/^www\./, "").toLowerCase();
+  const diagnosticEntry = {
+    fecha: Date.now(),
+    tienda: currentHostClean,
+    tiendas: diagStores
+  };
+  await locked(async () => {
+    const { compareDiagnostics = [] } = await get("compareDiagnostics");
+    compareDiagnostics.unshift(diagnosticEntry);
+    await set({ compareDiagnostics: compareDiagnostics.slice(0, 10) });
+  });
 
   const ranked = QED.groupAndRankComparison(product, allCandidates);
   return {

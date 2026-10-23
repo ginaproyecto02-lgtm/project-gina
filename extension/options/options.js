@@ -310,7 +310,7 @@ if ($("#r_provider")) $("#r_provider").addEventListener("change", () => { $("#r_
 
 // ---------------------------------------------------------------- Memoria
 async function refresh() {
-  const st = await api.storage.local.get(["aiCache", "pending", "verified", "groupPatches", "runLog", "usage", "jobState", "remoteBase", "customBrands", "repPatches", "suggestionsQueue", "suggestionsLastResult"]);
+  const st = await api.storage.local.get(["aiCache", "pending", "verified", "groupPatches", "runLog", "usage", "jobState", "remoteBase", "customBrands", "repPatches", "suggestionsQueue", "suggestionsLastResult", "compareDiagnostics"]);
   const pend = st.pending || {}, ver = st.verified || {}, cache = st.aiCache || {}, log = st.runLog || [], gp = st.groupPatches || {};
   const pendVals = Object.values(pend);
   const open = pendVals.filter((p) => ["por_investigar", "por_verificar", "reintentar", "sin_fuentes"].includes(p.status)).length;
@@ -405,6 +405,74 @@ async function refresh() {
       $("#sug_last_result").textContent = t("opt_sug_none");
     }
   }
+
+  // Diagnóstico del comparador
+  const diags = Array.isArray(st.compareDiagnostics) ? st.compareDiagnostics : [];
+  const diagSelect = $("#diag_select");
+  const diagTableBody = $("#diagTable tbody");
+  const diagInfo = $("#diag_info");
+  const copyBtn = $("#btn_copy_diag");
+
+  if (diagSelect && diagTableBody) {
+    if (diags.length === 0) {
+      diagSelect.innerHTML = `<option value="">${esc(t("msg_diag_empty"))}</option>`;
+      diagSelect.disabled = true;
+      if (diagInfo) diagInfo.textContent = "";
+      diagTableBody.innerHTML = `<tr><td colspan="9" class="small">${esc(t("msg_diag_empty"))}</td></tr>`;
+      if (copyBtn) copyBtn.disabled = true;
+    } else {
+      diagSelect.disabled = false;
+      if (copyBtn) copyBtn.disabled = false;
+      const prevVal = parseInt(diagSelect.value, 10);
+      const selectedIdx = (!isNaN(prevVal) && prevVal >= 0 && prevVal < diags.length) ? prevVal : 0;
+      diagSelect.innerHTML = diags.map((d, idx) => `<option value="${idx}">${fmtDate(d.fecha)} · ${esc(d.tienda || "—")}</option>`).join("");
+      diagSelect.value = String(selectedIdx);
+      renderSelectedDiagnostic(diags[selectedIdx]);
+    }
+  }
+}
+
+function renderSelectedDiagnostic(diag) {
+  const diagInfo = $("#diag_info");
+  const diagTableBody = $("#diagTable tbody");
+  if (!diag) {
+    if (diagInfo) diagInfo.textContent = "";
+    if (diagTableBody) diagTableBody.innerHTML = `<tr><td colspan="9" class="small">${esc(t("msg_diag_empty"))}</td></tr>`;
+    return;
+  }
+  if (diagInfo) {
+    diagInfo.textContent = `${fmtDate(diag.fecha)} · ${t("th_store")}: ${diag.tienda} (${(diag.tiendas || []).length} tiendas)`;
+  }
+  if (diagTableBody) {
+    const list = diag.tiendas || [];
+    diagTableBody.innerHTML = list.length ? list.map((st) => {
+      const qText = st.segunda_consulta ? `${esc(st.consulta)}<div class="small">segunda: ${esc(st.segunda_consulta)}</div>` : esc(st.consulta || "—");
+      return `<tr>
+        <td><b>${esc(st.tienda)}</b></td>
+        <td>${qText}</td>
+        <td><span class="pill ${esc(st.estado && st.estado.startsWith("error") ? "error" : (st.estado || "neutral"))}">${esc(st.estado)}</span></td>
+        <td><code>${esc(st.metodo || "ninguno")}</code></td>
+        <td>${esc(st.extraidos != null ? st.extraidos : "0")}</td>
+        <td>${esc(st.mismo != null ? st.mismo : "0")}</td>
+        <td>${esc(st.otra_presentacion != null ? st.otra_presentacion : "0")}</td>
+        <td>${esc(st.variante != null ? st.variante : "0")}</td>
+        <td>${esc(st.descartados != null ? st.descartados : "0")}</td>
+      </tr>`;
+    }).join("") : `<tr><td colspan="9" class="small">—</td></tr>`;
+  }
+}
+
+function formatDiagnosticsPlainText(diag) {
+  if (!diag) return "";
+  const lines = [];
+  lines.push(`Diagnóstico del comparador Gina (${fmtDate(diag.fecha)})`);
+  lines.push(`Tienda actual: ${diag.tienda || "—"}`);
+  lines.push("Tiendas consultadas:");
+  for (const st of diag.tiendas || []) {
+    const qPart = st.segunda_consulta ? `"${st.consulta}" (segunda: "${st.segunda_consulta}")` : `"${st.consulta}"`;
+    lines.push(`- ${st.tienda}: ${st.estado} | metodo: ${st.metodo} | consulta: ${qPart} | extraidos: ${st.extraidos != null ? st.extraidos : 0}, mismo: ${st.mismo != null ? st.mismo : 0}, otra pres.: ${st.otra_presentacion != null ? st.otra_presentacion : 0}, variante: ${st.variante != null ? st.variante : 0}, descartados: ${st.descartados != null ? st.descartados : 0}`);
+  }
+  return lines.join("\n");
 }
 
 document.addEventListener("click", async (e) => {
@@ -474,7 +542,7 @@ $("#importFile").addEventListener("change", async (e) => {
 });
 
 $("#clearCache").addEventListener("click", async () => {
-  await api.storage.local.set({ aiCache: {} });
+  await api.storage.local.set({ aiCache: {}, compareDiagnostics: [] });
   msg("msg_mem", t("msg_cache_cleared"), "ok");
   refresh();
 });
@@ -491,6 +559,36 @@ if ($("#btn_flush_suggestions")) {
       msg("msg_sug", String((err && err.message) || err), "err");
     } finally {
       btn.disabled = false;
+    }
+  });
+}
+
+if ($("#diag_select")) {
+  $("#diag_select").addEventListener("change", async (e) => {
+    const idx = parseInt(e.target.value, 10);
+    const { compareDiagnostics = [] } = await api.storage.local.get("compareDiagnostics");
+    if (!isNaN(idx) && compareDiagnostics[idx]) {
+      renderSelectedDiagnostic(compareDiagnostics[idx]);
+    }
+  });
+}
+
+if ($("#btn_copy_diag")) {
+  $("#btn_copy_diag").addEventListener("click", async () => {
+    const select = $("#diag_select");
+    const idx = select ? parseInt(select.value, 10) : 0;
+    const { compareDiagnostics = [] } = await api.storage.local.get("compareDiagnostics");
+    const diag = (!isNaN(idx) && compareDiagnostics[idx]) ? compareDiagnostics[idx] : compareDiagnostics[0];
+    if (!diag) {
+      msg("msg_diag", t("msg_diag_empty"), "err");
+      return;
+    }
+    const plainText = formatDiagnosticsPlainText(diag);
+    try {
+      await navigator.clipboard.writeText(plainText);
+      msg("msg_diag", t("msg_diag_copied"), "ok");
+    } catch (_) {
+      msg("msg_diag", "Error al copiar", "err");
     }
   });
 }

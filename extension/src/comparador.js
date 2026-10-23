@@ -495,13 +495,19 @@
     const nextData = extractNextData(doc || htmlText);
     if (nextData) {
       const nextItems = parseProductsFromNextData(nextData, domain, cur);
-      if (nextItems.length > 0) return nextItems.slice(0, 10);
+      if (nextItems.length > 0) {
+        nextItems.forEach((it) => { it._extractMethod = "json"; });
+        return nextItems.slice(0, 10);
+      }
     }
 
     const preloadedState = extractPreloadedState(doc || htmlText);
     if (preloadedState) {
       const preItems = parseProductsFromPreloadedState(preloadedState, domain, cur);
-      if (preItems.length > 0) return preItems.slice(0, 10);
+      if (preItems.length > 0) {
+        preItems.forEach((it) => { it._extractMethod = "json"; });
+        return preItems.slice(0, 10);
+      }
     }
 
     // 2. JSON-LD
@@ -510,12 +516,18 @@
     for (const ld of jsonLds) {
       ldItems.push(...parseProductsFromJsonLd(ld, domain, cur));
     }
-    if (ldItems.length > 0) return ldItems.slice(0, 10);
+    if (ldItems.length > 0) {
+      ldItems.forEach((it) => { it._extractMethod = "jsonld"; });
+      return ldItems.slice(0, 10);
+    }
 
     // 3. Selectores (si hay doc disponible)
     if (doc && cfg.selectores) {
       const selItems = parseStoreWithSelectors(doc, cfg.selectores, domain, cur);
-      if (selItems.length > 0) return selItems.slice(0, 10);
+      if (selItems.length > 0) {
+        selItems.forEach((it) => { it._extractMethod = "selectores"; });
+        return selItems.slice(0, 10);
+      }
     }
 
     return [];
@@ -680,6 +692,20 @@
     return h === d || h.endsWith("." + d);
   };
 
+  function formatDiagnosticsPlainText(diag) {
+    if (!diag) return "";
+    const lines = [];
+    const dateStr = diag.fecha ? new Date(diag.fecha).toISOString().replace("T", " ").slice(0, 19) : "";
+    lines.push(`Diagnóstico del comparador Gina (${dateStr})`);
+    lines.push(`Tienda actual: ${diag.tienda || "—"}`);
+    lines.push("Tiendas consultadas:");
+    for (const st of diag.tiendas || []) {
+      const qPart = st.segunda_consulta ? `"${st.consulta}" (segunda: "${st.segunda_consulta}")` : `"${st.consulta}"`;
+      lines.push(`- ${st.tienda}: ${st.estado} | metodo: ${st.metodo} | consulta: ${qPart} | extraidos: ${st.extraidos != null ? st.extraidos : 0}, mismo: ${st.mismo != null ? st.mismo : 0}, otra pres.: ${st.otra_presentacion != null ? st.otra_presentacion : 0}, variante: ${st.variante != null ? st.variante : 0}, descartados: ${st.descartados != null ? st.descartados : 0}`);
+    }
+    return lines.join("\n");
+  }
+
   // Exportar utilidades
   QED.hostMatches = hostMatches;
   QED.sanitizeStoreUrl = sanitizeStoreUrl;
@@ -690,6 +716,7 @@
   QED.cleanModel = cleanModel;
   QED.isBlockedOrCaptcha = isBlockedOrCaptcha;
   QED.extractJsonLd = extractJsonLd;
+  QED.formatDiagnosticsPlainText = formatDiagnosticsPlainText;
   QED.extractNextData = extractNextData;
   QED.extractPreloadedState = extractPreloadedState;
   QED.parseProductsFromNextData = parseProductsFromNextData;

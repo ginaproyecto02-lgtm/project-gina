@@ -453,6 +453,93 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
       rPg && rPg.ok === true && rBad && rBad.ok === false && tabs.length === 1 && tabs[0] === "ext://options/comparar.html?pais=M%C3%A9xico", JSON.stringify(tabs));
   }
 
+  // ---------------------------------------------------------------- H2: Diagnóstico del comparador
+  {
+    const baseWith3 = JSON.parse(fs.readFileSync(path.join(EXT, "data", "brands.json"), "utf8"));
+    baseWith3.tiendas_comparar = {
+      "México": [
+        { nombre: "Walmart México", dominio: "walmart.com.mx", url_busqueda: "https://www.walmart.com.mx/search?q={q}" },
+        { nombre: "Mercado Libre", dominio: "mercadolibre.com.mx", url_busqueda: "https://listado.mercadolibre.com.mx/{q}" },
+        { nombre: "Liverpool", dominio: "liverpool.com.mx", url_busqueda: "https://www.liverpool.com.mx/tienda?s={q}" }
+      ]
+    };
+    baseWith3.version = String(baseWith3.version) + "h2";
+    const sampleHtml = `
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Sony WH-1000XM5 Audífonos",
+        "offers": { "@type": "Offer", "price": "6800", "priceCurrency": "MXN", "url": "https://www.walmart.com.mx/ip/sony-wh-1000xm5/123" }
+      }
+      </script>
+    `;
+    const diagEnv = makeEnv(async (req) => {
+      if (req.url.includes("walmart.com.mx")) {
+        return { status: 200, body: sampleHtml };
+      }
+      if (req.url.includes("mercadolibre.com.mx")) {
+        return { status: 403, body: "Blocked by PerimeterX" };
+      }
+      return { status: 200, body: "" };
+    });
+    diagEnv.store.compareConsent = true;
+    diagEnv.store.remoteBase = { data: baseWith3, version: baseWith3.version };
+    diagEnv.chrome.permissions.granted.add("https://*.walmart.com.mx/*");
+    diagEnv.chrome.permissions.granted.add("https://*.mercadolibre.com.mx/*");
+
+    const userProductTitle = "Sony WH-1000XM5 Audífonos Inalámbricos Ruido Premium 2026";
+    await diagEnv.send({
+      type: "qed:compare_prices",
+      product: { title: userProductTitle, brand: "Sony", mpn: "WH-1000XM5", price: 7500, currency: "MXN" },
+      host: "www.amazon.com.mx",
+      country: "México"
+    });
+
+    const diags = (await diagEnv.chrome.storage.local.get("compareDiagnostics")).compareDiagnostics || [];
+    const lastDiag = diags[0];
+
+    // 1. Estados: leida, bloqueo, sin_permiso
+    const stWalmart = lastDiag && (lastDiag.tiendas || []).find((t) => t.tienda === "walmart.com.mx");
+    const stML = lastDiag && (lastDiag.tiendas || []).find((t) => t.tienda === "mercadolibre.com.mx");
+    const stLiverpool = lastDiag && (lastDiag.tiendas || []).find((t) => t.tienda === "liverpool.com.mx");
+
+    check("H2: el registro se llena con un caso leído, uno bloqueado y uno sin permiso",
+      stWalmart && stWalmart.estado === "leida" && stWalmart.metodo === "jsonld" &&
+      stML && stML.estado === "bloqueo" &&
+      stLiverpool && stLiverpool.estado === "sin_permiso",
+      JSON.stringify(lastDiag && lastDiag.tiendas));
+
+    // 2. Sin URLs completas de usuario ni títulos de productos
+    const diagJson = JSON.stringify(lastDiag);
+    const hasFullUrls = /https?:\/\//i.test(diagJson);
+    const hasProductTitle = diagJson.includes(userProductTitle);
+    check("H2: no guarda URLs completas de la página ni títulos de productos",
+      !hasFullUrls && !hasProductTitle && lastDiag.tienda === "amazon.com.mx",
+      JSON.stringify({ hasFullUrls, hasProductTitle, tienda: lastDiag && lastDiag.tienda }));
+
+    // 3. Guarda máximo 10
+    for (let i = 0; i < 15; i++) {
+      await diagEnv.send({
+        type: "qed:compare_prices",
+        product: { title: "P " + i, brand: "Sony", mpn: "WH-1000XM5" },
+        host: "www.amazon.com.mx",
+        country: "México"
+      });
+    }
+    const diags15 = (await diagEnv.chrome.storage.local.get("compareDiagnostics")).compareDiagnostics || [];
+    check("H2: compareDiagnostics guarda máximo 10 comparaciones",
+      diags15.length === 10,
+      `longitud = ${diags15.length}`);
+
+    // 4. «Borrar memoria» lo vacía
+    await diagEnv.chrome.storage.local.set({ aiCache: {}, compareDiagnostics: [] });
+    const diagsCleared = (await diagEnv.chrome.storage.local.get("compareDiagnostics")).compareDiagnostics || [];
+    check("H2: «Borrar memoria» vacía compareDiagnostics",
+      diagsCleared.length === 0,
+      `longitud = ${diagsCleared.length}`);
+  }
+
   // ---------------------------------------------------------------- Sugerencias de punta a punta: extensión → Code.gs real (validación 2026-10-18)
   // Antes las pruebas mandaban datos «bonitos» a mano; en el navegador la tarjeta y el popup mandaban el nombre de la tienda,
   // el servicio lo rechazaba y la tarjeta decía «Enviada». Aquí el fondo habla con el Code.gs real (con Sheets simulado).

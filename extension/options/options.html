@@ -179,6 +179,42 @@
     </div>
   </section>
 
+  <section class="card" id="sec_compare_diag">
+    <h2><span data-i18n="opt_sec_compare_diag">Diagnóstico del comparador</span></h2>
+    <p class="help" data-i18n="opt_help_compare_diag">Registro local de las últimas 10 comparaciones de precios realizadas en tu navegador para auditar lecturas, bloqueos y tiendas consultadas.</p>
+    <div class="grid">
+      <label class="wide">
+        <span data-i18n="opt_lbl_diag_select">Seleccionar comparación</span>
+        <select id="diag_select"></select>
+      </label>
+    </div>
+    <div id="diag_details">
+      <div id="diag_info" class="small" style="margin-bottom: 8px;"></div>
+      <div class="tablewrap">
+        <table id="diagTable">
+          <thead>
+            <tr>
+              <th data-i18n="th_store">Tienda</th>
+              <th data-i18n="th_diag_query">Consulta</th>
+              <th data-i18n="th_status">Estado</th>
+              <th data-i18n="th_diag_method">Método</th>
+              <th data-i18n="th_diag_extracted">Extraídos</th>
+              <th data-i18n="th_diag_same">Mismo</th>
+              <th data-i18n="th_diag_diff_pres">Otra pres.</th>
+              <th data-i18n="th_diag_variant">Variante</th>
+              <th data-i18n="th_diag_discarded">Descartados</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="ghost" id="btn_copy_diag" data-i18n="opt_btn_copy_diag">Copiar diagnóstico</button>
+      <span class="msg" id="msg_diag"></span>
+    </div>
+  </section>
+
   <p class="foot" id="optFootText">¿Encontraste un dato incorrecto sobre una empresa? Escríbenos para corregirlo: <span id="contacto"><a href="mailto:gina.proyecto02@gmail.com">gina.proyecto02@gmail.com</a></span>. Las claves se guardan solo en este navegador (almacenamiento local de la extensión) y se envían únicamente al proveedor que elijas. Recomendación: crea claves con límite de gasto. Información orientativa; no es una recomendación de compra ni de inversión.</p>
 </main>
 <script src="../src/matcher.js"></script>

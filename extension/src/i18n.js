@@ -2135,6 +2135,110 @@
       it: "Prodotto",
       ja: "商品"
     },
+    opt_sec_compare_diag: {
+      es: "Diagnóstico del comparador",
+      en: "Comparator Diagnostics",
+      de: "Preisvergleich-Diagnose",
+      fr: "Diagnostic du comparateur",
+      it: "Diagnostica del comparatore",
+      ja: "比較機能の診断"
+    },
+    opt_help_compare_diag: {
+      es: "Registro local de las últimas 10 comparaciones de precios realizadas en tu navegador para auditar lecturas, bloqueos y tiendas consultadas.",
+      en: "Local log of the last 10 price comparisons performed in your browser to audit readings, blocks, and queried stores.",
+      de: "Lokales Protokoll der letzten 10 Preisvergleiche in deinem Browser zur Überprüfung von Auslesungen, Blockaden und abgefragten Shops.",
+      fr: "Journal local des 10 dernières comparaisons de prix effectuées dans votre navigateur pour auditer lectures, blocages et boutiques consultées.",
+      it: "Registro locale degli ultimi 10 confronti prezzi eseguiti nel browser per verificare letture, blocchi e negozi consultati.",
+      ja: "ブラウザで実行された過去10回の価格比較のローカルログ。取得状況、アクセスブロック、照会先ストアを確認できます。"
+    },
+    opt_lbl_diag_select: {
+      es: "Seleccionar comparación",
+      en: "Select comparison",
+      de: "Vergleich auswählen",
+      fr: "Sélectionner la comparaison",
+      it: "Seleziona confronto",
+      ja: "比較を選択"
+    },
+    opt_btn_copy_diag: {
+      es: "Copiar diagnóstico",
+      en: "Copy diagnostics",
+      de: "Diagnose kopieren",
+      fr: "Copier le diagnostic",
+      it: "Copia diagnostica",
+      ja: "診断情報をコピー"
+    },
+    th_diag_query: {
+      es: "Consulta",
+      en: "Query",
+      de: "Abfrage",
+      fr: "Requête",
+      it: "Query",
+      ja: "クエリ"
+    },
+    th_diag_method: {
+      es: "Método",
+      en: "Method",
+      de: "Methode",
+      fr: "Méthode",
+      it: "Metodo",
+      ja: "抽出方法"
+    },
+    th_diag_extracted: {
+      es: "Extraídos",
+      en: "Extracted",
+      de: "Extrahiert",
+      fr: "Extraits",
+      it: "Estratti",
+      ja: "抽出件数"
+    },
+    th_diag_same: {
+      es: "Mismo",
+      en: "Same",
+      de: "Gleich",
+      fr: "Identique",
+      it: "Stesso",
+      ja: "同商品"
+    },
+    th_diag_diff_pres: {
+      es: "Otra pres.",
+      en: "Diff. pres.",
+      de: "Andere Pack.",
+      fr: "Autre prés.",
+      it: "Altra conf.",
+      ja: "別包装"
+    },
+    th_diag_variant: {
+      es: "Variante",
+      en: "Variant",
+      de: "Variante",
+      fr: "Variante",
+      it: "Variante",
+      ja: "バリアント"
+    },
+    th_diag_discarded: {
+      es: "Descartados",
+      en: "Discarded",
+      de: "Verworfen",
+      fr: "Écartés",
+      it: "Scartati",
+      ja: "除外"
+    },
+    msg_diag_copied: {
+      es: "Diagnóstico copiado al portapapeles.",
+      en: "Diagnostics copied to clipboard.",
+      de: "Diagnose in die Zwischenablage kopiert.",
+      fr: "Diagnostic copié dans le presse-papiers.",
+      it: "Diagnostica copiata negli appunti.",
+      ja: "診断情報をクリップボードにコピーしました。"
+    },
+    msg_diag_empty: {
+      es: "Sin diagnósticos registrados.",
+      en: "No comparisons recorded yet.",
+      de: "Noch keine Vergleiche aufgezeichnet.",
+      fr: "Aucune comparaison enregistrée pour le moment.",
+      it: "Nessun confronto registrato.",
+      ja: "記録された診断情報はありません。"
+    },
     opt_help_custom_remote: {
       es: "Déjalo vacío para usar la base del proyecto. Solo si mantienes tu propia copia (por ejemplo, con el job de <code>job/</code> en tu GitHub), pon aquí la URL de tu <code>brands.json</code>.",
       en: "Leave blank to use the official project database. Only enter a URL if you maintain your own <code>brands.json</code> copy (e.g., via GitHub Actions).",

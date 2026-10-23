@@ -289,5 +289,26 @@ console.log("\n--- 6. Validación 2026-10-18: precios y moneda por país ---");
     r.same[0] && r.same[0].currency === "" && r.same[0].isCheapest === false, JSON.stringify(r.same[0]));
 }
 
+console.log("\n--- 7. Diagnóstico del comparador (H2) ---");
+{
+  const diagSample = {
+    fecha: 1792737837000,
+    tienda: "amazon.com.mx",
+    tiendas: [
+      { tienda: "walmart.com.mx", consulta: "Sony WH-1000XM5", segunda_consulta: null, estado: "leida", metodo: "json", extraidos: 5, mismo: 1, otra_presentacion: 1, variante: 1, descartados: 2 },
+      { tienda: "mercadolibre.com.mx", consulta: "Sony WH-1000XM5", segunda_consulta: "Sony WH-1000", estado: "bloqueo", metodo: "ninguno", extraidos: 0, mismo: 0, otra_presentacion: 0, variante: 0, descartados: 0 },
+      { tienda: "liverpool.com.mx", consulta: "Sony WH-1000XM5", segunda_consulta: null, estado: "sin_permiso", metodo: "ninguno", extraidos: 0, mismo: 0, otra_presentacion: 0, variante: 0, descartados: 0 }
+    ]
+  };
+
+  const plainText = QED.formatDiagnosticsPlainText(diagSample);
+  check("H2: el texto copiado de diagnóstico no trae etiquetas HTML",
+    plainText && !/<[^>]+>/.test(plainText) && plainText.includes("walmart.com.mx: leida"),
+    plainText);
+
+  check("H2: el texto copiado incluye tienda actual, consulta y tiendas consultadas",
+    plainText.includes("Tienda actual: amazon.com.mx") && plainText.includes("Sony WH-1000XM5") && plainText.includes("mercadolibre.com.mx: bloqueo"));
+}
+
 console.log(`\n${pass}/${total} pruebas de comparador correctas`);
 process.exit(pass === total ? 0 : 1);
