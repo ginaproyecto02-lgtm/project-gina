@@ -60,9 +60,35 @@ Para recibir sugerencias de marcas y alternativas sin obligar a los usuarios a a
    - Pestaña **Secrets** → `GINA_SUGERENCIAS_TOKEN` = el mismo valor que `ROBOT_TOKEN`.
    - Prueba: abre `URL/exec?token=TU_TOKEN` en el navegador; debe responder `{"ok":true,"filas":[]}`.
 
+   **Verificación con la herramienta de diagnóstico CLI:**
+   Puedes verificar toda la integración ejecutando la herramienta de diagnóstico:
+   ```bash
+   node job/verificar_sugerencias.js --url "https://script.google.com/macros/s/.../exec" --token "TU_ROBOT_TOKEN"
+   ```
+   Esta herramienta ejecuta 6 comprobaciones automáticas (formato de URL, autenticación GET con token, versión de Code.gs, envío de prueba POST, sugerencias pendientes y sincronización con `proyecto.json`) y muestra diagnósticos claros con acciones correctivas ante cualquier fallo.
+
 6. **Comparte la hoja solo contigo.** El Apps Script escribe con tu identidad, así que la hoja **no** necesita estar compartida. En **Compartir → Acceso general** déjala en **Restringido**: con «Cualquier persona con el enlace puede editar», cualquiera que tenga el enlace puede borrarla o llenarla de basura.
 
 **Ciclo de cada fila:** la extensión escribe la sugerencia con estado `pendiente` (si la misma marca ya está pendiente, suma 1 en `veces`). También puedes escribir filas a mano: con estado vacío cuentan como pendientes. Cada lunes el robot (`job/investigar.js`) 1) borra las filas en `procesado` de la corrida anterior, 2) investiga las pendientes (hasta el límite por corrida; las demás esperan) y 3) las marca `procesado`. Las alternativas (`tipo = alternativa`) no se tocan: se revisan a mano. Ya no hay correo ni issues de por medio.
+
+### Tabla de Secretos y Variables de GitHub Actions
+
+Configura en **Settings → Secrets and variables → Actions**:
+
+| Tipo | Nombre | Descripción | Valor por omisión |
+|---|---|---|---|
+| Secreto | `GINA_API_KEY` | Clave de API del proveedor de IA para investigación (Anthropic, Gemini, OpenAI...) | Obligatorio para el job |
+| Secreto | `GINA_SUGERENCIAS_TOKEN` | Token secreto para que el robot lea y confirme sugerencias en la hoja (mismo valor que `ROBOT_TOKEN` en Apps Script) | Recomendado si usas la hoja |
+| Secreto | `GINA_SAFEBROWSING_KEY` | Clave de Google Safe Browsing Lookup API v4 (opcional) | Opcional |
+| Secreto | `GINA_FACTCHECK_KEY` | Clave de Google Fact Check Tools API (opcional) | Opcional |
+| Variable | `GINA_SUGERENCIAS_URL` | URL pública `/exec` de la aplicación web de Google Apps Script (se empaqueta en `proyecto.json`) | Recomendado si usas la hoja |
+| Variable | `GINA_PROVIDER` | Proveedor de IA: `anthropic`, `gemini`, `groq`, `xai`, `openai` | `anthropic` |
+| Variable | `GINA_MODEL` | Modelo económico de investigación | Modelo por defecto del proveedor |
+| Variable | `GINA_EVERY_DAYS` | Días mínimos entre ejecuciones periódicas del job | `6` (corre los lunes) |
+| Variable | `GINA_REVALIDATE` | Número de evidencias archivadas a revalidar por ejecución | `5` |
+| Variable | `GINA_SITIOS` | Tope de marcas por ejecución para buscarles sitio oficial y buscador (0 = apagado). **No es una lista de dominios.** | `50` |
+| Variable | `GINA_URL_CHECK` | Método de verificación de URLs: `safebrowsing` o `webrisk` | `safebrowsing` |
+| Variable | `GINA_REP_LIMIT` | Límite de investigaciones de reputación por ejecución (0 = apagado) | `0` |
 
 > [!NOTE]
 > **Nota sobre arquitectura futura (Cloud Storage + Cloud Run):**
