@@ -15,8 +15,18 @@
   let lastKey = "", closedFor = "", lastResult = null, timer = null, seq = 0;
 
   async function load() {
-    if (!packaged) packaged = await (await fetch(api.runtime.getURL("data/brands.json"))).json();
-    if (!registry) registry = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
+    if (!packaged || !registry || !QED.PROJECT) {
+      try {
+        const res = await api.runtime.sendMessage({ type: "qed:data" });
+        if (res && res.ok) {
+          if (!packaged && res.brands) packaged = res.brands;
+          if (!registry && res.sites) registry = res.sites;
+          if (!QED.PROJECT && res.project) QED.PROJECT = res.project;
+        }
+      } catch (_) {}
+    }
+    if (!packaged) { try { packaged = await (await fetch(api.runtime.getURL("data/brands.json"))).json(); } catch (_) {} }
+    if (!registry) { try { registry = await (await fetch(api.runtime.getURL("data/sites.json"))).json(); } catch (_) {} }
     if (!QED.PROJECT) { try { QED.PROJECT = await (await fetch(api.runtime.getURL("data/proyecto.json"))).json(); } catch (e) { QED.PROJECT = {}; } }
     const st = await api.storage.local.get(["customBrands", "enabled", "minimized", "remoteBase", "verified", "groupPatches", "settings", "repPatches", "priceHistory", "userSuggestions", "compareConsent"]);
     prefs.enabled = st.enabled !== false;

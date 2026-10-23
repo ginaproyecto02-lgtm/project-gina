@@ -333,6 +333,20 @@ const classifyAnswer = (o) => anthropicText(JSON.stringify(Object.assign({ conoc
         for (const f of e.listeners.message) f({ type: "qed:open_tracker", url: "https://keepa.com/#!product/11-B0ABCDEF12" }, { tab: { id: 9 } }, resolve);
       });
       const openedTrack = e.chrome.tabs.created.map((o) => o.url);
+
+      // H3a: qed:data entrega base efectiva y sitios a la extensión
+      const rData = await e.send({ type: "qed:data" });
+      check("H3a: qed:data responde con base de marcas, sitios y proyecto",
+        rData && rData.ok === true && rData.brands && rData.sites && rData.project,
+        JSON.stringify({ ok: rData && rData.ok, hasBrands: !!(rData && rData.brands), hasSites: !!(rData && rData.sites) }));
+
+      // qed:data desde remitente externo (id distinto) es ignorado
+      let extAnswered = false;
+      for (const f of e.listeners.message) {
+        const ret = f({ type: "qed:data" }, { id: "otro-addon-id" }, () => { extAnswered = true; });
+        if (ret === false) { /* rechazado/ignorado */ }
+      }
+      check("H3a: qed:data ignora remitentes con ID externo", !extAnswered);
       check("F2. qed:open_tracker abre enlace permitido de Keepa", rTrackOk && rTrackOk.ok === true && openedTrack.length === 1 && openedTrack[0] === "https://keepa.com/#!product/11-B0ABCDEF12");
 
       e.chrome.tabs.created.length = 0;

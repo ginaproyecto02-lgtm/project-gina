@@ -399,12 +399,8 @@ m["browser_specific_settings"] = {"gecko": {
 cs = m["content_scripts"][0]
 cs["matches"] = patterns
 cs["js"] = ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/i18n.js", "src/card.js", "src/content.js"]
-# En web_accessible_resources Chrome solo admite patrones con ruta «/*».
-war = []
-for e in S:
-    pat = f"https://*.{e['d']}/*"
-    if pat not in war: war.append(pat)
-m["web_accessible_resources"] = [{"resources": ["data/brands.json", "data/sites.json", "data/proyecto.json"], "matches": war}]
+# H3a: Anti-fingerprinting: no exponer data/*.json en web_accessible_resources
+m.pop("web_accessible_resources", None)
 json.dump(m, open(mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
 paises = sorted({e["pais"] for e in S})

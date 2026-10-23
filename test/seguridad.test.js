@@ -727,6 +727,14 @@ function fakeImap(messages) {
       posSame < posPres && posPres < posVar && container.innerHTML.indexOf("Mismo producto") < posLinks);
   }
 
+  console.log("\n--- H3a. Anti-fingerprinting: sin data/*.json en web_accessible_resources ---");
+  {
+    const manifest = JSON.parse(fs.readFileSync(path.join(EXT, "manifest.json"), "utf8"));
+    const war = manifest.web_accessible_resources || [];
+    const exposesData = war.some((w) => (w.resources || []).some((r) => /^data\//.test(r)));
+    check("H3a: el manifest no expone data/ en web_accessible_resources (anti-fingerprinting)", !exposesData && war.length === 0);
+  }
+
   console.log(`\n${pass}/${total} pruebas de seguridad correctas`);
   process.exit(pass === total ? 0 : 1);
 })();

@@ -592,6 +592,23 @@ async function recordAlternativeSuggestion(alt) {
   });
 }
 
+async function effectiveSites() {
+  if (!sitesCache) sitesCache = await (await fetch(api.runtime.getURL("data/sites.json"))).json();
+  return sitesCache;
+}
+
+async function getDataForContent() {
+  const { db } = await effectiveBase();
+  const sites = await effectiveSites();
+  const proj = await project();
+  return {
+    ok: true,
+    brands: db,
+    sites,
+    project: proj
+  };
+}
+
 let offscreenCreating = null;
 async function ensureOffscreenDocument() {
   if (typeof chrome === "undefined" || !chrome.offscreen) return;
@@ -984,6 +1001,10 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
         reply({ ok: true, model: r.model, text: r.text.slice(0, 80) });
       } catch (e) { reply({ ok: false, error: e.message }); }
     });
+    return true;
+  }
+  if (msg.type === "qed:data") {
+    getDataForContent().then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
   if (msg.type === "qed:flush_suggestions") {
