@@ -429,8 +429,9 @@
       </div>`;
   }
 
-  function buildCompareResultsHtml(cmpData, currentPriceObj) {
+  function buildCompareResultsHtml(cmpData, currentPriceObj, opts) {
     if (!cmpData) return "";
+    opts = opts || {};
     const same = cmpData.same || [];
     const similar = cmpData.similar || [];
     const unreadable = cmpData.unreadable || [];
@@ -514,26 +515,41 @@
           const asinMatch = rawItemUrl.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i) || (item.asin ? [null, item.asin] : null);
           if (asinMatch && asinMatch[1]) {
             const asin = asinMatch[1];
-            const domainCodeMap = {
-              "amazon.com.mx": "11",
-              "amazon.com": "1",
-              "amazon.co.uk": "2",
-              "amazon.de": "3",
-              "amazon.fr": "4",
-              "amazon.co.jp": "5",
-              "amazon.ca": "6",
-              "amazon.it": "8",
-              "amazon.es": "9"
-            };
-            // Solo dominios de Amazon con código de Keepa conocido; si no, sin botón (antes caía en amazon.com).
-            let code = "";
+            let hostNorm = "";
             try {
-              const h = new URL(rawItemUrl).hostname.toLowerCase().replace(/^www\./, "");
-              for (const [d, c] of Object.entries(domainCodeMap)) if (h === d) { code = c; break; }
+              hostNorm = new URL(rawItemUrl).hostname.toLowerCase().replace(/^www\./, "");
             } catch (_) {}
-            if (code) {
-            const keepaUrl = `https://keepa.com/#!product/${code}-${asin}`;
-            amazonTrackerBtn = `<a href="${esc(safe(keepaUrl))}" class="btn-follow-price-mini tracker-link" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:3px;padding:2px 6px;font-size:10px;font-weight:600;color:#0284c7;background:#f0f9ff;border:1px solid #bae6fd;border-radius:4px;text-decoration:none;">${t("btn_follow_price")} ↗</a>`;
+
+            let keepaTemplate = "";
+            const trackerList = (opts && opts.rastreadores) ||
+                                (typeof QED !== "undefined" && (QED.RASTREADORES || (QED.db && QED.db.rastreadores))) ||
+                                null;
+            if (Array.isArray(trackerList)) {
+              const keepaObj = trackerList.find((tr) => tr && tr.nombre === "Keepa" && !tr.excluido);
+              if (keepaObj && keepaObj.dominios && hostNorm) {
+                keepaTemplate = keepaObj.dominios[hostNorm] || "";
+              }
+            }
+            if (!keepaTemplate && hostNorm) {
+              const fallbackMap = {
+                "amazon.com.mx": "https://keepa.com/#!product/11-{asin}",
+                "amazon.com": "https://keepa.com/#!product/1-{asin}",
+                "amazon.co.uk": "https://keepa.com/#!product/2-{asin}",
+                "amazon.de": "https://keepa.com/#!product/3-{asin}",
+                "amazon.fr": "https://keepa.com/#!product/4-{asin}",
+                "amazon.co.jp": "https://keepa.com/#!product/5-{asin}",
+                "amazon.ca": "https://keepa.com/#!product/6-{asin}",
+                "amazon.it": "https://keepa.com/#!product/8-{asin}",
+                "amazon.es": "https://keepa.com/#!product/9-{asin}",
+                "amazon.in": "https://keepa.com/#!product/10-{asin}",
+                "amazon.com.br": "https://keepa.com/#!product/12-{asin}"
+              };
+              keepaTemplate = fallbackMap[hostNorm] || "";
+            }
+
+            if (keepaTemplate) {
+              const keepaUrl = keepaTemplate.replace(/\{asin\}/g, encodeURIComponent(asin));
+              amazonTrackerBtn = `<a href="${esc(safe(keepaUrl))}" class="btn-follow-price-mini tracker-link" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:3px;padding:2px 6px;font-size:10px;font-weight:600;color:#0284c7;background:#f0f9ff;border:1px solid #bae6fd;border-radius:4px;text-decoration:none;">${t("btn_follow_price")} ↗</a>`;
             }
           }
         }
@@ -636,7 +652,7 @@
           <div id="compare-results"></div>
         `;
       } else {
-        bodyHtml = buildCompareResultsHtml(cmpData, price);
+        bodyHtml = buildCompareResultsHtml(cmpData, price, opts);
       }
     }
 
@@ -1235,6 +1251,7 @@
 
   QED.showCard = function (res, opts) {
     opts = opts || {};
+    if (opts.rastreadores) QED.RASTREADORES = opts.rastreadores;
     getHost();
     const shadow = cardRoot;
     if (opts.minimized) {
@@ -1425,11 +1442,11 @@
             res.compareData = r;
             const resBox = shadow.querySelector("#compare-results");
             if (resBox) {
-              resBox.innerHTML = buildCompareResultsHtml(r, res.reliabilityEval && res.reliabilityEval.price);
+              resBox.innerHTML = buildCompareResultsHtml(r, res.reliabilityEval && res.reliabilityEval.price, opts);
             } else {
               cmpContainer.innerHTML = `
                 <div class="d-k" style="margin-bottom:4px;">${t("lbl_in_other_stores")}</div>
-                ${buildCompareResultsHtml(r, res.reliabilityEval && res.reliabilityEval.price)}
+                ${buildCompareResultsHtml(r, res.reliabilityEval && res.reliabilityEval.price, opts)}
               `;
             }
           }

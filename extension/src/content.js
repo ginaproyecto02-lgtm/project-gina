@@ -242,6 +242,7 @@
       compareConsent: prefs.compareConsent,
       compareEnabled: prefs.compareEnabled,
       storesTable: (packaged && packaged.tiendas_comparar) || {},
+      rastreadores: (packaged && packaged.rastreadores) || [],
       onToggle: (m) => { prefs.minimized = m; api.storage.local.set({ minimized: m }); draw(); },
       onClose: () => { closedFor = location.pathname; }
     });

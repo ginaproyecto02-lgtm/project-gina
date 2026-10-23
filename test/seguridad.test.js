@@ -480,14 +480,14 @@ function fakeImap(messages) {
     const w2 = env("<div></div>", "https://www.mercadolibre.com.mx/MLM-123");
     w2.QED.showCard(Object.assign({}, base, { compareData: { same: [
       { title: "Sin dominio", price: 6500, currency: "MXN", url: "https://cualquier-sitio.example/p", storeName: "X" },
-      { title: "Amazon India", price: 6600, currency: "MXN", url: "https://www.amazon.in/dp/B0ABCDEF12", storeName: "Amazon.in", storeDomain: "amazon.in" },
+      { title: "Amazon AU", price: 6600, currency: "AUD", url: "https://www.amazon.com.au/dp/B0ABCDEF12", storeName: "Amazon AU", storeDomain: "amazon.com.au" },
       { title: "Amazon MX", price: 6700, currency: "MXN", url: "https://www.amazon.com.mx/dp/B0ABCDEF12", storeName: "Amazon México", storeDomain: "amazon.com.mx" }
     ], similar: [], unreadable: [] } }), { compareConsent: true, compareEnabled: true });
     const root2 = rootOf(w2);
     const links = Array.from(root2.querySelectorAll("a.compare-link")).map((a) => a.getAttribute("href"));
     const keepa = Array.from(root2.querySelectorAll(".btn-follow-price-mini")).map((a) => a.getAttribute("href"));
     check("Comparador: un resultado sin dominio de tienda conocido no lleva enlace", links[0] === "#", JSON.stringify(links));
-    check("Comparador: Keepa solo para Amazon con código conocido (amazon.in sin botón; amazon.com.mx → 11)",
+    check("Comparador: Keepa solo para Amazon con código conocido (amazon.com.au sin botón; amazon.com.mx → 11)",
       keepa.length === 1 && keepa[0] === "https://keepa.com/#!product/11-B0ABCDEF12", JSON.stringify(keepa));
 
     // Clic en un rastreador: una sola pestaña (la del fondo), no también la del enlace
@@ -733,6 +733,70 @@ function fakeImap(messages) {
     const war = manifest.web_accessible_resources || [];
     const exposesData = war.some((w) => (w.resources || []).some((r) => /^data\//.test(r)));
     check("H3a: el manifest no expone data/ en web_accessible_resources (anti-fingerprinting)", !exposesData && war.length === 0);
+  }
+
+  console.log("\n--- H3b. Keepa para Amazon India y Brasil en comparador ---");
+  {
+    const wH3b = env("<div></div>", "https://example.com");
+    const itemsIndia = [
+      {
+        storeId: "amazon_in",
+        storeName: "Amazon India",
+        storeDomain: "amazon.in",
+        title: "Producto de prueba India",
+        url: "https://www.amazon.in/dp/B08L5VJYV7",
+        price: 999,
+        currency: "INR"
+      }
+    ];
+    const htmlIn = wH3b.QED.buildCompareResultsHtml({ same: itemsIndia });
+    check("H3b: Amazon India genera enlace de Keepa con código de dominio 10",
+      htmlIn.includes("https://keepa.com/#!product/10-B08L5VJYV7"));
+
+    const itemsBr = [
+      {
+        storeId: "amazon_br",
+        storeName: "Amazon Brasil",
+        storeDomain: "amazon.com.br",
+        title: "Produto de teste Brasil",
+        url: "https://www.amazon.com.br/dp/B09XYZ1234",
+        price: 199,
+        currency: "BRL"
+      }
+    ];
+    const htmlBr = wH3b.QED.buildCompareResultsHtml({ same: itemsBr });
+    check("H3b: Amazon Brasil genera enlace de Keepa con código de dominio 12",
+      htmlBr.includes("https://keepa.com/#!product/12-B09XYZ1234"));
+
+    const itemsAu = [
+      {
+        storeId: "amazon_au",
+        storeName: "Amazon Australia",
+        storeDomain: "amazon.com.au",
+        title: "Test item Australia",
+        url: "https://www.amazon.com.au/dp/B08L5VJYV7",
+        price: 50,
+        currency: "AUD"
+      }
+    ];
+    const htmlAu = wH3b.QED.buildCompareResultsHtml({ same: itemsAu });
+    check("H3b: Dominio sin código en Keepa (amazon.com.au) no muestra botón de rastreador",
+      !htmlAu.includes("btn-follow-price-mini") && !htmlAu.includes("keepa.com"));
+
+    const itemsNonAmazon = [
+      {
+        storeId: "liverpool_mx",
+        storeName: "Liverpool",
+        storeDomain: "liverpool.com.mx",
+        title: "Playera polo",
+        url: "https://www.liverpool.com.mx/tienda/pdp/123",
+        price: 499,
+        currency: "MXN"
+      }
+    ];
+    const htmlNonAmazon = wH3b.QED.buildCompareResultsHtml({ same: itemsNonAmazon });
+    check("H3b: Tienda no-Amazon no muestra botón de rastreador Keepa",
+      !htmlNonAmazon.includes("btn-follow-price-mini") && !htmlNonAmazon.includes("keepa.com"));
   }
 
   console.log(`\n${pass}/${total} pruebas de seguridad correctas`);

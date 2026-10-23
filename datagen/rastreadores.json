@@ -14,10 +14,12 @@
     "amazon.co.jp": "https://keepa.com/#!product/5-{asin}",
     "amazon.ca": "https://keepa.com/#!product/6-{asin}",
     "amazon.it": "https://keepa.com/#!product/8-{asin}",
-    "amazon.es": "https://keepa.com/#!product/9-{asin}"
+    "amazon.es": "https://keepa.com/#!product/9-{asin}",
+    "amazon.in": "https://keepa.com/#!product/10-{asin}",
+    "amazon.com.br": "https://keepa.com/#!product/12-{asin}"
    },
-   "verificado": "2026-10-15",
-   "fuente": "https://keepa.com/#!discuss/t/keepa-extension-and-features/61"
+   "verificado": "2026-10-23",
+   "fuente": "https://keepa.com/#!discuss/t/keepa-extension-and-features/61 · https://keepa.com/#!api (verificado 2026-10-23)"
   },
   {
    "nombre": "CamelCamelCamel",
