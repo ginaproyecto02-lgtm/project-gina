@@ -132,7 +132,7 @@ Requiere una Mac con Xcode, convertir la extensión con `xcrun safari-web-extens
 ## 6. Publicar actualizaciones
 
 1. Cambia los datos en `datagen/` y ejecuta `python3 datagen/build_data.py`. Para publicar una versión nueva, sube el número `version` en ese script.
-2. Ejecuta las pruebas: `node test/run.js`, `node test/background.test.js` y `python3 test/e2e.py`.
+2. Ejecuta las pruebas: `node test/run.js`, `node test/background.test.js` y suites de prueba.
 3. Genera el zip con `manifest.json` en la raíz: `cd extension && zip -r ../gina-extension-X.Y.Z.zip . -x "README.md"`.
 4. En cada tienda: *Paquete → Subir nueva versión*.
 

@@ -17,11 +17,11 @@ Cubre 335 sitios de 17 países: EE.UU., México, Canadá, Brasil, Argentina, Chi
 ```
 Usuarios: instalan Gina → la base viene incluida → cada semana descargan la versión nueva del repositorio
           (sin cuenta, sin clave, sin enviar nada suyo; solo se reemplaza si la versión remota es mayor y limpia pendientes reconocidos).
-          Si Gina no conoce una marca, el botón «Sugerir» de la tarjeta o el lote del popup abre un issue de GitHub prellenado
-          con el marcador «gina:sugerencia» y la etiqueta «sugerencia» (o correo como respaldo).
+          Si Gina no conoce una marca, el botón «Sugerir» de la tarjeta o el lote del popup envía la sugerencia
+          directamente a la hoja de Google del proyecto (o abre un issue de GitHub si está configurado en opciones).
 
 Proyecto: GitHub Actions corre el canario los domingos (DRY_RUN=1, sin escribir) y la ejecución real los lunes (job/investigar.js):
-          1. Lee los issues abiertos (marcador «gina:sugerencia» o plantilla YAML), los une con job/pendientes/ y quita duplicados.
+          1. Lee las sugerencias de la hoja y los issues abiertos, los une con job/pendientes/ y quita duplicados.
           2. Orden barato de resolución:
              (a) ¿La marca ya está en la base? → comenta «Ya está en la base (grupo X)» y cierra el issue ($0).
              (b) Biblioteca local datagen/fuentes/ e índice SQLite FTS5 (<12 meses) → reutiliza fuente verificada ($0).
@@ -87,7 +87,7 @@ Para publicarla en las tiendas sigue **`PUBLICAR.md`**.
 
 - Sin la IA avanzada, Gina no envía nada: solo descarga la base del proyecto (un archivo de datos, sin código).
 - Los datos de confiabilidad (calificación de la tienda, vendedor, origen del envío y garantías legales) se extraen localmente de la página abierta y nunca salen de tu navegador.
-- Las sugerencias las envía el usuario por su voluntad, revisando el texto antes (issue de GitHub o correo). Solo incluyen marca, tienda y título del producto.
+- Las sugerencias las envía el usuario por su voluntad (vía hoja de sugerencias del proyecto o issue de GitHub). Solo incluyen marca, tienda y título del producto; nunca historial ni datos de navegación.
 - Con la IA avanzada activada, al proveedor elegido solo van la marca, el título del producto y el nombre de la tienda (y, en la investigación de reputación, el nombre de la empresa).
 - El conteo de qué empresas ves, tus valores y tus claves se quedan en tu navegador.
 
@@ -109,7 +109,7 @@ Para publicarla en las tiendas sigue **`PUBLICAR.md`**.
 | `job/investigar.js`, `.github/workflows/` | Job del proyecto y su programación (canario dominical + ejecución real de lunes) |
 | `docs/privacidad.html` | Política de privacidad (para publicar en GitHub Pages) |
 | `store/` | Textos e imágenes para las tiendas |
-| `test/` | `node test/run.js`, `node test/background.test.js`, `node test/job.test.js`, `node test/e2e_ciclo.test.js` (ejecutar antes `cd test && npm ci`) y `python3 test/e2e.py` (Playwright) |
+| `test/` | `node test/run.js`, `node test/background.test.js`, `node test/job.test.js`, `node test/e2e_ciclo.test.js` y suites de regresión (ejecutar antes `cd test && npm ci`) |
 
 ## Límites
 

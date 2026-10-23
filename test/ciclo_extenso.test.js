@@ -955,9 +955,9 @@ console.log("\n--- 2.5 Resiliencia del cliente: Cola offline y vaciado automáti
     Array.isArray(store.suggestionsQueue) && store.suggestionsQueue.length === 0);
 
   // --- 2.6 Robot Semanal: Manejo de Cuotas, Duplicados y Marcas Populares ---
-  console.log("\n--- 2.6 Robot Semanal (job/sugerencias.js): Filtrado, etiquetado y límites ---");
+  console.log("\n--- 2.6 Sugerencias comunes: Filtrado, deduplicación y sanitización ---");
   {
-    const robot = require("../job/sugerencias.js");
+    const comun = require("../job/sugerencias_comun.js");
 
     const mockBrandsDb = {
       marcas: [{ n: "Bimbo", g: "bimbo" }, { n: "Herdez", g: "herdez" }],
@@ -968,68 +968,25 @@ console.log("\n--- 2.5 Resiliencia del cliente: Cola offline y vaciado automáti
       { title: "Marca faltante: Marinela", body: "Detalles" }
     ];
 
-    const mockFilasHoja = [
-      { id: "row-1", tipo: "marca", marca: "Bimbo", tienda: "tienda.com", producto: "Pan", veces: 1 }, // Ya en DB
-      { id: "row-2", tipo: "marca", marca: "Marinela", tienda: "tienda.com", producto: "Galletas", veces: 1 }, // Ya en issue abierto
-      { id: "row-3", tipo: "marca", marca: "Jabón Zazil", tienda: "tienda.com", producto: "Jabón 100g", veces: 1 }, // Nueva marca
-      { id: "row-4", tipo: "marca", marca: "Miel Melipona Maya", tienda: "tienda.com", producto: "Miel 250ml", veces: 5 }, // Popular: veces >= 3
-      { id: "row-5", tipo: "marca", marca: "Marca Para Siguiente Corrida", tienda: "tienda.com", producto: "P", veces: 1 } // Superará el límite
-    ];
+    check("Sugerencias comunes: descarta marcas ya catalogadas en brands.json y en issues abiertos",
+      comun.isDuplicateBrand("Bimbo", mockBrandsDb, mockOpenIssues) === true &&
+      comun.isDuplicateBrand("Marinela", mockBrandsDb, mockOpenIssues) === true &&
+      comun.isDuplicateBrand("Jabón Zazil", mockBrandsDb, mockOpenIssues) === false);
 
-    let ackedIdsList = [];
-    const mockRobotFetch = async (url) => {
-      if (url.includes("op=ack")) {
-        const u = new URL(url);
-        ackedIdsList = u.searchParams.get("ids").split(",");
-        return { ok: true, status: 200, json: async () => ({ ok: true, procesados: ackedIdsList.length }) };
-      }
-      return { ok: true, status: 200, json: async () => ({ ok: true, filas: mockFilasHoja }) };
-    };
+    check("Sugerencias comunes: valida y sanea marca nueva limpia",
+      comun.plausibleBrand("Jabón Zazil") === true &&
+      comun.sanitize({ tipo: "marca", marca: "Jabón Zazil", tienda: "tienda.com", producto: "Jabón 100g" }) !== null);
 
-    const ghCreatedIssues = [];
-    const mockGhExec = (cmd, args) => {
-      if (cmd === "gh" && args[0] === "issue" && args[1] === "create") {
-        const titleIdx = args.indexOf("--title");
-        const labels = [];
-        for (let i = 0; i < args.length; i++) {
-          if (args[i] === "--label") labels.push(args[i + 1]);
-        }
-        ghCreatedIssues.push({ title: args[titleIdx + 1], labels });
-      }
-    };
+    check("Sugerencias comunes: marca peligrosa rechazada por plausibleBrand",
+      comun.plausibleBrand("<script>alert(1)</script>") === false &&
+      comun.plausibleBrand("@everyone") === false);
 
-    // Correr procesador con límite de 2 creaciones máximas por corrida
-    const robotRes = await robot.processSuggestions({
-      url: "https://script.google.com/macros/s/test/exec",
-      token: "secret-token",
-      brandsDb: mockBrandsDb,
-      openIssues: mockOpenIssues,
-      repo: "ginaproyecto02-lgtm/project-gina",
-      dryRun: false,
-      max: 2, // Límite estricto de 2 issues creados
-      execFile: mockGhExec,
-      fetchImpl: mockRobotFetch
-    });
+    check("Sugerencias comunes: formateo estructurado para issue o robot",
+      comun.buildIssueBody({ tipo: "marca", marca: "Miel Melipona Maya", tienda: "tienda.com", producto: "Miel 250ml" })
+        .includes("<!-- gina:sugerencia v1 tipo=marca -->"));
 
-    check("Robot semanal: descarta marcas ya catalogadas en brands.json y en issues abiertos",
-      robotRes.duplicates === 2 && !ghCreatedIssues.some((c) => c.title.includes("Bimbo") || c.title.includes("Marinela")));
-
-    check("Robot semanal: crea issue para marca nueva (Jabón Zazil)",
-      ghCreatedIssues.some((c) => c.title.includes("Jabón Zazil")));
-
-    check("Robot semanal: marca con veces >= 3 (Miel Melipona Maya) recibe etiqueta 'pedida-por-varios'",
-      ghCreatedIssues.some((c) => c.title.includes("Miel Melipona Maya") && c.labels.includes("pedida-por-varios")));
-
-    check("Robot semanal: respeta límite de max=2 y salta fila excedente (skipped=1)",
-      robotRes.created === 2 && robotRes.skipped === 1);
-
-    check("Robot semanal: confirma (ack) únicamente las 4 filas atendidas, dejando la excedente pendiente",
-      ackedIdsList.length === 4 &&
-      ackedIdsList.includes("row-1") &&
-      ackedIdsList.includes("row-2") &&
-      ackedIdsList.includes("row-3") &&
-      ackedIdsList.includes("row-4") &&
-      !ackedIdsList.includes("row-5"));
+    check("Sugerencias comunes: deduplicación reconoce marcas con alias o símbolos",
+      comun.isDuplicateBrand("Herdez®", mockBrandsDb, []) === true);
   }
 
   // --- REPORTE FINAL ---

@@ -517,37 +517,31 @@ import build_data
     check("22. licencia_origen (CC0|ODbL|oficial|prensa) y fallo en build_data.py si ODbL carece de atribución", okLic && okFail, "Falla con AssertionError: licencia_origen 'ODbL' sin la nota de atribución");
   }
 
-  // ---------------------------------------------------------------- E1. Robot de correos (job/correo.js)
+  // ---------------------------------------------------------------- H3c. Sugerencias comunes y priorización
   {
-    const correo = require("../job/correo.js");
+    const comun = require("../job/sugerencias_comun.js");
 
-    // 23. Sin credenciales IMAP sale con código 0 y skipped
-    const resSkipped = await correo.main();
-    check("23. job/correo.js sin credenciales IMAP sale con código 0 y skipped",
-      resSkipped && resSkipped.skipped === true && resSkipped.reason.includes("Credenciales IMAP no configuradas"));
+    // 23. plausibleBrand y sanitize descartan entradas hostiles y aceptan limpias
+    check("23. plausibleBrand y sanitize descartan entradas hostiles y aceptan limpias",
+      comun.plausibleBrand("Café Don Pepe") === true &&
+      comun.plausibleBrand("<script>alert(1)</script>") === false &&
+      comun.sanitize({ tipo: "marca", marca: "<script>alert(1)</script>" }) === null);
 
-    // 24. Sanitización rigurosa de remitentes: parseEmailBody extrae datos y elimina remitente/encabezados
-    const rawEmail = `From: Juan Perez <juan.perez@dominio-privado.com>
-To: gina.proyecto02@gmail.com
-Subject: Sugerencia de marca
-Date: Fri, 16 Oct 2026 12:00:00 +0000
+    // 24. buildIssueBody genera bloque estructurado sin datos personales
+    const parsed = comun.sanitize({
+      tipo: "marca",
+      marca: "Café Don Pepe",
+      tienda: "Mercado Libre México",
+      producto: "Café artesanal de Veracruz 500g",
+      fecha: "2026-10-16"
+    });
+    const body = comun.buildIssueBody(parsed);
+    check("24. buildIssueBody genera bloque estructurado v1 con campos delimitados",
+      parsed && parsed.marca === "Café Don Pepe" &&
+      body.includes("<!-- gina:sugerencia v1 tipo=marca -->") &&
+      body.includes("- marca: Café Don Pepe | tienda: Mercado Libre México"));
 
-<!-- gina:sugerencia v1 tipo=marca -->
-- marca: Café Don Pepe
-- tienda: Mercado Libre México
-- producto: Café artesanal de Veracruz 500g
-- fecha: 2026-10-16
-
-(Enviado desde la extensión Gina. Revisa y edita antes de enviar; no incluye datos personales.)`;
-
-    const parsed = correo.parseEmailBody(rawEmail);
-    const body = correo.buildIssueBody(parsed);
-    check("24. parseEmailBody extrae únicamente la sugerencia estructurada y no incluye remitente ni headers",
-      parsed && parsed.marca === "Café Don Pepe" && parsed.tienda === "Mercado Libre México" &&
-      !body.includes("juan.perez") && !body.includes("dominio-privado.com") && !body.includes("From:") &&
-      body.includes("<!-- gina:sugerencia v1 tipo=marca -->") && body.includes("- marca: Café Don Pepe | tienda: Mercado Libre México"));
-
-    // 25. Detección de duplicados contra brands.json e issues abiertos
+    // 25. isDuplicateBrand detecta marcas en brands.json e issues abiertos
     const mockDb = {
       marcas: [{ n: "Bimbo", g: "bimbo" }, { n: "Sony", g: "sony" }],
       grupos: { bimbo: { empresa: "Grupo Bimbo" } }
@@ -555,43 +549,40 @@ Date: Fri, 16 Oct 2026 12:00:00 +0000
     const mockOpenIssues = [
       { title: "Marca faltante: Café Don Pepe", body: "- marca: Café Don Pepe" }
     ];
-
-    const dupInDb = correo.isDuplicateBrand("Bimbo", mockDb, []);
-    const dupAlias = correo.isDuplicateBrand("Visita la tienda de Sony®", mockDb, []);
-    const dupIssue = correo.isDuplicateBrand("Café Don Pepe", mockDb, mockOpenIssues);
-    const notDup = correo.isDuplicateBrand("Marca Totalmente Nueva", mockDb, mockOpenIssues);
-
     check("25. isDuplicateBrand detecta marcas existentes en brands.json y en issues abiertos",
-      dupInDb === true && dupAlias === true && dupIssue === true && notDup === false);
+      comun.isDuplicateBrand("Bimbo", mockDb, []) === true &&
+      comun.isDuplicateBrand("Visita la tienda de Sony®", mockDb, []) === true &&
+      comun.isDuplicateBrand("Café Don Pepe", mockDb, mockOpenIssues) === true &&
+      comun.isDuplicateBrand("Marca Totalmente Nueva", mockDb, mockOpenIssues) === false);
 
-    // 26. Proceso de emails: solo correos con «[gina:sugerencia]» en el asunto; crea la nueva, descarta la duplicada y mueve ambas a procesado
-    const moved = [];
-    const createdIssues = [];
-    const mail2 = "From: x <x@y.z>\r\nSubject: [gina:sugerencia] Marca faltante: Bimbo\r\n\r\n<!-- gina:sugerencia v1 tipo=marca -->\n- marca: Bimbo\n- tienda: Oxxo\n- producto: Pan";
-    const mail1 = rawEmail.replace("Subject: Sugerencia de marca", "Subject: [gina:sugerencia] Marca faltante: Café Don Pepe");
-    const mockImap = {
-      searchGina: async () => [1, 2],
-      fetchRaw: async (id) => Buffer.from(id === 1 ? mail1 : mail2, "utf8"),
-      markProcessed: async (id) => { moved.push(id); }
+    // 26. Priorización en job/investigar.js: sugerencias con veces >= 3 se procesan primero
+    const tmpP = fs.mkdtempSync(path.join(require("os").tmpdir(), "gina-prioridad-"));
+    const brandsTmpP = path.join(tmpP, "brands.json");
+    fs.writeFileSync(brandsTmpP, JSON.stringify({ version: "x", grupos: {}, marcas: [] }));
+    const URL_PRUEBA = "https://script.google.com/macros/s/AKfycbxPRUEBApruebaPRUEBA1234567890/exec";
+    const llamadasP = [];
+    const fetchPrioridad = async (u) => {
+      const url = new URL(u);
+      const op = url.searchParams.get("op") || "list";
+      llamadasP.push({ op, ids: url.searchParams.get("ids") });
+      const body = op === "purge" ? { ok: true, borradas: 0 }
+        : op === "ack" ? { ok: true, procesados: url.searchParams.get("ids").split(",").length }
+        : op === "version" ? { ok: true, version: "2026-10-22", filas: 2 }
+        : { ok: true, filas: [
+          { id: "row_baja", tipo: "marca", marca: "Marca Poco Pedida", tienda: "amazon.com.mx", veces: 1 },
+          { id: "row_alta", tipo: "marca", marca: "Marca Muy Pedida", tienda: "amazon.com.mx", veces: 5 }
+        ] };
+      return { ok: true, status: 200, json: async () => body, text: async () => JSON.stringify(body), headers: { get: () => null } };
     };
-    const mockExec = (cmd, args) => {
-      if (cmd === "gh" && args[0] === "issue" && args[1] === "create") {
-        createdIssues.push({ title: args[args.indexOf("--title") + 1], body: args[args.indexOf("--body") + 1] });
-      }
-    };
-
-    const processRes = await correo.processEmails({
-      imap: mockImap,
-      brandsDb: mockDb,
-      openIssues: [],
-      repo: "ginaproyecto02-lgtm/project-gina",
-      execFile: mockExec
+    // Correr con limit: 1 para procesar solo la primera de la cola ordenada
+    await job.main({
+      dryRun: false, force: true, limit: 1, sitiosLimit: 0, revalidate: 0, repLimit: 0,
+      brandsPath: brandsTmpP, statePath: path.join(tmpP, "estado.json"), reportsDir: tmpP, pendDir: path.join(tmpP, "pend"),
+      sheetUrl: URL_PRUEBA, sheetToken: "tok-p", execFileImpl: () => { throw new Error("sin gh"); }, fetchImpl: fetchPrioridad
     });
-
-    check("26. processEmails crea issue solo para la marca nueva, descarta duplicada y mueve ambos a procesado",
-      processRes.read === 2 && processRes.created === 1 && processRes.duplicates === 1 &&
-      createdIssues.length === 1 && createdIssues[0].title === "Marca faltante: Café Don Pepe" &&
-      !createdIssues[0].body.includes("juan.perez") && moved.length === 2, JSON.stringify(processRes));
+    const ackIds = (llamadasP.find((l) => l.op === "ack") || {}).ids || "";
+    check("26. El robot procesa primero las sugerencias más pedidas (veces >= 3)",
+      ackIds === "row_alta", `ack recibido: ${ackIds}`);
   }
 
   // ---------------------------------------------------------------- E3. Sitios oficiales y buscador de marcas (job/sitios_oficiales.js)

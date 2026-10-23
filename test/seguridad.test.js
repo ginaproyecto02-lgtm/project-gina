@@ -197,135 +197,42 @@ for (const [name, url, html] of pages) {
   check("Correo de proyecto con parámetros (?bcc=) se rechaza", !/bcc=/i.test(contactoMalo), contactoMalo);
 }
 
-// ---------------------------------------------------------------- 6. Procesador de correo (robot)
-const correo = require(path.join(ROOT, "job", "correo.js"));
-function mime(subject, bodyText, opts = {}) {
-  const enc = opts.enc || "7bit";
-  let b = bodyText;
-  if (enc === "quoted-printable") b = bodyText.replace(/[^\x20-\x7e\n]/g, (c) => Array.from(Buffer.from(c, "utf8")).map((x) => "=" + x.toString(16).toUpperCase().padStart(2, "0")).join("")).replace(/=/g, (m, i, s) => m).replace(/\n/g, "\r\n");
-  if (enc === "base64") b = Buffer.from(bodyText, "utf8").toString("base64");
-  const head = `From: Persona <persona@example.com>\r\nTo: gina.proyecto02@gmail.com\r\nSubject: ${subject}\r\nMIME-Version: 1.0\r\n`;
-  if (opts.multipart) {
-    return head + `Content-Type: multipart/alternative; boundary="BB"\r\n\r\n--BB\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: ${enc}\r\n\r\n${b}\r\n--BB\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n<div>${bodyText.replace(/</g, "&lt;")}</div>\r\n--BB--\r\n`;
-  }
-  return head + `Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: ${enc}\r\n\r\n${b}\r\n`;
-}
-const block = (marca, extra = "") => `<!-- gina:sugerencia v1 tipo=marca -->\n- marca: ${marca}\n- tienda: amazon.com.mx\n- producto: Producto de prueba categoría\n- fecha: 2026-10-16${extra}\n\n(Enviado desde la extensión Gina.)`;
-
-function fakeImap(messages) {
-  // messages: [{ uid, raw }]; recuerda qué se movió y qué se borró.
-  const st = { moved: [], deleted: [], expunged: 0, box: messages.slice() };
-  return {
-    st,
-    async searchUnseen() { return st.box.map((m) => m.uid); },
-    async searchGina() { return st.box.filter((m) => /\[gina:sugerencia\]/i.test(m.raw.split("\r\n\r\n")[0])).map((m) => m.uid); },
-    async fetchRaw(uid) { const m = st.box.find((x) => x.uid === uid); return m ? m.raw : ""; },
-    async fetchBody(uid) { const m = st.box.find((x) => x.uid === uid); return m ? m.raw.split("\r\n\r\n").slice(1).join("\r\n\r\n") : ""; },
-    async moveToProcessed(uid) { st.moved.push(uid); },
-    async markProcessed(uid) { st.moved.push(uid); },
-  };
-}
+// ---------------------------------------------------------------- 6. Saneamiento de sugerencias comunes (robot / issues)
+const SUG = require(path.join(ROOT, "job", "sugerencias_comun.js"));
 
 (async () => {
   {
-    const msgs = [
-      { uid: 101, raw: mime("Hola, ¿comemos el viernes?", "Nos vemos. La marca: Patito es la mejor.") },             // correo personal
-      { uid: 102, raw: mime("Alerta de seguridad de Google", "Alguien inició sesión.\nmarca: Google") },             // correo del sistema
-      { uid: 103, raw: mime("[gina:sugerencia] Marca faltante: Jabones Zazil", block("Jabones Zazil"), { enc: "quoted-printable", multipart: true }) },
-      { uid: 104, raw: mime("[gina:sugerencia] Marca faltante: Café Ñandú", block("Café Ñandú"), { enc: "base64" }) },
-      { uid: 105, raw: mime("[gina:sugerencia] Marca faltante: Nutella", block("Nutella")) },                         // ya está en la base
-      { uid: 106, raw: mime("[gina:sugerencia] Marca faltante: x", block("@everyone ![p](https://evil.example/p.png) <img src=x onerror=alert(1)> [click](javascript:alert(1)) Zuzu")) },
+    // Cargas hostiles en sugerencias: descartadas por plausibleBrand y sanitize
+    const hostileBrands = [
+      "@everyone",
+      "![p](https://evil.example/p.png)",
+      "<img src=x onerror=alert(1)>",
+      "[click](javascript:alert(1))",
+      "Marca ${process.env}",
+      "Marca {{7*7}}"
     ];
-    const imap = fakeImap(msgs);
-    const created = [];
-    const exec = (cmd, args) => { if (args[0] === "issue" && args[1] === "create") created.push({ title: args[args.indexOf("--title") + 1], body: args[args.indexOf("--body") + 1] || "" }); return ""; };
-    let res, err = null;
-    try { res = await correo.processEmails({ imap, brandsDb: baseDb, openIssues: [], repo: "o/r", execFile: exec }); } catch (e) { err = e; }
-    check("Correo: ignora y NO toca correos ajenos (personales o del sistema)", !err && !imap.st.moved.includes(101) && !imap.st.moved.includes(102) && !created.some((c) => /Patito|Google/.test(c.title)), err ? String(err) : `movidos ${imap.st.moved} · issues ${created.map((c) => c.title)}`);
-    check("Correo: decodifica quoted-printable y base64 (acentos intactos)", created.some((c) => /Jabones Zazil/.test(c.title)) && created.some((c) => /Café Ñandú/.test(c.title)), created.map((c) => c.title).join(" | "));
-    check("Correo: marca existente (Nutella) no crea issue", !created.some((c) => /Nutella/.test(c.title)));
-    const txt = created.map((c) => c.title + "\n" + c.body).join("\n");
-    check("Correo: ningún issue lleva menciones, imágenes, HTML ni enlaces javascript: (la marca hostil se descarta)", !/@everyone|!\[|<img|onerror|javascript:|evil\.example/i.test(txt), txt.slice(0, 200));
-    check("Correo: el issue no lleva la dirección del remitente", !created.some((c) => /persona@example\.com/.test(c.title + c.body)));
-  }
-  {
-    // Inundación: 200 correos válidos distintos → tope por ejecución.
-    const msgs = Array.from({ length: 200 }, (_, i) => ({ uid: 1000 + i, raw: mime(`[gina:sugerencia] Marca faltante: Zmarca${i}`, block(`Zmarca${i}`)) }));
-    const imap = fakeImap(msgs);
-    let n = 0;
-    await correo.processEmails({ imap, brandsDb: baseDb, openIssues: [], repo: "o/r", execFile: (c, a) => { if (a[1] === "create") n++; return ""; } });
-    check("Correo: tope de issues por ejecución (≤ 25) ante una inundación", n > 0 && n <= 25, String(n));
-  }
-  {
-    // Duplicado contra issues cerrados (rechazados antes): no se vuelve a abrir.
-    const imap = fakeImap([{ uid: 7, raw: mime("[gina:sugerencia] Marca faltante: Marca Rechazada", block("Marca Rechazada")) }]);
-    let n = 0;
-    await correo.processEmails({ imap, brandsDb: baseDb, openIssues: [{ title: "Marca faltante: Marca Rechazada", body: "", state: "CLOSED" }], repo: "o/r", execFile: (c, a) => { if (a[1] === "create") n++; return ""; } });
-    check("Correo: una marca con issue ya cerrado no se vuelve a abrir", n === 0, String(n));
-  }
-  {
-    // Cliente IMAP: los comandos usan UID (no números de secuencia que cambian tras borrar) y no borran.
-    const src = fs.readFileSync(path.join(ROOT, "job", "correo.js"), "utf8");
-    check("IMAP: usa UID SEARCH/FETCH/MOVE (los números de secuencia cambian tras EXPUNGE)", /UID SEARCH/.test(src) && /UID FETCH/.test(src) && !/[^D] FETCH \$\{seq/.test(src));
-    check("IMAP: nunca marca \\Deleted ni hace EXPUNGE en el buzón", !/\\\\Deleted|EXPUNGE/.test(src));
-    check("IMAP: lee sin marcar como leído (BODY.PEEK)", /BODY\.PEEK/.test(src));
-    check("IMAP: credenciales entre comillas escapadas (sin inyección de comandos)", /quoteImap|imapQuote|literal/i.test(src));
+    for (const h of hostileBrands) {
+      check(`Sugerencias: marca hostil descartada (${h.slice(0, 20)})`, !SUG.plausibleBrand(h) && SUG.sanitize({ tipo: "marca", marca: h }) === null);
+    }
+
+    // Marca limpia aceptada
+    check("Sugerencias: marca limpia aceptada", SUG.plausibleBrand("Jabones Zazil") && SUG.plausibleBrand("Café Ñandú"));
+
+    // Duplicados contra marcas existentes e issues
+    check("Sugerencias: marca existente en base es duplicada", SUG.isDuplicateBrand("Nutella", baseDb, []));
+    check("Sugerencias: marca en issue cerrado es duplicada", SUG.isDuplicateBrand("Marca Rechazada", baseDb, [{ title: "Marca faltante: Marca Rechazada", body: "", state: "CLOSED" }]));
   }
 
   {
-    // Cliente IMAP real contra un servidor simulado: literales por bytes (con «G3 OK» dentro del correo) y comandos exactos.
-    const net = require("net");
-    const mail = Buffer.from("Subject: =?UTF-8?Q?[gina:sugerencia]_Marca_faltante:_Caf=C3=A9_Lun=C3=A1?=\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n<!-- gina:sugerencia v1 tipo=marca -->\r\n- marca: Caf=C3=A9 Lun=C3=A1\r\n- tienda: amazon.com.mx\r\nG3 OK esto es texto del correo, no una respuesta\r\n", "utf8");
-    const seen = [];
-    const server = net.createServer((sock) => {
-      sock.write("* OK Gmail listo\r\n");
-      let acc = "";
-      sock.on("data", (d) => {
-        acc += d.toString("latin1");
-        let i;
-        while ((i = acc.indexOf("\r\n")) >= 0) {
-          const line = acc.slice(0, i); acc = acc.slice(i + 2);
-          const [tag, ...rest] = line.split(" "); const cmd = rest.join(" ");
-          seen.push(cmd);
-          if (/^LOGIN/.test(cmd)) sock.write(`${tag} OK LOGIN\r\n`);
-          else if (/^CAPABILITY/.test(cmd)) sock.write(`* CAPABILITY IMAP4rev1 MOVE UIDPLUS\r\n${tag} OK\r\n`);
-          else if (/^SELECT/.test(cmd)) sock.write(`* 3 EXISTS\r\n${tag} OK [READ-WRITE]\r\n`);
-          else if (/^UID SEARCH/.test(cmd)) sock.write(`* SEARCH 41\r\n${tag} OK\r\n`);
-          else if (/^UID FETCH 41 \(BODY\.PEEK\[\]\)/.test(cmd)) { sock.write(`* 1 FETCH (UID 41 BODY[] {${mail.length}}\r\n`); sock.write(mail); sock.write(`)\r\n${tag} OK FETCH\r\n`); }
-          else if (/^CREATE/.test(cmd)) sock.write(`${tag} NO [ALREADYEXISTS]\r\n`);
-          else if (/^UID MOVE 41/.test(cmd)) sock.write(`${tag} OK MOVE\r\n`);
-          else if (/^LOGOUT/.test(cmd)) { sock.write(`* BYE\r\n${tag} OK\r\n`); sock.end(); }
-          else sock.write(`${tag} BAD\r\n`);
-        }
-      });
-    });
-    await new Promise((r) => server.listen(0, "127.0.0.1", r));
-    const port = server.address().port;
-    const client = new correo.SimpleImapClient({ user: 'yo"@x', pass: "a\\b\"c", socketFactory: () => net.connect(port, "127.0.0.1") });
-    let res, err = null;
-    const created = [];
-    try {
-      await client.connect(); await client.login(); await client.select("INBOX");
-      res = await correo.processEmails({ imap: client, brandsDb: baseDb, issues: [], repo: "o/r", execFile: (c, a) => { if (a[1] === "create") created.push(a[a.indexOf("--title") + 1]); return ""; } });
-      await client.logout();
-    } catch (e) { err = e; }
-    server.close();
-    check("IMAP real (servidor simulado): lee el literal completo aunque contenga «G3 OK», decodifica el asunto RFC 2047 y crea 1 issue",
-      !err && res && res.created === 1 && created[0] === "Marca faltante: Café Luná", err ? String(err) : JSON.stringify({ res, created }));
-    check("IMAP real: comandos esperados (UID SEARCH con asunto, BODY.PEEK, UID MOVE; contraseña escapada)",
-      seen.some((c) => c === 'LOGIN "yo\\"@x" "a\\\\b\\"c"') && seen.some((c) => /^UID SEARCH SUBJECT "gina:sugerencia"/.test(c)) && seen.some((c) => /^UID MOVE 41 "gina\/procesado"/.test(c)) && !seen.some((c) => /EXPUNGE|\\Deleted/.test(c)), seen.join(" | "));
-  }
-
-  {
-    // Contrato del recorrido: el issue que crea el correo lo entiende el robot (parseIssueContent) sin pérdida.
+    // Contrato del recorrido: el issue que crea buildIssueBody lo entiende el robot (parseIssueContent) sin pérdida.
     const job = require(path.join(ROOT, "job", "investigar.js"));
-    const p1 = correo.sanitize(correo.parseEmailBody(block("Jabones Zazil")));
-    const parsedM = job.parseIssueContent({ number: 1, title: "Marca faltante: Jabones Zazil", body: correo.buildIssueBody(p1), labels: ["sugerencia"] });
-    const p2 = correo.sanitize({ tipo: "alternativa", marca: "Café Ñandú", categoria: "Café", pais: "México", dueno: "Cooperativa X", fuente: "https://cooperativa-x.mx/quienes-somos" });
-    const parsedA = job.parseIssueContent({ number: 2, title: "Alternativa local: Café Ñandú", body: correo.buildIssueBody(p2), labels: ["sugerencia"] });
-    check("Recorrido: correo → issue → robot entiende marca, tienda y producto",
+    const p1 = SUG.sanitize({ tipo: "marca", marca: "Jabones Zazil", tienda: "amazon.com.mx", producto: "Producto de prueba" });
+    const parsedM = job.parseIssueContent({ number: 1, title: "Marca faltante: Jabones Zazil", body: SUG.buildIssueBody(p1), labels: ["sugerencia"] });
+    const p2 = SUG.sanitize({ tipo: "alternativa", marca: "Café Ñandú", categoria: "Café", pais: "México", dueno: "Cooperativa X", fuente: "https://cooperativa-x.mx/quienes-somos" });
+    const parsedA = job.parseIssueContent({ number: 2, title: "Alternativa local: Café Ñandú", body: SUG.buildIssueBody(p2), labels: ["sugerencia"] });
+    check("Recorrido: sugerencia → issue → robot entiende marca, tienda y producto",
       parsedM && parsedM.tipo === "marca" && parsedM.items[0].brand === "Jabones Zazil" && parsedM.items[0].site === "amazon.com.mx" && /Producto de prueba/.test(parsedM.items[0].title), JSON.stringify(parsedM));
-    check("Recorrido: correo de alternativa → issue → robot entiende categoría, país, dueño y fuente",
+    check("Recorrido: sugerencia de alternativa → issue → robot entiende categoría, país, dueño y fuente",
       parsedA && parsedA.tipo === "alternativa" && parsedA.items[0].marca === "Café Ñandú" && parsedA.items[0].fuente === "https://cooperativa-x.mx/quienes-somos", JSON.stringify(parsedA));
   }
 

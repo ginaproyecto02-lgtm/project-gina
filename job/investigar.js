@@ -1038,6 +1038,9 @@ async function main(options = {}) {
     }
   }
 
+  // Prioridad: las sugerencias más solicitadas (mayor count / veces) se investigan primero
+  queue.sort((a, b) => (Number(b.count) || 1) - (Number(a.count) || 1));
+
   const toProcess = queue.slice(0, limit);
   const nuevasEvidencias = [];
   const issuesToClose = [];
@@ -1238,7 +1241,8 @@ async function main(options = {}) {
           url: f0.url_final,
           cita: f0.cita,
           archivo: f0.archivo_url,
-          issueNumber: item.issueNumber
+          issueNumber: item.issueNumber,
+          veces: Number(item.count) || 1
         });
         metricas.aprobadas++;
 
@@ -1357,9 +1361,10 @@ async function main(options = {}) {
   // Generar reporte en Markdown para el PR
   const dateStr = report.inicio.slice(0, 10);
   const branchName = `datos/${dateStr}`;
-  const tableRows = report.cambios.map(
-    (c) => `| ${c.grupo} (\`${c.gid}\`) | ${c.antes} → **${c.despues}** | [Fuente](${c.url}) | «${c.cita}» | [Archivo](${c.archivo}) |`
-  );
+  const tableRows = report.cambios.map((c) => {
+    const notaVeces = c.veces && c.veces >= 3 ? ` *(pedida por ${c.veces} usuarios)*` : (c.veces && c.veces > 1 ? ` *(${c.veces} sugerencias)*` : "");
+    return `| ${c.grupo} (\`${c.gid}\`)${notaVeces} | ${c.antes} → **${c.despues}** | [Fuente](${c.url}) | «${c.cita}» | [Archivo](${c.archivo}) |`;
+  });
 
   const motivosLines = Object.entries(metricas.rechazadasPorMotivo).map(
     ([motivo, count]) => `  - ${motivo}: ${count}`
