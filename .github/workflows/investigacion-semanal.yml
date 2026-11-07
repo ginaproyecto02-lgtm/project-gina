@@ -76,6 +76,7 @@ jobs:
           GINA_DRY_RUN: ${{ (github.event.schedule == '17 9 * * 0' || inputs.dry_run) && '1' || '' }}
           GINA_FORCE: ${{ (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 9 * * 0') && '1' || '' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node job/investigar.js
 
       - name: Comprobación de seguridad de rutas modificadas

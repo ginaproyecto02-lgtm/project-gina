@@ -570,11 +570,13 @@ async function createReviewPR({ branchName, reportMarkdown, changesList, dryRun,
       "--base", "main"
     ];
     prUrl = (execFileImpl("gh", prArgs, { cwd: rootDir, encoding: "utf8" }) || "").trim();
+  } catch (prErr) {
+    console.warn(`[investigar] Aviso: no se pudo crear el PR con gh (${prErr.message}). La rama ${finalBranchName} ya está en origin.`);
+    prUrl = `https://github.com/${repo}/pull/new/${finalBranchName}`;
   } finally {
     try { fs.unlinkSync(tmpBodyFile); } catch (_) {}
+    try { execFileImpl("git", ["checkout", "main"], { cwd: rootDir }); } catch (_) {}
   }
-
-  execFileImpl("git", ["checkout", "main"], { cwd: rootDir });
 
   return { branch: finalBranchName, prUrl, dryRun: false, changesCount: changesList ? changesList.length : 0 };
 }

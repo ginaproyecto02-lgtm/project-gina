@@ -71,6 +71,15 @@ Para recibir sugerencias de marcas y alternativas sin obligar a los usuarios a a
 
 **Ciclo de cada fila:** la extensión escribe la sugerencia con estado `pendiente` (si la misma marca ya está pendiente, suma 1 en `veces`). También puedes escribir filas a mano: con estado vacío cuentan como pendientes. Cada lunes el robot (`job/investigar.js`) 1) borra las filas en `procesado` de la corrida anterior, 2) investiga las pendientes (hasta el límite por corrida; las demás esperan) y 3) las marca `procesado`. Las alternativas (`tipo = alternativa`) no se tocan: se revisan a mano. Ya no hay correo ni issues de por medio.
 
+### Configuración de Permisos de GitHub Actions (Workflow permissions)
+
+Para que el robot semanal pueda crear ramas y abrir el Pull Request de actualización automáticamente:
+1. En tu repositorio ve a **Settings → Actions → General**.
+2. Desplázate hasta la sección **Workflow permissions**.
+3. Selecciona **Read and write permissions** (para que pueda subir ramas como `datos/AAAA-MM-DD`).
+4. Marca la casilla: ☑ **Allow GitHub Actions to create and approve pull requests** (requisito de seguridad de GitHub para que el comando `gh pr create` abra el PR).
+5. Haz clic en **Save**.
+
 ### Tabla de Secretos y Variables de GitHub Actions
 
 Configura en **Settings → Secrets and variables → Actions**:
