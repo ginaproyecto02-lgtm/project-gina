@@ -46,6 +46,17 @@
     { id: "cafeina", re: /\bcontiene\s+cafe[ií]na(?:\s*-\s*evitar\s+en\s+ni[ñn]os)?\b/i, label: "Contiene cafeína" }
   ];
 
+  function normalizeText(text) {
+    if (text == null) return "";
+    return String(text)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
   function evaluateProductNotices(params) {
     params = params || {};
     const cat = params.category;
@@ -267,9 +278,11 @@
 
     // ---------------------------------------------------------------- 6. ESTUDIOS DE CALIDAD Y GRADOS OFICIALES (PROFECO, USDA, MAPA)
     if (Array.isArray(estudiosDb) && estudiosDb.length > 0) {
-      const brandLower = brand.toLowerCase();
-      const gid = brandGroup && (brandGroup.id || brandGroup.g);
       const cNorm = country.replace(/[.,]/g, "").trim();
+      const brandNorm = normalizeText(brand);
+      const titleNorm = normalizeText(title);
+      const textPoolNorm = normalizeText(textPool);
+      const escRe = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
       for (const study of estudiosDb) {
         // Validación 2026-11-09: un estudio solo se muestra si alguien lo comprobó contra el documento oficial
@@ -288,43 +301,70 @@
         }
 
         for (const item of (study.items || [])) {
-          const itemMarca = String(item.marca || "").toLowerCase().trim();
-          const matchesBrand = (itemMarca && (brandLower === itemMarca || textLower.includes(itemMarca) || brandLower.includes(itemMarca))) ||
-                               (item.grupo && gid && item.grupo === gid);
+          const itemMarca = String(item.marca || "").trim();
+          if (!itemMarca) continue;
+          const itemMarcaNorm = normalizeText(itemMarca);
+
+          // I2 Candado 1 y 2: Quitar coincidencia por grupo. Solo coincide con la marca evaluada,
+          // usando palabra completa (misma normalización y regla que semejanza.js).
+          const wordRe = new RegExp(`(^|\\s)${escRe(itemMarcaNorm)}(\\s|$)`);
+          const matchesBrand = (brandNorm && (brandNorm === itemMarcaNorm || wordRe.test(brandNorm))) ||
+                               (!brandNorm && wordRe.test(titleNorm));
           if (!matchesBrand) continue;
 
-          // Comprobación de palabras clave específicas de la presentación o subcategoría
-          const keywords = item.keywords || [];
-          let matchesKeywords = keywords.length === 0;
-          if (keywords.length > 0) {
-            matchesKeywords = keywords.some(kw => {
-              const kwNorm = String(kw).toLowerCase().trim();
-              const re = new RegExp(`(^|[^a-záéíóúñ0-9])${kwNorm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-záéíóúñ0-9]|$)`, "i");
-              return re.test(textPool);
-            });
+          // I2 Candado 3: Exigir que el producto sea del tipo estudiado mediante keywords
+          // (keywords del item o del estudio). Si no coinciden, no se aplica el estudio.
+          const studyKws = Array.isArray(study.keywords) ? study.keywords : [];
+          const itemKws = Array.isArray(item.keywords) ? item.keywords : [];
+          const allKeywords = itemKws.length > 0 ? itemKws : studyKws;
+
+          if (allKeywords.length === 0) {
+            continue;
           }
 
-          if (matchesKeywords) {
-            const aut = study.autoridad || "Autoridad oficial";
-            const sub = study.subcategoria ? ` (${study.subcategoria})` : "";
-            const resType = item.resultado || "informativo";
-            const noticeTitle = `Estudio de calidad (${aut}): ${item.grado}`;
-            const noticeText = `${aut}${sub}: ${item.grado} · ${item.veredicto}`;
+          const matchesKeywords = allKeywords.some(kw => {
+            const kwNorm = normalizeText(kw);
+            if (!kwNorm) return false;
+            const kwRe = new RegExp(`(^|\\s)${escRe(kwNorm)}(\\s|$)`);
+            return kwRe.test(textPoolNorm);
+          });
+          if (!matchesKeywords) continue;
 
-            notices.push({
-              tipo: "oficial",
-              categoria: "calidad",
-              resultado: resType,
-              autoridad: aut,
-              titulo: noticeTitle,
-              texto: noticeText,
-              grado: item.grado,
-              veredicto: item.veredicto,
-              url: study.url,
-              origen: `Estudio oficial: <a href="${study.url}" target="_blank" rel="noopener noreferrer">${study.fuente || aut}</a>`
-            });
-            break; // Máximo 1 aviso de calidad por estudio
+          const aut = study.autoridad || "Autoridad oficial";
+          const sub = study.subcategoria ? ` (${study.subcategoria})` : "";
+          let resType = item.resultado || "informativo";
+          const anio = String(study.fecha || "").split("-")[0];
+
+          let noticeTitle = `Estudio de calidad (${aut}): ${item.grado}`;
+          let noticeText = `${aut}${sub}: ${item.grado} · ${item.veredicto}`;
+
+          // I2 Candado 4: Estudios de más de 3 años (antiguedad: true) pasan de advertencia
+          // a informativo y muestran el año a la vista («Estudio PROFECO de 2019: puede haber cambiado»).
+          if (study.antiguedad) {
+            if (resType === "advertencia") {
+              resType = "informativo";
+            }
+            const agedNotice = t("lbl_quality_aged", { autoridad: aut, anio: anio }) || `Estudio ${aut} de ${anio}: puede haber cambiado`;
+            noticeTitle = `${agedNotice}: ${item.grado}`;
+            noticeText = `${agedNotice} · ${item.grado} · ${item.veredicto}`;
           }
+
+          const estudioUrl = study.url_estudio || study.url;
+          notices.push({
+            tipo: "oficial",
+            categoria: "calidad",
+            resultado: resType,
+            autoridad: aut,
+            antiguedad: !!study.antiguedad,
+            anio: anio,
+            titulo: noticeTitle,
+            texto: noticeText,
+            grado: item.grado,
+            veredicto: item.veredicto,
+            url: estudioUrl,
+            origen: `Estudio oficial: <a href="${estudioUrl}" target="_blank" rel="noopener noreferrer">${study.fuente || aut}</a>`
+          });
+          break; // Máximo 1 aviso de calidad por estudio
         }
       }
     }

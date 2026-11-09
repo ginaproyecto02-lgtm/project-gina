@@ -108,6 +108,71 @@ async function run() {
       `Dolores: ${qDolores ? qDolores.resultado : "null"} | Aurrera: ${qAurrera ? qAurrera.resultado : "null"}`);
   }
 
+  // 2b. I2: Herdez salsa NO recibe el estudio de atún de Herdez (sin coincidencia por grupo ni categoría errónea)
+  {
+    const rSalsa = QED.evaluateProductNotices({
+      title: "Salsa Casera Mexicana Herdez 240 g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Herdez",
+      brandGroup: { id: "herdez" },
+      estudiosCalidadDb: estudios
+    });
+    const qSalsa = rSalsa.find(n => n.categoria === "calidad");
+    check("2b. I2: Herdez salsa NO recibe estudio de atún de Herdez (no coincide tipo de producto)",
+      !qSalsa,
+      qSalsa ? `infiltrado: ${qSalsa.texto}` : "0 avisos de calidad (correcto)");
+  }
+
+  // 2c. I2: Un título con «lala» dentro de otra palabra no coincide (palabra completa estricta)
+  {
+    const rLalaSub = QED.evaluateProductNotices({
+      title: "Postre Clalafate Helado 500 ml",
+      category: "lacteos",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "",
+      estudiosCalidadDb: estudios
+    });
+    const qLalaSub = rLalaSub.find(n => n.categoria === "calidad");
+    check("2c. I2: Substring 'lala' dentro de 'Clalafate' no coincide (palabra completa)",
+      !qLalaSub,
+      qLalaSub ? `infiltrado: ${qLalaSub.texto}` : "0 avisos (correcto)");
+  }
+
+  // 2d. I2: El atún Aurrera sí coincide (con datos verificados)
+  {
+    const rAurreraVerif = QED.evaluateProductNotices({
+      title: "Atún con Soya Aurrera en Agua 140 g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Aurrera",
+      estudiosCalidadDb: estudios
+    });
+    const qAurreraVerif = rAurreraVerif.find(n => n.categoria === "calidad");
+    check("2d. I2: Atún Aurrera sí coincide (marca exacta y palabras clave verificadas)",
+      !!qAurreraVerif && qAurreraVerif.texto.includes("30–62 % de soya"),
+      qAurreraVerif ? qAurreraVerif.texto : "no encontrado");
+  }
+
+  // 2e. I2: Estudio con antigüedad (> 3 años) sale como informativo y muestra el año a la vista
+  {
+    const rAurreraAged = QED.evaluateProductNotices({
+      title: "Atún con Soya Aurrera en Agua 140 g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Aurrera",
+      estudiosCalidadDb: estudios
+    });
+    const qAurreraAged = rAurreraAged.find(n => n.categoria === "calidad");
+    check("2e. I2: Estudio con antigüedad sale como informativo y muestra el año (2019) a la vista",
+      !!qAurreraAged && qAurreraAged.resultado === "informativo" && qAurreraAged.texto.includes("2019") && qAurreraAged.antiguedad === true,
+      `resultado: ${qAurreraAged ? qAurreraAged.resultado : "null"}, texto: ${qAurreraAged ? qAurreraAged.texto.split("·")[0] : "null"}`);
+  }
+
   // 3. PROFECO México: Queso artesanal Covadonga y Flor de Alfalfa vs Imitación Franja
   {
     const rCova = QED.evaluateProductNotices({
@@ -142,7 +207,7 @@ async function run() {
     check("3. PROFECO: Quesos auténticos (Covadonga, Flor de Alfalfa) vs Imitación vegetal (Franja)",
       !!qCova && qCova.resultado === "positivo" &&
       !!qFlor && qFlor.resultado === "positivo" &&
-      !!qFranja && qFranja.resultado === "advertencia" && qFranja.texto.includes("Imitación"),
+      !!qFranja && (qFranja.resultado === "informativo" || qFranja.resultado === "advertencia") && qFranja.texto.includes("Imitación"),
       `Cova: ${qCova ? qCova.resultado : "null"}, Flor: ${qFlor ? qFlor.resultado : "null"}, Franja: ${qFranja ? qFranja.resultado : "null"}`);
   }
 
@@ -169,7 +234,7 @@ async function run() {
 
     check("4. PROFECO: Jamón Extrafino (Peñaranda) vs Económico 10% fécula (Duby)",
       !!qPen && qPen.resultado === "positivo" && qPen.texto.includes("Extrafino") &&
-      !!qDuby && qDuby.resultado === "advertencia" && qDuby.texto.includes("Económico"),
+      !!qDuby && (qDuby.resultado === "informativo" || qDuby.resultado === "advertencia") && qDuby.texto.includes("Económico"),
       `Peñaranda: ${qPen ? qPen.resultado : "null"} | Duby: ${qDuby ? qDuby.resultado : "null"}`);
   }
 
@@ -196,7 +261,7 @@ async function run() {
 
     check("5. PROFECO: Aceite 100% puro (San Lucas) vs mezcla con canola (Cate de Mi Corazón)",
       !!qLucas && qLucas.resultado === "positivo" && qLucas.texto.includes("100% Aceite puro") &&
-      !!qCate && qCate.resultado === "advertencia" && qCate.texto.includes("canola"),
+      !!qCate && (qCate.resultado === "informativo" || qCate.resultado === "advertencia") && qCate.texto.includes("canola"),
       `Lucas: ${qLucas ? qLucas.resultado : "null"} | Cate: ${qCate ? qCate.resultado : "null"}`);
   }
 
@@ -223,7 +288,7 @@ async function run() {
 
     check("6. PROFECO: Sartenes Cinsa (Muy Bueno) vs Iuno (Deficiente por desprendimiento)",
       !!qCinsa && qCinsa.resultado === "positivo" && qCinsa.texto.includes("Muy Bueno") &&
-      !!qIuno && qIuno.resultado === "advertencia" && qIuno.texto.includes("Deficiente"),
+      !!qIuno && (qIuno.resultado === "informativo" || qIuno.resultado === "advertencia") && qIuno.texto.includes("Deficiente"),
       `Cinsa: ${qCinsa ? qCinsa.resultado : "null"} | Iuno: ${qIuno ? qIuno.resultado : "null"}`);
   }
 

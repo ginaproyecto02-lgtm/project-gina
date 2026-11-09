@@ -799,7 +799,7 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     const nWarn = rWarn.find(n => n.categoria === "calidad");
     check("7d. PROFECO (México): Queso Covadonga (auténtico) vs Franja (imitación vegetal)",
       !!nPos && nPos.resultado === "positivo" && nPos.texto.includes("100% leche") &&
-      !!nWarn && nWarn.resultado === "advertencia" && nWarn.texto.includes("Imitación"),
+      !!nWarn && (nWarn.resultado === "informativo" || nWarn.resultado === "advertencia") && nWarn.texto.includes("Imitación"),
       `pos=${nPos ? nPos.resultado : "null"}, warn=${nWarn ? nWarn.resultado : "null"}`);
   }
 
@@ -826,7 +826,7 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     const nWarn = rWarn.find(n => n.categoria === "calidad");
     check("7e. PROFECO (México): Jamón Peñaranda (Extrafino) vs Duby (Económico con fécula)",
       !!nPos && nPos.resultado === "positivo" && nPos.texto.includes("Extrafino") &&
-      !!nWarn && nWarn.resultado === "advertencia" && nWarn.texto.includes("Económico"),
+      !!nWarn && (nWarn.resultado === "informativo" || nWarn.resultado === "advertencia") && nWarn.texto.includes("Económico"),
       `peñaranda=${nPos ? nPos.resultado : "null"}, duby=${nWarn ? nWarn.resultado : "null"}`);
   }
 
