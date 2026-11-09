@@ -167,6 +167,7 @@
         specsText: data.specsText,
         aditivosDb: (packaged && packaged.aditivos) || [],
         alertasDb: (packaged && packaged.alertas) || [],
+        estudiosCalidadDb: (packaged && packaged.estudios_calidad) || [],
         options: prefs
       });
     }

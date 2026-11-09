@@ -415,5 +415,35 @@ g('loc_goodai', 'Goodai Global (Beauty of Joseon)', 'Lee Min-gu (fundador y CEO 
 b('loc_goodai', 'Beauty of Joseon')
 CAT['Beauty of Joseon'] = 'skincare_cosmetica'
 
+# Marcas mexicanas independientes analizadas en Estudios de Calidad PROFECO
+g('loc_flor_de_alfalfa', 'Flor de Alfalfa (Rancho San José)', 'Familia y ganaderos de Rancho San José en Colón, Querétaro; quesería y lechería artesanal 100% de pastoreo.', 'México', 'Familia', NC, "", 'Quesos artesanales y lácteos de pastoreo en Querétaro; destacado en calidad por PROFECO.', 'Alta', 'PROFECO: Revista del Consumidor No. 538 (Estudio de Quesos Panela)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Rancho San José family and local farmers in Colón, Querétaro', nota_en='Artisanal Mexican dairy and raw milk cheeses.')
+b('loc_flor_de_alfalfa', 'Flor de Alfalfa')
+CAT['Flor de Alfalfa'] = 'lacteos'
+
+g('loc_aceite_san_lucas', 'Aceite San Lucas', 'Familia productora de aguacate en Uruapan, Michoacán; fundada para extracción artesanal de aceite extra virgen.', 'México', 'Familia', NC, "", 'Aceite de aguacate 100% puro prensado en frío; acreditado sin adulteración por PROFECO.', 'Alta', 'PROFECO: Revista del Consumidor No. 547 (Estudio de Aceites Vegetales)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='San Lucas family growers in Uruapan, Michoacán', nota_en='Pure cold-pressed avocado oil from Michoacán, Mexico.')
+b('loc_aceite_san_lucas', 'San Lucas', 'Aceite San Lucas')
+CAT['San Lucas'] = 'abarrotes'
+
+g('loc_industrias_ines', 'Industrias Inés (Aceites Inés)', 'Familia jalisciense en Guadalajara; fabricante independiente de aceites vegetales de ajonjolí y semillas prensados en frío.', 'México', 'Familia', NC, "", 'Aceites vegetales puros y semillas comestibles; evaluado con alta pureza por PROFECO.', 'Alta', 'PROFECO: Revista del Consumidor No. 547 (Estudio de Aceites Vegetales)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Inés family in Guadalajara, Jalisco (cold-pressed seed oils)', nota_en='Mexican pure sesame and seed oils manufacturer.')
+b('loc_industrias_ines', '!Inés', 'Aceite Inés')
+CAT['Inés'] = 'abarrotes'
+
+g('loc_bove_lacteos', 'Bové (Lácteos Orgánicos de México)', 'Sociedad de ganaderos y productores lecheros orgánicos en Jalisco y Aguascalientes; fundada en 2011.', 'México', 'Familia', NC, "", 'Lácteos y quesos orgánicos certificados sin adición de almidones ni grasas vegetales.', 'Alta', 'PROFECO: Revista del Consumidor No. 538 (Estudio de Quesos)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Bové organic dairy cooperative and farmers in Central Mexico', nota_en='Certified organic Mexican dairy and cheeses.')
+b('loc_bove_lacteos', 'Bové')
+CAT['Bové'] = 'lacteos'
+
+g('loc_cinsa_gis', 'Cinsa (Grupo Industrial Saltillo)', 'Empresa mexicana fundada en 1928 en Saltillo, Coahuila; menaje tradicional de cocina, sartenes y peltre.', 'México', 'Privada', NC, "", 'Sartenes antiadherentes y enseres de cocina; calificación de durabilidad sobresaliente en PROFECO.', 'Alta', 'PROFECO: Revista del Consumidor No. 544 (Estudio de Sartenes)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Grupo Industrial Saltillo (Mexican cookware manufacturer founded in 1928)', nota_en='Traditional Mexican enameled cookware and nonstick pans.')
+b('loc_cinsa_gis', 'Cinsa')
+CAT['Cinsa'] = 'electrodomesticos_cocina'
+
+g('loc_lacteos_covadonga', 'Covadonga (Lácteos Covadonga)', 'Empresa láctea mexicana independiente fundada en Tulancingo, Hidalgo; quesos tradicionales 100% leche.', 'México', 'Familia', NC, "", 'Quesos panela y tradicionales sin almidones ni grasa vegetal añadida; verificado por PROFECO.', 'Alta', 'PROFECO: Revista del Consumidor No. 538 (Estudio de Quesos Panela)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Covadonga dairy family in Tulancingo, Hidalgo', nota_en='Traditional 100% milk Mexican cheese producer.')
+b('loc_lacteos_covadonga', 'Covadonga', 'Queso Covadonga')
+CAT['Covadonga'] = 'lacteos'
+
+g('loc_penaranda_charcuteria', 'Peñaranda (Embutidos Peñaranda)', 'Familia de maestros charcuteros en México; elaboración tradicional de jamones madurados y cocidos extrafinos.', 'México', 'Familia', NC, "", 'Jamones y embutidos de calidad Extrafino sin adición de féculas ni soya según la NOM-158-SCFI.', 'Alta', 'PROFECO: Revista del Consumidor No. 522 (Estudio de Jamones)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Peñaranda family charcuterie masters in Mexico', nota_en='Traditional extra-fine cured and cooked hams in Mexico.')
+b('loc_penaranda_charcuteria', 'Peñaranda')
+CAT['Peñaranda'] = 'abarrotes'
+
+
 
 

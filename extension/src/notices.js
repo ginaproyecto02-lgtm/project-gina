@@ -65,6 +65,7 @@
     const brandGroup = params.brandGroup || params.group || null;
     const aditivosDb = params.aditivosDb || params.aditivos || (QED.DB && QED.DB.aditivos) || [];
     const alertasDb = params.alertasDb || params.alertas || (QED.DB && QED.DB.alertas) || [];
+    const estudiosDb = params.estudiosCalidadDb || params.estudios_calidad || (QED.DB && QED.DB.estudios_calidad) || [];
     const lang = (QED.I18N && QED.I18N.getLang ? QED.I18N.getLang() : "es") || "es";
     const t = (k, o) => (QED.I18N && QED.I18N.t ? QED.I18N.t(k, o) : k);
 
@@ -264,9 +265,71 @@
       }
     }
 
+    // ---------------------------------------------------------------- 6. ESTUDIOS DE CALIDAD Y GRADOS OFICIALES (PROFECO, USDA, MAPA)
+    if (Array.isArray(estudiosDb) && estudiosDb.length > 0) {
+      const brandLower = brand.toLowerCase();
+      const gid = brandGroup && (brandGroup.id || brandGroup.g);
+      const cNorm = country.replace(/[.,]/g, "").trim();
+
+      for (const study of estudiosDb) {
+        // Validación geográfica estricta: solo tiendas del país correspondiente
+        const studyCountries = (study.paises_tienda || [study.pais || ""]).map(p => String(p).toLowerCase().replace(/[.,]/g, "").trim());
+        const matchesCountry = studyCountries.some(sc => cNorm === sc || cNorm.includes(sc) || sc.includes(cNorm));
+        if (!matchesCountry) continue;
+
+        // Comprobación de categoría si aplica
+        if (study.categoria && study.categoria !== "alimentos" && cat !== study.categoria) {
+          const isBothFood = FOOD_CATS.has(cat) && (study.categoria === "abarrotes" || study.categoria === "lacteos" || study.categoria === "mascotas");
+          if (!isBothFood) continue;
+        }
+
+        for (const item of (study.items || [])) {
+          const itemMarca = String(item.marca || "").toLowerCase().trim();
+          const matchesBrand = (itemMarca && (brandLower === itemMarca || textLower.includes(itemMarca) || brandLower.includes(itemMarca))) ||
+                               (item.grupo && gid && item.grupo === gid);
+          if (!matchesBrand) continue;
+
+          // Comprobación de palabras clave específicas de la presentación o subcategoría
+          const keywords = item.keywords || [];
+          let matchesKeywords = keywords.length === 0;
+          if (keywords.length > 0) {
+            matchesKeywords = keywords.some(kw => {
+              const kwNorm = String(kw).toLowerCase().trim();
+              const re = new RegExp(`(^|[^a-záéíóúñ0-9])${kwNorm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-záéíóúñ0-9]|$)`, "i");
+              return re.test(textPool);
+            });
+          }
+
+          if (matchesKeywords) {
+            const aut = study.autoridad || "Autoridad oficial";
+            const sub = study.subcategoria ? ` (${study.subcategoria})` : "";
+            const resType = item.resultado || "informativo";
+            const noticeTitle = `Estudio de calidad (${aut}): ${item.grado}`;
+            const noticeText = `${aut}${sub}: ${item.grado} · ${item.veredicto}`;
+
+            notices.push({
+              tipo: "oficial",
+              categoria: "calidad",
+              resultado: resType,
+              autoridad: aut,
+              titulo: noticeTitle,
+              texto: noticeText,
+              grado: item.grado,
+              veredicto: item.veredicto,
+              url: study.url,
+              origen: `Estudio oficial: <a href="${study.url}" target="_blank" rel="noopener noreferrer">${study.fuente || aut}</a>`
+            });
+            break; // Máximo 1 aviso de calidad por estudio
+          }
+        }
+      }
+    }
+
     // ---------------------------------------------------------------- Ordenar y Limitar
-    // Los oficiales primero; máximo 3 avisos.
+    // Los avisos de calidad primero, luego alertas sanitarias, luego oficiales, luego informativos.
     notices.sort((a, b) => {
+      if (a.categoria === "calidad" && b.categoria !== "calidad") return -1;
+      if (a.categoria !== "calidad" && b.categoria === "calidad") return 1;
       if (a.tipo === "oficial" && b.tipo !== "oficial") return -1;
       if (a.tipo !== "oficial" && b.tipo === "oficial") return 1;
       return 0;

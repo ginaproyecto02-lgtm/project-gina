@@ -75,6 +75,7 @@ function analyze(w, url) {
       group: r.group,
       aditivos: db.aditivos || [],
       alertas: db.alertas || [],
+      estudiosCalidadDb: db.estudios_calidad || [],
       options: {}
     });
   }
@@ -588,6 +589,7 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
 {
   const aditivosData = db.aditivos || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/aditivos.json"), "utf8"));
   const alertasData = db.alertas || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/alertas.json"), "utf8"));
+  const estudiosCalidadData = db.estudios_calidad || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/estudios_calidad.json"), "utf8"));
 
   // 1. Título con "Red 3" en tienda de EE.UU. → aviso con enlace oficial a la FDA
   {
@@ -734,6 +736,147 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     const alertaNotice = rNotices.find(n => n.categoria === "alerta");
     const okAlerta = !!alertaNotice && alertaNotice.texto.includes("alertas de esta marca") && !alertaNotice.texto.includes("este producto");
     check("7. Alerta de solo marca → texto «alertas de esta marca», nunca «este producto»", okAlerta, alertaNotice ? alertaNotice.texto : "no encontrada");
+  }
+
+  // 7b. PROFECO (México): Atún Dolores → positivo «Sin soya detectada»
+  {
+    const w = env("", "https://www.walmart.com.mx/ip/atun-dolores/123");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Atún Dolores en Agua Lomo 140 g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Dolores",
+      brandGroup: { id: "pinsa" },
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const qNotice = rNotices.find(n => n.categoria === "calidad");
+    check("7b. PROFECO (México): Atún Dolores → positivo «Sin soya detectada»",
+      !!qNotice && qNotice.resultado === "positivo" && qNotice.texto.includes("Sin soya") && qNotice.autoridad === "PROFECO",
+      qNotice ? qNotice.texto : "no encontrado");
+  }
+
+  // 7c. PROFECO (México): Atún Aurrera → advertencia «Contiene hasta 62% de soya»
+  {
+    const w = env("", "https://www.bodegaaurrera.com.mx/ip/atun-aurrera/456");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Atún con Soya Aurrera en Agua 140 g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Aurrera",
+      brandGroup: { id: "walmart" },
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const qNotice = rNotices.find(n => n.categoria === "calidad");
+    check("7c. PROFECO (México): Atún Aurrera → advertencia «Contiene hasta 62% de soya»",
+      !!qNotice && qNotice.resultado === "advertencia" && qNotice.texto.includes("hasta 62% de soya"),
+      qNotice ? qNotice.texto : "no encontrado");
+  }
+
+  // 7d. PROFECO (México): Queso Covadonga (auténtico 100% leche) vs Franja (imitación vegetal)
+  {
+    const w = env("", "https://www.walmart.com.mx/ip/queso/789");
+    const rPos = w.QED.evaluateProductNotices({
+      title: "Queso Panela Covadonga 400 g",
+      category: "lacteos",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Covadonga",
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const rWarn = w.QED.evaluateProductNotices({
+      title: "Queso Panela Franja Imitación 400 g",
+      category: "lacteos",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Franja",
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const nPos = rPos.find(n => n.categoria === "calidad");
+    const nWarn = rWarn.find(n => n.categoria === "calidad");
+    check("7d. PROFECO (México): Queso Covadonga (auténtico) vs Franja (imitación vegetal)",
+      !!nPos && nPos.resultado === "positivo" && nPos.texto.includes("100% leche") &&
+      !!nWarn && nWarn.resultado === "advertencia" && nWarn.texto.includes("Imitación"),
+      `pos=${nPos ? nPos.resultado : "null"}, warn=${nWarn ? nWarn.resultado : "null"}`);
+  }
+
+  // 7e. PROFECO (México): Jamón Peñaranda (Extrafino) vs Duby (Económico 10% fécula)
+  {
+    const w = env("", "https://www.walmart.com.mx/ip/jamon/101");
+    const rPos = w.QED.evaluateProductNotices({
+      title: "Jamón Horneado Peñaranda 250 g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Peñaranda",
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const rWarn = w.QED.evaluateProductNotices({
+      title: "Jamón Cocido Duby Económico 250 g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "México",
+      brand: "Duby",
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const nPos = rPos.find(n => n.categoria === "calidad");
+    const nWarn = rWarn.find(n => n.categoria === "calidad");
+    check("7e. PROFECO (México): Jamón Peñaranda (Extrafino) vs Duby (Económico con fécula)",
+      !!nPos && nPos.resultado === "positivo" && nPos.texto.includes("Extrafino") &&
+      !!nWarn && nWarn.resultado === "advertencia" && nWarn.texto.includes("Económico"),
+      `peñaranda=${nPos ? nPos.resultado : "null"}, duby=${nWarn ? nWarn.resultado : "null"}`);
+  }
+
+  // 7f. USDA (EE.UU.): Certified Angus Beef → USDA Prime Grade
+  {
+    const w = env("", "https://www.walmart.com/ip/beef/202");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Certified Angus Beef Prime Ribeye Steak",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "EE.UU.",
+      brand: "Certified Angus Beef",
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const qNotice = rNotices.find(n => n.categoria === "calidad");
+    check("7f. USDA (EE.UU.): Certified Angus Beef → USDA Prime Grade",
+      !!qNotice && qNotice.autoridad === "USDA" && qNotice.resultado === "positivo" && qNotice.texto.includes("USDA Prime"),
+      qNotice ? qNotice.texto : "no encontrado");
+  }
+
+  // 7g. MAPA (España): Jamón Ibérico Cinco Jotas → Precinto Negro 100% Bellota
+  {
+    const w = env("", "https://www.elcorteingles.es/supermercado/jamon/303");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Jamón de Bellota 100% Ibérico Cinco Jotas",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "España",
+      brand: "Cinco Jotas",
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const qNotice = rNotices.find(n => n.categoria === "calidad");
+    check("7g. MAPA (España): Jamón Ibérico Cinco Jotas → Precinto Negro 100% Bellota",
+      !!qNotice && qNotice.autoridad === "MAPA" && qNotice.resultado === "positivo" && qNotice.texto.includes("Precinto Negro"),
+      qNotice ? qNotice.texto : "no encontrado");
+  }
+
+  // 7h. Aislamiento geográfico: Tienda alemana (amazon.de) jamás muestra estudios de PROFECO, USDA ni MAPA
+  {
+    const w = env("", "https://www.amazon.de/dp/B0ATUN");
+    const rNotices = w.QED.evaluateProductNotices({
+      title: "Thunfisch Dolores in Wasser 140g",
+      category: "abarrotes",
+      categoryConfidence: "alta",
+      storeCountry: "Alemania",
+      brand: "Dolores",
+      estudiosCalidadDb: estudiosCalidadData
+    });
+    const qNotice = rNotices.find(n => n.categoria === "calidad");
+    check("7h. Aislamiento geográfico: Tienda alemana jamás muestra estudios de PROFECO, USDA ni MAPA",
+      !qNotice,
+      qNotice ? `infiltrado: ${qNotice.texto}` : "0 avisos (correcto)");
   }
 
   // 8. Popup sin producto o con marca conocida → #suggest oculto

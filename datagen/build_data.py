@@ -117,6 +117,11 @@ ADITIVOS = json.load(open(aditivos_path, encoding="utf-8")) if os.path.exists(ad
 alertas_path = os.path.join(os.path.dirname(__file__), "alertas.json")
 ALERTAS = json.load(open(alertas_path, encoding="utf-8")) if os.path.exists(alertas_path) else []
 
+estudios_path = os.path.join(os.path.dirname(__file__), "estudios_calidad.json")
+ESTUDIOS_CALIDAD = json.load(open(estudios_path, encoding="utf-8")) if os.path.exists(estudios_path) else []
+for e in ESTUDIOS_CALIDAD:
+    assert e.get("id") and e.get("url", "").startswith("https://") and e.get("autoridad"), f"estudio de calidad inválido: {e}"
+
 # ---- Rastreadores de precio (solo enlaces verificados) y tiendas para «Buscar en otra tienda»
 RASTREADORES = json.load(open(os.path.join(os.path.dirname(__file__), "rastreadores.json"), encoding="utf-8"))["rastreadores"]
 for r in RASTREADORES:
@@ -158,6 +163,7 @@ brands = {
     "dominios": DOMINIOS,
     "aditivos": ADITIVOS,
     "alertas": ALERTAS,
+    "estudios_calidad": ESTUDIOS_CALIDAD,
     "rastreadores": RASTREADORES,
     "tiendas_comparar": TIENDAS_COMPARAR,
 }
@@ -318,6 +324,8 @@ if os.path.exists(aditivos_path):
     shutil.copyfile(aditivos_path, os.path.join(ROOT, "data", "aditivos.json"))
 if os.path.exists(alertas_path):
     shutil.copyfile(alertas_path, os.path.join(ROOT, "data", "alertas.json"))
+if os.path.exists(estudios_path):
+    shutil.copyfile(estudios_path, os.path.join(ROOT, "data", "estudios_calidad.json"))
 
 # ---- Proyecto: de dónde descargan todos la base actualizada (gratis, sin claves) y a dónde se sugieren marcas
 PROY = json.load(open(os.path.join(os.path.dirname(__file__), "proyecto.json"), encoding="utf-8"))

@@ -158,6 +158,8 @@
   .prod-notices { margin-top: 10px; margin-bottom: 6px; }
   .notice-box { border-radius: 7px; padding: 7px 9px; margin-top: 5px; font-size: 11.5px; line-height: 1.35; }
   .notice-box.notice-official { background: #fdf1e2; color: #5c2e00; border: 1px solid #f4d4a8; }
+  .notice-box.notice-official.notice-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+  .notice-box.notice-official.notice-warn { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
   .notice-box.notice-info { background: #f4f6fa; color: #2d3748; border: 1px solid #e2e8f0; }
   .notice-text { font-weight: 600; }
   .notice-src { font-size: 10.5px; margin-top: 2px; opacity: 0.9; }
@@ -786,7 +788,9 @@
     const pNotices = res.productNotices || [];
     if (pNotices.length > 0) {
       const noticesHtml = pNotices.map((n) => {
-        const boxClass = n.tipo === "oficial" ? "notice-box notice-official" : "notice-box notice-info";
+        let boxClass = n.tipo === "oficial" ? "notice-box notice-official" : "notice-box notice-info";
+        if (n.resultado === "positivo") boxClass += " notice-success";
+        if (n.resultado === "advertencia") boxClass += " notice-warn";
         return `
           <div class="${boxClass}">
             <div class="notice-text">${esc(n.texto)}</div>
@@ -1125,14 +1129,20 @@
           specsText: res.specsText || "",
           aditivosDb: (QED.DB && QED.DB.aditivos) || [],
           alertasDb: (QED.DB && QED.DB.alertas) || [],
+          estudiosCalidadDb: (QED.DB && QED.DB.estudios_calidad) || [],
           options: opts || {}
         });
       }
     }
 
-    // Insignia SOLO en Confiabilidad (cambia a "Aviso oficial" si hay avisos oficiales)
+    // Insignia SOLO en Confiabilidad (cambia a calidad o aviso oficial si los hay)
     let relBadgeHtml = "";
-    if (res.productNotices && res.productNotices.some(n => n.tipo === "oficial")) {
+    const qualityNotice = res.productNotices && res.productNotices.find(n => n.categoria === "calidad");
+    if (qualityNotice && qualityNotice.resultado === "positivo") {
+      relBadgeHtml = `<span class="badge-rel official-notice">${t("badge_quality_certified")}</span>`;
+    } else if (qualityNotice && qualityNotice.resultado === "advertencia") {
+      relBadgeHtml = `<span class="badge-rel check">${t("badge_quality_warn")}</span>`;
+    } else if (res.productNotices && res.productNotices.some(n => n.tipo === "oficial")) {
       relBadgeHtml = `<span class="badge-rel official-notice">${t("badge_official_notice")}</span>`;
     } else if (rel.sellerType === "direct") {
       relBadgeHtml = `<span class="badge-rel direct">${t("badge_direct_store")}</span>`;

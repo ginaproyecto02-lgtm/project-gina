@@ -1086,6 +1086,30 @@
       it: "Avviso ufficiale",
       ja: "公的通知"
     },
+    badge_quality_certified: {
+      es: "Calidad oficial",
+      en: "Official quality",
+      de: "Offizielle Qualität",
+      fr: "Qualité officielle",
+      it: "Qualità ufficiale",
+      ja: "公式品質"
+    },
+    badge_quality_warn: {
+      es: "Alerta de calidad",
+      en: "Quality warning",
+      de: "Qualitätswarnung",
+      fr: "Alerte qualité",
+      it: "Avviso di qualità",
+      ja: "品質警告"
+    },
+    lbl_quality_study: {
+      es: "Estudio oficial de calidad",
+      en: "Official quality study",
+      de: "Offizielle Qualitätsstudie",
+      fr: "Étude officielle de qualité",
+      it: "Studio ufficiale di qualità",
+      ja: "公式品質調査"
+    },
     notices_disclaimer: {
       es: "Información de autoridades y de la página. No es consejo médico.",
       en: "Information from authorities and the page. Not medical advice.",
