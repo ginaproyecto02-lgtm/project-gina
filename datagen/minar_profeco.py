@@ -32,19 +32,41 @@ def load_brands(path=BRANDS_FILE):
         return json.load(f)
 
 
+PORTADAS_FILE = os.path.join(DATAGEN_DIR, "portadas_no_validas.json")
+
+AUTORIDADES_DOMINIOS = {
+    "PROFECO": ["gob.mx", "revistadelconsumidor.gob.mx"],
+    "USDA": ["usda.gov"],
+    "MAPA": ["mapa.gob.es"],
+}
+
+
+def load_portadas_no_validas():
+    if os.path.exists(PORTADAS_FILE):
+        with open(PORTADAS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            items = data if isinstance(data, list) else data.get("portadas_no_validas", [])
+            return set(p.rstrip("/").lower() for p in items)
+    return set()
+
+
 def auditar_estudios(estudios):
     """
     Verifica que cada estudio cumpla con las reglas estrictas del proyecto Gina:
     - ID único y descriptivo
-    - Autoridad oficial válida
-    - URL con protocolo HTTPS oficial
-    - Fuente con número o título de revista/documento
-    - Cada item con marca, resultado (positivo|advertencia|informativo) y veredicto
+    - Autoridad oficial válida con dominio oficial
+    - URL y url_estudio concretas (no portadas genéricas)
+    - Fecha con formato AAAA o AAAA-MM y no posterior a verificado
+    - Cada item con marca, keywords, resultado (positivo|advertencia|informativo) y veredicto
     - Cero palabras de alarma en veredictos ni grados
     """
+    import re
+    import urllib.parse
+
     ids_vistos = set()
     errores = []
     total_items = 0
+    portadas = load_portadas_no_validas()
 
     bad_words = [
         bytes.fromhex(h).decode("utf-8")
@@ -71,8 +93,35 @@ def auditar_estudios(estudios):
         if not url.startswith("https://"):
             errores.append(f"Estudio {eid}: URL no segura (debe ser https://): {url}")
 
-        if not est.get("autoridad") or not est.get("fuente"):
+        aut = est.get("autoridad")
+        if not aut or not est.get("fuente"):
             errores.append(f"Estudio {eid}: falta autoridad o fuente oficial")
+
+        if aut in AUTORIDADES_DOMINIOS:
+            doms = AUTORIDADES_DOMINIOS[aut]
+            for fld in ("url", "url_estudio"):
+                u = est.get(fld)
+                if u:
+                    hp = urllib.parse.urlparse(u).netloc.lower()
+                    if hp.startswith("www."):
+                        hp = hp[4:]
+                    if not any(hp == d or hp.endswith("." + d) for d in doms):
+                        errores.append(f"Estudio {eid}: {fld} dominio '{hp}' no corresponde a {doms}")
+
+        verif = str(est.get("verificado", "")).strip()
+        if verif:
+            url_est = est.get("url_estudio")
+            if not url_est or not str(url_est).startswith("https://"):
+                errores.append(f"Estudio {eid}: verificado pero carece de url_estudio seguro")
+            elif url_est.rstrip("/").lower() in portadas:
+                errores.append(f"Estudio {eid}: url_estudio apunta a portada no válida: {url_est}")
+
+        fecha = str(est.get("fecha", "")).strip()
+        if fecha:
+            if not re.fullmatch(r"^\d{4}(?:-(?:0[1-9]|1[0-2]))?$", fecha):
+                errores.append(f"Estudio {eid}: fecha '{fecha}' debe tener formato AAAA o AAAA-MM")
+            elif verif and fecha > verif[:len(fecha)]:
+                errores.append(f"Estudio {eid}: fecha '{fecha}' posterior a verificado '{verif}'")
 
         items = est.get("items", [])
         if not items:

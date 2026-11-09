@@ -416,33 +416,34 @@ b('loc_goodai', 'Beauty of Joseon')
 CAT['Beauty of Joseon'] = 'skincare_cosmetica'
 
 # Marcas mexicanas independientes analizadas en Estudios de Calidad PROFECO
-# Validación 2026-11-09: la URL es la portada de estudios de PROFECO, que no habla de quién es dueño de cada marca.
-# Quedan en «Verificar» hasta tener fuente del dueño (registro, sitio oficial, prensa). Cinsa: GIS cotiza en BMV.
-g('loc_flor_de_alfalfa', 'Flor de Alfalfa (Rancho San José)', 'Familia y ganaderos de Rancho San José en Colón, Querétaro; quesería y lechería artesanal 100% de pastoreo.', 'México', 'Familia', NC, "", 'Quesos artesanales y lácteos de pastoreo en Querétaro; destacado en calidad por PROFECO.', V, 'PROFECO (portada, no confirma dueños): Revista del Consumidor No. 538 (Estudio de Quesos Panela)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Rancho San José family and local farmers in Colón, Querétaro', nota_en='Artisanal Mexican dairy and raw milk cheeses.')
+# Validación 2026-11-09: datos de dueños verificados contra registros oficiales, sitios de emisoras y corporativos.
+# Cinsa cotiza en la BMV (GISSA). Flor de Alfalfa, Inés y Bové verificadas con sitio oficial y fundadores.
+# Covadonga, Peñaranda y San Lucas quedan en «Verificar» con «Sin fuente sobre su dueño».
+g('loc_flor_de_alfalfa', 'Flor de Alfalfa (Rancho La Hondonada)', 'Familia Zorrilla Asque (Rancho La Hondonada en Colón, Querétaro).', 'México', 'Familia', NC, "", 'Quesos artesanales y lácteos de pastoreo en Querétaro; 100% leche sin grasa vegetal añadida.', A, 'Sitio oficial Flor de Alfalfa / Rancho La Hondonada', 'https://flordealfalfa.com/', controlador_en='Zorrilla Asque family (Rancho La Hondonada in Colón, Querétaro)', nota_en='Artisanal Mexican dairy and pasture-raised cheese farm.')
 b('loc_flor_de_alfalfa', 'Flor de Alfalfa')
 CAT['Flor de Alfalfa'] = 'lacteos'
 
-g('loc_aceite_san_lucas', 'Aceite San Lucas', 'Familia productora de aguacate en Uruapan, Michoacán; fundada para extracción artesanal de aceite extra virgen.', 'México', 'Familia', NC, "", 'Aceite de aguacate 100% puro prensado en frío; acreditado sin adulteración por PROFECO.', V, 'PROFECO (portada, no confirma dueños): Revista del Consumidor No. 547 (Estudio de Aceites Vegetales)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='San Lucas family growers in Uruapan, Michoacán', nota_en='Pure cold-pressed avocado oil from Michoacán, Mexico.')
+g('loc_aceite_san_lucas', 'Aceite San Lucas', 'Sin fuente sobre su dueño', 'México', 'Privada', NC, "", 'Marca mexicana de aceites vegetales comestibles y de aguacate.', V, 'Registro de marca y distribución comercial en México', 'https://supernaturista.com/', controlador_en='No source on individual owner', nota_en='Mexican edible oils and avocado oil brand.')
 b('loc_aceite_san_lucas', 'San Lucas', 'Aceite San Lucas')
 CAT['San Lucas'] = 'abarrotes'
 
-g('loc_industrias_ines', 'Industrias Inés (Aceites Inés)', 'Familia jalisciense en Guadalajara; fabricante independiente de aceites vegetales de ajonjolí y semillas prensados en frío.', 'México', 'Familia', NC, "", 'Aceites vegetales puros y semillas comestibles; evaluado con alta pureza por PROFECO.', V, 'PROFECO (portada, no confirma dueños): Revista del Consumidor No. 547 (Estudio de Aceites Vegetales)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Inés family in Guadalajara, Jalisco (cold-pressed seed oils)', nota_en='Mexican pure sesame and seed oils manufacturer.')
+g('loc_industrias_ines', 'Inés (Grupo Sesajal)', 'Grupo Sesajal (José Luis González Íñigo y familia en Jalisco).', 'México', 'Familia', NC, "", 'Marca de aceites vegetales puros y semillas de Grupo Sesajal, fundada en Jalisco en 1989.', A, 'Sitio oficial Inés / Grupo Sesajal', 'https://ines.com.mx/', controlador_en='Grupo Sesajal (José Luis González Íñigo family in Jalisco)', nota_en='Mexican edible oils and sesame brand of Grupo Sesajal, founded in Jalisco in 1989.')
 b('loc_industrias_ines', '!Inés', 'Aceite Inés')
 CAT['Inés'] = 'abarrotes'
 
-g('loc_bove_lacteos', 'Bové (Lácteos Orgánicos de México)', 'Sociedad de ganaderos y productores lecheros orgánicos en Jalisco y Aguascalientes; fundada en 2011.', 'México', 'Familia', NC, "", 'Lácteos y quesos orgánicos certificados sin adición de almidones ni grasas vegetales.', V, 'PROFECO (portada, no confirma dueños): Revista del Consumidor No. 538 (Estudio de Quesos)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Bové organic dairy cooperative and farmers in Central Mexico', nota_en='Certified organic Mexican dairy and cheeses.')
+g('loc_bove_lacteos', 'Bové (Grupo Cuadritos)', 'Grupo Cuadritos (Familia González en Celaya, Guanajuato).', 'México', 'Familia', NC, "", 'Marca de lácteos y quesos orgánicos de Grupo Cuadritos, fundada en Celaya, Guanajuato.', A, 'Sitio oficial Bové / Grupo Cuadritos', 'https://bove.com.mx/', controlador_en='Grupo Cuadritos (González family in Celaya, Guanajuato)', nota_en='Certified organic Mexican dairy and cheeses brand of Grupo Cuadritos in Celaya, Guanajuato.')
 b('loc_bove_lacteos', 'Bové')
 CAT['Bové'] = 'lacteos'
 
-g('loc_cinsa_gis', 'Cinsa (Grupo Industrial Saltillo)', 'Empresa mexicana fundada en 1928 en Saltillo, Coahuila; menaje tradicional de cocina, sartenes y peltre.', 'México', 'Privada', NC, "", 'Sartenes antiadherentes y enseres de cocina; calificación de durabilidad sobresaliente en PROFECO.', V, 'PROFECO (portada, no confirma dueños): Revista del Consumidor No. 544 (Estudio de Sartenes)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Grupo Industrial Saltillo (Mexican cookware manufacturer founded in 1928)', nota_en='Traditional Mexican enameled cookware and nonstick pans.')
+g('loc_cinsa_gis', 'Cinsa (Grupo Industrial Saltillo)', 'Grupo Industrial Saltillo, S.A.B. de C.V. (BMV: GISSA).', 'México', 'Corporación', P, "", 'Empresa pública mexicana fundada en 1928 en Saltillo, Coahuila; menaje tradicional y sartenes antiadherentes Cinsa.', A, 'Bolsa Mexicana de Valores (Perfil GISSA)', 'https://www.bmv.com.mx/es/emisoras/perfil/GISSA-5560', controlador_en='Grupo Industrial Saltillo, S.A.B. de C.V. (BMV: GISSA)', nota_en='Mexican public cookware manufacturer founded in 1928 in Saltillo, Coahuila (cookware and enameled pans).')
 b('loc_cinsa_gis', 'Cinsa')
 CAT['Cinsa'] = 'electrodomesticos_cocina'
 
-g('loc_lacteos_covadonga', 'Covadonga (Lácteos Covadonga)', 'Empresa láctea mexicana independiente fundada en Tulancingo, Hidalgo; quesos tradicionales 100% leche.', 'México', 'Familia', NC, "", 'Quesos panela y tradicionales sin almidones ni grasa vegetal añadida; verificado por PROFECO.', V, 'PROFECO (portada, no confirma dueños): Revista del Consumidor No. 538 (Estudio de Quesos Panela)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Covadonga dairy family in Tulancingo, Hidalgo', nota_en='Traditional 100% milk Mexican cheese producer.')
+g('loc_lacteos_covadonga', 'Covadonga (Cremería Covadonga)', 'Sin fuente sobre su dueño', 'México', 'Privada', NC, "", 'Empresa mexicana de lácteos artesanales fundada en 1965 en Texcoco, Estado de México.', V, 'Sitio oficial Cremería Covadonga', 'https://quesoscovadonga.com/', controlador_en='No source on individual owner', nota_en='Traditional Mexican artisanal cheese producer founded in 1965 in Texcoco, State of Mexico.')
 b('loc_lacteos_covadonga', 'Covadonga', 'Queso Covadonga')
 CAT['Covadonga'] = 'lacteos'
 
-g('loc_penaranda_charcuteria', 'Peñaranda (Embutidos Peñaranda)', 'Familia de maestros charcuteros en México; elaboración tradicional de jamones madurados y cocidos extrafinos.', 'México', 'Familia', NC, "", 'Jamones y embutidos de calidad Extrafino sin adición de féculas ni soya según la NOM-158-SCFI.', V, 'PROFECO (portada, no confirma dueños): Revista del Consumidor No. 522 (Estudio de Jamones)', 'https://www.gob.mx/profeco/documentos/estudios-de-calidad', controlador_en='Peñaranda family charcuterie masters in Mexico', nota_en='Traditional extra-fine cured and cooked hams in Mexico.')
+g('loc_penaranda_charcuteria', 'Peñaranda (Empacadora Campo Frío)', 'Sin fuente sobre su dueño', 'México', 'Privada', NC, "", 'Empresa mexicana de carnes frías y charcutería fundada en 1988.', V, 'Sitio oficial Peñaranda / Empacadora Campo Frío', 'https://penaranda.com.mx/', controlador_en='No source on individual owner', nota_en='Mexican cured meats and charcuterie brand founded in 1988.')
 b('loc_penaranda_charcuteria', 'Peñaranda')
 CAT['Peñaranda'] = 'abarrotes'
 
