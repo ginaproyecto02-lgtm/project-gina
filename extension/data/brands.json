@@ -1,5 +1,5 @@
 {
- "version": "2026-11-09T1836",
+ "version": "2026-11-09T1915",
  "licencia": "CC BY 4.0",
  "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -27086,7 +27086,7 @@
  ],
  "estudios_calidad": [
   {
-   "id": "profeco-atun-2024",
+   "id": "profeco-atun-2019",
    "pais": "México",
    "paises_tienda": [
     "México",
@@ -27096,80 +27096,34 @@
    "autoridad": "PROFECO",
    "categoria": "abarrotes",
    "subcategoria": "atun",
-   "fuente": "Revista del Consumidor No. 565 (PROFECO)",
-   "url": "https://www.gob.mx/profeco/documentos/estudios-de-calidad",
-   "fecha": "2024-03",
-   "norma": "NOM-235-SE-2020",
+   "fuente": "Revista del Consumidor No. 505 (marzo 2019)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/443232/ESTUDIO_DE_CALIDAD_ATUN_ENVASADO.pdf",
+   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/443232/ESTUDIO_DE_CALIDAD_ATUN_ENVASADO.pdf",
+   "fecha": "2019-03",
+   "antiguedad": true,
+   "verificado": "2026-11-09",
+   "norma": "NOM-084-SCFI-1994",
    "items": [
     {
-     "marca": "Dolores",
-     "grupo": "pinsa",
-     "keywords": [
-      "atun",
-      "atún"
-     ],
-     "resultado": "positivo",
-     "grado": "Sin soya detectada (100% lomo de atún)",
-     "veredicto": "Cumple contenido neto y masa drenada según la norma",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Tuny",
-     "grupo": "grupomar",
-     "keywords": [
-      "atun",
-      "atún"
-     ],
-     "resultado": "positivo",
-     "grado": "Sin soya detectada (100% lomo de atún)",
-     "veredicto": "Cumple con las especificaciones de calidad comercial",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Herdez",
-     "grupo": "herdez",
-     "keywords": [
-      "atun",
-      "atún"
-     ],
-     "resultado": "positivo",
-     "grado": "Sin soya detectada en presentaciones de lomo",
-     "veredicto": "Cumple con la norma oficial mexicana de atún envasado",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Calmex",
-     "keywords": [
-      "atun",
-      "atún"
-     ],
-     "resultado": "positivo",
-     "grado": "100% atún sin adición de soya",
-     "veredicto": "Cumple contenido neto y masa drenada",
-     "norma_cumplida": true
-    },
-    {
      "marca": "Aurrera",
-     "grupo": "walmart",
      "keywords": [
       "atun",
       "atún"
      ],
      "resultado": "advertencia",
-     "grado": "Contiene hasta 62% de soya en masa drenada",
-     "veredicto": "Señalamiento oficial: Adquiere soya en lugar de pescado",
+     "grado": "30–62 % de soya en masa drenada",
+     "veredicto": "Contiene 30–62 % de soya en masa drenada en atún aleta amarilla en agua",
      "norma_cumplida": false
     },
     {
      "marca": "Chedraui",
-     "grupo": "chedraui",
      "keywords": [
       "atun",
       "atún"
      ],
      "resultado": "advertencia",
-     "grado": "Contiene entre 23% y 28% de soya",
-     "veredicto": "Exceso de soya respecto a la proporción de pescado",
+     "grado": "23–28 % de soya en masa drenada",
+     "veredicto": "Contiene 23–28 % de soya en masa drenada en atún en aceite o agua",
      "norma_cumplida": false
     },
     {
@@ -27179,26 +27133,69 @@
       "atún"
      ],
      "resultado": "advertencia",
-     "grado": "Contiene hasta 26% de soya en masa drenada",
-     "veredicto": "No cumple denominación clara al consumidor",
+     "grado": "17–26 % de soya en masa drenada",
+     "veredicto": "Contiene 17–26 % de soya en masa drenada en atún en agua",
      "norma_cumplida": false
     },
     {
      "marca": "Ke! Precio",
-     "grupo": "soriana",
      "keywords": [
       "atun",
       "atún"
      ],
      "resultado": "advertencia",
-     "grado": "Contiene entre 15% y 23% de soya",
-     "veredicto": "Alta presencia de soya en presentación con agua",
+     "grado": "15–23 % de soya en masa drenada",
+     "veredicto": "Contiene 15–23 % de soya en masa drenada en atún con agua",
      "norma_cumplida": false
+    },
+    {
+     "marca": "Calmex",
+     "keywords": [
+      "atun",
+      "atún"
+     ],
+     "resultado": "advertencia",
+     "grado": "7–15 % de soya en masa drenada",
+     "veredicto": "Calmex hojuela de atún en aceite contiene 7–15 % de soya en masa drenada",
+     "norma_cumplida": false
+    },
+    {
+     "marca": "Dolores",
+     "keywords": [
+      "atun",
+      "atún"
+     ],
+     "resultado": "informativo",
+     "grado": "1–4 % de soya en masa drenada",
+     "veredicto": "Lomo de atún con 1–4 % de soya en masa drenada",
+     "norma_cumplida": true
+    },
+    {
+     "marca": "Tuny",
+     "keywords": [
+      "atun",
+      "atún"
+     ],
+     "resultado": "informativo",
+     "grado": "1–4 % de soya en masa drenada",
+     "veredicto": "Lomo de atún con 1–4 % de soya en masa drenada",
+     "norma_cumplida": true
+    },
+    {
+     "marca": "Herdez",
+     "keywords": [
+      "atun",
+      "atún"
+     ],
+     "resultado": "informativo",
+     "grado": "1–2 % de soya en masa drenada",
+     "veredicto": "Lomo de atún con 1–2 % de soya en masa drenada",
+     "norma_cumplida": true
     }
    ]
   },
   {
-   "id": "profeco-jamon-2023",
+   "id": "profeco-jamon-2020",
    "pais": "México",
    "paises_tienda": [
     "México",
@@ -27208,9 +27205,12 @@
    "autoridad": "PROFECO",
    "categoria": "abarrotes",
    "subcategoria": "jamon",
-   "fuente": "Revista del Consumidor No. 522 (PROFECO)",
-   "url": "https://www.gob.mx/profeco/documentos/estudios-de-calidad",
-   "fecha": "2023-08",
+   "fuente": "Revista del Consumidor No. 522 (agosto 2020)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/568125/ESTUDIO_CALIDAD_JAMONES.pdf",
+   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/568125/ESTUDIO_CALIDAD_JAMONES.pdf",
+   "fecha": "2020-08",
+   "antiguedad": true,
+   "verificado": "2026-11-09",
    "norma": "NOM-158-SCFI-2003",
    "items": [
     {
@@ -27220,57 +27220,53 @@
       "jamón"
      ],
      "resultado": "positivo",
-     "grado": "Clasificación oficial: Extrafino (100% carne sin fécula)",
-     "veredicto": "Máxima calidad comercial según NOM-158-SCFI",
+     "grado": "Extrafino (sin fécula ni soya)",
+     "veredicto": "Clasificación Extrafino, cumple contenido cárnico y proteína",
      "norma_cumplida": true
     },
     {
      "marca": "San Rafael",
-     "grupo": "sigma_alimentos",
      "keywords": [
       "jamon",
       "jamón"
      ],
      "resultado": "positivo",
-     "grado": "Clasificación oficial: Fino / Extrafino (libre de fécula)",
-     "veredicto": "Alto contenido de proteína libre de grasa",
+     "grado": "Fino",
+     "veredicto": "Clasificación Fino, cumple contenido cárnico y proteína",
      "norma_cumplida": true
     },
     {
      "marca": "Zwan",
-     "grupo": "qualatia_alimentos",
      "keywords": [
       "jamon",
       "jamón"
      ],
      "resultado": "positivo",
-     "grado": "Clasificación oficial: Fino",
-     "veredicto": "Cumple proteína y contenido neto",
+     "grado": "Fino",
+     "veredicto": "Clasificación Fino, cumple contenido cárnico y proteína",
      "norma_cumplida": true
     },
     {
      "marca": "Fud",
-     "grupo": "sigma_alimentos",
      "keywords": [
       "jamon",
       "jamón"
      ],
      "resultado": "informativo",
-     "grado": "Clasificación oficial: Preferente / Comercial (con fécula)",
-     "veredicto": "Contiene hasta 5% de fécula o soya adicionada",
+     "grado": "Comercial / Preferente",
+     "veredicto": "Clasificación Comercial / Preferente, contiene fécula dentro de norma",
      "norma_cumplida": true
     },
     {
      "marca": "Bafar",
-     "grupo": "grupo_bafar",
      "keywords": [
       "jamon",
       "jamón"
      ],
-     "resultado": "informativo",
-     "grado": "Clasificación oficial: Comercial (con soya y fécula)",
-     "veredicto": "Cumple clasificación comercial con adición de fécula",
-     "norma_cumplida": true
+     "resultado": "advertencia",
+     "grado": "Comercial con 4.7 % menos producto",
+     "veredicto": "Tuvo hasta 4.7 % menos de producto del declarado en jamón de pavo",
+     "norma_cumplida": false
     },
     {
      "marca": "Duby",
@@ -27279,9 +27275,9 @@
       "jamón"
      ],
      "resultado": "advertencia",
-     "grado": "Clasificación oficial: Económico (10% fécula)",
-     "veredicto": "Señalamiento oficial: Mínimo aporte proteico cárnico",
-     "norma_cumplida": true
+     "grado": "Económico con 4.6 % menos producto",
+     "veredicto": "Tuvo 4.6 % menos de contenido neto en jamón cocido de pavo",
+     "norma_cumplida": false
     },
     {
      "marca": "Sparta",
@@ -27290,14 +27286,14 @@
       "jamón"
      ],
      "resultado": "advertencia",
-     "grado": "Clasificación oficial: Económico (fécula y soya)",
-     "veredicto": "Alto contenido de agua y fécula adicionada",
-     "norma_cumplida": true
+     "grado": "Económico no cumple denominación",
+     "veredicto": "Sparta Cocido contiene pollo no declarado en la denominación",
+     "norma_cumplida": false
     }
    ]
   },
   {
-   "id": "profeco-quesos-2023",
+   "id": "profeco-quesos-2021",
    "pais": "México",
    "paises_tienda": [
     "México",
@@ -27307,108 +27303,106 @@
    "autoridad": "PROFECO",
    "categoria": "lacteos",
    "subcategoria": "queso",
-   "fuente": "Revista del Consumidor No. 538 (PROFECO)",
-   "url": "https://www.gob.mx/profeco/documentos/estudios-de-calidad",
-   "fecha": "2023-12",
+   "fuente": "Revista del Consumidor No. 538 (diciembre 2021)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/688702/ESTUDIO_DE_CALIDAD_QUESO_PANELA_E_IMITACIONES.pdf",
+   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/688702/ESTUDIO_DE_CALIDAD_QUESO_PANELA_E_IMITACIONES.pdf",
+   "fecha": "2021-12",
+   "antiguedad": true,
+   "verificado": "2026-11-09",
    "norma": "NOM-223-SCFI/SAGARPA-2018",
    "items": [
     {
      "marca": "Covadonga",
      "keywords": [
-      "queso",
-      "panela"
+      "panela",
+      "queso"
      ],
      "resultado": "positivo",
-     "grado": "Queso auténtico (100% leche de vaca)",
-     "veredicto": "Sin grasa vegetal ni almidones · Cumple NOM-223",
+     "grado": "Queso panela artesanal auténtico",
+     "veredicto": "100% leche de vaca, sin grasa vegetal",
      "norma_cumplida": true
     },
     {
      "marca": "Flor de Alfalfa",
      "keywords": [
-      "queso",
       "panela",
-      "oaxaca"
+      "queso"
      ],
      "resultado": "positivo",
-     "grado": "Queso artesanal auténtico (100% leche fresca)",
-     "veredicto": "Calidad destacada por PROFECO sin adulteración",
+     "grado": "Queso panela auténtico",
+     "veredicto": "100% leche de vaca, sin grasa vegetal",
      "norma_cumplida": true
     },
     {
      "marca": "Bové",
      "keywords": [
-      "queso",
-      "panela"
-     ],
-     "resultado": "positivo",
-     "grado": "Queso orgánico auténtico 100% leche",
-     "veredicto": "Libre de gomas, féculas o caseinatos",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "NocheBuena",
-     "grupo": "sigma_alimentos",
-     "keywords": [
-      "queso",
       "panela",
-      "oaxaca"
+      "queso"
      ],
      "resultado": "positivo",
-     "grado": "Queso auténtico 100% leche",
-     "veredicto": "Cumple proteína y contenido neto NOM-223",
+     "grado": "Queso panela auténtico",
+     "veredicto": "100% leche de vaca, sin grasa vegetal",
      "norma_cumplida": true
     },
     {
      "marca": "Alpura",
-     "grupo": "alpura",
      "keywords": [
-      "queso",
-      "panela"
+      "panela",
+      "queso"
      ],
      "resultado": "positivo",
-     "grado": "Queso auténtico 100% leche",
-     "veredicto": "Cumple especificaciones físico-químicas de la norma",
+     "grado": "Queso panela auténtico",
+     "veredicto": "100% leche de vaca, sin grasa vegetal",
      "norma_cumplida": true
     },
     {
      "marca": "Lala",
-     "grupo": "lala",
      "keywords": [
-      "queso",
-      "panela"
+      "panela",
+      "queso"
      ],
      "resultado": "positivo",
-     "grado": "Queso auténtico 100% leche",
-     "veredicto": "Cumple con las normas sanitarias y comerciales",
+     "grado": "Queso panela auténtico",
+     "veredicto": "100% leche de vaca, sin grasa vegetal",
+     "norma_cumplida": true
+    },
+    {
+     "marca": "NocheBuena",
+     "keywords": [
+      "panela",
+      "queso"
+     ],
+     "resultado": "positivo",
+     "grado": "Queso panela auténtico",
+     "veredicto": "100% leche de vaca, sin grasa vegetal",
      "norma_cumplida": true
     },
     {
      "marca": "Franja",
      "keywords": [
-      "queso",
-      "panela"
+      "panela",
+      "queso"
      ],
      "resultado": "advertencia",
-     "grado": "Imitación queso (grasa vegetal hidrogenada)",
-     "veredicto": "Señalamiento oficial: No es queso auténtico, sustituye leche con grasa vegetal",
+     "grado": "Imitación queso panela",
+     "veredicto": "Imitación con grasa vegetal añadida",
      "norma_cumplida": false
     },
     {
      "marca": "Zwan Premium",
      "keywords": [
-      "queso",
-      "panela"
+      "panela",
+      "queso"
      ],
      "resultado": "advertencia",
-     "grado": "Imitación panela con caseinatos",
-     "veredicto": "Contiene grasas trans y caseinatos de sodio añadidos",
+     "grado": "Imitación queso panela",
+     "veredicto": "Imitación con grasa vegetal y caseinatos",
      "norma_cumplida": false
     }
    ]
   },
   {
-   "id": "profeco-aceites-2024",
+   "id": "profeco-aceites-2019",
    "pais": "México",
    "paises_tienda": [
     "México",
@@ -27418,56 +27412,33 @@
    "autoridad": "PROFECO",
    "categoria": "abarrotes",
    "subcategoria": "aceite",
-   "fuente": "Revista del Consumidor No. 547 (PROFECO)",
-   "url": "https://www.gob.mx/profeco/documentos/estudios-de-calidad",
-   "fecha": "2024-05",
-   "norma": "NOM-051-SCFI/SSA1-2010",
+   "fuente": "Revista del Consumidor No. 511 (septiembre 2019)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/490747/ESTUDIO_CALIDAD_ACEITES_VEGETALES_.pdf",
+   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/490747/ESTUDIO_CALIDAD_ACEITES_VEGETALES_.pdf",
+   "fecha": "2019-09",
+   "antiguedad": true,
+   "verificado": "2026-11-09",
+   "norma": "NMX-F-052-SCFI-2008",
    "items": [
     {
      "marca": "San Lucas",
      "keywords": [
       "aceite",
-      "aguacate",
-      "oliva"
+      "aguacate"
      ],
      "resultado": "positivo",
      "grado": "100% Aceite puro de aguacate",
-     "veredicto": "Auténtico sin adulteración con otros aceites vegetales",
+     "veredicto": "Cumple pureza de aceite de aguacate, sin adulteración",
      "norma_cumplida": true
     },
     {
      "marca": "Inés",
      "keywords": [
-      "aceite",
-      "ajonjoli",
-      "ajonjolí",
-      "aguacate"
+      "aceite"
      ],
      "resultado": "positivo",
-     "grado": "100% Aceite vegetal puro prensado",
-     "veredicto": "Cumple veracidad de etiqueta y acidez libre",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Carbonell",
-     "keywords": [
-      "aceite",
-      "oliva"
-     ],
-     "resultado": "positivo",
-     "grado": "100% Aceite de oliva virgen extra",
-     "veredicto": "Cumple perfil de ácidos grasos y norma internacional COI",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Filippo Berio",
-     "keywords": [
-      "aceite",
-      "oliva"
-     ],
-     "resultado": "positivo",
-     "grado": "100% Aceite de oliva virgen",
-     "veredicto": "Acidez adecuada, sin mezclas con aceites de menor costo",
+     "grado": "100% Aceite puro vegetal comestible",
+     "veredicto": "Cumple pureza declarada de aceite vegetal",
      "norma_cumplida": true
     },
     {
@@ -27477,8 +27448,8 @@
       "aguacate"
      ],
      "resultado": "advertencia",
-     "grado": "Mezcla de aceites no declarada claramente",
-     "veredicto": "Señalamiento oficial: Mezclado con aceite de canola",
+     "grado": "Aceite de aguacate adulterado",
+     "veredicto": "Aceite de aguacate mezclado con canola sin declarar",
      "norma_cumplida": false
     }
    ]
@@ -27493,83 +27464,84 @@
    ],
    "autoridad": "PROFECO",
    "categoria": "mascotas",
-   "subcategoria": "croquetas",
-   "fuente": "Revista del Consumidor No. 557 (PROFECO)",
-   "url": "https://www.gob.mx/profeco/documentos/estudios-de-calidad",
+   "subcategoria": "alimento_perro",
+   "fuente": "Revista del Consumidor No. 557 (julio 2023)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/837839/ESTUDIO_DE_CALIDAD_CROQUETAS_PARA_PERROS.pdf",
+   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/837839/ESTUDIO_DE_CALIDAD_CROQUETAS_PARA_PERROS.pdf",
    "fecha": "2023-07",
-   "norma": "NOM-012-ZOO-1993",
+   "antiguedad": true,
+   "verificado": "2026-11-09",
+   "norma": "Estudio de Calidad PROFECO 2023",
    "items": [
     {
      "marca": "Hill's Science Diet",
-     "grupo": "colgate_palmolive",
      "keywords": [
-      "perro",
-      "dog",
       "croquetas",
+      "perro",
+      "perros",
       "alimento"
      ],
      "resultado": "positivo",
-     "grado": "Categoría A (Especializada / Alta digestibilidad)",
-     "veredicto": "Alto contenido proteico cárnico de calidad superior",
+     "grado": "Categoría A (Especializadas)",
+     "veredicto": "Mayor aporte nutrimental y calidad de ingredientes",
      "norma_cumplida": true
     },
     {
      "marca": "Royal Canin",
-     "grupo": "mars",
      "keywords": [
-      "perro",
-      "dog",
       "croquetas",
+      "perro",
+      "perros",
       "alimento"
      ],
      "resultado": "positivo",
-     "grado": "Categoría A (Fórmula nutricional específica)",
-     "veredicto": "Ingredientes de origen animal de alta biodisponibilidad",
+     "grado": "Categoría A (Especializadas)",
+     "veredicto": "Mayor aporte nutrimental y digestibilidad",
      "norma_cumplida": true
     },
     {
      "marca": "Purina Pro Plan",
-     "grupo": "nestle",
      "keywords": [
+      "croquetas",
       "perro",
-      "dog",
-      "pro plan",
-      "croquetas"
+      "perros",
+      "alimento"
      ],
      "resultado": "positivo",
-     "grado": "Categoría A (Nutrición avanzada)",
-     "veredicto": "Cumple aporte proteico y balance de aminoácidos",
+     "grado": "Categoría A (Especializadas)",
+     "veredicto": "Formulación completa y balanceada de alta calidad",
      "norma_cumplida": true
     },
     {
      "marca": "Nupec",
      "keywords": [
-      "perro",
-      "dog",
       "croquetas",
+      "perro",
+      "perros",
       "alimento"
      ],
      "resultado": "positivo",
-     "grado": "Categoría B (Calidad intermedia alta)",
-     "veredicto": "Cumple requerimientos nutricionales con harinas de calidad",
+     "grado": "Categoría B (Intermedias)",
+     "veredicto": "Cumple requerimientos nutrimentales básicos y de mantenimiento",
      "norma_cumplida": true
     },
     {
      "marca": "Pal Perro",
      "keywords": [
+      "croquetas",
       "perro",
-      "dog",
-      "croquetas"
+      "perros",
+      "alimento"
      ],
-     "resultado": "advertencia",
-     "grado": "Categoría D (Bajo aporte cárnico)",
-     "veredicto": "Señalamiento oficial: Mayormente subproductos y harinas de cereales",
+     "resultado": "informativo",
+     "grado": "Categoría D (Básicas)",
+     "veredicto": "Cumple requerimientos mínimos de mantenimiento, menor proteína cárnica",
      "norma_cumplida": true
     }
    ]
   },
   {
-   "id": "profeco-sartenes-2023",
+   "id": "profeco-sartenes-2022",
    "pais": "México",
    "paises_tienda": [
     "México",
@@ -27578,23 +27550,25 @@
    ],
    "autoridad": "PROFECO",
    "categoria": "electrodomesticos_cocina",
-   "subcategoria": "sarten",
-   "fuente": "Revista del Consumidor No. 544 (PROFECO)",
-   "url": "https://www.gob.mx/profeco/documentos/estudios-de-calidad",
-   "fecha": "2023-06",
-   "norma": "NOM-225-SCFI",
+   "subcategoria": "sartenes",
+   "fuente": "Revista del Consumidor No. 544 (junio 2022)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/730296/ESTUDIO_CALIDAD_SARTENES_ANTIADHERENTES.pdf",
+   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/730296/ESTUDIO_CALIDAD_SARTENES_ANTIADHERENTES.pdf",
+   "fecha": "2022-06",
+   "antiguedad": true,
+   "verificado": "2026-11-09",
+   "norma": "NMX-B-119-1983",
    "items": [
     {
      "marca": "T-Fal",
-     "grupo": "groupe_seb",
      "keywords": [
       "sarten",
       "sartén",
       "antiadherente"
      ],
      "resultado": "positivo",
-     "grado": "Calificación: Excelente (E)",
-     "veredicto": "Durabilidad sobresaliente de antiadherente y distribución térmica",
+     "grado": "Calificación Excelente (E)",
+     "veredicto": "Excelente durabilidad de antiadherente y distribución de temperatura",
      "norma_cumplida": true
     },
     {
@@ -27605,8 +27579,8 @@
       "antiadherente"
      ],
      "resultado": "positivo",
-     "grado": "Calificación: Muy Bueno (MB)",
-     "veredicto": "Resistencia a la abrasión y distribución homogénea",
+     "grado": "Calificación Muy Bueno (MB)",
+     "veredicto": "Muy buena antiadherencia y resistencia térmica",
      "norma_cumplida": true
     },
     {
@@ -27617,8 +27591,8 @@
       "antiadherente"
      ],
      "resultado": "positivo",
-     "grado": "Calificación: Bueno (B)",
-     "veredicto": "Cumple prueba de adherencia de huevo y leche",
+     "grado": "Calificación Bueno (B)",
+     "veredicto": "Buena durabilidad de capa antiadherente",
      "norma_cumplida": true
     },
     {
@@ -27629,64 +27603,21 @@
       "antiadherente"
      ],
      "resultado": "positivo",
-     "grado": "Calificación: Muy Bueno (MB)",
-     "veredicto": "Cumple espesor de película antiadherente NOM-225",
+     "grado": "Calificación Muy Bueno (MB)",
+     "veredicto": "Muy buena adherencia y distribución de calor",
      "norma_cumplida": true
     },
     {
      "marca": "Iuno",
      "keywords": [
       "sarten",
-      "sartén"
+      "sartén",
+      "antiadherente"
      ],
      "resultado": "advertencia",
-     "grado": "Calificación: Deficiente (D)",
-     "veredicto": "Señalamiento oficial: Desprendimiento prematuro de recubrimiento",
+     "grado": "Calificación Deficiente (D)",
+     "veredicto": "Desprendimiento prematuro de capa antiadherente en prueba de abrasión",
      "norma_cumplida": false
-    }
-   ]
-  },
-  {
-   "id": "usda-meat-quality",
-   "pais": "EE.UU.",
-   "paises_tienda": [
-    "EE.UU.",
-    "us",
-    "usa",
-    "eeuu",
-    "estados unidos"
-   ],
-   "autoridad": "USDA",
-   "categoria": "abarrotes",
-   "subcategoria": "carne",
-   "fuente": "USDA Agricultural Marketing Service (Quality Meat Grading)",
-   "url": "https://www.ams.usda.gov/grades-standards/beef",
-   "fecha": "2024",
-   "norma": "7 CFR Part 54",
-   "items": [
-    {
-     "marca": "Certified Angus Beef",
-     "keywords": [
-      "prime",
-      "beef",
-      "angus"
-     ],
-     "resultado": "positivo",
-     "grado": "USDA Prime Grade (Máximo marmoleo y terneza)",
-     "veredicto": "Certificación de grado oficial de los inspectores USDA",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Kirkland Signature",
-     "keywords": [
-      "prime",
-      "choice",
-      "beef"
-     ],
-     "resultado": "positivo",
-     "grado": "USDA Choice / Prime Grade",
-     "veredicto": "Carne inspeccionada y clasificada por USDA",
-     "norma_cumplida": true
     }
    ]
   },
@@ -27703,9 +27634,12 @@
    "autoridad": "USDA",
    "categoria": "lacteos",
    "subcategoria": "organico",
-   "fuente": "USDA National Organic Program (NOP)",
-   "url": "https://www.usda.gov/topics/organic",
-   "fecha": "2024",
+   "fuente": "USDA National Organic Program (Organic Integrity Database)",
+   "url": "https://organic.ams.usda.gov/Integrity/CP/OPP?nopid=8150001357",
+   "url_estudio": "https://organic.ams.usda.gov/Integrity/CP/OPP?nopid=8150001357",
+   "fecha": "2024-01",
+   "antiguedad": false,
+   "verificado": "2026-11-09",
    "norma": "7 CFR Part 205",
    "items": [
     {
@@ -27717,79 +27651,7 @@
      ],
      "resultado": "positivo",
      "grado": "USDA Organic 100% Certified",
-     "veredicto": "Libre de antibióticos, hormonas sintéticas y pesticidas",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Horizon Organic",
-     "keywords": [
-      "organic",
-      "milk"
-     ],
-     "resultado": "positivo",
-     "grado": "USDA Organic Certified",
-     "veredicto": "Verificado bajo el Programa Orgánico Nacional de EE.UU.",
-     "norma_cumplida": true
-    }
-   ]
-  },
-  {
-   "id": "mapa-iberico-dop",
-   "pais": "España",
-   "paises_tienda": [
-    "España",
-    "spain",
-    "es",
-    "espana"
-   ],
-   "autoridad": "MAPA",
-   "categoria": "abarrotes",
-   "subcategoria": "jamon_iberico",
-   "fuente": "Ministerio de Agricultura, Pesca y Alimentación (Norma del Ibérico RD 4/2014)",
-   "url": "https://www.mapa.gob.es/es/alimentacion/temas/calidad-diferenciada/norma-iberico/",
-   "fecha": "2024",
-   "norma": "Real Decreto 4/2014",
-   "items": [
-    {
-     "marca": "Cinco Jotas",
-     "keywords": [
-      "jamon",
-      "jamón",
-      "bellota",
-      "iberico",
-      "ibérico"
-     ],
-     "resultado": "positivo",
-     "grado": "Precinto Negro (100% Ibérico de Bellota)",
-     "veredicto": "Máxima categoría de calidad oficial del cerdo ibérico en dehesa",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Joselito",
-     "keywords": [
-      "jamon",
-      "jamón",
-      "bellota",
-      "iberico",
-      "ibérico"
-     ],
-     "resultado": "positivo",
-     "grado": "100% Bellota Gran Reserva",
-     "veredicto": "Cumple normativa española de pureza racial y curación",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "El Pozo",
-     "keywords": [
-      "jamon",
-      "jamón",
-      "iberico",
-      "ibérico",
-      "cebo"
-     ],
-     "resultado": "informativo",
-     "grado": "Precinto Blanco (Jamón de Cebo Ibérico 50% raza)",
-     "veredicto": "Criado en granja con alimentación de piensos según RD 4/2014",
+     "veredicto": "Operación certificada en USDA Organic Integrity Database (NOP ID 8150001357)",
      "norma_cumplida": true
     }
    ]
@@ -27806,9 +27668,12 @@
    "autoridad": "MAPA",
    "categoria": "abarrotes",
    "subcategoria": "aceite_oliva",
-   "fuente": "Ministerio de Agricultura, Pesca y Alimentación (Denominaciones de Origen Protegidas)",
-   "url": "https://www.mapa.gob.es/es/alimentacion/temas/calidad-diferenciada/dop-igp/",
-   "fecha": "2024",
+   "fuente": "Ministerio de Agricultura, Pesca y Alimentación (Premios Alimentos de España)",
+   "url": "https://www.mapa.gob.es/dam/mapa/contenido/prensa/notas-de-prensa/documentos/documentos-2023/230421fnlplanasvisitacastillodecanena.pdf",
+   "url_estudio": "https://www.mapa.gob.es/dam/mapa/contenido/prensa/notas-de-prensa/documentos/documentos-2023/230421fnlplanasvisitacastillodecanena.pdf",
+   "fecha": "2023-04",
+   "antiguedad": true,
+   "verificado": "2026-11-09",
    "norma": "Reglamento UE 1151/2012",
    "items": [
     {
@@ -27820,21 +27685,8 @@
       "extra"
      ],
      "resultado": "positivo",
-     "grado": "Aceite de Oliva Virgen Extra (AOVE) de Cosecha Temprana",
-     "veredicto": "Acidez inferior a 0.2º y panel de cata oficial virgen extra",
-     "norma_cumplida": true
-    },
-    {
-     "marca": "Carbonell",
-     "keywords": [
-      "aceite",
-      "oliva",
-      "virgen",
-      "extra"
-     ],
-     "resultado": "positivo",
-     "grado": "Aceite de Oliva Virgen Extra",
-     "veredicto": "Cumple especificaciones químicas y sensoriales reglamentarias",
+     "grado": "Premio Alimentos de España AOVE Ecológico",
+     "veredicto": "Reconocimiento oficial del MAPA a la excelencia y producción ecológica de AOVE",
      "norma_cumplida": true
     }
    ]

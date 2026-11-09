@@ -56,11 +56,15 @@ async function run() {
 
   // 0. Validación 2026-11-09: ningún estudio sin verificar (fecha + URL del estudio concreto) llega a la tarjeta
   {
+    const estudiosSinVerificar = [
+      { id: "sin-verif-1", pais: "México", paises_tienda: ["México"], autoridad: "PROFECO", categoria: "abarrotes", items: [{ marca: "Aurrera", resultado: "advertencia", grado: "Prueba" }] },
+      { id: "sin-verif-2", pais: "México", paises_tienda: ["México"], autoridad: "PROFECO", categoria: "abarrotes", verificado: "2026-11-09", items: [{ marca: "Aurrera", resultado: "advertencia", grado: "Prueba" }] },
+      { id: "sin-verif-3", pais: "México", paises_tienda: ["México"], autoridad: "PROFECO", categoria: "abarrotes", url_estudio: "https://gob.mx/test", items: [{ marca: "Aurrera", resultado: "advertencia", grado: "Prueba" }] }
+    ];
     const r = QED.evaluateProductNotices({ title: "Atún Aurrera en agua 140 g", category: "abarrotes", categoryConfidence: "alta",
-      storeCountry: "México", brand: "Aurrera", estudiosCalidadDb: estudiosReales });
-    const sinVerificar = estudiosReales.filter((e) => !e.verificado || !e.url_estudio).length;
+      storeCountry: "México", brand: "Aurrera", estudiosCalidadDb: estudiosSinVerificar });
     check("0. Estudios sin verificar no se muestran (son juicios sobre marcas reales)",
-      !r.some((n) => n.categoria === "calidad"), `${sinVerificar} de ${estudiosReales.length} sin verificar`);
+      !r.some((n) => n.categoria === "calidad"), "Estudios sin verificado y url_estudio no se muestran");
   }
 
   // 1. Auditoría de esquema de estudios_calidad.json
@@ -76,7 +80,7 @@ async function run() {
     check("1. Esquema de estudios_calidad.json válido (IDs, países, URLs seguras e items)", allValid, `${estudios.length} estudios validados`);
   }
 
-  // 2. PROFECO México: Atún Dolores (Lomo / Positivo) vs Aurrera (Advertencia / Soya)
+  // 2. PROFECO México: Atún Dolores (Lomo / 1–4 % soya) vs Aurrera (30–62 % soya)
   {
     const rDolores = QED.evaluateProductNotices({
       title: "Atún Dolores en Agua Lomo 140 g",
@@ -98,9 +102,9 @@ async function run() {
     });
     const qAurrera = rAurrera.find(n => n.categoria === "calidad");
 
-    check("2. PROFECO: Atún Dolores positivo (sin soya) vs Aurrera advertencia (62% soya)",
-      !!qDolores && qDolores.resultado === "positivo" && qDolores.texto.includes("Sin soya") &&
-      !!qAurrera && qAurrera.resultado === "advertencia" && qAurrera.texto.includes("hasta 62% de soya"),
+    check("2. PROFECO: Atún Dolores (1–4 % soya) vs Aurrera (30–62 % soya)",
+      !!qDolores && qDolores.texto.includes("1–4 % de soya") &&
+      !!qAurrera && qAurrera.texto.includes("30–62 % de soya"),
       `Dolores: ${qDolores ? qDolores.resultado : "null"} | Aurrera: ${qAurrera ? qAurrera.resultado : "null"}`);
   }
 
@@ -223,16 +227,8 @@ async function run() {
       `Cinsa: ${qCinsa ? qCinsa.resultado : "null"} | Iuno: ${qIuno ? qIuno.resultado : "null"}`);
   }
 
-  // 7. USDA EE.UU.: Certified Angus Beef (Prime Grade) y Organic Valley (USDA Organic)
+  // 7. USDA EE.UU.: Organic Valley (USDA Organic 100% Certified)
   {
-    const rBeef = QED.evaluateProductNotices({
-      title: "Certified Angus Beef USDA Prime Ribeye 16 oz",
-      category: "abarrotes",
-      categoryConfidence: "alta",
-      storeCountry: "EE.UU.",
-      brand: "Certified Angus Beef",
-      estudiosCalidadDb: estudios
-    });
     const rOrg = QED.evaluateProductNotices({
       title: "Organic Valley Whole Milk Half Gallon",
       category: "lacteos",
@@ -241,25 +237,15 @@ async function run() {
       brand: "Organic Valley",
       estudiosCalidadDb: estudios
     });
-    const qBeef = rBeef.find(n => n.categoria === "calidad");
     const qOrg = rOrg.find(n => n.categoria === "calidad");
 
-    check("7. USDA (EE.UU.): Certified Angus Beef (Prime Grade) y Organic Valley (USDA Organic)",
-      !!qBeef && qBeef.autoridad === "USDA" && qBeef.resultado === "positivo" && qBeef.texto.includes("USDA Prime") &&
+    check("7. USDA (EE.UU.): Organic Valley (USDA Organic)",
       !!qOrg && qOrg.autoridad === "USDA" && qOrg.resultado === "positivo" && qOrg.texto.includes("Organic 100% Certified"),
-      `Beef: ${qBeef ? qBeef.autoridad : "null"} | Organic: ${qOrg ? qOrg.autoridad : "null"}`);
+      `Organic: ${qOrg ? qOrg.autoridad : "null"}`);
   }
 
-  // 8. MAPA España: Jamón Ibérico Cinco Jotas (Precinto Negro) y AOVE Castillo de Canena (Cosecha Temprana)
+  // 8. MAPA España: AOVE Castillo de Canena (Premios Alimentos de España)
   {
-    const rJamon = QED.evaluateProductNotices({
-      title: "Jamón de Bellota 100% Ibérico Cinco Jotas 8 kg",
-      category: "abarrotes",
-      categoryConfidence: "alta",
-      storeCountry: "España",
-      brand: "Cinco Jotas",
-      estudiosCalidadDb: estudios
-    });
     const rAove = QED.evaluateProductNotices({
       title: "Aceite de Oliva Virgen Extra Castillo de Canena Primer Día de Cosecha 500 ml",
       category: "abarrotes",
@@ -268,13 +254,11 @@ async function run() {
       brand: "Castillo de Canena",
       estudiosCalidadDb: estudios
     });
-    const qJamon = rJamon.find(n => n.categoria === "calidad");
     const qAove = rAove.find(n => n.categoria === "calidad");
 
-    check("8. MAPA (España): Jamón Ibérico Cinco Jotas (Precinto Negro) y AOVE Castillo de Canena",
-      !!qJamon && qJamon.autoridad === "MAPA" && qJamon.resultado === "positivo" && qJamon.texto.includes("Precinto Negro") &&
+    check("8. MAPA (España): AOVE Castillo de Canena (Premios Alimentos de España)",
       !!qAove && qAove.autoridad === "MAPA" && qAove.resultado === "positivo" && qAove.texto.includes("AOVE"),
-      `Cinco Jotas: ${qJamon ? qJamon.resultado : "null"} | Canena: ${qAove ? qAove.resultado : "null"}`);
+      `Canena: ${qAove ? qAove.resultado : "null"}`);
   }
 
   // 9. Aislamiento geográfico estricto: Tienda alemana (amazon.de) y francesa jamás muestran PROFECO ni USDA

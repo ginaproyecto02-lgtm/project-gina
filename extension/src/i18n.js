@@ -1095,12 +1095,28 @@
       ja: "公式品質"
     },
     badge_quality_warn: {
-      es: "Alerta de calidad",
-      en: "Quality warning",
-      de: "Qualitätswarnung",
-      fr: "Alerte qualité",
-      it: "Avviso di qualità",
-      ja: "品質警告"
+      es: "Estudio oficial",
+      en: "Official study",
+      de: "Offizielle Studie",
+      fr: "Étude officielle",
+      it: "Studio ufficiale",
+      ja: "公式調査"
+    },
+    lbl_quality_aged: {
+      es: "Estudio {autoridad} de {anio}: puede haber cambiado",
+      en: "{autoridad} study from {anio}: may have changed",
+      de: "{autoridad}-Studie aus {anio}: Angaben können veraltet sein",
+      fr: "Étude {autoridad} de {anio} : susceptible d'avoir changé",
+      it: "Studio {autoridad} del {anio}: potrebbe essere cambiato",
+      ja: "{autoridad}の{anio}年調査：変更されている可能性があります"
+    },
+    lbl_quality_result: {
+      es: "Resultado de {autoridad} ({fuente}): {grado}",
+      en: "Result from {autoridad} ({fuente}): {grado}",
+      de: "Ergebnis von {autoridad} ({fuente}): {grado}",
+      fr: "Résultat de {autoridad} ({fuente}) : {grado}",
+      it: "Risultato di {autoridad} ({fuente}): {grado}",
+      ja: "{autoridad}の調査結果（{fuente}）：{grado}"
     },
     lbl_quality_study: {
       es: "Estudio oficial de calidad",

@@ -740,7 +740,7 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     check("7. Alerta de solo marca → texto «alertas de esta marca», nunca «este producto»", okAlerta, alertaNotice ? alertaNotice.texto : "no encontrada");
   }
 
-  // 7b. PROFECO (México): Atún Dolores → positivo «Sin soya detectada»
+  // 7b. PROFECO (México): Atún Dolores → «1–4 % de soya»
   {
     const w = env("", "https://www.walmart.com.mx/ip/atun-dolores/123");
     const rNotices = w.QED.evaluateProductNotices({
@@ -753,12 +753,12 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       estudiosCalidadDb: estudiosCalidadData
     });
     const qNotice = rNotices.find(n => n.categoria === "calidad");
-    check("7b. PROFECO (México): Atún Dolores → positivo «Sin soya detectada»",
-      !!qNotice && qNotice.resultado === "positivo" && qNotice.texto.includes("Sin soya") && qNotice.autoridad === "PROFECO",
+    check("7b. PROFECO (México): Atún Dolores → «1–4 % de soya»",
+      !!qNotice && qNotice.texto.includes("1–4 % de soya") && qNotice.autoridad === "PROFECO",
       qNotice ? qNotice.texto : "no encontrado");
   }
 
-  // 7c. PROFECO (México): Atún Aurrera → advertencia «Contiene hasta 62% de soya»
+  // 7c. PROFECO (México): Atún Aurrera → «30–62 % de soya»
   {
     const w = env("", "https://www.bodegaaurrera.com.mx/ip/atun-aurrera/456");
     const rNotices = w.QED.evaluateProductNotices({
@@ -771,8 +771,8 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       estudiosCalidadDb: estudiosCalidadData
     });
     const qNotice = rNotices.find(n => n.categoria === "calidad");
-    check("7c. PROFECO (México): Atún Aurrera → advertencia «Contiene hasta 62% de soya»",
-      !!qNotice && qNotice.resultado === "advertencia" && qNotice.texto.includes("hasta 62% de soya"),
+    check("7c. PROFECO (México): Atún Aurrera → «30–62 % de soya»",
+      !!qNotice && qNotice.texto.includes("30–62 % de soya"),
       qNotice ? qNotice.texto : "no encontrado");
   }
 
@@ -830,37 +830,37 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       `peñaranda=${nPos ? nPos.resultado : "null"}, duby=${nWarn ? nWarn.resultado : "null"}`);
   }
 
-  // 7f. USDA (EE.UU.): Certified Angus Beef → USDA Prime Grade
+  // 7f. USDA (EE.UU.): Organic Valley → USDA Organic
   {
-    const w = env("", "https://www.walmart.com/ip/beef/202");
+    const w = env("", "https://www.target.com/p/organic-valley-milk/-/A-123");
     const rNotices = w.QED.evaluateProductNotices({
-      title: "Certified Angus Beef Prime Ribeye Steak",
-      category: "abarrotes",
+      title: "Organic Valley Whole Milk Half Gallon",
+      category: "lacteos",
       categoryConfidence: "alta",
       storeCountry: "EE.UU.",
-      brand: "Certified Angus Beef",
+      brand: "Organic Valley",
       estudiosCalidadDb: estudiosCalidadData
     });
     const qNotice = rNotices.find(n => n.categoria === "calidad");
-    check("7f. USDA (EE.UU.): Certified Angus Beef → USDA Prime Grade",
-      !!qNotice && qNotice.autoridad === "USDA" && qNotice.resultado === "positivo" && qNotice.texto.includes("USDA Prime"),
+    check("7f. USDA (EE.UU.): Organic Valley → USDA Organic",
+      !!qNotice && qNotice.autoridad === "USDA" && qNotice.resultado === "positivo" && qNotice.texto.includes("Organic 100% Certified"),
       qNotice ? qNotice.texto : "no encontrado");
   }
 
-  // 7g. MAPA (España): Jamón Ibérico Cinco Jotas → Precinto Negro 100% Bellota
+  // 7g. MAPA (España): Castillo de Canena → AOVE Premios Alimentos de España
   {
-    const w = env("", "https://www.elcorteingles.es/supermercado/jamon/303");
+    const w = env("", "https://www.elcorteingles.es/supermercado/aove/303");
     const rNotices = w.QED.evaluateProductNotices({
-      title: "Jamón de Bellota 100% Ibérico Cinco Jotas",
+      title: "Aceite de Oliva Virgen Extra Castillo de Canena",
       category: "abarrotes",
       categoryConfidence: "alta",
       storeCountry: "España",
-      brand: "Cinco Jotas",
+      brand: "Castillo de Canena",
       estudiosCalidadDb: estudiosCalidadData
     });
     const qNotice = rNotices.find(n => n.categoria === "calidad");
-    check("7g. MAPA (España): Jamón Ibérico Cinco Jotas → Precinto Negro 100% Bellota",
-      !!qNotice && qNotice.autoridad === "MAPA" && qNotice.resultado === "positivo" && qNotice.texto.includes("Precinto Negro"),
+    check("7g. MAPA (España): Castillo de Canena → AOVE Premios Alimentos de España",
+      !!qNotice && qNotice.autoridad === "MAPA" && qNotice.resultado === "positivo" && qNotice.texto.includes("AOVE"),
       qNotice ? qNotice.texto : "no encontrado");
   }
 
