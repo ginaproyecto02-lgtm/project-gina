@@ -5,7 +5,7 @@ const assert = require("assert");
 const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
-const { execFileSync } = require("child_process");
+const { execFileSync, spawnSync } = require("child_process");
 
 const ROOT = path.join(__dirname, "..");
 const EXT = path.join(ROOT, "extension");
@@ -333,6 +333,68 @@ async function run() {
     check("11. Herramienta datagen/minar_profeco.py audita estudios y analiza cobertura sin errores",
       toolExit === 0 && toolOut.includes("cero errores") && toolOut.includes("Marcas analizadas"),
       `salida: ${toolOut.split("\n")[2]}`);
+  }
+
+  // 12. Candado 1: build_data.py falla si un estudio verificado no tiene url_estudio o usa portada no válida
+  {
+    const pyOpts = { encoding: "utf8", cwd: ROOT, env: Object.assign({}, process.env, { PYTHONIOENCODING: "utf-8" }) };
+    const pyCode1a = "import sys, json, builtins, io; sys.path.insert(0, 'datagen'); real_open = builtins.open; builtins.open = (lambda f, *a, **kw: io.StringIO(json.dumps([{'id': 'test-c1', 'url': 'https://www.gob.mx/test', 'autoridad': 'PROFECO', 'fecha': '2024', 'verificado': '2024-05'}])) if 'estudios_calidad.json' in str(f) else real_open(f, *a, **kw)); import build_data";
+    const res1a = spawnSync("python", ["-c", pyCode1a], pyOpts);
+    const ok1a = res1a.status !== 0 && (res1a.stderr || "").includes("carece de 'url_estudio'");
+
+    const pyCode1b = "import sys, json, builtins, io; sys.path.insert(0, 'datagen'); real_open = builtins.open; builtins.open = (lambda f, *a, **kw: io.StringIO(json.dumps([{'id': 'test-c1b', 'url': 'https://www.gob.mx/test', 'autoridad': 'PROFECO', 'fecha': '2024', 'verificado': '2024-05', 'url_estudio': 'https://www.gob.mx/profeco/documentos/estudios-de-calidad'}])) if 'estudios_calidad.json' in str(f) else real_open(f, *a, **kw)); import build_data";
+    const res1b = spawnSync("python", ["-c", pyCode1b], pyOpts);
+    const ok1b = res1b.status !== 0 && (res1b.stderr || "").includes("portada no");
+
+    check("12. Candado 1: build_data.py falla si estudio verificado carece de url_estudio o usa portada",
+      ok1a && ok1b,
+      "Falla con AssertionError: url_estudio inválido o portada no válida");
+  }
+
+  // 13. Candado 2: build_data.py falla si un estudio tiene url o url_estudio que no corresponde a su autoridad
+  {
+    const pyOpts = { encoding: "utf8", cwd: ROOT, env: Object.assign({}, process.env, { PYTHONIOENCODING: "utf-8" }) };
+    const pyCode2 = "import sys, json, builtins, io; sys.path.insert(0, 'datagen'); real_open = builtins.open; builtins.open = (lambda f, *a, **kw: io.StringIO(json.dumps([{'id': 'test-c2', 'url': 'https://example.com/bad', 'autoridad': 'PROFECO', 'fecha': '2024'}])) if 'estudios_calidad.json' in str(f) else real_open(f, *a, **kw)); import build_data";
+    const res2 = spawnSync("python", ["-c", pyCode2], pyOpts);
+    const ok2 = res2.status !== 0 && (res2.stderr || "").includes("no corresponde a");
+    check("13. Candado 2: build_data.py falla si estudio tiene dominio no correspondiente a su autoridad",
+      ok2,
+      "Falla con AssertionError: dominio no corresponde a autoridad");
+  }
+
+  // 14. Candado 3: build_data.py falla si una empresa con confianza «Alta» o «Verificado» tiene una portada como url
+  {
+    const pyOpts = { encoding: "utf8", cwd: ROOT, env: Object.assign({}, process.env, { PYTHONIOENCODING: "utf-8" }) };
+    const pyCode3 = "import sys; sys.path.insert(0, 'datagen'); import data_base as base; base.g('grupo_bad_url', 'Bad URL SA', 'Nadie', 'México', 'Privada', confianza='Alta', fuente='Prueba', url='https://www.gob.mx/profeco'); import build_data";
+    const res3 = spawnSync("python", ["-c", pyCode3], pyOpts);
+    const ok3 = res3.status !== 0 && (res3.stderr || "").includes("portada no");
+    check("14. Candado 3: build_data.py falla si empresa Alta/Verificado tiene una portada como url",
+      ok3,
+      "Falla con AssertionError: portada no válida como url");
+  }
+
+  // 15. Candado 4: build_data.py falla si fecha tiene formato no válido o es posterior a verificado
+  {
+    const pyOpts = { encoding: "utf8", cwd: ROOT, env: Object.assign({}, process.env, { PYTHONIOENCODING: "utf-8" }) };
+    const pyCode4a = "import sys, json, builtins, io; sys.path.insert(0, 'datagen'); real_open = builtins.open; builtins.open = (lambda f, *a, **kw: io.StringIO(json.dumps([{'id': 'test-c4a', 'url': 'https://www.gob.mx/test', 'autoridad': 'PROFECO', 'fecha': 'marzo 2024'}])) if 'estudios_calidad.json' in str(f) else real_open(f, *a, **kw)); import build_data";
+    const res4a = spawnSync("python", ["-c", pyCode4a], pyOpts);
+    const ok4a = res4a.status !== 0 && (res4a.stderr || "").includes("formato AAAA o AAAA-MM");
+
+    const pyCode4b = "import sys, json, builtins, io; sys.path.insert(0, 'datagen'); real_open = builtins.open; builtins.open = (lambda f, *a, **kw: io.StringIO(json.dumps([{'id': 'test-c4b', 'url': 'https://www.gob.mx/test', 'autoridad': 'PROFECO', 'fecha': '2025-05', 'verificado': '2024-11-09', 'url_estudio': 'https://www.gob.mx/profeco/estudio-123.pdf'}])) if 'estudios_calidad.json' in str(f) else real_open(f, *a, **kw)); import build_data";
+    const res4b = spawnSync("python", ["-c", pyCode4b], pyOpts);
+    const ok4b = res4b.status !== 0 && (res4b.stderr || "").includes("es posterior a fecha de");
+
+    check("15. Candado 4: build_data.py falla si fecha tiene formato no válido o es posterior a verificado",
+      ok4a && ok4b,
+      "Falla con AssertionError: formato fecha inválido o posterior a verificado");
+  }
+
+  // 16. build_data.py con los datos reales pasa exitosamente
+  {
+    const resReal = spawnSync("python", ["datagen/build_data.py"], { encoding: "utf8", cwd: ROOT });
+    check("16. build_data.py pasa con éxito en los datos reales",
+      resReal.status === 0,
+      `exit: ${resReal.status}`);
   }
 
   console.log(`\n${pass}/${total} pruebas de calidad y grados alimenticios correctas\n`);

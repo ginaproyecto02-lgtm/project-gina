@@ -1,5 +1,5 @@
 # Genera extension/data/brands.json, extension/data/sites.json y actualiza el manifiesto.
-import json, os, re, sys
+import json, os, re, sys, urllib.parse
 sys.path.insert(0, os.path.dirname(__file__))
 import data_base as base
 import data_mundo as mundo
@@ -117,10 +117,77 @@ ADITIVOS = json.load(open(aditivos_path, encoding="utf-8")) if os.path.exists(ad
 alertas_path = os.path.join(os.path.dirname(__file__), "alertas.json")
 ALERTAS = json.load(open(alertas_path, encoding="utf-8")) if os.path.exists(alertas_path) else []
 
+portadas_path = os.path.join(os.path.dirname(__file__), "portadas_no_validas.json")
+assert os.path.exists(portadas_path), f"Falta el archivo de portadas no válidas: {portadas_path}"
+PORTADAS_NO_VALIDAS = json.load(open(portadas_path, encoding="utf-8"))
+
+AUTORIDADES_DOMINIOS = {
+    "PROFECO": ["gob.mx", "revistadelconsumidor.gob.mx"],
+    "USDA": ["usda.gov"],
+    "MAPA": ["mapa.gob.es"],
+}
+RAICES_AUTORIDAD = {"gob.mx", "revistadelconsumidor.gob.mx", "usda.gov", "mapa.gob.es"}
+
+def es_portada_no_valida(u):
+    if not u or not isinstance(u, str):
+        return False
+    u_clean = u.strip()
+    p = urllib.parse.urlparse(u_clean)
+    host = p.netloc.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    norm_url = f"{p.scheme}://{p.netloc.lower()}{p.path.rstrip('/')}"
+    for bad in PORTADAS_NO_VALIDAS:
+        bp = urllib.parse.urlparse(bad.strip())
+        bad_norm = f"{bp.scheme}://{bp.netloc.lower()}{bp.path.rstrip('/')}"
+        if norm_url == bad_norm:
+            return True
+    if p.path.strip("/") == "" and any(host == d or host.endswith("." + d) for d in RAICES_AUTORIDAD):
+        return True
+    return False
+
 estudios_path = os.path.join(os.path.dirname(__file__), "estudios_calidad.json")
 ESTUDIOS_CALIDAD = json.load(open(estudios_path, encoding="utf-8")) if os.path.exists(estudios_path) else []
 for e in ESTUDIOS_CALIDAD:
-    assert e.get("id") and e.get("url", "").startswith("https://") and e.get("autoridad"), f"estudio de calidad inválido: {e}"
+    eid = e.get("id")
+    assert eid and e.get("url", "").startswith("https://") and e.get("autoridad"), f"estudio de calidad inválido: {e}"
+
+    # Candado 1: Un estudio con verificado no puede carecer de url_estudio ni usar una portada
+    if e.get("verificado"):
+        url_est = e.get("url_estudio")
+        assert url_est and isinstance(url_est, str) and url_est.startswith("https://"), (
+            f"Estudio '{eid}': tiene 'verificado' pero carece de 'url_estudio' válido (obtenido: {url_est})"
+        )
+        assert not es_portada_no_valida(url_est), (
+            f"Estudio '{eid}': 'url_estudio' es una portada no válida: '{url_est}'"
+        )
+
+    # Candado 2: url y url_estudio deben tener dominio correspondiente a su autoridad
+    aut = e.get("autoridad")
+    if aut in AUTORIDADES_DOMINIOS:
+        doms = AUTORIDADES_DOMINIOS[aut]
+        for field in ("url", "url_estudio"):
+            u = e.get(field)
+            if u:
+                hp = urllib.parse.urlparse(u).netloc.lower()
+                if hp.startswith("www."):
+                    hp = hp[4:]
+                assert any(hp == d or hp.endswith("." + d) for d in doms), (
+                    f"Estudio '{eid}' de autoridad '{aut}': '{field}' tiene dominio '{hp}' que no corresponde a {doms}"
+                )
+
+    # Candado 4: fecha con formato AAAA o AAAA-MM, y no posterior a verificado
+    fecha = str(e.get("fecha", "")).strip()
+    assert re.fullmatch(r"^\d{4}(?:-(?:0[1-9]|1[0-2]))?$", fecha), (
+        f"Estudio '{eid}': fecha '{fecha}' debe tener formato AAAA o AAAA-MM"
+    )
+    verif = str(e.get("verificado", "")).strip()
+    if verif:
+        prefix_len = len(fecha)
+        verif_cmp = verif[:prefix_len]
+        assert fecha <= verif_cmp, (
+            f"Estudio '{eid}': fecha '{fecha}' es posterior a fecha de verificación '{verif}'"
+        )
 
 # ---- Rastreadores de precio (solo enlaces verificados) y tiendas para «Buscar en otra tienda»
 RASTREADORES = json.load(open(os.path.join(os.path.dirname(__file__), "rastreadores.json"), encoding="utf-8"))["rastreadores"]
@@ -286,6 +353,10 @@ for gid, grp in brands["grupos"].items():
     assert "Conocimiento del modelo" not in fuente, f"Grupo '{gid}' tiene 'Conocimiento del modelo'"
     if grp.get("confianza") in ("Alta", "Verificado"):
         assert grp.get("url") and grp["url"].startswith("https://"), f"Grupo '{gid}' con confianza {grp.get('confianza')} sin URL válida"
+        assert not es_portada_no_valida(grp.get("url")), (
+            f"Grupo '{gid}' ({grp.get('empresa')}) con confianza '{grp.get('confianza')}' tiene como 'url' "
+            f"una portada no válida: '{grp.get('url')}'"
+        )
 
 # ---- E3: Validación estricta de sitios oficiales y buscadores
 def validate_sitios_oficiales(obj, context="datos"):
@@ -326,6 +397,8 @@ if os.path.exists(alertas_path):
     shutil.copyfile(alertas_path, os.path.join(ROOT, "data", "alertas.json"))
 if os.path.exists(estudios_path):
     shutil.copyfile(estudios_path, os.path.join(ROOT, "data", "estudios_calidad.json"))
+if os.path.exists(portadas_path):
+    shutil.copyfile(portadas_path, os.path.join(ROOT, "data", "portadas_no_validas.json"))
 
 # ---- Proyecto: de dónde descargan todos la base actualizada (gratis, sin claves) y a dónde se sugieren marcas
 PROY = json.load(open(os.path.join(os.path.dirname(__file__), "proyecto.json"), encoding="utf-8"))
