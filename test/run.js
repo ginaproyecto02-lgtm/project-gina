@@ -589,7 +589,9 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
 {
   const aditivosData = db.aditivos || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/aditivos.json"), "utf8"));
   const alertasData = db.alertas || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/alertas.json"), "utf8"));
-  const estudiosCalidadData = db.estudios_calidad || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/estudios_calidad.json"), "utf8"));
+  // Copias marcadas como verificadas para probar la lógica (los datos reales aún no lo están: ver test/calidad.test.js, prueba 0)
+  const estudiosCalidadData = (db.estudios_calidad || JSON.parse(fs.readFileSync(path.join(__dirname, "../datagen/estudios_calidad.json"), "utf8")))
+    .map((e) => Object.assign({}, e, { verificado: "prueba", url_estudio: e.url }));
 
   // 1. Título con "Red 3" en tienda de EE.UU. → aviso con enlace oficial a la FDA
   {

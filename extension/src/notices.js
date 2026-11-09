@@ -272,6 +272,10 @@
       const cNorm = country.replace(/[.,]/g, "").trim();
 
       for (const study of estudiosDb) {
+        // Validación 2026-11-09: un estudio solo se muestra si alguien lo comprobó contra el documento oficial
+        // («verificado» con fecha) y trae la URL del estudio concreto («url_estudio»), no la portada de la institución.
+        // Son juicios de calidad sobre marcas reales: sin eso, nada se muestra.
+        if (!study || !study.verificado || !/^https:\/\//.test(String(study.url_estudio || ""))) continue;
         // Validación geográfica estricta: solo tiendas del país correspondiente
         const studyCountries = (study.paises_tienda || [study.pais || ""]).map(p => String(p).toLowerCase().replace(/[.,]/g, "").trim());
         const matchesCountry = studyCountries.some(sc => cNorm === sc || cNorm.includes(sc) || sc.includes(cNorm));

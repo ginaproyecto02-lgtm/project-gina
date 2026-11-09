@@ -19,7 +19,9 @@ function loadModule(relPath, context = {}) {
 }
 
 const db = JSON.parse(fs.readFileSync(path.join(EXT, "data", "brands.json"), "utf8"));
-const estudios = JSON.parse(fs.readFileSync(path.join(ROOT, "datagen", "estudios_calidad.json"), "utf8"));
+const estudiosReales = JSON.parse(fs.readFileSync(path.join(ROOT, "datagen", "estudios_calidad.json"), "utf8"));
+// La lógica se prueba con copias marcadas como verificadas; los datos reales aún no lo están (ver prueba 0).
+const estudios = estudiosReales.map((e) => Object.assign({}, e, { verificado: "prueba", url_estudio: e.url }));
 
 let pass = 0;
 let total = 0;
@@ -51,6 +53,15 @@ async function run() {
   loadModule("src/card.js", ctx);
 
   const QED = ctx.QED;
+
+  // 0. Validación 2026-11-09: ningún estudio sin verificar (fecha + URL del estudio concreto) llega a la tarjeta
+  {
+    const r = QED.evaluateProductNotices({ title: "Atún Aurrera en agua 140 g", category: "abarrotes", categoryConfidence: "alta",
+      storeCountry: "México", brand: "Aurrera", estudiosCalidadDb: estudiosReales });
+    const sinVerificar = estudiosReales.filter((e) => !e.verificado || !e.url_estudio).length;
+    check("0. Estudios sin verificar no se muestran (son juicios sobre marcas reales)",
+      !r.some((n) => n.categoria === "calidad"), `${sinVerificar} de ${estudiosReales.length} sin verificar`);
+  }
 
   // 1. Auditoría de esquema de estudios_calidad.json
   {
