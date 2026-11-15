@@ -418,5 +418,6 @@
       }
     }
   },
-  "default_locale": "en"
+  "default_locale": "en",
+  "homepage_url": "https://ginaproyecto02-lgtm.github.io/project-gina/"
 }

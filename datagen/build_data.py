@@ -470,7 +470,7 @@ m["action"]["default_title"] = "__MSG_actionTitle__"
 # alternativas, i18n, semejanza y comparador, y en Firefox el comparador y las sugerencias fallaban).
 m["background"] = {"service_worker": "src/background.js", "scripts": ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/i18n.js", "src/semejanza.js", "src/comparador.js", "src/adaptivo.js", "src/ai.js", "src/background.js"]}
 m["minimum_chrome_version"] = "121"
-m.pop("homepage_url", None)
+m["homepage_url"] = f"https://{owner.lower()}.github.io/{name}/" if repo else "https://ginaproyecto02-lgtm.github.io/project-gina/"
 m["browser_specific_settings"] = {"gecko": {
     "id": "gina@project-gina",  # identificador único en addons.mozilla.org; puedes cambiarlo antes del primer envío
     "strict_min_version": "140.0",  # el consentimiento de datos integrado existe desde Firefox 140

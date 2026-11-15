@@ -15,7 +15,7 @@ Datos revisados el 18 de octubre de 2026. Las tiendas cambian sus reglas: confir
 |---|---|---|
 | **Revisar la marca «Gina»** | Es un nombre propio común; puede haber otra extensión, app o marca registrada «Gina» en software o comercio. | Busca «Gina» en las tres tiendas y en las bases de marcas: IMPI (México), USPTO (EE.UU.), EUIPO (UE), WIPO Global Brand Database (clases 9 y 35). El nombre completo «Gina: Know Who Your Money Backs» ayuda a distinguirla. |
 | **Correo de contacto público** | Las tiendas lo muestran; sirve también para correcciones de datos. | Crea uno dedicado (por ejemplo, `gina.soporte@…`). No uses tu correo personal: en Chrome **el correo de la cuenta de desarrollador no se puede cambiar después**. |
-| **Publicar la política de privacidad** | Obligatoria en Chrome y Edge porque la extensión lee contenido de páginas. | Reemplaza `CORREO_DE_CONTACTO` en `docs/privacidad.html` y súbela a una URL pública. Lo más simple es **GitHub Pages**: sube el proyecto a un repositorio, ve a *Settings → Pages → Deploy from branch → main → /docs*. La URL queda como `https://<usuario>.github.io/<repo>/privacidad.html`. |
+| **Publicar la política de privacidad y soporte** | Obligatorio en Chrome, Edge y Firefox porque la extensión lee contenido de páginas. | Usa **GitHub Pages** activando la carpeta `/docs` de la rama `main` (ver paso 0c abajo). Las URLs públicas quedan en `https://<usuario>.github.io/<repo>/`. |
 | **Decidir: persona o empresa** | En Edge el tipo de cuenta (individual o empresa) **no se puede cambiar**. En Chrome debes declarar si eres «comerciante» (*trader*). | Si la publicas como proyecto personal y gratuito, «individual» y «no comerciante» es lo habitual. Si tienes o tendrás una empresa detrás, regístrala como empresa desde el inicio. |
 | **Rellenar los marcadores** | Tu correo va en `datagen/proyecto.json` (la extensión lo toma de ahí al generar). Además: `CORREO_DE_CONTACTO` en `docs/privacidad.html`, y `CONTACT_EMAIL` y `PRIVACY_URL` en `store/ficha-tienda.md`. | Buscar y reemplazar; luego vuelve a generar el zip. |
 
@@ -105,7 +105,22 @@ Configura en **Settings → Secrets and variables → Actions**:
 
 ---
 
-> [!IMPORTANT]
+## 0c. Activar GitHub Pages (sitio público para privacidad y soporte)
+
+Las tiendas de extensiones (Chrome Web Store, Microsoft Edge Add-ons y Firefox Add-ons) exigen una URL pública para la política de privacidad y una para soporte técnico. Gina aloja estos documentos en la carpeta `docs/` del repositorio, servida directamente mediante GitHub Pages sin dependencias externas, analítica ni cookies.
+
+### Paso a paso para activar GitHub Pages:
+1. En tu repositorio de GitHub, ve a **Settings → Pages**.
+2. En la sección **Build and deployment → Source**, selecciona **Deploy from a branch**.
+3. En **Branch**, selecciona la rama **`main`** y la carpeta **`/docs`**.
+4. Haz clic en **Save**.
+5. Tras unos minutos, el sitio quedará publicado en las siguientes direcciones públicas:
+   - **Inicio / Portada:** `https://ginaproyecto02-lgtm.github.io/project-gina/`
+   - **Política de privacidad:** `https://ginaproyecto02-lgtm.github.io/project-gina/privacidad.html`
+   - **Centro de soporte y sugerencias:** `https://ginaproyecto02-lgtm.github.io/project-gina/soporte.html`
+6. Estas son las URLs que deben copiarse en los formularios de publicación de Chrome Web Store, Microsoft Edge Add-ons y Firefox Add-ons (detalladas en `store/ficha-tienda.md`).
+
+---
 > **Archivo para subir a las tiendas (ojo con los Artifacts de GitHub Actions):**
 > - Si descargas el paquete desde los **Releases** de GitHub (etiqueta `v*`): el archivo `.zip` (`gina-extension-3.2.0.zip`) se sube tal cual.
 > - Si descargas el paquete desde los **Artifacts** del flujo de GitHub Actions: GitHub siempre envuelve los artefactos dentro de otro archivo `.zip` (zip dentro de zip). Las tiendas rechazan ese archivo anidado. **Descomprime una vez el archivo descargado de Artifacts; sube el `gina-extension-X.Y.Z.zip` de adentro.**

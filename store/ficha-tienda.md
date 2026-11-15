@@ -15,8 +15,9 @@ The listing is **English first**, with Spanish as a second language. The extensi
 | Category | Chrome: **Shopping** · Edge: **Shopping** · Firefox: **Shopping** |
 | Listing languages | English (default), Spanish (the interface also has German, French, Italian and Japanese) |
 | Price | Free |
-| Website / support | Your repository or site · `gina.proyecto02@gmail.com` |
-| Privacy policy | `https://ginaproyecto02-lgtm.github.io/project-gina/privacidad.html` (publish `docs/privacidad.html`) |
+| Website / homepage | `https://ginaproyecto02-lgtm.github.io/project-gina/` |
+| Support | `https://ginaproyecto02-lgtm.github.io/project-gina/soporte.html` · Contact: `gina.proyecto02@gmail.com` |
+| Privacy policy | `https://ginaproyecto02-lgtm.github.io/project-gina/privacidad.html` |
 
 ## 2. Summary (≤132 characters, already in the manifest)
 

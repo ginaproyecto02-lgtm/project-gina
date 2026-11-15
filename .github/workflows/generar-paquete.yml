@@ -114,6 +114,7 @@ jobs:
           node test/verificar_sugerencias.test.js
           node test/calidad.test.js
           node test/adaptivo.test.js
+          node test/sitio.test.js
 
       - name: Leer versiones
         id: v
