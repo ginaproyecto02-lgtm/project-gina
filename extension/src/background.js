@@ -755,6 +755,7 @@ async function openCompareConsent(pais) {
 }
 
 async function comparePricesForProduct(product, host, country) {
+  const t0_compare = Date.now();
   const s = await settings();
   if (s.compareEnabled === false) return { ok: false, reason: "disabled" };
   const { compareConsent } = await get("compareConsent");
@@ -942,6 +943,26 @@ async function comparePricesForProduct(product, host, country) {
     await set({ compareDiagnostics: compareDiagnostics.slice(0, 10) });
   });
 
+  // Registrar tiempo del comparador en perfLog (máximo 50)
+  const t_comparador = Math.min(60000, Math.max(0, Date.now() - t0_compare));
+  await locked(async () => {
+    const { perfLog = [] } = await get("perfLog");
+    const existing = perfLog.find((p) => p.dominio === currentHostClean && Date.now() - p.fecha < 60000);
+    if (existing) {
+      existing.t_comparador = t_comparador;
+    } else if (currentHostClean) {
+      perfLog.unshift({
+        fecha: Date.now(),
+        dominio: currentHostClean,
+        t_datos: 0,
+        t_extraccion: 0,
+        t_tarjeta: 0,
+        t_comparador
+      });
+    }
+    await set({ perfLog: perfLog.slice(0, 50) });
+  });
+
   const ranked = QED.groupAndRankComparison(product, allCandidates);
   return {
     ok: true,
@@ -1035,7 +1056,53 @@ api.runtime.onMessage.addListener((msg, _sender, reply) => {
     })().then(reply, (e) => reply({ ok: false, error: String(e) }));
     return true;
   }
+  if (msg.type === "qed:perf") {
+    registrarMedicion(msg.entry, _sender).then(reply, (e) => reply({ ok: false, error: String(e) }));
+    return true;
+  }
   if (msg.type === "qed:badge") { updateBadge().then(() => reply({ ok: true })); return true; }
   return false;
 });
+
+async function registrarMedicion(entry, sender) {
+  if (sender) {
+    const myId = api.runtime && api.runtime.id;
+    if (sender.id && myId && sender.id !== myId) return { ok: false, error: "unauthorized" };
+    if (sender.origin && !sender.origin.startsWith("chrome-extension://") && !sender.origin.startsWith("moz-extension://") && !sender.tab) {
+      return { ok: false, error: "unauthorized" };
+    }
+  }
+  if (!entry || typeof entry !== "object") return { ok: false, error: "invalid_entry" };
+  const fecha = typeof entry.fecha === "number" && entry.fecha > 0 ? entry.fecha : Date.now();
+  const domRaw = String(entry.dominio || "").trim().toLowerCase();
+  const dominio = /^[a-z0-9.-]+\.[a-z]{2,}$/.test(domRaw) ? domRaw : "";
+  if (!dominio) return { ok: false, error: "invalid_domain" };
+
+  const validarNum = (n) => (typeof n === "number" && !isNaN(n) && n >= 0 && n <= 60000 ? Math.round(n) : 0);
+
+  const cleanEntry = {
+    fecha,
+    dominio,
+    t_datos: validarNum(entry.t_datos),
+    t_extraccion: validarNum(entry.t_extraccion),
+    t_tarjeta: validarNum(entry.t_tarjeta),
+    t_comparador: validarNum(entry.t_comparador)
+  };
+
+  await locked(async () => {
+    const { perfLog = [] } = await get("perfLog");
+    perfLog.unshift(cleanEntry);
+    await set({ perfLog: perfLog.slice(0, 50) });
+  });
+
+  return { ok: true };
+}
+
+if (typeof module !== "undefined") {
+  module.exports = {
+    registrarMedicion,
+    getDataForContent,
+    comparePricesForProduct
+  };
+}
 

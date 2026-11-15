@@ -310,7 +310,7 @@ if ($("#r_provider")) $("#r_provider").addEventListener("change", () => { $("#r_
 
 // ---------------------------------------------------------------- Memoria
 async function refresh() {
-  const st = await api.storage.local.get(["aiCache", "pending", "verified", "groupPatches", "runLog", "usage", "jobState", "remoteBase", "customBrands", "repPatches", "suggestionsQueue", "suggestionsLastResult", "compareDiagnostics"]);
+  const st = await api.storage.local.get(["aiCache", "pending", "verified", "groupPatches", "runLog", "usage", "jobState", "remoteBase", "customBrands", "repPatches", "suggestionsQueue", "suggestionsLastResult", "compareDiagnostics", "perfLog"]);
   const pend = st.pending || {}, ver = st.verified || {}, cache = st.aiCache || {}, log = st.runLog || [], gp = st.groupPatches || {};
   const pendVals = Object.values(pend);
   const open = pendVals.filter((p) => ["por_investigar", "por_verificar", "reintentar", "sin_fuentes"].includes(p.status)).length;
@@ -430,6 +430,7 @@ async function refresh() {
       renderSelectedDiagnostic(diags[selectedIdx]);
     }
   }
+  renderRendimiento(st.perfLog || []);
 }
 
 function renderSelectedDiagnostic(diag) {
@@ -473,6 +474,73 @@ function formatDiagnosticsPlainText(diag) {
     lines.push(`- ${st.tienda}: ${st.estado} | metodo: ${st.metodo} | consulta: ${qPart} | extraidos: ${st.extraidos != null ? st.extraidos : 0}, mismo: ${st.mismo != null ? st.mismo : 0}, otra pres.: ${st.otra_presentacion != null ? st.otra_presentacion : 0}, variante: ${st.variante != null ? st.variante : 0}, descartados: ${st.descartados != null ? st.descartados : 0}`);
   }
   return lines.join("\n");
+}
+
+function resumenRendimiento(perfLog) {
+  const list = Array.isArray(perfLog) ? perfLog : [];
+  const fields = ["t_datos", "t_extraccion", "t_tarjeta", "t_comparador"];
+  const out = { n: list.length };
+
+  function stats(vals) {
+    if (!vals.length) return { mediana: 0, p90: 0, n: 0 };
+    const s = [...vals].sort((a, b) => a - b);
+    const n = s.length;
+    const mid = Math.floor(n / 2);
+    const mediana = n % 2 !== 0 ? s[mid] : Math.round((s[mid - 1] + s[mid]) / 2);
+    const p90Idx = Math.min(n - 1, Math.max(0, Math.ceil(0.9 * n) - 1));
+    const p90 = s[p90Idx];
+    return { mediana, p90, n };
+  }
+
+  for (const f of fields) {
+    const vals = list.map((item) => item[f]).filter((v) => typeof v === "number" && !isNaN(v) && v >= 0);
+    out[f] = stats(vals);
+  }
+  return out;
+}
+
+function renderRendimiento(perfLog) {
+  const tbody = $("#perfTableBody");
+  if (!tbody) return;
+  const res = resumenRendimiento(perfLog);
+  const rows = [
+    { key: "t_datos", label: "Recepción de datos (fondo)" },
+    { key: "t_extraccion", label: "Extracción en página" },
+    { key: "t_tarjeta", label: "Pintado de tarjeta" },
+    { key: "t_comparador", label: "Lectura del comparador" }
+  ];
+
+  tbody.innerHTML = rows.map((r) => {
+    const s = res[r.key] || { mediana: 0, p90: 0, n: 0 };
+    return `<tr>
+      <td><b>${esc(r.label)}</b></td>
+      <td>${esc(s.mediana)}</td>
+      <td>${esc(s.p90)}</td>
+      <td>${esc(s.n)}</td>
+    </tr>`;
+  }).join("");
+
+  const btnCopy = $("#btn_copy_perf");
+  if (btnCopy) {
+    btnCopy.onclick = async () => {
+      const summaryText = [
+        `# Project Gina — Resumen de rendimiento (n=${res.n})`,
+        `Fecha: ${new Date().toISOString()}`,
+        `Recepción de datos: mediana ${res.t_datos.mediana} ms, p90 ${res.t_datos.p90} ms (n=${res.t_datos.n})`,
+        `Extracción en página: mediana ${res.t_extraccion.mediana} ms, p90 ${res.t_extraccion.p90} ms (n=${res.t_extraccion.n})`,
+        `Pintado de tarjeta: mediana ${res.t_tarjeta.mediana} ms, p90 ${res.t_tarjeta.p90} ms (n=${res.t_tarjeta.n})`,
+        `Lectura del comparador: mediana ${res.t_comparador.mediana} ms, p90 ${res.t_comparador.p90} ms (n=${res.t_comparador.n})`
+      ].join("\n");
+      try {
+        if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(summaryText);
+        }
+        msg("msg_perf", t("msg_perf_copied") || "Rendimiento copiado", "ok");
+      } catch (_) {
+        msg("msg_perf", "Error al copiar", "err");
+      }
+    };
+  }
 }
 
 document.addEventListener("click", async (e) => {
@@ -542,7 +610,7 @@ $("#importFile").addEventListener("change", async (e) => {
 });
 
 $("#clearCache").addEventListener("click", async () => {
-  await api.storage.local.set({ aiCache: {}, compareDiagnostics: [], compareFingerprints: {} });
+  await api.storage.local.set({ aiCache: {}, compareDiagnostics: [], compareFingerprints: {}, perfLog: [] });
   msg("msg_mem", t("msg_cache_cleared"), "ok");
   refresh();
 });
@@ -671,5 +739,12 @@ loadSettings().then((s) => {
 });
 
 api.storage.onChanged.addListener((ch) => {
-  if (ch.pending || ch.verified || ch.runLog || ch.jobState || ch.aiCache || ch.usage) refresh();
+  if (ch.pending || ch.verified || ch.runLog || ch.jobState || ch.aiCache || ch.usage || ch.perfLog) refresh();
 });
+
+if (typeof globalThis !== "undefined") {
+  globalThis.resumenRendimiento = resumenRendimiento;
+}
+if (typeof module !== "undefined") {
+  module.exports = { resumenRendimiento };
+}

@@ -2279,6 +2279,70 @@
       it: "Nessun confronto registrato.",
       ja: "記録された診断情報はありません。"
     },
+    opt_sec_perf: {
+      es: "Rendimiento",
+      en: "Performance",
+      de: "Leistung",
+      fr: "Performances",
+      it: "Prestazioni",
+      ja: "パフォーマンス"
+    },
+    opt_help_perf: {
+      es: "Medición interna de velocidad en este navegador (últimas 50 operaciones). No se registran URLs completas ni se envía nada al exterior.",
+      en: "Internal speed measurements in this browser (last 50 operations). No full URLs recorded, nothing sent externally.",
+      de: "Interne Geschwindigkeitsmessung in diesem Browser (letzte 50 Vorgänge). Keine vollständigen URLs aufgezeichnet, nichts extern gesendet.",
+      fr: "Mesures internes de vitesse dans ce navigateur (50 dernières opérations). Aucune URL complète enregistrée, rien envoyé à l'extérieur.",
+      it: "Misurazione interna della velocità in questo browser (ultime 50 operazioni). Nessun URL completo registrato, nulla inviato all'esterno.",
+      ja: "このブラウザ内での速度測定（直近50件の処理）。完全なURLは記録されず、外部への送信も一切ありません。"
+    },
+    th_perf_metric: {
+      es: "Operación",
+      en: "Operation",
+      de: "Vorgang",
+      fr: "Opération",
+      it: "Operazione",
+      ja: "処理"
+    },
+    th_perf_median: {
+      es: "Mediana (ms)",
+      en: "Median (ms)",
+      de: "Median (ms)",
+      fr: "Médiane (ms)",
+      it: "Mediana (ms)",
+      ja: "中央値 (ms)"
+    },
+    th_perf_p90: {
+      es: "Percentil 90 (ms)",
+      en: "90th Percentile (ms)",
+      de: "90. Perzentil (ms)",
+      fr: "90e percentile (ms)",
+      it: "90° percentile (ms)",
+      ja: "90パーセンタイル (ms)"
+    },
+    th_perf_count: {
+      es: "Muestras (n)",
+      en: "Samples (n)",
+      de: "Stichproben (n)",
+      fr: "Échantillons (n)",
+      it: "Campioni (n)",
+      ja: "サンプル数 (n)"
+    },
+    opt_btn_copy_perf: {
+      es: "Copiar rendimiento",
+      en: "Copy performance",
+      de: "Leistung kopieren",
+      fr: "Copier les performances",
+      it: "Copia prestazioni",
+      ja: "パフォーマンスをコピー"
+    },
+    msg_perf_copied: {
+      es: "Rendimiento copiado al portapapeles.",
+      en: "Performance copied to clipboard.",
+      de: "Leistungsdaten in die Zwischenablage kopiert.",
+      fr: "Performances copiées dans le presse-papiers.",
+      it: "Prestazioni copiate negli appunti.",
+      ja: "パフォーマンス情報をクリップボードにコピーしました。"
+    },
     opt_help_custom_remote: {
       es: "Déjalo vacío para usar la base del proyecto. Solo si mantienes tu propia copia (por ejemplo, con el job de <code>job/</code> en tu GitHub), pon aquí la URL de tu <code>brands.json</code>.",
       en: "Leave blank to use the official project database. Only enter a URL if you maintain your own <code>brands.json</code> copy (e.g., via GitHub Actions).",

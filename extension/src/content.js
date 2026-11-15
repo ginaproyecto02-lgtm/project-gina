@@ -14,6 +14,43 @@
   let cachedUserSuggestions = [];
   let lastKey = "", closedFor = "", lastResult = null, timer = null, seq = 0;
 
+  const _marcas = { inicio: (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now() };
+  function marcar(nombre) {
+    if (typeof performance !== "undefined" && performance.now) {
+      _marcas[nombre] = performance.now();
+    } else {
+      _marcas[nombre] = Date.now();
+    }
+  }
+  if (QED) { QED.marcar = marcar; }
+
+  let _medicionEnviada = false;
+  function enviarMedicion(extra) {
+    extra = extra || {};
+    if (_medicionEnviada && !extra.forzar) return;
+    _medicionEnviada = true;
+    const t_datos = _marcas.datos ? Math.round(_marcas.datos - _marcas.inicio) : 0;
+    const t_extr = _marcas.extraccion ? Math.round(_marcas.extraccion) : 0;
+    const t_tarjeta = _marcas.tarjeta ? Math.round(_marcas.tarjeta) : 0;
+    const t_comp = typeof extra.t_comparador === "number" ? Math.round(extra.t_comparador) : 0;
+    const dominio = typeof location !== "undefined" ? location.hostname.replace(/^www\./, "").toLowerCase() : "localhost";
+
+    try {
+      api.runtime.sendMessage({
+        type: "qed:perf",
+        entry: {
+          fecha: Date.now(),
+          dominio,
+          t_datos,
+          t_extraccion: t_extr,
+          t_tarjeta,
+          t_comparador: t_comp
+        }
+      }).catch(() => {});
+    } catch (_) {}
+  }
+  if (QED) { QED.enviarMedicion = enviarMedicion; }
+
   async function load() {
     if (!packaged || !registry || !QED.PROJECT) {
       try {
@@ -49,6 +86,7 @@
     airIndex = QED.buildAirlineIndex(db, index.groups);
     if (!db.categorias) db.categorias = packaged.categorias; // bases remotas antiguas sin categorías
     alt = QED.ALT ? QED.ALT.prepare(db, index) : null;
+    marcar("datos");
   }
 
   const groupOf = (gid) => (gid && index && index.groups[gid]) || null;
@@ -178,6 +216,7 @@
   function analyzeProduct(force) {
     const siteName = QED.site(location.hostname);
     if (!QED.isProductPage(document, siteName, location.href, entry)) { QED.hideCard(); lastResult = null; lastKey = ""; return; }
+    const t0_extr = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
     const data = QED.extract(document, location.hostname, entry ? entry.pais : "");
     if (!data.title && !data.candidates.length) return; // la página aún está cargando
     const key = location.pathname + "|" + data.title + "|" + data.candidates.map((c) => c.text).join(",");
@@ -189,6 +228,7 @@
       const resolved = QED.match(index, [{ text: local.brandText, source: "campo_limpio" }], data.title);
       if (resolved.found) local = resolved;
     }
+    _marcas.extraccion = ((typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now()) - t0_extr;
     if (local.found) {
       lastResult = enrichProduct(withAlternatives(Object.assign(local, { store }), local.brand, data.title, data.categoryPath), data);
       draw();
@@ -237,6 +277,7 @@
   function draw() {
     if (!lastResult || closedFor === location.pathname) return;
     noteSeen(lastResult);
+    const t0_card = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
     QED.showCard(lastResult, {
       minimized: prefs.minimized, values: prefs.values, showLobbying: prefs.showLobbying,
       index: index, userSuggestions: cachedUserSuggestions, useGitHubIssues: prefs.useGitHubIssues,
@@ -247,6 +288,8 @@
       onToggle: (m) => { prefs.minimized = m; api.storage.local.set({ minimized: m }); draw(); },
       onClose: () => { closedFor = location.pathname; }
     });
+    _marcas.tarjeta = ((typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now()) - t0_card;
+    enviarMedicion();
   }
 
   function schedule(force) { clearTimeout(timer); timer = setTimeout(() => analyze(force), 700); }
