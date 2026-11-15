@@ -542,7 +542,7 @@ $("#importFile").addEventListener("change", async (e) => {
 });
 
 $("#clearCache").addEventListener("click", async () => {
-  await api.storage.local.set({ aiCache: {}, compareDiagnostics: [] });
+  await api.storage.local.set({ aiCache: {}, compareDiagnostics: [], compareFingerprints: {} });
   msg("msg_mem", t("msg_cache_cleared"), "ok");
   refresh();
 });

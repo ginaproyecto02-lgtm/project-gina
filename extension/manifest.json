@@ -394,6 +394,7 @@
       "src/i18n.js",
       "src/semejanza.js",
       "src/comparador.js",
+      "src/adaptivo.js",
       "src/ai.js",
       "src/background.js"
     ]

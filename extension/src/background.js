@@ -2,7 +2,7 @@
 // Gina — service worker (Chrome/Edge) o página de eventos (Firefox):
 // memoria (caché, pendientes, verificados), clasificación con IA y job semanal de investigación.
 // En Chrome se cargan las dependencias con importScripts; en Firefox ya vienen en background.scripts del manifiesto.
-if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "alternativas.js", "i18n.js", "semejanza.js", "comparador.js", "ai.js");
+if (typeof importScripts === "function" && !globalThis.QED) importScripts("matcher.js", "reputation.js", "alternativas.js", "i18n.js", "semejanza.js", "comparador.js", "adaptivo.js", "ai.js");
 const QED = globalThis.QED, AI = globalThis.QEDAI;
 const api = chrome;
 const IS_FIREFOX = typeof browser !== "undefined" && !!(browser.runtime && browser.runtime.getBrowserInfo);
@@ -633,25 +633,44 @@ async function ensureOffscreenDocument() {
   offscreenCreating = null;
 }
 
+// Huellas de la tarjeta de producto por tienda (lectura adaptativa). Locales, pequeñas y sin datos del usuario.
+async function getFingerprint(dominio) {
+  try { const { compareFingerprints = {} } = await get("compareFingerprints"); const e = compareFingerprints[dominio]; return e && e.fp ? e.fp : null; } catch (_) { return null; }
+}
+async function saveFingerprint(dominio, fp) {
+  if (!dominio || !fp || !QED.ADAPT || !QED.ADAPT.validFingerprint(fp)) return;
+  try {
+    await locked(async () => {
+      const { compareFingerprints = {} } = await get("compareFingerprints");
+      compareFingerprints[dominio] = { fp, fecha: Date.now() };
+      const keys = Object.keys(compareFingerprints);
+      if (keys.length > 60) keys.sort((a, b) => compareFingerprints[a].fecha - compareFingerprints[b].fecha).slice(0, keys.length - 60).forEach((k) => delete compareFingerprints[k]);
+      await set({ compareFingerprints });
+    });
+  } catch (_) {}
+}
+
 async function parseStoreHtml(htmlText, storeConfig) {
+  const cfg = Object.assign({}, storeConfig);
+  const fp = cfg.dominio ? await getFingerprint(cfg.dominio) : null;
+  if (fp) cfg._fingerprint = fp;
+  let r = null;
   if (typeof DOMParser !== "undefined") {
     try {
       const doc = new DOMParser().parseFromString(htmlText, "text/html");
-      return QED.extractStoreItems(htmlText, doc, storeConfig);
+      r = QED.extractStoreItemsWithMeta(htmlText, doc, cfg);
     } catch (_) {}
   }
-  if (typeof chrome !== "undefined" && chrome.offscreen && chrome.runtime && chrome.runtime.sendMessage) {
+  if (!r && typeof chrome !== "undefined" && chrome.offscreen && chrome.runtime && chrome.runtime.sendMessage) {
     try {
       await ensureOffscreenDocument();
-      const r = await chrome.runtime.sendMessage({
-        type: "qed:offscreen_parse",
-        html: htmlText,
-        storeConfig
-      });
-      if (r && r.ok && Array.isArray(r.items)) return r.items;
+      const resp = await chrome.runtime.sendMessage({ type: "qed:offscreen_parse", html: htmlText, storeConfig: cfg });
+      if (resp && resp.ok && Array.isArray(resp.items)) r = { items: resp.items, fingerprint: resp.fingerprint || null };
     } catch (_) {}
   }
-  return QED.extractStoreItems(htmlText, null, storeConfig);
+  if (!r) return QED.extractStoreItems(htmlText, null, cfg);
+  if (r.fingerprint && cfg.dominio) await saveFingerprint(cfg.dominio, r.fingerprint);
+  return r.items;
 }
 
 async function safeFetchCompare(url, expectedDomain) {

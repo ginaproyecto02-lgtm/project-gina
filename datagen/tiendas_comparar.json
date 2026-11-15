@@ -12,7 +12,7 @@
     "selectores": {
      "item": ".poly-card, .ui-search-result, .ui-search-layout__item",
      "titulo": ".poly-component__title, .ui-search-item__title",
-     "precio": ".andes-money-amount__fraction",
+     "precio": ".poly-price__current .andes-money-amount, .ui-search-price__second-line .andes-money-amount, .andes-money-amount:not(.andes-money-amount--previous)",
      "enlace": "a.poly-component__title, a.ui-search-link, a",
      "calificacion": ".poly-reviews__rating, .ui-search-reviews__rating-number",
      "resenas": ".poly-reviews__total, .ui-search-reviews__amount",

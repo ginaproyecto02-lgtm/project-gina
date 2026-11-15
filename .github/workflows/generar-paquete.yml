@@ -113,6 +113,7 @@ jobs:
           node test/ciclo_extenso.test.js
           node test/verificar_sugerencias.test.js
           node test/calidad.test.js
+          node test/adaptivo.test.js
 
       - name: Leer versiones
         id: v

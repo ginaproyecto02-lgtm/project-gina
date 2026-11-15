@@ -9,8 +9,8 @@
       try {
         const parser = new DOMParser();
         const doc = parser.parseFromString(msg.html || "", "text/html");
-        const items = QED.extractStoreItems(msg.html, doc, msg.storeConfig || {});
-        reply({ ok: true, items });
+        const r = QED.extractStoreItemsWithMeta(msg.html, doc, msg.storeConfig || {});
+        reply({ ok: true, items: r.items, fingerprint: r.fingerprint, via: r.via });
       } catch (e) {
         reply({ ok: false, error: String(e), items: [] });
       }

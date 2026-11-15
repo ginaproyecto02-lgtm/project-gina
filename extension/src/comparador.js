@@ -477,7 +477,14 @@
   // 2. JSON-LD
   // 3. Selectores
   // Lee hasta 10 resultados de la página de búsqueda.
-  function extractStoreItems(htmlText, docOrStore, storeConfig) {
+  // Igual que extractStoreItems, pero también devuelve la huella de la tarjeta de producto (lectura adaptativa, adaptivo.js)
+  function extractStoreItemsWithMeta(htmlText, docOrStore, storeConfig) {
+    const meta = { fingerprint: null, via: "" };
+    const items = extractStoreItems(htmlText, docOrStore, storeConfig, meta);
+    return { items, fingerprint: meta.fingerprint, via: meta.via };
+  }
+
+  function extractStoreItems(htmlText, docOrStore, storeConfig, meta) {
     let doc = null;
     let cfg = storeConfig;
     if (docOrStore && (docOrStore.dominio || !storeConfig)) {
@@ -526,7 +533,24 @@
       const selItems = parseStoreWithSelectors(doc, cfg.selectores, domain, cur);
       if (selItems.length > 0) {
         selItems.forEach((it) => { it._extractMethod = "selectores"; });
-        return selItems.slice(0, 10);
+        // La huella de la tarjeta que funcionó: si la tienda cambia su HTML, con ella se reubican los productos
+        if (meta && QED.ADAPT) meta.fingerprint = QED.ADAPT.fingerprintFromSelectors(doc, cfg);
+        // Sin duplicados (algunas tiendas anidan dos contenedores por producto)
+        const seen = new Set();
+        return selItems.filter((it) => { const k = it.url || it.title; if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, 10);
+      }
+    }
+
+    // 4. Lectura adaptativa: los selectores ya no encuentran nada (la tienda cambió su HTML).
+    //    Se reubican las tarjetas con la huella guardada o se descubren por su forma (enlace a la tienda + precio + título/imagen).
+    if (doc && domain && QED.ADAPT) {
+      const cfgA = Object.assign({}, cfg);
+      if (!QED.ADAPT.validFingerprint(cfgA._fingerprint)) delete cfgA._fingerprint;
+      const r = QED.ADAPT.adaptiveExtract(doc, cfgA);
+      if (r.items.length > 0) {
+        r.items.forEach((it) => { it._extractMethod = "adaptivo"; });
+        if (meta) { meta.fingerprint = r.fingerprint; meta.via = r.via; }
+        return r.items.slice(0, 10);
       }
     }
 
@@ -724,6 +748,7 @@
   QED.parseProductsFromJsonLd = parseProductsFromJsonLd;
   QED.parseStoreWithSelectors = parseStoreWithSelectors;
   QED.extractStoreItems = extractStoreItems;
+  QED.extractStoreItemsWithMeta = extractStoreItemsWithMeta;
   QED.classifyProductMatch = classifyProductMatch;
   QED.groupAndRankComparison = groupAndRankComparison;
   QED.queryForCompare = queryForCompare;
