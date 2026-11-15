@@ -72,7 +72,7 @@ function msg(id, text, kind) {
 // ---------------------------------------------------------------- Proveedores y modelos
 function fillProviders(sel) {
   if (!sel || !AI || !AI.PROVIDERS) return;
-  sel.innerHTML = Object.entries(AI.PROVIDERS).map(([id, p]) => `<option value="${id}">${esc(p.label)}${p.search ? "" : " — sin búsqueda web"}</option>`).join("");
+  sel.innerHTML = Object.entries(AI.PROVIDERS).map(([id, p]) => `<option value="${id}">${esc(p.label)}${p.search ? "" : esc(t("no_web_search"))}</option>`).join("");
 }
 
 function syncProvider(prefix, which) {
@@ -345,7 +345,7 @@ async function refresh() {
   pt.innerHTML = rows.length ? rows.map(([k, p]) => `<tr>
       <td><b>${esc(p.brand || "(sin marca)")}</b><div class="small">${esc(p.title)}</div>${p.hint ? `<div class="small">IA: ${esc(p.hint)}</div>` : ""}</td>
       <td>${esc(p.site)}</td><td>${esc(p.count)}</td>
-      <td><span class="pill ${esc(p.status)}">${esc(getStatusLabel(p.status))}</span>${p.tries ? `<div class="small">${p.tries} intento(s)</div>` : ""}</td>
+      <td><span class="pill ${esc(p.status)}">${esc(getStatusLabel(p.status))}</span>${p.tries ? `<div class="small">${esc(t("tries_count", { n: p.tries }))}</div>` : ""}</td>
       <td>${fmtDate(p.lastTry)}</td>
       <td><button data-retry="${esc(k)}" title="${t("btn_retry_title")}">↻</button><button data-del-pend="${esc(k)}" title="${t("btn_remove_title")}">✕</button></td></tr>`).join("")
     : `<tr><td colspan="6" class="small">${t("msg_no_pending")}</td></tr>`;
@@ -354,15 +354,15 @@ async function refresh() {
   const vrows = Object.entries(ver).sort((a, b) => (b[1].verifiedAt || 0) - (a[1].verifiedAt || 0));
   vt.innerHTML = vrows.length ? vrows.map(([k, v]) => `<tr>
       <td><b>${esc(v.marca)}</b></td><td>${esc(v.empresa)}</td><td>${esc(v.controlador)}</td>
-      <td>${/^https?:\/\//.test(v.url || "") ? `<a href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">${esc(v.fuente || t("source"))}</a>` : esc(v.fuente)}${(v.fuentes || []).length > 1 ? `<div class="small">+${v.fuentes.length - 1} fuente(s)</div>` : ""}</td>
+      <td>${/^https?:\/\//.test(v.url || "") ? `<a href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">${esc(v.fuente || t("source"))}</a>` : esc(v.fuente)}${(v.fuentes || []).length > 1 ? `<div class="small">${esc(t("sources_count", { n: v.fuentes.length - 1 }))}</div>` : ""}</td>
       <td>${fmtDate(v.verifiedAt)}<div class="small">${esc(v.model)}</div></td>
       <td><button data-del-ver="${esc(k)}" title="${t("btn_remove_title")}">✕</button></td></tr>`).join("")
     : `<tr><td colspan="6" class="small">${t("msg_no_verified")}</td></tr>`;
 
   const lt = $("#logTable tbody");
   lt.innerHTML = log.length ? log.map((l) => `<tr>
-      <td>${fmtDate(l.start)}</td><td>${esc(l.trigger)}</td><td>${l.researched}</td><td>${l.verified}</td><td>${l.unsourced}</td><td>${l.notFound}</td><td>${l.revalidated}${l.reputacion ? `<div class="small">+${l.reputacion} reputación</div>` : ""}</td>
-      <td>${(l.tokensIn || 0).toLocaleString(numLoc)} / ${(l.tokensOut || 0).toLocaleString(numLoc)}${l.searches ? `<div class="small">${l.searches} búsquedas</div>` : ""}</td>
+      <td>${fmtDate(l.start)}</td><td>${esc(l.trigger)}</td><td>${l.researched}</td><td>${l.verified}</td><td>${l.unsourced}</td><td>${l.notFound}</td><td>${l.revalidated}${l.reputacion ? `<div class="small">${esc(t("rep_count", { n: l.reputacion }))}</div>` : ""}</td>
+      <td>${(l.tokensIn || 0).toLocaleString(numLoc)} / ${(l.tokensOut || 0).toLocaleString(numLoc)}${l.searches ? `<div class="small">${esc(t("searches_count", { n: l.searches }))}</div>` : ""}</td>
       <td>${[l.remote, ...(l.changed || []), ...(l.errors || []).map((e) => "⚠ " + e)].filter(Boolean).map((x) => `<div class="small">${esc(x)}</div>`).join("") || "—"}</td></tr>`).join("")
     : `<tr><td colspan="9" class="small">${t("msg_no_logs")}</td></tr>`;
 
@@ -447,7 +447,7 @@ function renderSelectedDiagnostic(diag) {
   if (diagTableBody) {
     const list = diag.tiendas || [];
     diagTableBody.innerHTML = list.length ? list.map((st) => {
-      const qText = st.segunda_consulta ? `${esc(st.consulta)}<div class="small">segunda: ${esc(st.segunda_consulta)}</div>` : esc(st.consulta || "—");
+      const qText = st.segunda_consulta ? `${esc(st.consulta)}<div class="small">${esc(t("second_query_label"))}: ${esc(st.segunda_consulta)}</div>` : esc(st.consulta || "—");
       return `<tr>
         <td><b>${esc(st.tienda)}</b></td>
         <td>${qText}</td>
@@ -504,10 +504,10 @@ function renderRendimiento(perfLog) {
   if (!tbody) return;
   const res = resumenRendimiento(perfLog);
   const rows = [
-    { key: "t_datos", label: "Recepción de datos (fondo)" },
-    { key: "t_extraccion", label: "Extracción en página" },
-    { key: "t_tarjeta", label: "Pintado de tarjeta" },
-    { key: "t_comparador", label: "Lectura del comparador" }
+    { key: "t_datos", label: t("perf_label_datos") },
+    { key: "t_extraccion", label: t("perf_label_extraccion") },
+    { key: "t_tarjeta", label: t("perf_label_tarjeta") },
+    { key: "t_comparador", label: t("perf_label_comparador") }
   ];
 
   tbody.innerHTML = rows.map((r) => {

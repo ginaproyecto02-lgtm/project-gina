@@ -101,15 +101,15 @@
         }
       }
       const medio = matchedName || fallbackText || domain;
-      return `Fuente: ${medio}`;
+      return `${t("source")}: ${medio}`;
     }
     if (domain) {
-      return `Fuente: ${domain}`;
+      return `${t("source")}: ${domain}`;
     }
     if (fallbackText && !/registro oficial|sec \/|entidad oficial/i.test(fallbackText)) {
-      return `Fuente: ${fallbackText}`;
+      return `${t("source")}: ${fallbackText}`;
     }
-    return t("src_official", { source: fallbackText || "Registro oficial" });
+    return t("src_official", { source: fallbackText || t("public_registry") });
   }
 
   const CSS = `
@@ -833,7 +833,7 @@
   // ---------------------------------------------------------------- SECCIÓN 2: Mercado y alternativas
   function renderMarket(res, opts) {
     const a = res.alternativas;
-    const srcOfficial = t("src_official", { source: "Registro público" });
+    const srcOfficial = t("src_official", { source: t("public_registry") });
 
     let localAltHtml = "";
     if (!a || !a.items || !a.items.length) {
@@ -846,7 +846,8 @@
         </div>
       `;
     } else {
-      const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, a.label.toLowerCase()) : a.label.toLowerCase();
+      const rawLbl = String(a.label || a.cat || "").toLowerCase();
+      const catLabel = I18N().catLabel ? I18N().catLabel(a.cat, rawLbl) : rawLbl;
       const alsoLocal = a.actualEsLocal ? ` <span class="d-src">(${t("alt_also_local")})</span>` : "";
       const countryLbl = I18N().paisLabel ? I18N().paisLabel(a.pais) : a.pais;
 
@@ -1058,7 +1059,7 @@
       const ctrl = (isEn && g.controlador_en) ? g.controlador_en : g.controlador;
       const agencyCountryLbl = I18N().paisLabel ? I18N().paisLabel(g.pais) : g.pais;
       const agencyText = `<b>${esc(res.agency.nombre)}</b> → ${esc(g.empresa)} · ${esc(ctrl)}${g.pais ? " · " + esc(agencyCountryLbl) : ""}`;
-      h += `<div style="margin-top:10px;">${dataRow(t("lbl_store"), agencyText, t("src_official", { source: "Registro público" }))}</div>`;
+      h += `<div style="margin-top:10px;">${dataRow(t("lbl_store"), agencyText, t("src_official", { source: t("public_registry") }))}</div>`;
     }
     return `<div class="sec-content" style="display:block;padding-left:14px;">${h}</div>`;
   }
@@ -1076,7 +1077,7 @@
       return t("summary_rel_ext_intl", { country: rel.shipper });
     }
     if (rel.sellerName) {
-      return `Vendido por ${rel.sellerName}`;
+      return t("seller_sold_by", { seller: rel.sellerName });
     }
     return t("summary_rel_ext");
   }
@@ -1215,7 +1216,7 @@
 
   // Shadow DOM CERRADO: los scripts de la tienda no pueden leer ni reescribir la tarjeta (host.shadowRoot === null).
   // La referencia vive solo en este mundo aislado. Las pruebas en jsdom piden modo abierto con __GINA_SHADOW_OPEN__.
-  let cardHost = null, cardRoot = null;
+  let cardHost = null, cardRoot = null, escapeListener = null;
   function getHost() {
     if (cardHost && cardRoot && cardHost.isConnected) return cardHost;
     // Un elemento con nuestro id que no creamos nosotros (p. ej. puesto por la página) no se reutiliza.
@@ -1263,6 +1264,21 @@
     opts = opts || {};
     if (opts.rastreadores) QED.RASTREADORES = opts.rastreadores;
     getHost();
+
+    if (escapeListener && typeof document !== "undefined") {
+      document.removeEventListener("keydown", escapeListener);
+      escapeListener = null;
+    }
+    escapeListener = (e) => {
+      if (e.key === "Escape" || e.keyCode === 27) {
+        QED.hideCard();
+        if (opts.onClose) opts.onClose();
+      }
+    };
+    if (typeof document !== "undefined") {
+      document.addEventListener("keydown", escapeListener);
+    }
+
     const shadow = cardRoot;
     if (opts.minimized) {
       const label = res.mode === "vuelos" ? `✈️ ${(res.airline ? 1 : 0) + (res.airlines || []).length}` : res.mode === "hospedaje" ? "🏨" : `🔎 ${esc(res.found ? res.brand : "Gina")}`;
@@ -1512,6 +1528,10 @@
   };
 
   QED.hideCard = function () {
+    if (escapeListener && typeof document !== "undefined") {
+      document.removeEventListener("keydown", escapeListener);
+      escapeListener = null;
+    }
     if (cardHost) cardHost.remove();
     cardHost = null; cardRoot = null;
   };

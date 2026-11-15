@@ -357,7 +357,7 @@
       de: "erscheint {count} {times}",
       fr: "apparaît {count} {times}",
       it: "appare {count} {times}",
-      ja: "{count}回表示"
+      ja: "{count} {times}表示"
     },
     time_singular: { es: "vez", en: "time", de: "Mal", fr: "fois", it: "volta", ja: "回" },
     time_plural: { es: "veces", en: "times", de: "Mal", fr: "fois", it: "volte", ja: "回" },
@@ -401,7 +401,7 @@
       de: "· {n} belegte {facts}",
       fr: "· {n} {facts} avec source",
       it: "· {n} {facts} con fonte",
-      ja: "· {n}件の出典付き記録"
+      ja: "· {n} {facts}（出典あり）"
     },
     fact_singular: { es: "hecho", en: "fact", de: "Fakt", fr: "fait", it: "fatto", ja: "件" },
     fact_plural: { es: "hechos", en: "facts", de: "Fakten", fr: "faits", it: "fatti", ja: "件" },
@@ -2798,6 +2798,244 @@
       fr: "Une information inexacte ? Écrivez-nous : {contacto}. Les clés sont stockées uniquement dans ce navigateur et transmises seulement au fournisseur choisi. Conseil : définissez des plafonds. À titre indicatif ; pas une recommandation d'achat ou d'investissement.",
       it: "Hai trovato un dato errato? Contattaci: {contacto}. Le chiavi sono salvate solo in questo browser e trasmesse solo al fornitore scelto. Consiglio: imposta un limite di spesa. Informazioni orientative; non costituiscono consiglio di acquisto o investimento.",
       ja: "企業情報に誤りを見つけましたか？修正依頼はこちら：{contacto}。APIキーはこのブラウザのローカルストレージにのみ保存され、選択したプロバイダーにのみ送信されます。利用限度額の設定を推奨します。参考情報であり、購入や投資の推奨ではありません。"
+    },
+    msg_nom051_found: {
+      es: "Sellos NOM-051 según la página: {stamps}",
+      en: "NOM-051 seals according to page: {stamps}",
+      de: "NOM-051 Siegel laut Seite: {stamps}",
+      fr: "Sceaux NOM-051 selon la page : {stamps}",
+      it: "Sigilli NOM-051 secondo la pagina: {stamps}",
+      ja: "商品ページ記載のNOM-051ラベル: {stamps}"
+    },
+    stamp_azucares: {
+      es: "Exceso azúcares", en: "Excess sugars", de: "Zu viel Zucker", fr: "Excès de sucres", it: "Eccesso di zuccheri", ja: "糖分の過剰"
+    },
+    stamp_calorias: {
+      es: "Exceso calorías", en: "Excess calories", de: "Zu viele Kalorien", fr: "Excès de calories", it: "Eccesso di calorie", ja: "カロリーの過剰"
+    },
+    stamp_sodio: {
+      es: "Exceso sodio", en: "Excess sodium", de: "Zu viel Natrium", fr: "Excès de sodium", it: "Eccesso di sodio", ja: "ナトリウムの過剰"
+    },
+    stamp_grasas_sat: {
+      es: "Exceso grasas saturadas", en: "Excess saturated fats", de: "Zu viele gesättigte Fette", fr: "Excès de graisses saturées", it: "Eccesso di grassi saturi", ja: "飽和脂肪酸の過剰"
+    },
+    stamp_grasas_trans: {
+      es: "Exceso grasas trans", en: "Excess trans fats", de: "Zu viele Transfette", fr: "Excès de graisses trans", it: "Eccesso di grassi trans", ja: "トランス脂肪酸の過剰"
+    },
+    stamp_edulcorantes: {
+      es: "Contiene edulcorantes", en: "Contains sweeteners", de: "Enthält Süßstoffe", fr: "Contient des édulcorants", it: "Contiene edulcoranti", ja: "甘味料含有"
+    },
+    stamp_cafeina: {
+      es: "Contiene cafeína", en: "Contains caffeine", de: "Enthält Koffein", fr: "Contient de la caféine", it: "Contiene caffeina", ja: "カフェイン含有"
+    },
+    lbl_action_banned: {
+      es: "lo prohibió", en: "banned it", de: "hat es verboten", fr: "l'a interdit", it: "lo ha vietato", ja: "使用を禁止"
+    },
+    lbl_action_warn: {
+      es: "exige advertencia", en: "requires warning", de: "fordert Warnhinweis", fr: "exige un avertissement", it: "richiede avvertenza", ja: "警告表示を義務付け"
+    },
+    lbl_health_auth: {
+      es: "Autoridad sanitaria", en: "Health authority", de: "Gesundheitsbehörde", fr: "Autorité sanitaire", it: "Autorità sanitaria", ja: "保健当局"
+    },
+    lbl_reg_action: {
+      es: "Acción regulatoria: {name}", en: "Regulatory action: {name}", de: "Regulierungsmaßnahme: {name}", fr: "Action réglementaire : {name}", it: "Azione normativa: {name}", ja: "規制措置: {name}"
+    },
+    msg_additive_action: {
+      es: "Contiene {name}: {aut} {action} en {juris}{fecha}",
+      en: "Contains {name}: {aut} {action} in {juris}{fecha}",
+      de: "Enthält {name}: {aut} {action} in {juris}{fecha}",
+      fr: "Contient {name} : {aut} {action} en {juris}{fecha}",
+      it: "Contiene {name}: {aut} {action} in {juris}{fecha}",
+      ja: "{name}含有: {juris}で{aut}が{action}{fecha}"
+    },
+    lbl_official_data_src: {
+      es: "Dato oficial", en: "Official record", de: "Offizielle Angabe", fr: "Donnée officielle", it: "Dato ufficiale", ja: "公式情報"
+    },
+    lbl_energy_consumption: {
+      es: "Consumo energético", en: "Energy consumption", de: "Energieverbrauch", fr: "Consommation d'énergie", it: "Consumo energetico", ja: "エネルギー消費量"
+    },
+    msg_energy_consumption: {
+      es: "Consumo {value} según la página", en: "Consumption {value} according to page", de: "Verbrauch {value} laut Seite", fr: "Consommation {value} selon la page", it: "Consumo {value} secondo la pagina", ja: "ページ記載の消費量: {value}"
+    },
+    lbl_energy_class: {
+      es: "Clase energética", en: "Energy class", de: "Energieeffizienzklasse", fr: "Classe énergétique", it: "Classe energetica", ja: "エネルギー効率等級"
+    },
+    msg_energy_class: {
+      es: "Clase energética {class} según la página", en: "Energy class {class} according to page", de: "Energieeffizienzklasse {class} laut Seite", fr: "Classe énergétique {class} selon la page", it: "Classe energetica {class} secondo la pagina", ja: "ページ記載のエネルギー等級: {class}"
+    },
+    lbl_energy_norm: {
+      es: "Norma de eficiencia", en: "Efficiency standard", de: "Effizienzstandard", fr: "Norme d'efficacité", it: "Standard di efficienza", ja: "エネルギー基準"
+    },
+    msg_energy_norm: {
+      es: "Etiqueta {norm} según la página", en: "Label {norm} according to page", de: "Kennzeichnung {norm} laut Seite", fr: "Étiquette {norm} selon la page", it: "Etichetta {norm} secondo la pagina", ja: "ページ記載の基準ラベル: {norm}"
+    },
+    lbl_energy_star: {
+      es: "Certificación ENERGY STAR", en: "ENERGY STAR certification", de: "ENERGY STAR Zertifizierung", fr: "Certification ENERGY STAR", it: "Certificazione ENERGY STAR", ja: "ENERGY STAR 認証"
+    },
+    msg_energy_star: {
+      es: "ENERGY STAR mencionado en la página", en: "ENERGY STAR mentioned on page", de: "ENERGY STAR auf der Seite erwähnt", fr: "ENERGY STAR mentionné sur la page", it: "ENERGY STAR menzionato nella pagina", ja: "ページにENERGY STARの記載あり"
+    },
+    lbl_repair_index: {
+      es: "Índice de reparabilidad", en: "Repairability index", de: "Reparierbarkeitsindex", fr: "Indice de réparabilité", it: "Indice di riparabilità", ja: "修理可能性指数"
+    },
+    msg_repair_index: {
+      es: "Índice de reparabilidad: {score} (según la página)", en: "Repairability index: {score} (according to page)", de: "Reparierbarkeitsindex: {score} (laut Seite)", fr: "Indice de réparabilité : {score} (selon la page)", it: "Indice di riparabilità: {score} (secondo la pagina)", ja: "修理可能性指数: {score}（ページ記載）"
+    },
+    lbl_voltage_compat: {
+      es: "Compatibilidad de voltaje", en: "Voltage compatibility", de: "Spannungskompatibilität", fr: "Compatibilité de tension", it: "Compatibilità del voltaggio", ja: "電圧の適合性"
+    },
+    msg_voltage_compat_220: {
+      es: "Voltaje 220 V según la página: revisa la compatibilidad", en: "Voltage 220 V according to page: verify compatibility", de: "Spannung 220 V laut Seite: bitte Kompatibilität prüfen", fr: "Tension 220 V selon la page : vérifiez la compatibilité", it: "Voltaggio 220 V secondo la pagina: verifica la compatibilità", ja: "ページ記載の電圧 220 V: 適合性をご確認ください"
+    },
+    msg_voltage_compat_110: {
+      es: "Voltaje 110 V según la página: revisa la compatibilidad", en: "Voltage 110 V according to page: verify compatibility", de: "Spannung 110 V laut Seite: bitte Kompatibilität prüfen", fr: "Tension 110 V selon la page : vérifiez la compatibilité", it: "Voltaggio 110 V secondo la pagina: verifica la compatibilità", ja: "ページ記載の電圧 110 V: 適合性をご確認ください"
+    },
+    lbl_health_alert: {
+      es: "Alerta sanitaria ({aut})", en: "Health alert ({aut})", de: "Gesundheitswarnung ({aut})", fr: "Alerte sanitaire ({aut})", it: "Allerta sanitaria ({aut})", ja: "衛生・安全警報 ({aut})"
+    },
+    msg_health_alert: {
+      es: "Alerta sanitaria ({aut}): {title}", en: "Health alert ({aut}): {title}", de: "Gesundheitswarnung ({aut}): {title}", fr: "Alerte sanitaire ({aut}) : {title}", it: "Allerta sanitaria ({aut}): {title}", ja: "衛生・安全警報 ({aut}): {title}"
+    },
+    msg_brand_alert: {
+      es: "Hay alertas de esta marca ({aut})", en: "There are alerts for this brand ({aut})", de: "Es gibt Warnungen zu dieser Marke ({aut})", fr: "Il existe des alertes pour cette marque ({aut})", it: "Ci sono allerte per questo marchio ({aut})", ja: "このブランドに関する警報があります ({aut})"
+    },
+    lbl_quality_study_item: {
+      es: "Estudio de calidad ({aut}): {grade}", en: "Quality study ({aut}): {grade}", de: "Qualitätsstudie ({aut}): {grade}", fr: "Étude de qualité ({aut}) : {grade}", it: "Studio di qualità ({aut}): {grade}", ja: "品質調査 ({aut}): {grade}"
+    },
+    seller_sold_by: {
+      es: "Vendido por {seller}", en: "Sold by {seller}", de: "Verkauft von {seller}", fr: "Vendu par {seller}", it: "Venduto da {seller}", ja: "販売元: {seller}"
+    },
+    public_registry: {
+      es: "Registro público", en: "Public registry", de: "Öffentliches Register", fr: "Registre public", it: "Registro pubblico", ja: "公的登記録"
+    },
+    popup_loading_base: {
+      es: "Cargando base…", en: "Loading database…", de: "Lade Datenbank…", fr: "Chargement de la base…", it: "Caricamento database…", ja: "データベース読込中…"
+    },
+    popup_switch_title: {
+      es: "Mostrar la tarjeta en las tiendas", en: "Show card in online stores", de: "Karte in Shops anzeigen", fr: "Afficher la carte dans les boutiques", it: "Mostra scheda nei negozi", ja: "ストアでカードを表示"
+    },
+    popup_newer_base_banner: {
+      es: "Hay una base más nueva:", en: "A newer database is available:", de: "Neuere Datenbank verfügbar:", fr: "Une base plus récente est disponible :", it: "È disponibile un database più recente:", ja: "新しいデータベースがあります:"
+    },
+    popup_btn_update: {
+      es: "Actualizar", en: "Update", de: "Aktualisieren", fr: "Mettre à jour", it: "Aggiorna", ja: "更新"
+    },
+    popup_page_out_empty: {
+      es: "Abre un producto en una tienda, o una búsqueda de vuelos u hospedaje.",
+      en: "Open a product in a store, or search flights or lodging.",
+      de: "Öffne ein Produkt in einem Shop oder suche Flüge bzw. Unterkünfte.",
+      fr: "Ouvrez un produit dans une boutique ou recherchez des vols ou hébergements.",
+      it: "Apri un prodotto in un negozio o cerca voli o alloggi.",
+      ja: "ストアの商品ページ、または航空券・宿泊の検索ページを開いてください。"
+    },
+    popup_batch_unrecognized: {
+      es: "{n} marcas sin reconocer", en: "{n} unrecognized brands", de: "{n} nicht erkannte Marken", fr: "{n} marques non reconnues", it: "{n} marchi non riconosciuti", ja: "{n}件の未確認ブランド"
+    },
+    popup_btn_send_project: {
+      es: "Enviarlas al proyecto", en: "Send to project", de: "An Projekt senden", fr: "Envoyer au projet", it: "Invia al proyecto", ja: "プロジェクトへ送信"
+    },
+    popup_batch_help: {
+      es: "Elige las marcas que quieres enviar (máx. 40):", en: "Choose brands to send (max 40):", de: "Wähle Marken zum Senden (max. 40):", fr: "Choisissez les marques à envoyer (max 40) :", it: "Scegli i marchi da inviare (max 40):", ja: "送信するブランドを選択（最大40件）:"
+    },
+    popup_btn_batch_send: {
+      es: "Enviar marcas seleccionadas", en: "Send selected brands", de: "Ausgewählte Marken senden", fr: "Envoyer les marques sélectionnées", it: "Invia i marchi selezionati", ja: "選択したブランドを送信"
+    },
+    popup_alt_lead: {
+      es: "¿Conoces una alternativa local?", en: "Know a local alternative?", de: "Kennst du eine lokale Alternative?", fr: "Connaissez-vous une alternative locale ?", it: "Conosci un'alternativa locale?", ja: "地元の代替品をご存知ですか？"
+    },
+    popup_alt_help: {
+      es: "Una cooperativa, empresa familiar o de sus empleados. Sugiérela al proyecto para que todos la vean (se verifica antes de publicarse).",
+      en: "A cooperative, family-owned business or worker-owned company. Suggest it to the project so everyone sees it (verified before publication).",
+      de: "Eine Genossenschaft, ein Familienunternehmen oder eine Mitarbeitergesellschaft. Schlage sie dem Projekt vor (wird vor Veröffentlichung geprüft).",
+      fr: "Une coopérative, entreprise familiale ou appartenant aux salariés. Suggérez-la au projet pour que tous la voient (vérifiée avant publication).",
+      it: "Una cooperativa, azienda familiare o dei dipendenti. Suggeriscila al proyecto affinché tutti la vedano (verificata prima della pubblicazione).",
+      ja: "協同組合、家族経営企業、従業員持株会社など。誰もが見られるようプロジェクトに提案してください（公開前に検証されます）。"
+    },
+    popup_ph_brand_req: {
+      es: "Marca *", en: "Brand *", de: "Marke *", fr: "Marque *", it: "Marchio *", ja: "ブランド *"
+    },
+    popup_ph_cat: {
+      es: "Tipo de producto (leche, café, detergente…)", en: "Product type (milk, coffee, detergent…)", de: "Produktart (Milch, Kaffee, Waschmittel…)", fr: "Type de produit (lait, café, lessive…)", it: "Tipo di prodotto (latte, caffè, detersivo…)", ja: "商品カテゴリー（牛乳、コーヒー、洗剤など）"
+    },
+    popup_ph_country: {
+      es: "País", en: "Country", de: "Land", fr: "Pays", it: "Paese", ja: "国"
+    },
+    popup_ph_owner: {
+      es: "Quién es el dueño (cooperativa X, familia Y…)", en: "Who owns it (cooperative X, family Y…)", de: "Wer ist Eigentümer (Genossenschaft X, Familie Y…)", fr: "Qui est le propriétaire (coopérative X, famille Y…)", it: "Chi è il proprietario (cooperativa X, famiglia Y…)", ja: "所有者（〇〇協同組合、〇〇家など）"
+    },
+    popup_ph_source_link: {
+      es: "Enlace donde se confirma (https://…)", en: "Confirmation link (https://…)", de: "Bestätigungslink (https://…)", fr: "Lien de confirmation (https://…)", it: "Link di conferma (https://…)", ja: "確認リンク (https://…)"
+    },
+    popup_btn_suggest_alt: {
+      es: "Sugerir alternativa", en: "Suggest alternative", de: "Alternative vorschlagen", fr: "Suggérer une alternative", it: "Suggerisci alternativa", ja: "代替品を提案"
+    },
+    popup_custom_privacy: {
+      es: "Las marcas que agregues se guardan solo en este navegador y tienen prioridad sobre la base.",
+      en: "Brands you add are stored only in this browser and take priority over the database.",
+      de: "Hinzugefügte Marken werden nur in diesem Browser gespeichert und haben Vorrang vor der Datenbank.",
+      fr: "Les marques ajoutées sont stockées uniquement dans ce navigateur et ont priorité sur la base.",
+      it: "I marchi aggiunti sono salvati solo in questo browser e hanno la priorità sul database.",
+      ja: "追加したブランドはこのブラウザ内のみに保存され、データベースより優先されます。"
+    },
+    popup_ph_company_req: {
+      es: "Empresa dueña *", en: "Parent company *", de: "Eigentümerunternehmen *", fr: "Entreprise propriétaire *", it: "Azienda proprietaria *", ja: "所有企業 *"
+    },
+    popup_ph_controller: {
+      es: "Quién la controla (familia, fondo, Estado…)", en: "Who controls it (family, fund, State…)", de: "Wer kontrolliert sie (Familie, Fonds, Staat…)", fr: "Qui contrôle (famille, fonds, État…)", it: "Chi la controlla (famiglia, fondo, Stato…)", ja: "実質的支配者（創業者一族、ファンド、国家など）"
+    },
+    popup_ph_capital_country: {
+      es: "País del capital", en: "Country of capital", de: "Herkunftsland des Kapitals", fr: "Pays d'origine du capital", it: "Paese del capitale", ja: "資本の所在国"
+    },
+    popup_type_select_def: {
+      es: "Tipo de controlador", en: "Controller type", de: "Kontrolltyp", fr: "Type de contrôle", it: "Tipo di controllo", ja: "支配形態"
+    },
+    popup_ph_funds: {
+      es: "Grandes fondos presentes", en: "Major funds present", de: "Beteiligte Großfonds", fr: "Grands fonds présents", it: "Grandi fondi presenti", ja: "主要な大株主ファンド"
+    },
+    popup_ph_source: {
+      es: "Fuente (ej. reporte anual en la BMV)", en: "Source (e.g. annual report)", de: "Quelle (z. B. Geschäftsbericht)", fr: "Source (ex. rapport annuel)", it: "Fonte (es. bilancio annuale)", ja: "情報源（例：有価証券報告書など）"
+    },
+    popup_ph_source_url: {
+      es: "Enlace de la fuente (https://…)", en: "Source link (https://…)", de: "Quellenlink (https://…)", fr: "Lien de la source (https://…)", it: "Link alla fonte (https://…)", ja: "情報源のリンク (https://…)"
+    },
+    popup_btn_save_brand: {
+      es: "Guardar marca", en: "Save brand", de: "Marke speichern", fr: "Enregistrer la marque", it: "Salva marchio", ja: "ブランドを保存"
+    },
+    popup_your_brands_title: {
+      es: "Tus marcas", en: "Your brands", de: "Deine Marken", fr: "Vos marques", it: "I tuoi marchi", ja: "登録したブランド"
+    },
+    base_date: {
+      es: "Base del {date}", en: "Database: {date}", de: "Datenbank vom {date}", fr: "Base du {date}", it: "Database del {date}", ja: "データベース: {date}"
+    },
+    no_web_search: {
+      es: " — sin búsqueda web", en: " — no web search", de: " — ohne Websuche", fr: " — sans recherche web", it: " — senza ricerca web", ja: " — ウェブ検索なし"
+    },
+    tries_count: {
+      es: "{n} intento(s)", en: "{n} attempt(s)", de: "{n} Versuch(e)", fr: "{n} tentative(s)", it: "{n} tentativo/i", ja: "{n}回試行"
+    },
+    sources_count: {
+      es: "+{n} fuente(s)", en: "+{n} source(s)", de: "+{n} Quelle(n)", fr: "+{n} source(s)", it: "+{n} fonte/i", ja: "+{n}件の情報源"
+    },
+    rep_count: {
+      es: "+{n} reputación", en: "+{n} reputation", de: "+{n} Reputation", fr: "+{n} réputation", it: "+{n} reputazione", ja: "+{n}件の公的評価"
+    },
+    searches_count: {
+      es: "{n} búsquedas", en: "{n} searches", de: "{n} Suchen", fr: "{n} recherches", it: "{n} ricerche", ja: "{n}回検索"
+    },
+    second_query_label: {
+      es: "segunda", en: "second", de: "zweite", fr: "seconde", it: "seconda", ja: "第2"
+    },
+    perf_label_datos: {
+      es: "Recepción de datos (fondo)", en: "Data reception (background)", de: "Datenempfang (Hintergrund)", fr: "Réception des données (arrière-plan)", it: "Ricezione dati (background)", ja: "データ受信（バックグラウンド）"
+    },
+    perf_label_extraccion: {
+      es: "Extracción en página", en: "In-page extraction", de: "Extraktion auf der Seite", fr: "Extraction sur la page", it: "Estrazione nella pagina", ja: "ページ内抽出"
+    },
+    perf_label_tarjeta: {
+      es: "Pintado de tarjeta", en: "Card rendering", de: "Kartendarstellung", fr: "Affichage de la carte", it: "Rendering della scheda", ja: "カード描画"
+    },
+    perf_label_comparador: {
+      es: "Lectura del comparador", en: "Comparator reading", de: "Preisvergleich-Lesung", fr: "Lecture du comparateur", it: "Lettura del comparatore", ja: "価格比較の読込"
     }
   };
 
@@ -3140,7 +3378,8 @@
     temaLabel,
     repLevel,
     catLabel,
-    paisLabel
+    paisLabel,
+    STRINGS
   };
 
 })(typeof globalThis !== "undefined" ? globalThis : this);

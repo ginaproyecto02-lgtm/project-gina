@@ -37,13 +37,13 @@
   ]);
 
   const NOM051_STAMPS = [
-    { id: "azucares", re: /\bexceso\s+az[uú]cares\b/i, label: "Exceso azúcares" },
-    { id: "calorias", re: /\bexceso\s+calor[ií]as\b/i, label: "Exceso calorías" },
-    { id: "sodio", re: /\bexceso\s+sodio\b/i, label: "Exceso sodio" },
-    { id: "grasas_sat", re: /\bexceso\s+grasas\s+saturadas\b/i, label: "Exceso grasas saturadas" },
-    { id: "grasas_trans", re: /\bexceso\s+grasas\s+trans\b/i, label: "Exceso grasas trans" },
-    { id: "edulcorantes", re: /\bcontiene\s+edulcorantes(?:\s*-\s*evitar\s+en\s+ni[ñn]os)?\b/i, label: "Contiene edulcorantes" },
-    { id: "cafeina", re: /\bcontiene\s+cafe[ií]na(?:\s*-\s*evitar\s+en\s+ni[ñn]os)?\b/i, label: "Contiene cafeína" }
+    { id: "azucares", key: "stamp_azucares", re: /\bexceso\s+az[uú]cares\b/i, label: "Exceso azúcares" },
+    { id: "calorias", key: "stamp_calorias", re: /\bexceso\s+calor[ií]as\b/i, label: "Exceso calorías" },
+    { id: "sodio", key: "stamp_sodio", re: /\bexceso\s+sodio\b/i, label: "Exceso sodio" },
+    { id: "grasas_sat", key: "stamp_grasas_sat", re: /\bexceso\s+grasas\s+saturadas\b/i, label: "Exceso grasas saturadas" },
+    { id: "grasas_trans", key: "stamp_grasas_trans", re: /\bexceso\s+grasas\s+trans\b/i, label: "Exceso grasas trans" },
+    { id: "edulcorantes", key: "stamp_edulcorantes", re: /\bcontiene\s+edulcorantes(?:\s*-\s*evitar\s+en\s+ni[ñn]os)?\b/i, label: "Contiene edulcorantes" },
+    { id: "cafeina", key: "stamp_cafeina", re: /\bcontiene\s+cafe[ií]na(?:\s*-\s*evitar\s+en\s+ni[ñn]os)?\b/i, label: "Contiene cafeína" }
   ];
 
   function normalizeText(text) {
@@ -88,7 +88,7 @@
       const foundStamps = [];
       for (const st of NOM051_STAMPS) {
         if (st.re.test(textPool)) {
-          foundStamps.push(st.label);
+          foundStamps.push(t(st.key) || st.label);
         }
       }
       if (foundStamps.length > 0) {
@@ -96,7 +96,7 @@
           tipo: "info",
           categoria: "alimentos",
           titulo: t("lbl_nom051_title") || "Sellos NOM-051",
-          texto: `Sellos NOM-051 según la página: ${foundStamps.join(", ")}`,
+          texto: t("msg_nom051_found", { stamps: foundStamps.join(", ") }),
           origen: t("src_page") || "según la página"
         });
       }
@@ -126,20 +126,26 @@
 
           if (matchedName) {
             const isBanned = ad.accion === "prohibido";
-            const actionVerb = isBanned ? "lo prohibió" : "exige advertencia";
+            const actionVerb = isBanned ? t("lbl_action_banned") : t("lbl_action_warn");
             const juris = ad.jurisdiccion || "";
             const fechaStr = ad.fecha ? ` (${ad.fecha})` : "";
-            const aut = ad.autoridad || "Autoridad sanitaria";
-            const noticeText = `Contiene ${matchedName}: ${aut} ${actionVerb} en ${juris}${fechaStr}`;
+            const aut = ad.autoridad || t("lbl_health_auth");
+            const noticeText = t("msg_additive_action", {
+              name: matchedName,
+              aut: aut,
+              action: actionVerb,
+              juris: juris,
+              fecha: fechaStr
+            });
 
             notices.push({
               tipo: "oficial",
               categoria: "aditivos",
-              titulo: `Acción regulatoria: ${matchedName}`,
+              titulo: t("lbl_reg_action", { name: matchedName }),
               texto: noticeText,
               url: ad.url_oficial,
               autoridad: aut,
-              origen: `Dato oficial: <a href="${ad.url_oficial}" target="_blank" rel="noopener noreferrer">${aut}</a>`
+              origen: `${t("lbl_official_data_src")}: <a href="${ad.url_oficial}" target="_blank" rel="noopener noreferrer">${aut}</a>`
             });
           }
         }
@@ -154,8 +160,8 @@
         notices.push({
           tipo: "info",
           categoria: "energia",
-          titulo: "Consumo energético",
-          texto: `Consumo ${mCons[1]} según la página`,
+          titulo: t("lbl_energy_consumption"),
+          texto: t("msg_energy_consumption", { value: mCons[1] }),
           origen: t("src_page") || "según la página"
         });
       }
@@ -167,8 +173,8 @@
         notices.push({
           tipo: "info",
           categoria: "energia",
-          titulo: "Clase energética",
-          texto: `Clase energética ${cl} según la página`,
+          titulo: t("lbl_energy_class"),
+          texto: t("msg_energy_class", { class: cl }),
           origen: t("src_page") || "según la página"
         });
       }
@@ -179,8 +185,8 @@
         notices.push({
           tipo: "info",
           categoria: "normas",
-          titulo: "Norma de eficiencia",
-          texto: `Etiqueta ${mNom[1].toUpperCase()} según la página`,
+          titulo: t("lbl_energy_norm"),
+          texto: t("msg_energy_norm", { norm: mNom[1].toUpperCase() }),
           origen: t("src_page") || "según la página"
         });
       }
@@ -190,8 +196,8 @@
         notices.push({
           tipo: "info",
           categoria: "energia",
-          titulo: "Certificación ENERGY STAR",
-          texto: "ENERGY STAR mencionado en la página",
+          titulo: t("lbl_energy_star"),
+          texto: t("msg_energy_star"),
           origen: t("src_page") || "según la página"
         });
       }
@@ -204,8 +210,8 @@
         notices.push({
           tipo: "info",
           categoria: "reparabilidad",
-          titulo: "Índice de reparabilidad",
-          texto: `Índice de reparabilidad: ${mRep[1]} (según la página)`,
+          titulo: t("lbl_repair_index"),
+          texto: t("msg_repair_index", { score: mRep[1] }),
           origen: t("src_page") || "según la página"
         });
       }
@@ -218,8 +224,8 @@
           notices.push({
             tipo: "info",
             categoria: "voltaje",
-            titulo: "Compatibilidad de voltaje",
-            texto: "Voltaje 220 V según la página: revisa la compatibilidad",
+            titulo: t("lbl_voltage_compat"),
+            texto: t("msg_voltage_compat_220"),
             origen: t("src_page") || "según la página"
           });
         }
@@ -228,8 +234,8 @@
           notices.push({
             tipo: "info",
             categoria: "voltaje",
-            titulo: "Compatibilidad de voltaje",
-            texto: "Voltaje 110 V según la página: revisa la compatibilidad",
+            titulo: t("lbl_voltage_compat"),
+            texto: t("msg_voltage_compat_110"),
             origen: t("src_page") || "según la página"
           });
         }
@@ -254,22 +260,22 @@
             notices.push({
               tipo: "oficial",
               categoria: "alerta",
-              titulo: `Alerta sanitaria (${al.autoridad})`,
-              texto: `Alerta sanitaria (${al.autoridad}): ${al.titulo}`,
+              titulo: t("lbl_health_alert", { aut: al.autoridad }),
+              texto: t("msg_health_alert", { aut: al.autoridad, title: al.titulo }),
               url: al.url,
               autoridad: al.autoridad,
-              origen: `Dato oficial: <a href="${al.url}" target="_blank" rel="noopener noreferrer">${al.autoridad}</a>`
+              origen: `${t("lbl_official_data_src")}: <a href="${al.url}" target="_blank" rel="noopener noreferrer">${al.autoridad}</a>`
             });
           } else {
             // Regla estricta: si solo coincide la marca → "Hay alertas de esta marca" con enlace, sin afirmar que es este producto
             notices.push({
               tipo: "oficial",
               categoria: "alerta",
-              titulo: `Alerta sanitaria (${al.autoridad})`,
-              texto: `Hay alertas de esta marca (${al.autoridad})`,
+              titulo: t("lbl_health_alert", { aut: al.autoridad }),
+              texto: t("msg_brand_alert", { aut: al.autoridad }),
               url: al.url,
               autoridad: al.autoridad,
-              origen: `Dato oficial: <a href="${al.url}" target="_blank" rel="noopener noreferrer">${al.autoridad}</a>`
+              origen: `${t("lbl_official_data_src")}: <a href="${al.url}" target="_blank" rel="noopener noreferrer">${al.autoridad}</a>`
             });
           }
         }
@@ -335,7 +341,7 @@
           let resType = item.resultado || "informativo";
           const anio = String(study.fecha || "").split("-")[0];
 
-          let noticeTitle = `Estudio de calidad (${aut}): ${item.grado}`;
+          let noticeTitle = t("lbl_quality_study_item", { aut: aut, grade: item.grado }) || `Estudio de calidad (${aut}): ${item.grado}`;
           let noticeText = `${aut}${sub}: ${item.grado} · ${item.veredicto}`;
 
           // I2 Candado 4: Estudios de más de 3 años (antiguedad: true) pasan de advertencia
@@ -362,7 +368,7 @@
             grado: item.grado,
             veredicto: item.veredicto,
             url: estudioUrl,
-            origen: `Estudio oficial: <a href="${estudioUrl}" target="_blank" rel="noopener noreferrer">${study.fuente || aut}</a>`
+            origen: `${t("lbl_official_study") || "Estudio oficial"}: <a href="${estudioUrl}" target="_blank" rel="noopener noreferrer">${study.fuente || aut}</a>`
           });
           break; // Máximo 1 aviso de calidad por estudio
         }

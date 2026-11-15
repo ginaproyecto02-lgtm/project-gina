@@ -57,14 +57,19 @@ function fundCard(id) {
 }
 
 function applyI18nLabels() {
-  const bPage = $('[data-tab="page"]'); if (bPage) bPage.textContent = t("tab_page");
-  const bSearch = $('[data-tab="search"]'); if (bSearch) bSearch.textContent = t("tab_search");
-  const bAdd = $('[data-tab="add"]'); if (bAdd) bAdd.textContent = t("tab_add");
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const k = el.getAttribute("data-i18n");
+    if (k) el.textContent = t(k);
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+    const k = el.getAttribute("data-i18n-ph");
+    if (k) el.placeholder = t(k);
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const k = el.getAttribute("data-i18n-title");
+    if (k) el.title = t(k);
+  });
   const q = $("#q"); if (q) q.placeholder = t("search_placeholder");
-  const showCard = $("#showCard"); if (showCard) showCard.textContent = t("show_card_btn");
-  const sug = $("#suggest"); if (sug) sug.textContent = t("suggest_btn");
-  const opt = $("#openOptions"); if (opt) opt.textContent = t("btn_options");
-  const foot = $("footer"); if (foot) foot.textContent = t("foot_disclaimer");
 }
 
 const keyFor = (brand, title) => {
@@ -76,7 +81,7 @@ function baseDateText(v) {
   const bDate = formatBaseDate(v);
   const age = QED.baseAgeDays ? QED.baseAgeDays(v) : null;
   if (bDate && age != null && age > (QED.BASE_STALE_DAYS || 21)) return t("base_stale", { fecha: bDate });
-  return bDate ? `Base del ${bDate}` : `Base ${v}`;
+  return bDate ? t("base_date", { date: bDate }) : `Base ${v}`;
 }
 
 function formatBaseDate(v) {
