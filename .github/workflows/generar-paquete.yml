@@ -115,6 +115,10 @@ jobs:
           node test/calidad.test.js
           node test/adaptivo.test.js
           node test/sitio.test.js
+          node test/politicas.test.js
+
+      - name: Validar políticas de extensiones con addons-linter (Firefox AMO)
+        run: npx --yes addons-linter@10.15.0 extension/
 
       - name: Leer versiones
         id: v

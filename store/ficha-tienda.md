@@ -110,21 +110,27 @@ Store images: `icono-128.png` (icon), `promo-pequeno-440x280.png` (small tile, r
 
 ## 5. Chrome Web Store — "Privacy practices" tab
 
-**Single purpose**
+**Single purpose / Propósito único**
 ```
-Help shoppers make informed purchases: seller and product reliability shown on the page, who owns the brand, and locally owned alternatives.
+EN: Help shoppers make informed purchases: seller and product reliability shown on the page, who owns the brand, and locally owned alternatives.
+ES: Ayudar a los compradores a tomar decisiones informadas: confiabilidad del vendedor y del producto en la página, quién es dueño de la marca y alternativas de propiedad local.
 ```
 
-**Permission justifications**
+**Permission justifications / Justificación de permisos (generado desde `store/permisos.json`)**
 
-| Permission | Justification |
-|---|---|
-| `storage` | Saves the user's preferences and values, the cache of identified brands, the list of pending brands, reputation records from the optional weekly research, a local count of which companies the user sees (used only to prioritize that research), an optional local price history (product ID, price and date only; at most 300 products and 90 days; the user can turn it off and clear it in Options), a 12-hour local comparison cache, and the API keys the user enters. Nothing of this is sent anywhere. |
-| `alarms` | Schedules the weekly download of the project's updated data file, suggestion retries, and the optional personal research. |
-| `offscreen` | In Chromium browsers, runs a dedicated, sandboxed offscreen document containing `DOMParser` to parse HTML structures and JSON-LD metadata for background price comparison safely without exposing extension privileges. |
-| Host permissions (content-script sites) | The extension runs only on 335 specific shopping and travel sites to read the product brand or the airline names and show the card. It does not run on other sites. |
-| Host permissions (`https://script.google.com/*`, `https://script.googleusercontent.com/*`) | Required exclusively to send voluntary user suggestions (brand, store domain, country, version and random installation UUID) directly to the project's Google Apps Script Web App without needing an email client. |
-| Optional host permissions (AI providers and country comparison store domains) | Requested only with explicit user action: 1) AI APIs (`api.anthropic.com`, `generativelanguage.googleapis.com`, `api.groq.com`, `api.x.ai`, `https://*/*`) when the user saves an AI key; 2) Shopping store domains for the user's country only after the user clicks "See this product in other stores" and then "Allow and compare" on a Gina page (options/comparar.html) that lists those stores to read public offers in the background with `credentials: 'omit'`. |
+| Permiso / Permission | Justificación (ES) | Justification (EN) | Archivo / File | Obligatorio |
+|---|---|---|---|---|
+| `storage` | Guardar preferencias de usuario, caché local de IA, historial de precios, marcas pendientes y diagnósticos técnicos en el navegador. | Store user preferences, local AI cache, price history, pending unknown brands, and technical diagnostics inside the browser. | `src/background.js`, `src/content.js`, `src/card.js`, `options/options.js`, `popup/popup.js` | Sí / Yes |
+| `alarms` | Programar la comprobación periódica de la base de datos descargada y la sincronización de sugerencias pendientes. | Schedule periodic checks for database updates and pending suggestion queue synchronizations. | `src/background.js` | Sí / Yes |
+| `offscreen` | Crear un contexto offscreen en Chromium para procesamiento DOM de diagnóstico y análisis en segundo plano sin interrumpir la página. | Create an offscreen document context in Chromium for background DOM parsing and diagnostic tasks without blocking navigation. | `src/background.js` | Sí / Yes |
+| `https://script.google.com/*` | Enviar sugerencias anónimas de marcas y alternativas comunitarias a la aplicación web privada de Google Apps Script del proyecto. | Send voluntary, anonymous brand and alternative suggestions to the project private Google Apps Script Web App. | `src/background.js` | Sí / Yes |
+| `https://script.googleusercontent.com/*` | Seguir redirecciones seguras de Google Apps Script al procesar sugerencias anónimas de marcas. | Follow secure HTTP redirects from Google Apps Script when submitting anonymous brand suggestions. | `src/background.js` | Sí / Yes |
+| `https://api.anthropic.com/*` | Consultar la API de Anthropic (Claude) cuando el usuario activa voluntariamente la investigación con su propia clave de API. | Query the Anthropic Claude API only when the user voluntarily enables AI features using their own API key. | `src/ai.js`, `src/background.js` | No (opcional) |
+| `https://generativelanguage.googleapis.com/*` | Consultar la API de Google Gemini cuando el usuario activa voluntariamente la investigación con su propia clave de API. | Query the Google Gemini API only when the user voluntarily enables AI features using their own API key. | `src/ai.js`, `src/background.js` | No (opcional) |
+| `https://api.groq.com/*` | Consultar la API de Groq cuando el usuario activa voluntariamente la investigación con su propia clave de API. | Query the Groq API only when the user voluntarily enables AI features using their own API key. | `src/ai.js`, `src/background.js` | No (opcional) |
+| `https://api.x.ai/*` | Consultar la API de xAI cuando el usuario activa voluntariamente la investigación con su propia clave de API. | Query the xAI API only when the user voluntarily enables AI features using their own API key. | `src/ai.js`, `src/background.js` | No (opcional) |
+| `https://*/*` | Permitir al comparador de precios consultar tiendas del país del usuario, solicitado bajo demanda por tienda con consentimiento explícito en options/comparar.html. | Allow the in-card price comparator to look up matching items across local stores, requested on demand per store with explicit consent. | `src/comparador.js`, `options/comparar.js` | No (opcional) |
+| Tiendas compatibles (`matches`: 335 patrones) | Inyectar el script de contenido en tiendas y plataformas de viaje compatibles para extraer la marca, vendedor y garantías locales y mostrar la tarjeta de Gina. | Inject the content script into supported shopping and travel websites to extract brand, seller, and legal warranty information and show the Gina card. | `src/content.js`, `src/card.js`, `src/extractors.js` | Sí / Yes |
 
 **Remote code?** No. All JavaScript ships in the package. The weekly download from the project's GitHub repository is a JSON data file with no logic.
 

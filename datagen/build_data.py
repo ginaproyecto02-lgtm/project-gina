@@ -480,8 +480,48 @@ m["browser_specific_settings"] = {"gecko": {
 cs = m["content_scripts"][0]
 cs["matches"] = patterns
 cs["js"] = ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/i18n.js", "src/card.js", "src/content.js"]
+def verificar_permisos(manifest, permisos):
+    """Valida bidireccionalmente que todo permiso del manifest esté justificado en store/permisos.json y viceversa."""
+    manifest_api = set(manifest.get("permissions", []))
+    doc_api = {p["permiso"] for p in permisos.get("permisos_api", [])}
+
+    manifest_hosts = set(manifest.get("host_permissions", []))
+    doc_hosts = {p["permiso"] for p in permisos.get("host_permissions", [])}
+
+    manifest_opt = set(manifest.get("optional_host_permissions", []))
+    doc_opt = {p["permiso"] for p in permisos.get("optional_host_permissions", [])}
+
+    manifest_matches = set(manifest.get("content_scripts", [{}])[0].get("matches", []))
+    doc_matches = set(permisos.get("tiendas_compatibles", {}).get("patrones", []))
+
+    errores = []
+    if manifest_api - doc_api:
+        errores.append(f"Permisos API en manifest sin justificar: {sorted(manifest_api - doc_api)}")
+    if doc_api - manifest_api:
+        errores.append(f"Permisos API en store/permisos.json inexistentes en manifest: {sorted(doc_api - manifest_api)}")
+    if manifest_hosts - doc_hosts:
+        errores.append(f"Hosts en manifest sin justificar: {sorted(manifest_hosts - doc_hosts)}")
+    if doc_hosts - manifest_hosts:
+        errores.append(f"Hosts en store/permisos.json inexistentes en manifest: {sorted(doc_hosts - manifest_hosts)}")
+    if manifest_opt - doc_opt:
+        errores.append(f"Hosts opcionales en manifest sin justificar: {sorted(manifest_opt - doc_opt)}")
+    if doc_opt - manifest_opt:
+        errores.append(f"Hosts opcionales en store/permisos.json inexistentes en manifest: {sorted(doc_opt - manifest_opt)}")
+    if manifest_matches - doc_matches:
+        errores.append(f"Patrones de tienda en manifest sin justificar ({len(manifest_matches - doc_matches)})")
+    if doc_matches - manifest_matches:
+        errores.append(f"Patrones de tienda en store/permisos.json inexistentes en manifest ({len(doc_matches - manifest_matches)})")
+
+    assert not errores, "Error de verificación de permisos:\n" + "\n".join(errores)
+
 # H3a: Anti-fingerprinting: no exponer data/*.json en web_accessible_resources
 m.pop("web_accessible_resources", None)
+
+permisos_path = os.path.join(os.path.dirname(__file__), "..", "store", "permisos.json")
+assert os.path.exists(permisos_path), f"Falta el archivo de permisos: {permisos_path}"
+permisos_doc = json.load(open(permisos_path, encoding="utf-8"))
+verificar_permisos(m, permisos_doc)
+
 json.dump(m, open(mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
 paises = sorted({e["pais"] for e in S})
