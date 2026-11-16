@@ -69,17 +69,75 @@ for gid, grp in base.G.items():
     for k in ("empresa", "controlador", "pais", "tipo", "confianza", "fuente"):
         assert grp.get(k), f"grupo {gid} sin {k}"
 
+portadas_path = os.path.join(os.path.dirname(__file__), "portadas_no_validas.json")
+assert os.path.exists(portadas_path), f"Falta el archivo de portadas no válidas: {portadas_path}"
+PORTADAS_NO_VALIDAS = json.load(open(portadas_path, encoding="utf-8"))
+
 # ---- Reputación: hechos con fuente por grupo (id del grupo) o por gestora de fondos («fondo:…»)
 REP = json.load(open(os.path.join(os.path.dirname(__file__), "reputacion.json"), encoding="utf-8"))
 TEMAS = {"ambiental","laboral","corrupcion","privacidad","competencia","consumidor","derechos_humanos","fiscal","seguridad","gobierno_corporativo"}
-ESTADOS = {"alegacion","investigacion","litigio","acuerdo","multa","condena","absuelto","anulado"}
+ESTADOS_REPUTACION = {"investigación", "demanda", "acuerdo", "multa", "sentencia", "sanción", "archivado", "revocado"}
+PALABRAS_JUICIO_REPUTACION = [r"\bfraude\b", r"\bestafa\b", r"\bcriminal\b", r"\bcorrupto\b", r"\bengaña\b"]
+
+def validar_evento_reputacion(rid, e, portadas):
+    tit = e.get("titulo", "")
+    url = e.get("url", "")
+    # Candado 1: url https de un documento concreto (no portada ni vacía, no en portadas_no_validas)
+    assert url and isinstance(url, str) and url.startswith("https://"), (
+        f"reputación {rid} ('{tit}'): url debe ser https:// concreto (obtenido: {url})"
+    )
+    p = urllib.parse.urlparse(url)
+    assert p.netloc and p.path.strip("/") != "", (
+        f"reputación {rid} ('{tit}'): url no puede ser una portada o raíz de dominio (obtenido: {url})"
+    )
+    norm_url = f"{p.scheme}://{p.netloc.lower()}{p.path.rstrip('/')}"
+    for bad in portadas:
+        bp = urllib.parse.urlparse(bad.strip())
+        bad_norm = f"{bp.scheme}://{bp.netloc.lower()}{bp.path.rstrip('/')}"
+        assert norm_url != bad_norm, (
+            f"reputación {rid} ('{tit}'): url figura en portadas no válidas: {url}"
+        )
+
+    # Candado 2: Debe tener anio y estado
+    anio = e.get("anio")
+    estado = e.get("estado")
+    assert anio and (isinstance(anio, int) or (isinstance(anio, str) and anio.isdigit())), (
+        f"reputación {rid} ('{tit}'): falta 'anio' válido (obtenido: {anio})"
+    )
+    assert estado and isinstance(estado, str), (
+        f"reputación {rid} ('{tit}'): falta 'estado' (obtenido: {estado})"
+    )
+
+    # Candado 3: Estado dentro del catálogo estricto
+    assert estado in ESTADOS_REPUTACION, (
+        f"reputación {rid} ('{tit}'): estado '{estado}' fuera de la lista permitida {sorted(ESTADOS_REPUTACION)}"
+    )
+
+    # Candado 4: Sin palabras de juicio fuera de cita (fraude solo permitido si sentencia)
+    resumen = e.get("resumen", "")
+    sin_citas = re.sub(r'«[^»]*»|"[^"]*"', '', resumen)
+    for w in PALABRAS_JUICIO_REPUTACION:
+        if re.search(w, sin_citas, re.IGNORECASE):
+            if "fraude" in w and estado == "sentencia":
+                continue
+            raise AssertionError(
+                f"reputación {rid} ('{tit}'): resumen contiene palabra de juicio '{w}' fuera de cita: {resumen}"
+            )
+
+    # Candado 5: Si estado == 'acuerdo', el resumen debe aclarar si hubo o no admisión de culpa
+    if estado == "acuerdo":
+        lower_res = resumen.lower()
+        assert "no admit" in lower_res or "admit" in lower_res, (
+            f"reputación {rid} ('{tit}'): estado 'acuerdo' requiere aclarar si hubo o no admisión de culpa ('admit' o 'no admit')"
+        )
+
 for rid, r in REP.items():
     assert rid in base.G or rid.startswith("fondo:"), f"reputación de id desconocido: {rid}"
     assert r.get("revisado"), rid
     for e in r.get("eventos", []):
-        assert e["tema"] in TEMAS and e["estado"] in ESTADOS, (rid, e["titulo"])
-        assert e["url"].startswith("https://") and e.get("fuente") and e.get("anio"), (rid, e["titulo"])
-        assert len(e["titulo"]) <= 80, (rid, e["titulo"])
+        assert e.get("tema") in TEMAS, (rid, e.get("titulo"), e.get("tema"))
+        validar_evento_reputacion(rid, e, PORTADAS_NO_VALIDAS)
+        assert len(e.get("titulo", "")) <= 80, (rid, e.get("titulo"))
     for e in r.get("positivos", []) + r.get("lobbying", []):
         assert e["url"].startswith("https://"), (rid, e)
 

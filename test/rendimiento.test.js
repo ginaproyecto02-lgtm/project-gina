@@ -259,9 +259,9 @@ function makeBackgroundEnv() {
       }
       dom.window.QED.I18N.setLang("es");
 
+      const index = dom.window.QED.buildIndex(db, [], {}, {});
       const t0 = Date.now();
       const data = dom.window.QED.extract(dom.window.document, fdir.host, fdir.pais);
-      const index = dom.window.QED.buildIndex(db, [], {}, {});
       const matched = dom.window.QED.match(index, data.candidates || [], data.title);
       dom.window.QED.showCard(Object.assign(matched, { store: { nombre: fdir.store, pais: fdir.pais } }), {
         minimized: false,

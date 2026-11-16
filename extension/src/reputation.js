@@ -17,15 +17,22 @@
     gobierno_corporativo: { label: "Gobierno corporativo", icon: "📊" }
   };
 
-  // Peso de cada estado: una condena pesa más que una alegación; lo anulado o desestimado no resta.
+  // Peso de cada estado: una condena/sentencia pesa más que una alegación; lo revocado o archivado no resta.
   const ESTADOS = {
+    sentencia: { label: "Sentencia firme", peso: 10 },
     condena: { label: "Condena o sentencia", peso: 10 },
-    multa: { label: "Multa o sanción", peso: 8 },
+    multa: { label: "Multa", peso: 8 },
+    sanción: { label: "Sanción", peso: 8 },
+    sancion: { label: "Sanción", peso: 8 },
     acuerdo: { label: "Acuerdo o pago", peso: 6 },
+    demanda: { label: "Demanda en curso", peso: 3 },
     litigio: { label: "Juicio en curso", peso: 3 },
+    investigación: { label: "Investigación abierta", peso: 2 },
     investigacion: { label: "Investigación abierta", peso: 2 },
     alegacion: { label: "Alegación", peso: 1 },
+    archivado: { label: "Archivado o desestimado", peso: 0 },
     absuelto: { label: "Desestimado o absuelto", peso: 0 },
+    revocado: { label: "Sanción revocada", peso: 0 },
     anulado: { label: "Sanción anulada", peso: 0 }
   };
 

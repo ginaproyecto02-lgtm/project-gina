@@ -1511,6 +1511,14 @@
     },
 
     // Options page UI
+    opt_link_test_mvp: {
+      es: "Prueba del MVP",
+      en: "MVP Verification Checklist",
+      de: "MVP-Prüfliste",
+      fr: "Liste de vérification MVP",
+      it: "Lista di controllo MVP",
+      ja: "MVP検証チェックリスト"
+    },
     opt_page_title: {
       es: "Gina — tus valores y opciones",
       en: "Gina — your values and settings",

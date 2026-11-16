@@ -119,6 +119,7 @@ jobs:
           node test/rendimiento.test.js
           node test/i18n.test.js
           node test/accesibilidad.test.js
+          node test/prueba_mvp.test.js
 
       - name: Validar políticas de extensiones con addons-linter (Firefox AMO)
         run: npx --yes addons-linter@10.15.0 extension/
