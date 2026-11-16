@@ -740,7 +740,7 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
     check("7. Alerta de solo marca → texto «alertas de esta marca», nunca «este producto»", okAlerta, alertaNotice ? alertaNotice.texto : "no encontrada");
   }
 
-  // 7b. PROFECO (México): Atún Dolores → «1–4 % de soya»
+  // 7b. PROFECO (México, estudio de marzo 2024): Atún Dolores → «Sin soya detectada»
   {
     const w = env("", "https://www.walmart.com.mx/ip/atun-dolores/123");
     const rNotices = w.QED.evaluateProductNotices({
@@ -753,12 +753,12 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       estudiosCalidadDb: estudiosCalidadData
     });
     const qNotice = rNotices.find(n => n.categoria === "calidad");
-    check("7b. PROFECO (México): Atún Dolores → «1–4 % de soya»",
-      !!qNotice && qNotice.texto.includes("1–4 % de soya") && qNotice.autoridad === "PROFECO",
+    check("7b. PROFECO (México, 2024): Atún Dolores → «Sin soya detectada»",
+      !!qNotice && qNotice.texto.includes("Sin soya detectada") && qNotice.autoridad === "PROFECO",
       qNotice ? qNotice.texto : "no encontrado");
   }
 
-  // 7c. PROFECO (México): Atún Aurrera → «30–62 % de soya»
+  // 7c. PROFECO (México, 2024): Atún Aurrera → «21–22 % de soya (declara 14 %)»
   {
     const w = env("", "https://www.bodegaaurrera.com.mx/ip/atun-aurrera/456");
     const rNotices = w.QED.evaluateProductNotices({
@@ -771,8 +771,8 @@ for (const [name, url, html, wantBrand, wantG, store] of products) {
       estudiosCalidadDb: estudiosCalidadData
     });
     const qNotice = rNotices.find(n => n.categoria === "calidad");
-    check("7c. PROFECO (México): Atún Aurrera → «30–62 % de soya»",
-      !!qNotice && qNotice.texto.includes("30–62 % de soya"),
+    check("7c. PROFECO (México, 2024): Atún Aurrera → «21–22 % de soya»",
+      !!qNotice && qNotice.texto.includes("21–22 % de soya"),
       qNotice ? qNotice.texto : "no encontrado");
   }
 

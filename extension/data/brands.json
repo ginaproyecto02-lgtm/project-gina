@@ -1,5 +1,5 @@
 {
- "version": "2026-11-16T0107",
+ "version": "2026-11-16T0354",
  "licencia": "CC BY 4.0",
  "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -8041,19 +8041,19 @@
    "fuente_en": ""
   },
   "loc_flor_de_alfalfa": {
-   "empresa": "Flor de Alfalfa (Rancho La Hondonada)",
-   "controlador": "Familia Zorrilla Asque (Rancho La Hondonada en Colón, Querétaro).",
+   "empresa": "Flor de Alfalfa",
+   "controlador": "Sin fuente sobre su dueño",
    "pais": "México",
-   "tipo": "Familia",
+   "tipo": "Privada",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "Quesos artesanales y lácteos de pastoreo en Querétaro; 100% leche sin grasa vegetal añadida.",
-   "confianza": "Alta",
-   "fuente": "Sitio oficial Flor de Alfalfa / Rancho La Hondonada",
+   "nota": "Quesos artesanales de rancho en Querétaro.",
+   "confianza": "Verificar",
+   "fuente": "Sitio oficial Flor de Alfalfa (no nombra a sus dueños)",
    "url": "https://flordealfalfa.com/",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "Zorrilla Asque family (Rancho La Hondonada in Colón, Querétaro)",
+   "controlador_en": "No source on its owner",
    "nota_en": "Artisanal Mexican dairy and pasture-raised cheese farm.",
    "fondos_en": "Not publicly traded",
    "gobierno_en": "",
@@ -8079,39 +8079,39 @@
    "fuente_en": ""
   },
   "loc_industrias_ines": {
-   "empresa": "Inés (Grupo Sesajal)",
-   "controlador": "Grupo Sesajal (José Luis González Íñigo y familia en Jalisco).",
+   "empresa": "Inés",
+   "controlador": "Sin fuente que la vincule a su dueño",
    "pais": "México",
-   "tipo": "Familia",
+   "tipo": "Privada",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "Marca de aceites vegetales puros y semillas de Grupo Sesajal, fundada en Jalisco en 1989.",
-   "confianza": "Alta",
-   "fuente": "Sitio oficial Inés / Grupo Sesajal",
+   "nota": "Marca mexicana de aceites vegetales y de ajonjolí.",
+   "confianza": "Verificar",
+   "fuente": "Sitio oficial Inés (no confirmado como fuente del dueño)",
    "url": "https://ines.com.mx/",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "Grupo Sesajal (José Luis González Íñigo family in Jalisco)",
-   "nota_en": "Mexican edible oils and sesame brand of Grupo Sesajal, founded in Jalisco in 1989.",
+   "controlador_en": "No source linking it to its owner",
+   "nota_en": "Mexican edible and sesame oils brand.",
    "fondos_en": "Not publicly traded",
    "gobierno_en": "",
    "fuente_en": ""
   },
   "loc_bove_lacteos": {
-   "empresa": "Bové (Grupo Cuadritos)",
-   "controlador": "Grupo Cuadritos (Familia González en Celaya, Guanajuato).",
+   "empresa": "Bové (Cuadritos)",
+   "controlador": "Cuadritos, empresa mexicana dueña de las leches Bové, Boulder y Güd (Expansión, 2018).",
    "pais": "México",
-   "tipo": "Familia",
+   "tipo": "Privada",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "Marca de lácteos y quesos orgánicos de Grupo Cuadritos, fundada en Celaya, Guanajuato.",
-   "confianza": "Alta",
-   "fuente": "Sitio oficial Bové / Grupo Cuadritos",
-   "url": "https://bove.com.mx/",
+   "nota": "Lácteos orgánicos y alternativos.",
+   "confianza": "Verificar",
+   "fuente": "Expansión: «Cuadritos busca crecer su negocio de alimentos orgánicos» (8 ene 2018)",
+   "url": "https://expansion.mx/empresas/2018/01/08/cuadritos-busca-crecer-su-negocio-de-alimentos-organicos",
    "ahorro": false,
    "ahorro_fuente": "",
-   "controlador_en": "Grupo Cuadritos (González family in Celaya, Guanajuato)",
-   "nota_en": "Certified organic Mexican dairy and cheeses brand of Grupo Cuadritos in Celaya, Guanajuato.",
+   "controlador_en": "Cuadritos, the Mexican company that owns the Bové, Boulder and Güd milk brands (Expansión, 2018)",
+   "nota_en": "Organic and alternative dairy.",
    "fondos_en": "Not publicly traded",
    "gobierno_en": "",
    "fuente_en": ""
@@ -27075,7 +27075,7 @@
  ],
  "estudios_calidad": [
   {
-   "id": "profeco-atun-2019",
+   "id": "profeco-atun-2024",
    "pais": "México",
    "paises_tienda": [
     "México",
@@ -27085,12 +27085,12 @@
    "autoridad": "PROFECO",
    "categoria": "abarrotes",
    "subcategoria": "atun",
-   "fuente": "Revista del Consumidor No. 505 (marzo 2019)",
-   "url": "https://www.gob.mx/cms/uploads/attachment/file/443232/ESTUDIO_DE_CALIDAD_ATUN_ENVASADO.pdf",
-   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/443232/ESTUDIO_DE_CALIDAD_ATUN_ENVASADO.pdf",
-   "fecha": "2019-03",
-   "antiguedad": true,
-   "verificado": "2026-11-09",
+   "fuente": "PROFECO, Estudio de calidad de atún envasado (Revista del Consumidor, marzo 2024; productos comprados del 29 sep al 25 oct de 2023)",
+   "url": "https://www.gob.mx/cms/uploads/attachment/file/897473/ESTUDIO_DE_CALIDAD_ATUN_ENVASADO.pdf",
+   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/897473/ESTUDIO_DE_CALIDAD_ATUN_ENVASADO.pdf",
+   "fecha": "2024-03",
+   "antiguedad": false,
+   "verificado": "2026-11-15",
    "norma": "NOM-084-SCFI-1994",
    "items": [
     {
@@ -27100,19 +27100,8 @@
       "atún"
      ],
      "resultado": "advertencia",
-     "grado": "30–62 % de soya en masa drenada",
-     "veredicto": "Contiene 30–62 % de soya en masa drenada en atún aleta amarilla en agua",
-     "norma_cumplida": false
-    },
-    {
-     "marca": "Chedraui",
-     "keywords": [
-      "atun",
-      "atún"
-     ],
-     "resultado": "advertencia",
-     "grado": "23–28 % de soya en masa drenada",
-     "veredicto": "Contiene 23–28 % de soya en masa drenada en atún en aceite o agua",
+     "grado": "21–22 % de soya (declara 14 %)",
+     "veredicto": "Atún con soya en agua con aceite 295 g: 21–22 % de soya en masa drenada; la etiqueta declara 14 %",
      "norma_cumplida": false
     },
     {
@@ -27121,21 +27110,32 @@
       "atun",
       "atún"
      ],
-     "resultado": "advertencia",
-     "grado": "17–26 % de soya en masa drenada",
-     "veredicto": "Contiene 17–26 % de soya en masa drenada en atún en agua",
-     "norma_cumplida": false
+     "resultado": "informativo",
+     "grado": "13–25 % de soya (declara 20 %)",
+     "veredicto": "Atún con proteína de soya en agua 120 g: 13–25 % de soya en masa drenada; la etiqueta declara 20 %",
+     "norma_cumplida": null
     },
     {
-     "marca": "Ke! Precio",
+     "marca": "Chedraui",
      "keywords": [
       "atun",
       "atún"
      ],
-     "resultado": "advertencia",
-     "grado": "15–23 % de soya en masa drenada",
-     "veredicto": "Contiene 15–23 % de soya en masa drenada en atún con agua",
-     "norma_cumplida": false
+     "resultado": "informativo",
+     "grado": "10–13 % de soya (declara 20 %)",
+     "veredicto": "Atún con soya en agua o agua con aceite 130 g: 10–13 % de soya en masa drenada; la etiqueta declara 20 %",
+     "norma_cumplida": true
+    },
+    {
+     "marca": "Ke Precio",
+     "keywords": [
+      "atun",
+      "atún"
+     ],
+     "resultado": "informativo",
+     "grado": "8–12 % de soya (declara 14 %)",
+     "veredicto": "Atún con proteína de soya 130–140 g: 8–12 % de soya en masa drenada; la etiqueta declara 14 %",
+     "norma_cumplida": true
     },
     {
      "marca": "Calmex",
@@ -27143,10 +27143,10 @@
       "atun",
       "atún"
      ],
-     "resultado": "advertencia",
-     "grado": "7–15 % de soya en masa drenada",
-     "veredicto": "Calmex hojuela de atún en aceite contiene 7–15 % de soya en masa drenada",
-     "norma_cumplida": false
+     "resultado": "informativo",
+     "grado": "1–2 % de soya (declara 4 %)",
+     "veredicto": "Atún aleta amarilla con soya en agua 135 g: 1–2 % de soya en masa drenada; la etiqueta declara 4 %",
+     "norma_cumplida": true
     },
     {
      "marca": "Dolores",
@@ -27155,8 +27155,8 @@
       "atún"
      ],
      "resultado": "informativo",
-     "grado": "1–4 % de soya en masa drenada",
-     "veredicto": "Lomo de atún con 1–4 % de soya en masa drenada",
+     "grado": "Sin soya detectada",
+     "veredicto": "PROFECO no encontró soya en los productos analizados",
      "norma_cumplida": true
     },
     {
@@ -27166,8 +27166,8 @@
       "atún"
      ],
      "resultado": "informativo",
-     "grado": "1–4 % de soya en masa drenada",
-     "veredicto": "Lomo de atún con 1–4 % de soya en masa drenada",
+     "grado": "Sin soya detectada",
+     "veredicto": "PROFECO no encontró soya en los productos analizados",
      "norma_cumplida": true
     },
     {
@@ -27177,11 +27177,12 @@
       "atún"
      ],
      "resultado": "informativo",
-     "grado": "1–2 % de soya en masa drenada",
-     "veredicto": "Lomo de atún con 1–2 % de soya en masa drenada",
+     "grado": "Sin soya detectada",
+     "veredicto": "PROFECO no encontró soya en los productos analizados",
      "norma_cumplida": true
     }
-   ]
+   ],
+   "verificado_por": "validador: contrastado contra el PDF de PROFECO (archivo 897473); el estudio de 2019 citado antes era otro y con otras cifras"
   },
   {
    "id": "profeco-jamon-2020",
@@ -27196,10 +27197,8 @@
    "subcategoria": "jamon",
    "fuente": "Revista del Consumidor No. 522 (agosto 2020)",
    "url": "https://www.gob.mx/cms/uploads/attachment/file/568125/ESTUDIO_CALIDAD_JAMONES.pdf",
-   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/568125/ESTUDIO_CALIDAD_JAMONES.pdf",
    "fecha": "2020-08",
    "antiguedad": true,
-   "verificado": "2026-11-09",
    "norma": "NOM-158-SCFI-2003",
    "items": [
     {
@@ -27279,7 +27278,8 @@
      "veredicto": "Sparta Cocido contiene pollo no declarado en la denominación",
      "norma_cumplida": false
     }
-   ]
+   ],
+   "verificacion_rechazada": "2026-11-15 (validador): no se pudo comprobar el PDF citado; mismo patrón de URL que el atún, cuyo número de archivo no correspondía"
   },
   {
    "id": "profeco-quesos-2021",
@@ -27294,10 +27294,8 @@
    "subcategoria": "queso",
    "fuente": "Revista del Consumidor No. 538 (diciembre 2021)",
    "url": "https://www.gob.mx/cms/uploads/attachment/file/688702/ESTUDIO_DE_CALIDAD_QUESO_PANELA_E_IMITACIONES.pdf",
-   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/688702/ESTUDIO_DE_CALIDAD_QUESO_PANELA_E_IMITACIONES.pdf",
    "fecha": "2021-12",
    "antiguedad": true,
-   "verificado": "2026-11-09",
    "norma": "NOM-223-SCFI/SAGARPA-2018",
    "items": [
     {
@@ -27388,7 +27386,8 @@
      "veredicto": "Imitación con grasa vegetal y caseinatos",
      "norma_cumplida": false
     }
-   ]
+   ],
+   "verificacion_rechazada": "2026-11-15 (validador): no se pudo comprobar el PDF citado"
   },
   {
    "id": "profeco-aceites-2019",
@@ -27403,10 +27402,8 @@
    "subcategoria": "aceite",
    "fuente": "Revista del Consumidor No. 511 (septiembre 2019)",
    "url": "https://www.gob.mx/cms/uploads/attachment/file/490747/ESTUDIO_CALIDAD_ACEITES_VEGETALES_.pdf",
-   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/490747/ESTUDIO_CALIDAD_ACEITES_VEGETALES_.pdf",
    "fecha": "2019-09",
    "antiguedad": true,
-   "verificado": "2026-11-09",
    "norma": "NMX-F-052-SCFI-2008",
    "items": [
     {
@@ -27441,7 +27438,8 @@
      "veredicto": "Aceite de aguacate mezclado con canola sin declarar",
      "norma_cumplida": false
     }
-   ]
+   ],
+   "verificacion_rechazada": "2026-11-15 (validador): no se pudo comprobar el PDF citado"
   },
   {
    "id": "profeco-mascotas-2023",
@@ -27456,10 +27454,8 @@
    "subcategoria": "alimento_perro",
    "fuente": "Revista del Consumidor No. 557 (julio 2023)",
    "url": "https://www.gob.mx/cms/uploads/attachment/file/837839/ESTUDIO_DE_CALIDAD_CROQUETAS_PARA_PERROS.pdf",
-   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/837839/ESTUDIO_DE_CALIDAD_CROQUETAS_PARA_PERROS.pdf",
    "fecha": "2023-07",
    "antiguedad": true,
-   "verificado": "2026-11-09",
    "norma": "Estudio de Calidad PROFECO 2023",
    "items": [
     {
@@ -27527,7 +27523,8 @@
      "veredicto": "Cumple requerimientos mínimos de mantenimiento, menor proteína cárnica",
      "norma_cumplida": true
     }
-   ]
+   ],
+   "verificacion_rechazada": "2026-11-15 (validador): contradice la fuente: según Expansión (5 jul 2023, Revista 557) Nupec Senior y Nupec Adulto están entre las que NO cumplen su etiquetado; el estudio usa categorías A, B y C (no hay D); Pro Plan y Pal Perro no aparecen"
   },
   {
    "id": "profeco-sartenes-2022",
@@ -27542,10 +27539,8 @@
    "subcategoria": "sartenes",
    "fuente": "Revista del Consumidor No. 544 (junio 2022)",
    "url": "https://www.gob.mx/cms/uploads/attachment/file/730296/ESTUDIO_CALIDAD_SARTENES_ANTIADHERENTES.pdf",
-   "url_estudio": "https://www.gob.mx/cms/uploads/attachment/file/730296/ESTUDIO_CALIDAD_SARTENES_ANTIADHERENTES.pdf",
    "fecha": "2022-06",
    "antiguedad": true,
-   "verificado": "2026-11-09",
    "norma": "NMX-B-119-1983",
    "items": [
     {
@@ -27608,7 +27603,8 @@
      "veredicto": "Desprendimiento prematuro de capa antiadherente en prueba de abrasión",
      "norma_cumplida": false
     }
-   ]
+   ],
+   "verificacion_rechazada": "2026-11-15 (validador): contradice la prensa del estudio (Milenio: «Ekco y Vasconia con baja calificación»); aquí Vasconia salía como positiva"
   },
   {
    "id": "usda-organic-certified",
@@ -27625,10 +27621,8 @@
    "subcategoria": "organico",
    "fuente": "USDA National Organic Program (Organic Integrity Database)",
    "url": "https://organic.ams.usda.gov/Integrity/CP/OPP?nopid=8150001357",
-   "url_estudio": "https://organic.ams.usda.gov/Integrity/CP/OPP?nopid=8150001357",
    "fecha": "2024-01",
    "antiguedad": false,
-   "verificado": "2026-11-09",
    "norma": "7 CFR Part 205",
    "items": [
     {
@@ -27643,7 +27637,8 @@
      "veredicto": "Operación certificada en USDA Organic Integrity Database (NOP ID 8150001357)",
      "norma_cumplida": true
     }
-   ]
+   ],
+   "verificacion_rechazada": "2026-11-15 (validador): pendiente de comprobar el registro en la Organic Integrity Database"
   },
   {
    "id": "mapa-aove-dop",
@@ -27659,10 +27654,8 @@
    "subcategoria": "aceite_oliva",
    "fuente": "Ministerio de Agricultura, Pesca y Alimentación (Premios Alimentos de España)",
    "url": "https://www.mapa.gob.es/dam/mapa/contenido/prensa/notas-de-prensa/documentos/documentos-2023/230421fnlplanasvisitacastillodecanena.pdf",
-   "url_estudio": "https://www.mapa.gob.es/dam/mapa/contenido/prensa/notas-de-prensa/documentos/documentos-2023/230421fnlplanasvisitacastillodecanena.pdf",
    "fecha": "2023-04",
    "antiguedad": true,
-   "verificado": "2026-11-09",
    "norma": "Reglamento UE 1151/2012",
    "items": [
     {
@@ -27678,7 +27671,8 @@
      "veredicto": "Reconocimiento oficial del MAPA a la excelencia y producción ecológica de AOVE",
      "norma_cumplida": true
     }
-   ]
+   ],
+   "verificacion_rechazada": "2026-11-15 (validador): pendiente de comprobar la nota de prensa del MAPA"
   }
  ],
  "rastreadores": [

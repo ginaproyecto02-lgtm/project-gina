@@ -80,7 +80,7 @@ async function run() {
     check("1. Esquema de estudios_calidad.json válido (IDs, países, URLs seguras e items)", allValid, `${estudios.length} estudios validados`);
   }
 
-  // 2. PROFECO México: Atún Dolores (Lomo / 1–4 % soya) vs Aurrera (30–62 % soya)
+  // 2. PROFECO México (estudio de marzo 2024): Atún Dolores (sin soya) vs Aurrera (21–22 % de soya, declara 14 %)
   {
     const rDolores = QED.evaluateProductNotices({
       title: "Atún Dolores en Agua Lomo 140 g",
@@ -102,9 +102,9 @@ async function run() {
     });
     const qAurrera = rAurrera.find(n => n.categoria === "calidad");
 
-    check("2. PROFECO: Atún Dolores (1–4 % soya) vs Aurrera (30–62 % soya)",
-      !!qDolores && qDolores.texto.includes("1–4 % de soya") &&
-      !!qAurrera && qAurrera.texto.includes("30–62 % de soya"),
+    check("2. PROFECO 2024: Atún Dolores (sin soya) vs Aurrera (21–22 % de soya, declara 14 %)",
+      !!qDolores && qDolores.texto.includes("Sin soya detectada") &&
+      !!qAurrera && qAurrera.texto.includes("21–22 % de soya"),
       `Dolores: ${qDolores ? qDolores.resultado : "null"} | Aurrera: ${qAurrera ? qAurrera.resultado : "null"}`);
   }
 
@@ -153,19 +153,21 @@ async function run() {
     });
     const qAurreraVerif = rAurreraVerif.find(n => n.categoria === "calidad");
     check("2d. I2: Atún Aurrera sí coincide (marca exacta y palabras clave verificadas)",
-      !!qAurreraVerif && qAurreraVerif.texto.includes("30–62 % de soya"),
+      !!qAurreraVerif && qAurreraVerif.texto.includes("21–22 % de soya"),
       qAurreraVerif ? qAurreraVerif.texto : "no encontrado");
   }
 
   // 2e. I2: Estudio con antigüedad (> 3 años) sale como informativo y muestra el año a la vista
+  //     (copia del estudio de atún marcada como de 2019: el real es de 2024 y no es antiguo)
   {
+    const estudiosViejos = estudios.map((e) => e.id === "profeco-atun-2024" ? Object.assign({}, e, { fecha: "2019-03", antiguedad: true }) : e);
     const rAurreraAged = QED.evaluateProductNotices({
       title: "Atún con Soya Aurrera en Agua 140 g",
       category: "abarrotes",
       categoryConfidence: "alta",
       storeCountry: "México",
       brand: "Aurrera",
-      estudiosCalidadDb: estudios
+      estudiosCalidadDb: estudiosViejos
     });
     const qAurreraAged = rAurreraAged.find(n => n.categoria === "calidad");
     check("2e. I2: Estudio con antigüedad sale como informativo y muestra el año (2019) a la vista",

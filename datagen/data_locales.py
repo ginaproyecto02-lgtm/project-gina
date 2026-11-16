@@ -417,9 +417,11 @@ CAT['Beauty of Joseon'] = 'skincare_cosmetica'
 
 # Marcas mexicanas independientes analizadas en Estudios de Calidad PROFECO
 # Validación 2026-11-09: datos de dueños verificados contra registros oficiales, sitios de emisoras y corporativos.
-# Cinsa cotiza en la BMV (GISSA). Flor de Alfalfa, Inés y Bové verificadas con sitio oficial y fundadores.
+# Cinsa cotiza en la BMV (GISSA).
+# Validación 2026-11-15: Flor de Alfalfa, Inés y Bové bajan a «Verificar»: la familia y la ciudad no aparecían en las fuentes
+# citadas (portadas de sus sitios). Bové: Expansión 2018 confirma que es de Cuadritos (una sola nota → «Verificar»).
 # Covadonga, Peñaranda y San Lucas quedan en «Verificar» con «Sin fuente sobre su dueño».
-g('loc_flor_de_alfalfa', 'Flor de Alfalfa (Rancho La Hondonada)', 'Familia Zorrilla Asque (Rancho La Hondonada en Colón, Querétaro).', 'México', 'Familia', NC, "", 'Quesos artesanales y lácteos de pastoreo en Querétaro; 100% leche sin grasa vegetal añadida.', A, 'Sitio oficial Flor de Alfalfa / Rancho La Hondonada', 'https://flordealfalfa.com/', controlador_en='Zorrilla Asque family (Rancho La Hondonada in Colón, Querétaro)', nota_en='Artisanal Mexican dairy and pasture-raised cheese farm.')
+g('loc_flor_de_alfalfa', 'Flor de Alfalfa', 'Sin fuente sobre su dueño', 'México', 'Privada', NC, "", 'Quesos artesanales de rancho en Querétaro.', V, 'Sitio oficial Flor de Alfalfa (no nombra a sus dueños)', 'https://flordealfalfa.com/', controlador_en='No source on its owner', nota_en='Artisanal Mexican dairy and pasture-raised cheese farm.')
 b('loc_flor_de_alfalfa', 'Flor de Alfalfa')
 CAT['Flor de Alfalfa'] = 'lacteos'
 
@@ -427,11 +429,11 @@ g('loc_aceite_san_lucas', 'Aceite San Lucas', 'Sin fuente sobre su dueño', 'Mé
 b('loc_aceite_san_lucas', 'San Lucas', 'Aceite San Lucas')
 CAT['San Lucas'] = 'abarrotes'
 
-g('loc_industrias_ines', 'Inés (Grupo Sesajal)', 'Grupo Sesajal (José Luis González Íñigo y familia en Jalisco).', 'México', 'Familia', NC, "", 'Marca de aceites vegetales puros y semillas de Grupo Sesajal, fundada en Jalisco en 1989.', A, 'Sitio oficial Inés / Grupo Sesajal', 'https://ines.com.mx/', controlador_en='Grupo Sesajal (José Luis González Íñigo family in Jalisco)', nota_en='Mexican edible oils and sesame brand of Grupo Sesajal, founded in Jalisco in 1989.')
+g('loc_industrias_ines', 'Inés', 'Sin fuente que la vincule a su dueño', 'México', 'Privada', NC, "", 'Marca mexicana de aceites vegetales y de ajonjolí.', V, 'Sitio oficial Inés (no confirmado como fuente del dueño)', 'https://ines.com.mx/', controlador_en='No source linking it to its owner', nota_en='Mexican edible and sesame oils brand.')
 b('loc_industrias_ines', '!Inés', 'Aceite Inés')
 CAT['Inés'] = 'abarrotes'
 
-g('loc_bove_lacteos', 'Bové (Grupo Cuadritos)', 'Grupo Cuadritos (Familia González en Celaya, Guanajuato).', 'México', 'Familia', NC, "", 'Marca de lácteos y quesos orgánicos de Grupo Cuadritos, fundada en Celaya, Guanajuato.', A, 'Sitio oficial Bové / Grupo Cuadritos', 'https://bove.com.mx/', controlador_en='Grupo Cuadritos (González family in Celaya, Guanajuato)', nota_en='Certified organic Mexican dairy and cheeses brand of Grupo Cuadritos in Celaya, Guanajuato.')
+g('loc_bove_lacteos', 'Bové (Cuadritos)', 'Cuadritos, empresa mexicana dueña de las leches Bové, Boulder y Güd (Expansión, 2018).', 'México', 'Privada', NC, "", 'Lácteos orgánicos y alternativos.', V, 'Expansión: «Cuadritos busca crecer su negocio de alimentos orgánicos» (8 ene 2018)', 'https://expansion.mx/empresas/2018/01/08/cuadritos-busca-crecer-su-negocio-de-alimentos-organicos', controlador_en='Cuadritos, the Mexican company that owns the Bové, Boulder and Güd milk brands (Expansión, 2018)', nota_en='Organic and alternative dairy.')
 b('loc_bove_lacteos', 'Bové')
 CAT['Bové'] = 'lacteos'
 
