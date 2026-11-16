@@ -1,5 +1,5 @@
 {
- "version": "2026-11-16T0029",
+ "version": "2026-11-16T0107",
  "licencia": "CC BY 4.0",
  "atribucion": "Datos de Project Gina (github.com/ginaproyecto02-lgtm/project-gina)",
  "nota": "Base de la extensión Gina. Confianza: Verificado (fuente consultada con URL), Alta (hecho ampliamente documentado; confirmar en la fuente indicada), Verificar (puede haber cambiado).",
@@ -23693,6 +23693,17 @@
      "resumen": "En abril de 2022 autoridades sanitarias de Bélgica suspendieron la operación de la planta de Arlon tras brote de salmonela en productos Kinder, y la fiscalía abrió una causa penal.",
      "fuente": "Reuters",
      "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/belgian-prosecutors-open-probe-into-ferrero-salmonella-outbreak-2022-04-11/"
+    },
+    {
+     "tema": "consumidor",
+     "titulo": "Acuerdo en demanda colectiva por publicidad de Nutella en EE.UU.",
+     "pais": "EE.UU.",
+     "anio": 2012,
+     "estado": "acuerdo",
+     "monto": "US$3,05 millones",
+     "resumen": "En 2012 Ferrero U.S.A. resolvió una demanda colectiva en California que cuestionaba la publicidad sobre beneficios nutricionales de Nutella. Ferrero acordó un fondo de compensación y cambios de etiquetado sin admitir responsabilidad.",
+     "fuente": "CBS News",
+     "url": "https://www.cbsnews.com/news/nutella-health-claims-net-305-million-settlement/"
     }
    ],
    "positivos": [],

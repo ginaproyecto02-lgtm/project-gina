@@ -1,6 +1,7 @@
 node_modules/
 test/node_modules/
 *.zip
+dist/
 paquete/
 __pycache__/
 *.pyc

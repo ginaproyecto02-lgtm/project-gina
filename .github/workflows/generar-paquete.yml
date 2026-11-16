@@ -123,7 +123,7 @@ jobs:
           node test/ficha.test.js
 
       - name: Validar políticas de extensiones con addons-linter (Firefox AMO)
-        run: npx --yes addons-linter@10.15.0 extension/
+        run: npx --yes addons-linter@10.15.0 dist/gina-firefox-3.3.0.zip
 
       - name: Leer versiones
         id: v
@@ -160,37 +160,25 @@ jobs:
         if: steps.cambios.outputs.real == '0' && steps.pr_merge.outputs.updated != '1'
         run: git checkout -- extension/data
 
-      - name: Crear zip para las tiendas
+      - name: Crear zips para las tiendas
         if: github.event_name != 'pull_request' && (github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v'))
         id: zip
         env:
           # URL de la aplicación web de Apps Script (variable del repositorio, no es secreta: va dentro de la extensión)
           GINA_SUGERENCIAS_URL: ${{ vars.GINA_SUGERENCIAS_URL }}
         run: |
-          if [ -n "$GINA_SUGERENCIAS_URL" ]; then
-            node -e '
-              const fs = require("fs"), f = "extension/data/proyecto.json", u = process.env.GINA_SUGERENCIAS_URL.trim();
-              if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(u)) { console.error("::error::GINA_SUGERENCIAS_URL no es una URL /exec de Apps Script"); process.exit(1); }
-              const p = JSON.parse(fs.readFileSync(f, "utf8")); p.sugerencias_url = u; fs.writeFileSync(f, JSON.stringify(p, null, 1) + "\n");
-              console.log("Sugerencias → " + u);
-            '
-          else
-            echo "::warning::Sin la variable GINA_SUGERENCIAS_URL el paquete no puede enviar sugerencias"
-          fi
-          mkdir -p dist
-          ZIP="gina-extension-${{ steps.v.outputs.version }}.zip"
-          (cd extension && zip -r -X "../dist/$ZIP" . -x "README.md" -x "*.DS_Store")
-          (cd dist && sha256sum "$ZIP" > "$ZIP.sha256" && cat "$ZIP.sha256")
-          echo "zip=dist/$ZIP" >> "$GITHUB_OUTPUT"
+          python3 datagen/empaquetar.py
+          echo "zip_chrome=dist/gina-chrome-edge-${{ steps.v.outputs.version }}.zip" >> "$GITHUB_OUTPUT"
+          echo "zip_firefox=dist/gina-firefox-${{ steps.v.outputs.version }}.zip" >> "$GITHUB_OUTPUT"
 
-      - name: Guardar paquete como artefacto de descarga
-        if: steps.zip.outputs.zip
+      - name: Guardar paquetes como artefactos de descarga
+        if: steps.zip.outputs.zip_chrome
         uses: actions/upload-artifact@v4
         with:
-          name: gina-extension-${{ steps.v.outputs.version }}
+          name: gina-paquetes-${{ steps.v.outputs.version }}
           path: |
-            ${{ steps.zip.outputs.zip }}
-            ${{ steps.zip.outputs.zip }}.sha256
+            dist/*.zip
+            dist/*.zip.sha256
           retention-days: 90
 
       - name: Proponer la base regenerada por PR (nunca push directo a main)
@@ -210,12 +198,14 @@ jobs:
             --title "build: regenerar base ${{ steps.v.outputs.base }}" \
             --body "Base y archivos generados por el flujo «pruebas y paquete» (incluye aprobado_en_pr de evidencias tras fusionar un PR de datos). Revisar y fusionar."
 
-      - name: Crear Release con el zip
+      - name: Crear Release con los zips
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "$GITHUB_REF_NAME" "${{ steps.zip.outputs.zip }}" "${{ steps.zip.outputs.zip }}.sha256" \
+          gh release create "$GITHUB_REF_NAME" \
+            "${{ steps.zip.outputs.zip_chrome }}" "${{ steps.zip.outputs.zip_chrome }}.sha256" \
+            "${{ steps.zip.outputs.zip_firefox }}" "${{ steps.zip.outputs.zip_firefox }}.sha256" \
             --title "Gina ${{ steps.v.outputs.version }}" \
-            --notes "Paquete para Chrome Web Store, Edge Add-ons y Firefox AMO. Base de datos ${{ steps.v.outputs.base }}. Ver PUBLICAR.md."
+            --notes "Paquetes para tiendas: gina-chrome-edge-${{ steps.v.outputs.version }}.zip (Chrome Web Store y Microsoft Edge Add-ons) y gina-firefox-${{ steps.v.outputs.version }}.zip (Firefox AMO). Base de datos ${{ steps.v.outputs.base }}. Ver PUBLICAR.md y store/LISTA_PUBLICACION.md."
 

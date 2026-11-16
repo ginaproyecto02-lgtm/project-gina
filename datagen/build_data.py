@@ -502,7 +502,8 @@ for e in S:
     if pat not in patterns: patterns.append(pat)
 mpath = os.path.join(ROOT, "manifest.json")
 m = json.load(open(mpath, encoding="utf-8"))
-# Nombre y descripción traducibles: inglés por defecto, español para navegadores en español.
+# Nombre y descripción traducibles: inglés por defecto, español para navegadores en español,
+# y traducciones breves (<= 132 caracteres) para el catálogo de tiendas en todos los idiomas soportados.
 MSG = {
   "en": {"name": "Gina: Know Who Your Money Backs", "short": "Gina",
          "desc": "See which company, family, fund or government is behind what you buy, their track record and lobbying. Vote with every dollar.",
@@ -510,6 +511,18 @@ MSG = {
   "es": {"name": "Gina: sabe a quién apoya tu dinero", "short": "Gina",
          "desc": "Descubre qué empresa, familia, fondo o Estado está detrás de lo que compras, su historial y su lobbying. Vota con cada compra.",
          "title": "Gina: ¿a quién apoya tu dinero?"},
+  "de": {"name": "Gina: Erfahre, wen dein Geld unterstützt", "short": "Gina",
+         "desc": "Erfahre, wer hinter deinen Einkäufen steht: Unternehmen, Familien, Fonds, Historie und Lobbying. Stimme mit jedem Einkauf ab.",
+         "title": "Gina: Wen unterstützt dein Geld?"},
+  "fr": {"name": "Gina : Sachez qui votre argent soutient", "short": "Gina",
+         "desc": "Découvrez qui est derrière vos achats : entreprise, famille, fonds ou État, historique et lobbying. Votez à chaque achat.",
+         "title": "Gina : qui votre argent soutient-il ?"},
+  "it": {"name": "Gina: scopri chi sostiene il tuo denaro", "short": "Gina",
+         "desc": "Scopri chi c'è dietro i tuoi acquisti: azienda, famiglia, fondo o Stato, storia e lobbying. Vota con ogni acquisto.",
+         "title": "Gina: chi sostiene il tuo denaro?"},
+  "ja": {"name": "Gina：あなたのお金が支える企業を知る", "short": "Gina",
+         "desc": "購入する商品の背後にある企業、創業家、投資ファンド、国家、さらに過去の不祥事やロビー活動の実態を可视化します。",
+         "title": "Gina：あなたのお金は誰を支えていますか？"},
 }
 for loc, t in MSG.items():
     assert len(t["name"]) <= 45 and len(t["desc"]) <= 132, (loc, len(t["name"]), len(t["desc"]))
@@ -521,7 +534,7 @@ m["default_locale"] = "en"
 m["name"] = "__MSG_extName__"
 m["short_name"] = "__MSG_extShortName__"
 m["description"] = "__MSG_extDescription__"
-m["version"] = "3.2.0"
+m["version"] = "3.3.0"
 m["action"]["default_title"] = "__MSG_actionTitle__"
 # Chrome 121+ usa service_worker; Firefox 121+ usa scripts (página de eventos). Ambos con el mismo archivo.
 # Firefox no tiene importScripts: aquí van TODOS los módulos que background.js carga en Chrome (antes faltaban
@@ -538,10 +551,13 @@ m["browser_specific_settings"] = {"gecko": {
 cs = m["content_scripts"][0]
 cs["matches"] = patterns
 cs["js"] = ["src/matcher.js", "src/reputation.js", "src/alternativas.js", "src/extractors.js", "src/flights.js", "src/i18n.js", "src/card.js", "src/content.js"]
-def verificar_permisos(manifest, permisos):
+def verificar_permisos(manifest, permisos, target="ambos"):
     """Valida bidireccionalmente que todo permiso del manifest esté justificado en store/permisos.json y viceversa."""
     manifest_api = set(manifest.get("permissions", []))
     doc_api = {p["permiso"] for p in permisos.get("permisos_api", [])}
+    if target == "firefox":
+        # offscreen no existe en Firefox WebExtensions
+        doc_api = {p for p in doc_api if p != "offscreen"}
 
     manifest_hosts = set(manifest.get("host_permissions", []))
     doc_hosts = {p["permiso"] for p in permisos.get("host_permissions", [])}
@@ -554,23 +570,23 @@ def verificar_permisos(manifest, permisos):
 
     errores = []
     if manifest_api - doc_api:
-        errores.append(f"Permisos API en manifest sin justificar: {sorted(manifest_api - doc_api)}")
+        errores.append(f"Permisos API en manifest sin justificar ({target}): {sorted(manifest_api - doc_api)}")
     if doc_api - manifest_api:
-        errores.append(f"Permisos API en store/permisos.json inexistentes en manifest: {sorted(doc_api - manifest_api)}")
+        errores.append(f"Permisos API en store/permisos.json inexistentes en manifest ({target}): {sorted(doc_api - manifest_api)}")
     if manifest_hosts - doc_hosts:
-        errores.append(f"Hosts en manifest sin justificar: {sorted(manifest_hosts - doc_hosts)}")
+        errores.append(f"Hosts en manifest sin justificar ({target}): {sorted(manifest_hosts - doc_hosts)}")
     if doc_hosts - manifest_hosts:
-        errores.append(f"Hosts en store/permisos.json inexistentes en manifest: {sorted(doc_hosts - manifest_hosts)}")
+        errores.append(f"Hosts en store/permisos.json inexistentes en manifest ({target}): {sorted(doc_hosts - manifest_hosts)}")
     if manifest_opt - doc_opt:
-        errores.append(f"Hosts opcionales en manifest sin justificar: {sorted(manifest_opt - doc_opt)}")
+        errores.append(f"Hosts opcionales en manifest sin justificar ({target}): {sorted(manifest_opt - doc_opt)}")
     if doc_opt - manifest_opt:
-        errores.append(f"Hosts opcionales en store/permisos.json inexistentes en manifest: {sorted(doc_opt - manifest_opt)}")
+        errores.append(f"Hosts opcionales en store/permisos.json inexistentes en manifest ({target}): {sorted(doc_opt - manifest_opt)}")
     if manifest_matches - doc_matches:
-        errores.append(f"Patrones de tienda en manifest sin justificar ({len(manifest_matches - doc_matches)})")
+        errores.append(f"Patrones de tienda en manifest sin justificar ({target}) ({len(manifest_matches - doc_matches)})")
     if doc_matches - manifest_matches:
-        errores.append(f"Patrones de tienda en store/permisos.json inexistentes en manifest ({len(doc_matches - manifest_matches)})")
+        errores.append(f"Patrones de tienda en store/permisos.json inexistentes en manifest ({target}) ({len(doc_matches - manifest_matches)})")
 
-    assert not errores, "Error de verificación de permisos:\n" + "\n".join(errores)
+    assert not errores, f"Error de verificación de permisos ({target}):\n" + "\n".join(errores)
 
 # H3a: Anti-fingerprinting: no exponer data/*.json en web_accessible_resources
 m.pop("web_accessible_resources", None)
@@ -578,9 +594,95 @@ m.pop("web_accessible_resources", None)
 permisos_path = os.path.join(os.path.dirname(__file__), "..", "store", "permisos.json")
 assert os.path.exists(permisos_path), f"Falta el archivo de permisos: {permisos_path}"
 permisos_doc = json.load(open(permisos_path, encoding="utf-8"))
-verificar_permisos(m, permisos_doc)
 
+# Manifest base para desarrollo y pruebas unificadas
+verificar_permisos(m, permisos_doc, target="ambos")
 json.dump(m, open(mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+# Manifest para Chrome Web Store y Microsoft Edge Add-ons (Chromium MV3)
+# Chrome rechaza background.scripts y browser_specific_settings con advertencias / fallos en revisión
+m_chrome = json.loads(json.dumps(m))
+m_chrome["version"] = "3.3.0"
+m_chrome["background"] = {"service_worker": "src/background.js"}
+m_chrome.pop("browser_specific_settings", None)
+m_chrome["minimum_chrome_version"] = "121"
+verificar_permisos(m_chrome, permisos_doc, target="chromium")
+chrome_mpath = os.path.join(ROOT, "manifest.chrome.json")
+json.dump(m_chrome, open(chrome_mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+# Manifest para Mozilla Firefox Add-ons (Gecko MV3)
+# Firefox exige background.scripts (no service_worker) y no implementa chrome.offscreen
+m_firefox = json.loads(json.dumps(m))
+m_firefox["version"] = "3.3.0"
+m_firefox["background"] = {"scripts": [
+    "src/matcher.js", "src/reputation.js", "src/alternativas.js",
+    "src/i18n.js", "src/semejanza.js", "src/comparador.js",
+    "src/adaptivo.js", "src/ai.js", "src/background.js"
+]}
+m_firefox.pop("minimum_chrome_version", None)
+m_firefox["permissions"] = [p for p in m_firefox.get("permissions", []) if p != "offscreen"]
+m_firefox["browser_specific_settings"] = {
+    "gecko": {
+        "id": "gina@project-gina",
+        "strict_min_version": "140.0",
+        "data_collection_permissions": {"required": ["none"], "optional": ["websiteContent"]}
+    }
+}
+verificar_permisos(m_firefox, permisos_doc, target="firefox")
+firefox_mpath = os.path.join(ROOT, "manifest.firefox.json")
+json.dump(m_firefox, open(firefox_mpath, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+def empaquetar(dist_dir=None, sugerencias_url=None):
+    """Empaqueta los dos artefactos de salida para las tiendas: Chromium y Gecko."""
+    import zipfile, hashlib
+    if dist_dir is None:
+        dist_dir = os.path.join(os.path.dirname(__file__), "..", "dist")
+    os.makedirs(dist_dir, exist_ok=True)
+
+    proj_path = os.path.join(ROOT, "data", "proyecto.json")
+    proj_orig = None
+    if sugerencias_url and os.path.exists(proj_path):
+        proj_orig = open(proj_path, "r", encoding="utf-8").read()
+        pdata = json.loads(proj_orig)
+        pdata["sugerencias_url"] = sugerencias_url
+        with open(proj_path, "w", encoding="utf-8") as f:
+            json.dump(pdata, f, indent=1, ensure_ascii=False)
+            f.write("\n")
+
+    try:
+        chrome_m = json.load(open(os.path.join(ROOT, "manifest.chrome.json"), encoding="utf-8"))
+        firefox_m = json.load(open(os.path.join(ROOT, "manifest.firefox.json"), encoding="utf-8"))
+
+        paquetes = [
+            ("gina-chrome-edge-3.3.0.zip", chrome_m),
+            ("gina-firefox-3.3.0.zip", firefox_m),
+        ]
+
+        generados = []
+        for zip_name, man in paquetes:
+            zip_path = os.path.join(dist_dir, zip_name)
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+                zf.writestr("manifest.json", json.dumps(man, indent=2, ensure_ascii=False))
+                for dirpath, _, filenames in os.walk(ROOT):
+                    for fn in sorted(filenames):
+                        if fn in ("manifest.json", "manifest.chrome.json", "manifest.firefox.json", "README.md") or fn.endswith(".DS_Store"):
+                            continue
+                        full = os.path.join(dirpath, fn)
+                        rel = os.path.relpath(full, ROOT).replace("\\", "/")
+                        zf.write(full, rel)
+            sha = hashlib.sha256(open(zip_path, "rb").read()).hexdigest()
+            sha_file = zip_path + ".sha256"
+            with open(sha_file, "w", encoding="utf-8") as sf:
+                sf.write(f"{sha}  {zip_name}\n")
+            generados.append((zip_path, sha))
+            print(f"Paquete generado: {zip_name} ({os.path.getsize(zip_path)} bytes, SHA256: {sha[:16]}...)")
+        return generados
+    finally:
+        if proj_orig:
+            with open(proj_path, "w", encoding="utf-8") as f:
+                f.write(proj_orig)
+
+empaquetar()
 
 paises = sorted({e["pais"] for e in S})
 print("proyecto:", repo or "(sin repositorio: la base solo se actualiza con nuevas versiones)")

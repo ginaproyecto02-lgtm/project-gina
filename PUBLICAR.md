@@ -1,8 +1,30 @@
 # Cómo publicar Gina (Project Gina)
 
-Guía para publicar la versión 3.2.0 en **Chrome Web Store**, **Microsoft Edge Add-ons** y **Firefox Add-ons**. Un solo paquete sirve para las tres tiendas (el manifest ya es compatible). Los textos para copiar y pegar (en inglés y español) están en `store/ficha-tienda.md` y las imágenes en `store/imagenes/`.
+Guía para publicar la versión **3.3.0** en **Chrome Web Store**, **Microsoft Edge Add-ons** y **Mozilla Firefox Add-ons (AMO)**. 
+A partir de la versión 3.3.0 se generan dos paquetes optimizados para cada motor:
+- `dist/gina-chrome-edge-3.3.0.zip`: manifest Chromium MV3 con `service_worker`.
+- `dist/gina-firefox-3.3.0.zip`: manifest Gecko MV3 con página de eventos (`scripts`) y configuración `browser_specific_settings.gecko`.
 
-Datos revisados el 18 de octubre de 2026. Las tiendas cambian sus reglas: confirma cada punto en el enlace oficial al registrarte.
+Los textos para copiar y pegar (en inglés y español) están en [`store/ficha-tienda.md`](store/ficha-tienda.md) y las imágenes en `store/imagenes/`.
+Para la lista de verificación interactiva paso a paso de publicación por tienda, consulta directamente la sección **[Liberar el MVP](#liberar-el-mvp)** y [`store/LISTA_PUBLICACION.md`](store/LISTA_PUBLICACION.md).
+
+Datos actualizados para la liberación del MVP (noviembre de 2026). Las tiendas cambian sus reglas: confirma cada punto en el enlace oficial al registrarte.
+
+---
+
+## Liberar el MVP
+
+Para realizar el proceso de publicación oficial del Producto Mínimo Viable (MVP) en las tres tiendas de extensiones, sigue la guía detallada de verificación paso a paso:
+
+👉 **[Guía y lista de publicación para tiendas de extensiones (`store/LISTA_PUBLICACION.md`)](store/LISTA_PUBLICACION.md)**
+
+### Resumen de los paquetes de distribución (versión 3.3.0)
+
+| Tienda | Paquete ZIP a subir | Tipo de manifiesto | Notas específicas |
+|---|---|---|---|
+| **Chrome Web Store** | `gina-chrome-edge-3.3.0.zip` | Chromium MV3 (`service_worker`) | Cuota de registro única ($5 USD). Subir en Chrome Developer Dashboard. |
+| **Microsoft Edge Add-ons** | `gina-chrome-edge-3.3.0.zip` | Chromium MV3 (`service_worker`) | Registro gratuito con cuenta Microsoft en Partner Center. |
+| **Mozilla Firefox AMO** | `gina-firefox-3.3.0.zip` | Gecko MV3 (`background.scripts`) | Registro gratuito en AMO Developer Hub. ID fijado: `gina@project-gina`. |
 
 ---
 
@@ -121,9 +143,9 @@ Las tiendas de extensiones (Chrome Web Store, Microsoft Edge Add-ons y Firefox A
 6. Estas son las URLs que deben copiarse en los formularios de publicación de Chrome Web Store, Microsoft Edge Add-ons y Firefox Add-ons (detalladas en `store/ficha-tienda.md`).
 
 ---
-> **Archivo para subir a las tiendas (ojo con los Artifacts de GitHub Actions):**
-> - Si descargas el paquete desde los **Releases** de GitHub (etiqueta `v*`): el archivo `.zip` (`gina-extension-3.2.0.zip`) se sube tal cual.
-> - Si descargas el paquete desde los **Artifacts** del flujo de GitHub Actions: GitHub siempre envuelve los artefactos dentro de otro archivo `.zip` (zip dentro de zip). Las tiendas rechazan ese archivo anidado. **Descomprime una vez el archivo descargado de Artifacts; sube el `gina-extension-X.Y.Z.zip` de adentro.**
+> **Archivos para subir a las tiendas (ojo con los Artifacts de GitHub Actions):**
+> - Si descargas los paquetes desde los **Releases** de GitHub (etiqueta `v*`): los archivos `.zip` (`gina-chrome-edge-3.3.0.zip` y `gina-firefox-3.3.0.zip`) se suben tal cual.
+> - Si descargas el paquete desde los **Artifacts** del flujo de GitHub Actions: GitHub siempre envuelve los artefactos dentro de otro archivo `.zip` (zip dentro de zip). Las tiendas rechazan ese archivo anidado. **Descomprime una vez el archivo descargado de Artifacts; sube el `.zip` correspondiente de adentro.**
 
 ## 1. Chrome Web Store (también cubre Brave, Opera y otros navegadores basados en Chromium)
 
@@ -131,7 +153,7 @@ Las tiendas de extensiones (Chrome Web Store, Microsoft Edge Add-ons y Firefox A
 
 1. Entra en el **Chrome Developer Dashboard** con una cuenta de Google y paga el registro.
 2. Completa la cuenta: nombre del editor (*publisher name*), correo verificado y la declaración de **comerciante o no comerciante**. Si te declaras comerciante (requisito de la Ley de Servicios Digitales de la UE), debes dar dirección, teléfono (verificado por SMS) y nombre legal, y se muestran públicamente en la ficha.
-3. **Nuevo elemento** → sube `gina-extension-3.2.0.zip` (si lo descargaste de GitHub Actions Artifacts, descomprime primero una vez para extraer el zip interno; no subas el zip contenedor).
+3. **Nuevo elemento** → sube `gina-chrome-edge-3.3.0.zip` (si lo descargaste de GitHub Actions Artifacts, descomprime primero una vez para extraer el zip interno; no subas el zip contenedor).
 4. Pestaña **Ficha de la tienda**: descripción larga, categoría *Compras*, idioma, ícono 128, mosaico promocional pequeño 440×280 (obligatorio), marquesina 1400×560 (opcional) y de 1 a 5 capturas de 1280×800.
 5. Pestaña **Prácticas de privacidad**: propósito único, justificación de cada permiso, «no usa código remoto», casilla de *Contenido del sitio web*, las tres certificaciones y la URL de la política (todo en el bloque 5 de `store/ficha-tienda.md`).
 6. Pestaña **Distribución**: gratis; visibilidad *Pública* (o *No listada* para probar con amigos primero); países: todos, o al menos los 17 que cubre.
@@ -143,7 +165,7 @@ Las tiendas de extensiones (Chrome Web Store, Microsoft Edge Add-ons y Firefox A
 
 1. Entra en **Partner Center** con una **cuenta Microsoft personal** (Outlook/Hotmail; no una cuenta del trabajo o la escuela) y regístrate en el programa *Microsoft Edge*.
 2. Elige **Individual** o **Empresa** (no se puede cambiar) y completa los datos de contacto.
-3. **Crear nueva extensión** → sube el mismo zip (`gina-extension-3.2.0.zip`, descomprimido una vez si vino de Artifacts).
+3. **Crear nueva extensión** → sube `gina-chrome-edge-3.3.0.zip` (el mismo paquete optimizado para Chromium; si vino de Artifacts, descomprime una vez).
 4. **Disponibilidad:** pública, en todos los mercados.
 5. **Propiedades:** categoría *Compras*, URL de la política, sitio web y correo de soporte.
 6. **Ficha de la tienda** (por idioma): descripción (de 250 a 10.000 caracteres; la larga cumple), logotipo 300×300 (`logo-300.png`), hasta 6 capturas, mosaico pequeño 440×280 opcional.
@@ -155,10 +177,10 @@ Las tiendas de extensiones (Chrome Web Store, Microsoft Edge Add-ons y Firefox A
 **Costo:** gratis. **Requisito:** Firefox 140 o superior (ya está en el manifest). **Revisión:** automática al subir, más una revisión manual que puede tardar más con permisos amplios.
 
 1. Crea una cuenta en **addons.mozilla.org** → *Developer Hub* → **Submit a New Add-on** → *On this site*.
-2. Sube el mismo zip (`gina-extension-3.2.0.zip`, descomprimido una vez si vino de Artifacts). La validación automática debe dar **0 errores**. Hoy da 0 errores y 14 avisos esperados (`service_worker` no lo usa Firefox; los `innerHTML` pasan por una función de escape).
+2. Sube `gina-firefox-3.3.0.zip` (paquete exclusivo para Firefox con página de eventos en `background.scripts`; descomprime una vez si vino de Artifacts). La validación con `addons-linter` da **0 errores**.
 3. Si pregunta por el código fuente: no hay paso de compilación ni minificación, así que responde que no hace falta.
 4. Completa la ficha (puedes reutilizar los textos), elige la licencia y pega las notas para revisores del bloque 7.
-5. El ID del complemento ya está fijado: `gina-who-your-money-backs@extension`. No lo cambies después de publicar.
+5. El ID del complemento ya está fijado: `gina@project-gina`. No lo cambies después de publicar.
 
 ## 4. Safari (opcional, más adelante)
 
