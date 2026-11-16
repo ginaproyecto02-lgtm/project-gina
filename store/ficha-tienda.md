@@ -99,10 +99,10 @@ Información orientativa basada en fuentes públicas. No es una recomendación d
 | File | Caption |
 |---|---|
 | `captura-1-producto.png` | Prefer local? See co-op and family-owned alternatives for what you buy. |
-| `captura-2-reputacion.png` | A sourced track record (fines, lawsuits, settlements, lobbying) scored with an open formula. |
-| `captura-3-vuelos.png` | On flight searches, see which group controls each airline. |
-| `captura-4-marca-nueva-ia.png` | Optional: connect your own AI key for instant answers on brands not yet in the database. |
-| `captura-5-opciones.png` | Choose what matters to you: environment, labor, privacy, corruption and more. |
+| `captura-2-comparador.png` | In other stores: compare unit prices across stores with explicit permission per store. |
+| `captura-3-reputacion.png` | A sourced track record (fines, lawsuits, settlements, lobbying) scored with an open formula. |
+| `captura-4-sugerir.png` | Suggest missing brands or local alternatives to the community-verified database. |
+| `captura-5-opciones.png` | Choose what matters to you: environment, labor, privacy, corruption and performance diagnostics. |
 
 Store images: `icono-128.png` (icon), `promo-pequeno-440x280.png` (small tile, required on Chrome), `promo-marquesina-1400x560.png` (optional marquee), `logo-300.png` (Edge logo).
 

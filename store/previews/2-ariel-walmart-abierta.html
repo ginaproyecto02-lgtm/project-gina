@@ -71,6 +71,19 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
   .badge-rel.official { background: #e1ebfa; color: #143c73; }
   .badge-rel.verified { background: #e1ebfa; color: #143c73; }
   .badge-rel.check { background: #fbe3c4; color: #6e3500; }
+  .badge-rel.official-notice { background: #fdf1e2; color: #5c2e00; border: 1px solid #f4d4a8; }
+
+  /* Avisos del producto */
+  .prod-notices { margin-top: 10px; margin-bottom: 6px; }
+  .notice-box { border-radius: 7px; padding: 7px 9px; margin-top: 5px; font-size: 11.5px; line-height: 1.35; }
+  .notice-box.notice-official { background: #fdf1e2; color: #5c2e00; border: 1px solid #f4d4a8; }
+  .notice-box.notice-official.notice-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+  .notice-box.notice-official.notice-warn { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .notice-box.notice-info { background: #f4f6fa; color: #2d3748; border: 1px solid #e2e8f0; }
+  .notice-text { font-weight: 600; }
+  .notice-src { font-size: 10.5px; margin-top: 2px; opacity: 0.9; }
+  .notice-src a { color: inherit; text-decoration: underline; }
+  .notices-footer { font-size: 10px; color: #718096; margin-top: 5px; font-style: italic; line-height: 1.3; }
 
   /* Open Content: 42px indentation */
   .sec-content { padding: 10px 14px 14px 42px; background: #fafbfc; border-top: 1px solid #f0f2f7; }
@@ -99,6 +112,45 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
   .store-box { margin-top: 8px; padding: 7px 9px; border-radius: 7px; background: #f2f5fb; font-size: 11.5px; }
   .tip-box { font-size: 11.5px; color: #4a5468; background: #f2f5f9; border-radius: 7px; padding: 7px 9px; margin-top: 8px; line-height: 1.35; }
   .method { font-size: 10.5px; color: #7a8396; margin-top: 6px; line-height: 1.3; }
+
+  /* Price & Comparison */
+  .price-panel { margin-bottom: 10px; padding: 9px 11px; background: #f8fafd; border: 1px solid #e1e7f0; border-radius: 8px; }
+  .price-main { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .price-current { font-size: 16px; font-weight: 750; color: #1c2233; }
+  .price-cur-lbl { font-size: 10px; font-weight: 600; color: #5f687a; text-transform: uppercase; letter-spacing: .4px; }
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e6eaf2; }
+  .price-cell { text-align: center; background: #fff; padding: 5px 4px; border-radius: 6px; border: 1px solid #e8ecf3; }
+  .price-cell-title { font-size: 10px; color: #6a7386; font-weight: 600; text-transform: uppercase; }
+  .price-cell-val { font-size: 11px; font-weight: 700; margin-top: 2px; }
+  .price-up { color: #8a1f14; font-weight: 600; }
+  .price-down { color: #1f5f19; font-weight: 600; }
+  .price-neutral { color: #55627a; font-weight: 600; }
+  .price-hist-init { font-size: 11px; color: #64748b; margin-top: 6px; text-align: center; }
+  .price-msi { display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; color: #1f4e8c; margin-top: 6px; }
+
+  /* Cross platform options */
+  .cross-plat-box { margin-top: 10px; padding: 8px 10px; background: #fff; border: 1px solid #e6e9f0; border-radius: 8px; }
+  .cross-plat-item { display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; padding: 5px 0; border-bottom: 1px dashed #edf0f5; }
+  .cross-plat-item:last-child { border-bottom: none; }
+  .cross-plat-name { font-weight: 600; color: #1c2233; }
+  .cross-plat-link { color: #1f6fb2; text-decoration: none; font-weight: 600; font-size: 11px; flex: none; margin-left: 6px; }
+  .cross-plat-link:hover { text-decoration: underline; }
+  .cross-plat-comp { font-size: 10.5px; margin-top: 1px; color: #535d70; }
+
+  /* Free Trackers */
+  .trackers-box { margin-top: 10px; padding: 8px 10px; background: #f2f5fb; border: 1px solid #dce4f2; border-radius: 8px; }
+  .trackers-title { font-size: 10.5px; font-weight: 700; color: #143c73; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+  .tracker-item { font-size: 11.5px; margin-top: 4px; line-height: 1.35; }
+  .tracker-link { font-weight: 600; color: #1f6fb2; text-decoration: none; }
+  .tracker-link:hover { text-decoration: underline; }
+  .tracker-desc { font-size: 10.5px; color: #5f687a; }
+
+  /* Alternatives Badges & Store Anchoring */
+  .alt-badge { display: inline-block; font-size: 9.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; }
+  .alt-badge.local { background: #e2f0d9; color: #235017; }
+  .alt-badge.propia { background: #e0f2fe; color: #0369a1; }
+  .alt-badge.discount { background: #fef3c7; color: #92400e; }
+  .alt-disp { font-size: 10.5px; color: #475569; margin-top: 3px; }
 
   /* Reputación */
   .rep { margin-top: 8px; border: 1px solid #e6e9f0; border-radius: 8px; padding: 8px 9px; background: #fff; }
@@ -169,6 +221,7 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
         <div class="sec-content" id="sec-rel-body" hidden="">
           
       
+      
       <div class="d-row">
         <div class="d-k">VENDEDOR</div>
         <div class="d-v">Walmart</div>
@@ -189,6 +242,7 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
         <div class="d-src">Según la página</div>
       </div>
     
+      
       
       
       <div class="d-row">
@@ -226,39 +280,52 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
             <span class="sec-title-row">
               <span class="sec-title">Mercado y alternativas</span>
             </span>
-            <span class="sec-summary">1 alternativas locales</span>
+            <span class="sec-summary">1 alternativa local</span>
           </span>
           <span class="sec-arr-wrap"><svg class="sec-arr" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(180deg);"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
         </button>
         <div class="sec-content" id="sec-mkt-body">
           
       
-        <div class="d-k">🌱 Alternativas de limpieza del hogar con dueño local en México</div>
+      
+      <div class="cross-plat-box" id="card-compare-container" style="margin-top:10px;padding-top:8px;border-top:1px solid #e2e8f0;">
+        <div class="d-k" style="margin-bottom:4px;">EN OTRAS TIENDAS</div>
+        
+        <div style="font-size:11.5px;color:#64748b;margin:6px 0;">Consulta el precio en tiendas locales directamente aquí, sin cookies ni salir de la página.</div>
+        <button type="button" class="btn-sug" id="card-compare-consent-btn" style="margin-top:2px;">Ver este producto en otras tiendas</button>
+      
+      </div>
+    
+      
+      
+        <div class="d-k">1 alternativa local de limpieza del hogar con dueño local en México</div>
         
           <div class="alt-box">
-            <b>Zote, Roma, Blanca Nieves</b>
+            <div><b>Zote, Roma, Blanca Nieves</b> <span class="alt-badge local">Local / Independiente</span></div>
             <div style="font-size:11.5px;color:#334155;margin-top:2px;">
               <b>Fábrica de Jabón La Corona, S.A. de C.V.</b> · Empresa familiar · capital mexicano
                · Detergentes y jabones (Zote, Roma, Blanca Nieves, Foca). Control familiar actual inferido de la fuente (no hay cifras accionarias).
               
                · <a href="https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/" target="_blank" rel="noopener noreferrer">fuente</a>
             </div>
-            <div class="d-src">Dato oficial: Registro público</div>
+            
+            <div class="d-src">Fuente: EL CEO</div>
           </div>
         
       
       
+      
         <div class="d-row" style="margin-top:10px;">
-          <div class="d-k">QUIÉN DOMINA ESTA CATEGORÍA</div>
-          <div class="d-v" style="font-weight:normal;line-height:1.45;"><div style="margin-bottom:4px;"><b>Ariel</b> · Procter &amp; Gamble <span style="color:#5f687a;font-size:11px;">(Fondos dispersos · EE.UU.)</span> · <small><a href="https://www.pginvestor.com/financial-reporting/sec-filings/default.aspx" target="_blank" rel="noopener noreferrer">Informe 10-K de P&amp;G (SEC)</a></small></div><div style="margin-bottom:4px;"><b>Tide</b> · Procter &amp; Gamble <span style="color:#5f687a;font-size:11px;">(Fondos dispersos · EE.UU.)</span> · <small><a href="https://www.pginvestor.com/financial-reporting/sec-filings/default.aspx" target="_blank" rel="noopener noreferrer">Informe 10-K de P&amp;G (SEC)</a></small></div><div style="margin-bottom:4px;"><b>Downy</b> · Procter &amp; Gamble <span style="color:#5f687a;font-size:11px;">(Fondos dispersos · EE.UU.)</span> · <small><a href="https://www.pginvestor.com/financial-reporting/sec-filings/default.aspx" target="_blank" rel="noopener noreferrer">Informe 10-K de P&amp;G (SEC)</a></small></div><div style="margin-bottom:4px;"><b>Ace</b> · Procter &amp; Gamble <span style="color:#5f687a;font-size:11px;">(Fondos dispersos · EE.UU.)</span> · <small><a href="https://www.pginvestor.com/financial-reporting/sec-filings/default.aspx" target="_blank" rel="noopener noreferrer">Informe 10-K de P&amp;G (SEC)</a></small></div></div>
-          <div class="d-src">Dato oficial: Registros corporativos públicos</div>
+          <div class="d-k">OTRAS MARCAS DE ESTE TIPO EN LA BASE</div>
+          <div class="d-v" style="font-weight:normal;line-height:1.45;"><div style="margin-bottom:4px;"><b></b> · Fábrica de Jabón La Corona, S.A. de C.V. <span style="color:#5f687a;font-size:11px;">(Familia · México)</span> · <small><a href="https://elceo.com/negocios/zote-como-surgio-y-quien-es-el-dueno-de-la-marca-de-jabon/" target="_blank" rel="noopener noreferrer">El CEO: Zote, cómo surgió y quién es el dueño</a></small></div><div style="margin-bottom:4px;"><b></b> · Colgate-Palmolive <span style="color:#5f687a;font-size:11px;">(Fondos dispersos · EE.UU.)</span> · <small><a href="https://investor.colgatepalmolive.com/financial-information/sec-filings" target="_blank" rel="noopener noreferrer">Informe 10-K de Colgate-Palmolive (SEC)</a></small></div></div>
+
         </div>
       
       
         <div class="d-row" style="margin-top:10px;">
           <div class="d-k">OTRAS MARCAS DEL MISMO DUEÑO</div>
           <div class="d-v">Procter &amp; Gamble, Tide, Pampers, Gillette, Head &amp; Shoulders, Pantene</div>
-          <div class="d-src">Dato oficial: Informe 10-K de P&amp;G (SEC)</div>
+          <div class="d-src">Fuente: pginvestor.com</div>
         </div>
       
       <div class="tip-box">💡 Compara precio y contenido en la tienda: Gina no compara precios.</div>
@@ -285,7 +352,7 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
       <div class="d-row">
         <div class="d-k">QUIÉN LA CONTROLA</div>
         <div class="d-v">Sin accionista de control<div class="chips"><span class="chip">🌎 EE.UU.</span><span class="chip">Fondos dispersos</span><span class="chip alta">Confianza alta</span></div></div>
-        <div class="d-src">Dato oficial: Informe 10-K de P&amp;G (SEC)</div>
+        <div class="d-src">Fuente: pginvestor.com</div>
       </div>
     
       
@@ -308,7 +375,7 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
       <a href="https://ec.europa.eu/commission/presscorner/detail/en/IP_11_469" target="_blank" rel="noopener noreferrer"><small>Comisión Europea</small></a></span></div><details class="more"><summary>Ver todos los hechos, lobbying y donaciones políticas y método</summary>
       <div class="ev"><span class="ic" title="Seguridad y salud">🩺</span><span class="tx">Retiro voluntario de antitranspirantes Old Spice y Secret por benceno
       <span class="st acuerdo">Acuerdo</span> <small>2021 · EE.UU.</small>
-      <div class="d-src">P&amp;G retiró voluntariamente lotes de antitranspirantes en aerosol tras detectar trazas de benceno en el propulsor y resolvió demandas colectivas.</div>
+      <div class="d-src">P&amp;G retiró voluntariamente lotes de antitranspirantes en aerosol tras detectar trazas de benceno en el propulsor y resolvió demandas colectivas. Las demandas se resolvieron sin admitir responsabilidad.</div>
       <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/pg-issues-voluntary-recall-specific-old-spice-and-secret-aerosol-spray-antiperspirants-and-old-spice" target="_blank" rel="noopener noreferrer"><small>FDA</small></a></span></div><div class="ev"><span class="ic" title="Competencia">🏛️</span><span class="tx">Multa de la Comisión Europea por cartel en detergentes para ropa
       <span class="st multa">Multa</span> <small>2011 · UE · €211,2 millones</small>
       <div class="d-src">La Comisión Europea multó con 211,2 millones de euros a P&amp;G por acordar precios de detergente en polvo en ocho países europeos.</div>
@@ -325,17 +392,17 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
       <span class="st acuerdo">Acuerdo</span> <small>2023 · EE.UU. · US$2,5 millones</small>
       
       <a href="https://www.sec.gov/news/press-release/2023-226" target="_blank" rel="noopener noreferrer"><small>SEC</small></a></span></div><div class="ev"><span class="ic" title="Competencia">🏛️</span><span class="tx">Demanda antimonopolio de estados de EE.UU. por el mercado del carbón
-      <span class="st litigio">Juicio en curso</span> <small>2024 · EE.UU.</small>
+      <span class="st demanda">demanda</span> <small>2024 · EE.UU.</small>
       
       <a href="https://www.esgdive.com/news/blackrock-vanguard-state-street-motion-to-dismiss-coal-antitrust-case-denied-texas-ag/757336/" target="_blank" rel="noopener noreferrer"><small>ESG Dive</small></a></span></div><details class="more"><summary>Ver todos los hechos, lobbying y donaciones políticas y método</summary>
       <div class="ev"><span class="ic" title="Trato al consumidor">🛒</span><span class="tx">Acuerdo con el fiscal general de Tennessee sobre prácticas ESG
       <span class="st acuerdo">Acuerdo</span> <small>2025 · EE.UU.</small>
-      <div class="d-src">Tennessee demandó a BlackRock bajo su ley de protección al consumidor por sus comunicaciones sobre ESG. En enero de 2025 se resolvió con un acuerdo de mayor transparencia en votaciones y controles de cumplimiento, sin que el comunicado indique admisión de responsabilidad; la demanda se desestimó sin perjuicio.</div>
+      <div class="d-src">Tennessee demandó a BlackRock bajo su ley de protección al consumidor por sus comunicaciones sobre ESG. En enero de 2025 se resolvió con un acuerdo de mayor transparencia en votaciones y controles de cumplimiento, sin que el comunicado indique admisión de responsabilidad; la demanda se desestimó sin perjuicio. El acuerdo se alcanzó sin admitir responsabilidad.</div>
       <a href="https://www.tn.gov/attorneygeneral/news/2025/1/17/pr25-3.html" target="_blank" rel="noopener noreferrer"><small>Fiscalía General de Tennessee</small></a></span></div><div class="ev"><span class="ic" title="Gobierno corporativo">📊</span><span class="tx">SEC: información engañosa sobre inversiones de un fondo cotizado
       <span class="st acuerdo">Acuerdo</span> <small>2023 · EE.UU. · US$2,5 millones</small>
       <div class="d-src">La SEC acusó a BlackRock Advisors de describir de forma inexacta inversiones de un fondo que asesoraba. BlackRock aceptó pagar una sanción civil de US$2,5 millones sin admitir ni negar los hallazgos.</div>
       <a href="https://www.sec.gov/news/press-release/2023-226" target="_blank" rel="noopener noreferrer"><small>SEC</small></a></span></div><div class="ev"><span class="ic" title="Competencia">🏛️</span><span class="tx">Demanda antimonopolio de estados de EE.UU. por el mercado del carbón
-      <span class="st litigio">Juicio en curso</span> <small>2024 · EE.UU.</small>
+      <span class="st demanda">demanda</span> <small>2024 · EE.UU.</small>
       <div class="d-src">Texas y otros estados demandaron en diciembre de 2024 a BlackRock, Vanguard y State Street alegando que usaron sus participaciones y compromisos climáticos para reducir la producción de carbón. En agosto de 2025 un juez federal rechazó en lo sustancial la moción de desestimación; BlackRock niega las acusaciones y el caso seguía abierto a la fecha de la fuente (agosto de 2025).</div>
       <a href="https://www.esgdive.com/news/blackrock-vanguard-state-street-motion-to-dismiss-coal-antitrust-case-denied-texas-ag/757336/" target="_blank" rel="noopener noreferrer"><small>ESG Dive</small></a></span></div><div class="ev"><span class="ic" title="Gobierno corporativo">📊</span><span class="tx">SEC: no revelar un conflicto de interés de un gestor
       <span class="st acuerdo">Acuerdo</span> <small>2015 · EE.UU. · US$12 millones</small>
@@ -350,7 +417,7 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
       <span class="st acuerdo">Acuerdo</span> <small>2025 · EE.UU. · US$106,41 millones</small>
       
       <a href="https://sec.gov/newsroom/press-releases/2025-21" target="_blank" rel="noopener noreferrer"><small>SEC</small></a></span></div><div class="ev"><span class="ic" title="Medio ambiente">🌱</span><span class="tx">Australia: multa récord por greenwashing en un fondo «ético»
-      <span class="st condena">Condena</span> <small>2024 · Australia · A$12,9 millones</small>
+      <span class="st sentencia">sentencia</span> <small>2024 · Australia · A$12,9 millones</small>
       
       <a href="https://asic.gov.au/about-asic/news-centre/find-a-media-release/2024-releases/24-213mr-asic-s-vanguard-greenwashing-action-results-in-record-12-9-million-penalty" target="_blank" rel="noopener noreferrer"><small>ASIC</small></a></span></div><div class="ev"><span class="ic" title="Competencia">🏛️</span><span class="tx">Acuerdo en la demanda antimonopolio de estados por el carbón
       <span class="st acuerdo">Acuerdo</span> <small>2026 · EE.UU. · US$29,5 millones</small>
@@ -360,7 +427,7 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
       <span class="st acuerdo">Acuerdo</span> <small>2025 · EE.UU. · US$106,41 millones</small>
       <div class="d-src">La SEC concluyó que los folletos de sus fondos Target Retirement omitieron el riesgo de grandes distribuciones de plusvalías que afectaron fiscalmente a inversores minoristas. Vanguard pagó US$106,41 millones (SEC y reguladores estatales) sin admitir ni negar los hallazgos; aparte acordó US$40 millones en una demanda colectiva.</div>
       <a href="https://sec.gov/newsroom/press-releases/2025-21" target="_blank" rel="noopener noreferrer"><small>SEC</small></a></span></div><div class="ev"><span class="ic" title="Medio ambiente">🌱</span><span class="tx">Australia: multa récord por greenwashing en un fondo «ético»
-      <span class="st condena">Condena</span> <small>2024 · Australia · A$12,9 millones</small>
+      <span class="st sentencia">sentencia</span> <small>2024 · Australia · A$12,9 millones</small>
       <div class="d-src">A demanda de ASIC, el Tribunal Federal impuso a Vanguard Investments Australia una sanción civil de A$12,9 millones. La filial admitió haber engañado a inversores sobre los filtros ESG de un fondo de bonos.</div>
       <a href="https://asic.gov.au/about-asic/news-centre/find-a-media-release/2024-releases/24-213mr-asic-s-vanguard-greenwashing-action-results-in-record-12-9-million-penalty" target="_blank" rel="noopener noreferrer"><small>ASIC</small></a></span></div><div class="ev"><span class="ic" title="Competencia">🏛️</span><span class="tx">Acuerdo en la demanda antimonopolio de estados por el carbón
       <span class="st acuerdo">Acuerdo</span> <small>2026 · EE.UU. · US$29,5 millones</small>
