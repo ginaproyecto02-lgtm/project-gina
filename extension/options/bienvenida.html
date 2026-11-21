@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="welcome_page_title">Gina — Bienvenida y configuración inicial</title>
+<link rel="stylesheet" href="options.css">
+<link rel="stylesheet" href="bienvenida.css">
+</head>
+<body>
+<header>
+  <img class="logo" src="../icons/icon48.png" alt="" width="36" height="36">
+  <div style="flex:1">
+    <div class="header-top">
+      <h1 data-i18n="welcome_header_title">Te damos la bienvenida a Gina</h1>
+      <div class="lang-wrap">
+        <label for="lang_select" class="lang-lbl" data-i18n="opt_language">Idioma</label>
+        <select id="lang_select" class="lang-select">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="it">Italiano</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+    </div>
+    <p data-i18n="welcome_header_subtitle">Tu copiloto ético y de bolsillo para saber a quién va tu dinero y cuidar tu economía.</p>
+  </div>
+</header>
+
+<main>
+  <!-- Paso 1: País y Moneda -->
+  <section class="card" id="step1">
+    <h2><span data-i18n="welcome_step1_title">Tu país y moneda de compra</span> <span class="tag" data-i18n="welcome_step1_badge">Paso 1 de 3</span></h2>
+    <p class="help" data-i18n="welcome_step1_desc">Gina adapta las tiendas, alternativas locales y precios según donde compras.</p>
+    <div class="grid">
+      <label class="wide">
+        <span data-i18n="welcome_country_label">País principal</span>
+        <select id="country_select">
+          <option value="México" selected>México (MXN $)</option>
+          <option value="EE.UU.">Estados Unidos (USD $)</option>
+          <option value="España">España (EUR €)</option>
+          <option value="Colombia">Colombia (COP $)</option>
+          <option value="Argentina">Argentina (ARS $)</option>
+          <option value="Chile">Chile (CLP $)</option>
+          <option value="Brasil">Brasil (BRL R$)</option>
+          <option value="Reino Unido">United Kingdom (GBP £)</option>
+          <option value="Alemania">Deutschland (EUR €)</option>
+          <option value="Francia">France (EUR €)</option>
+          <option value="Italia">Italia (EUR €)</option>
+          <option value="Japón">日本 (JPY ¥)</option>
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <!-- Paso 2: Valores prioritarios y perfil -->
+  <section class="card" id="step2">
+    <h2><span data-i18n="welcome_step2_title">Tus valores y perfil de compra</span> <span class="tag" data-i18n="welcome_step2_badge">Paso 2 de 3</span></h2>
+    <p class="help" data-i18n="welcome_step2_desc">Elige qué te importa más para priorizar la información que ves al comprar.</p>
+    
+    <div class="grid" id="onboarding_values">
+      <label>
+        <span data-i18n="welcome_val_env">🌱 Medio ambiente</span>
+        <select id="val_ambiental">
+          <option value="0" data-i18n="opt_val_0">No me importa</option>
+          <option value="1" data-i18n="opt_val_1" selected>Normal</option>
+          <option value="2" data-i18n="opt_val_2">Muy importante</option>
+        </select>
+      </label>
+      <label>
+        <span data-i18n="welcome_val_labor">👷 Condiciones laborales</span>
+        <select id="val_laboral">
+          <option value="0" data-i18n="opt_val_0">No me importa</option>
+          <option value="1" data-i18n="opt_val_1" selected>Normal</option>
+          <option value="2" data-i18n="opt_val_2">Muy importante</option>
+        </select>
+      </label>
+      <label class="row" style="margin-top:6px;">
+        <input type="checkbox" id="showAlternatives" checked>
+        <span data-i18n="welcome_val_local">🤝 Consumo local (cooperativas y familiares)</span>
+      </label>
+      <label class="row" style="margin-top:6px;">
+        <input type="checkbox" id="compareEnabled" checked>
+        <span data-i18n="welcome_val_price">🛒 Bolsillo y ahorro (comparar y precio objetivo)</span>
+      </label>
+    </div>
+
+    <h3 data-i18n="welcome_profile_label" style="margin-top:16px;">Perfil de compra preferido</h3>
+    <div class="profile-options">
+      <label class="profile-opt">
+        <input type="radio" name="userProfile" value="consciente" checked>
+        <div class="profile-body">
+          <div class="profile-title" data-i18n="prof_opt_conscious">Consumidor consciente</div>
+          <div class="profile-desc" data-i18n="prof_desc_conscious">Abre primero «¿A quién le compras?» (controlador, tipo de dueño, país del capital y reputación pública).</div>
+        </div>
+      </label>
+      <label class="profile-opt">
+        <input type="radio" name="userProfile" value="ahorrador">
+        <div class="profile-body">
+          <div class="profile-title" data-i18n="prof_opt_saver">Consumidor ahorrador</div>
+          <div class="profile-desc" data-i18n="prof_desc_saver">Abre primero «Mercado y alternativas» (marcas del mismo grupo y alternativas con dueño local o línea económica).</div>
+        </div>
+      </label>
+      <label class="profile-opt">
+        <input type="radio" name="userProfile" value="inteligente">
+        <div class="profile-body">
+          <div class="profile-title" data-i18n="prof_opt_smart">Consumidor inteligente</div>
+          <div class="profile-desc" data-i18n="prof_desc_smart">Abre primero «Confiabilidad de compra» (vendedor directo o externo, garantías legales y normas aplicables).</div>
+        </div>
+      </label>
+      <label class="profile-opt">
+        <input type="radio" name="userProfile" value="ninguno">
+        <div class="profile-body">
+          <div class="profile-title" data-i18n="prof_opt_none">Ninguno (por defecto)</div>
+          <div class="profile-desc" data-i18n="prof_desc_none">La tarjeta empieza cerrada y compacta. Tú decides qué sección abrir cuando te interese.</div>
+        </div>
+      </label>
+    </div>
+  </section>
+
+  <!-- Paso 3: Cómo leer la tarjeta -->
+  <section class="card" id="step3">
+    <h2><span data-i18n="welcome_step3_title">¿Cómo leer la tarjeta de Gina?</span> <span class="tag" data-i18n="welcome_step3_badge">Paso 3 de 3</span></h2>
+    <p class="help" data-i18n="welcome_step3_desc">Al navegar en una tienda, Gina despliega una tarjeta discreta con 3 secciones plegables.</p>
+
+    <div class="card-preview-box">
+      <div class="card-preview-sec">
+        <div class="preview-sec-hdr">
+          <span class="preview-num">1</span>
+          <span class="preview-title" data-i18n="welcome_card_sec1_title">1. Confiabilidad y garantías</span>
+        </div>
+        <p class="preview-desc" data-i18n="welcome_card_sec1_desc">Revisa si el vendedor es directo o tercero, garantías legales, devoluciones y estudios de calidad oficiales.</p>
+      </div>
+
+      <div class="card-preview-sec">
+        <div class="preview-sec-hdr">
+          <span class="preview-num">2</span>
+          <span class="preview-title" data-i18n="welcome_card_sec2_title">2. Mercado, bolsillo y alternativas</span>
+        </div>
+        <p class="preview-desc" data-i18n="welcome_card_sec2_desc">Precio por unidad de medida (kg, L, 100 g, pza), historial, comparador de precios en otras tiendas y opciones locales.</p>
+      </div>
+
+      <div class="card-preview-sec">
+        <div class="preview-sec-hdr">
+          <span class="preview-num">3</span>
+          <span class="preview-title" data-i18n="welcome_card_sec3_title">3. ¿A quién le compras y reputación?</span>
+        </div>
+        <p class="preview-desc" data-i18n="welcome_card_sec3_desc">Controlador final (familia, fondo, Estado), país del capital, grandes fondos y registro público de sanciones o multas.</p>
+      </div>
+    </div>
+
+    <div class="welcome-actions">
+      <button type="button" id="btnFinish" class="btn primary" data-i18n="welcome_btn_finish">¡Comenzar a comprar con Gina!</button>
+      <div id="welcomeNotice" class="privacy" style="display:none;" role="status">
+        <span data-i18n="welcome_saved_notice">Preferencias guardadas localmente en tu navegador. Puedes cambiarlas en cualquier momento en Opciones.</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../src/reputation.js"></script>
+<script src="../src/i18n.js"></script>
+<script src="bienvenida.js"></script>
+</body>
+</html>

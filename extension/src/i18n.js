@@ -3184,6 +3184,338 @@
       fr: "Contrôlée par un trust ou une fondation pérenne.",
       it: "Controllata da un trust o fondazione con scopo definito.",
       ja: "信託・財団支配（公益・長期目的）。"
+    },
+
+    // Onboarding (bienvenida)
+    welcome_page_title: {
+      es: "Gina — Bienvenida y configuración inicial",
+      en: "Gina — Welcome and quick setup",
+      de: "Gina — Willkommen und Schnelleinrichtung",
+      fr: "Gina — Bienvenue et configuration rapide",
+      it: "Gina — Benvenuto e configurazione rapida",
+      ja: "Gina — ようこそ＆初期設定"
+    },
+    welcome_header_title: {
+      es: "Te damos la bienvenida a Gina",
+      en: "Welcome to Gina",
+      de: "Willkommen bei Gina",
+      fr: "Bienvenue sur Gina",
+      it: "Ti diamo il benvenuto su Gina",
+      ja: "Ginaへようこそ"
+    },
+    welcome_header_subtitle: {
+      es: "Tu copiloto ético y de bolsillo para saber a quién va tu dinero y cuidar tu economía.",
+      en: "Your ethical and wallet copilot to know where your money goes and protect your budget.",
+      de: "Dein ethischer Einkaufsbegleiter: wisse, wohin dein Geld fließt, und schütze dein Budget.",
+      fr: "Votre copilote éthique et d'achat pour savoir où va votre argent et préserver votre budget.",
+      it: "Il tuo copilota etico e per il risparmio per sapere dove va il tuo denaro e proteggere il tuo portafoglio.",
+      ja: "お金がどこへ渡るかを知り、家計を守るエシカル＆節約コパイロット。"
+    },
+    welcome_step1_badge: {
+      es: "Paso 1 de 3",
+      en: "Step 1 of 3",
+      de: "Schritt 1 von 3",
+      fr: "Étape 1 sur 3",
+      it: "Passo 1 di 3",
+      ja: "ステップ 1 / 3"
+    },
+    welcome_step1_title: {
+      es: "Tu país y moneda de compra",
+      en: "Your country and shopping currency",
+      de: "Dein Einkaufsland und Währung",
+      fr: "Votre pays et devise d'achat",
+      it: "Il tuo paese e valuta di acquisto",
+      ja: "お買い物の国と通貨"
+    },
+    welcome_step1_desc: {
+      es: "Gina adapta las tiendas, alternativas locales y precios según donde compras.",
+      en: "Gina adapts stores, local alternatives, and prices according to where you shop.",
+      de: "Gina passt Geschäfte, lokale Alternativen und Preise an deinen Einkaufsort an.",
+      fr: "Gina adapte les magasins, alternatives locales et prix selon votre lieu d'achat.",
+      it: "Gina adatta negozi, alternative locali e prezzi in base a dove acquisti.",
+      ja: "Ginaはお買い物の場所に合わせて店舗、地元の代替品、価格を最適化します。"
+    },
+    welcome_country_label: {
+      es: "País principal",
+      en: "Main country",
+      de: "Hauptland",
+      fr: "Pays principal",
+      it: "Paese principale",
+      ja: "主要な国"
+    },
+    welcome_step2_badge: {
+      es: "Paso 2 de 3",
+      en: "Step 2 of 3",
+      de: "Schritt 2 von 3",
+      fr: "Étape 2 sur 3",
+      it: "Passo 2 di 3",
+      ja: "ステップ 2 / 3"
+    },
+    welcome_step2_title: {
+      es: "Tus valores y perfil de compra",
+      en: "Your values and shopping profile",
+      de: "Deine Werte und Einkaufsprofil",
+      fr: "Vos valeurs et profil d'achat",
+      it: "I tuoi valori e profilo di acquisto",
+      ja: "お買い物の価値観とプロフィール"
+    },
+    welcome_step2_desc: {
+      es: "Elige qué te importa más para priorizar la información que ves al comprar.",
+      en: "Choose what matters most to you to prioritize the information you see when shopping.",
+      de: "Wähle, was dir am wichtigsten ist, um die angezeigten Einkaufsinfos zu priorisieren.",
+      fr: "Choisissez ce qui compte le plus pour hiérarchiser les informations lors de vos achats.",
+      it: "Scegli cosa conta di più per dare priorità alle informazioni che vedi cuando acquisti.",
+      ja: "お買い物時に優先して確認したい関心事項を選択してください。"
+    },
+    welcome_val_env: {
+      es: "Medio ambiente",
+      en: "Environment",
+      de: "Umwelt",
+      fr: "Environnement",
+      it: "Ambiente",
+      ja: "環境"
+    },
+    welcome_val_labor: {
+      es: "Condiciones laborales",
+      en: "Labor conditions",
+      de: "Arbeitsbedingungen",
+      fr: "Conditions de travail",
+      it: "Condizioni di lavoro",
+      ja: "労働環境"
+    },
+    welcome_val_local: {
+      es: "Consumo local (cooperativas y familiares)",
+      en: "Local consumption (cooperatives and family-owned)",
+      de: "Lokaler Konsum (Genossenschaften und Familienbetriebe)",
+      fr: "Consommation locale (coopératives et entreprises familiales)",
+      it: "Consumo locale (cooperative e imprese familiari)",
+      ja: "地域貢献（協同組合・家族経営）"
+    },
+    welcome_val_price: {
+      es: "Bolsillo y ahorro (comparar y precio objetivo)",
+      en: "Wallet and savings (compare and target price)",
+      de: "Budget und Sparen (Vergleich und Zielpreis)",
+      fr: "Portefeuille et économies (comparateur et prix cible)",
+      it: "Portafoglio e risparmio (confronto e prezzo obiettivo)",
+      ja: "節約とお財布（他店比較と目標価格）"
+    },
+    welcome_profile_label: {
+      es: "Perfil de compra preferido",
+      en: "Preferred shopping profile",
+      de: "Bevorzugtes Einkaufsprofil",
+      fr: "Profil d'achat préféré",
+      it: "Profilo di acquisto preferito",
+      ja: "おすすめの買い物プロフィール"
+    },
+    welcome_step3_badge: {
+      es: "Paso 3 de 3",
+      en: "Step 3 of 3",
+      de: "Schritt 3 von 3",
+      fr: "Étape 3 sur 3",
+      it: "Passo 3 di 3",
+      ja: "ステップ 3 / 3"
+    },
+    welcome_step3_title: {
+      es: "¿Cómo leer la tarjeta de Gina?",
+      en: "How to read the Gina card?",
+      de: "Wie liest man die Gina-Karte?",
+      fr: "Comment lire la carte Gina ?",
+      it: "Come leggere la scheda Gina?",
+      ja: "Ginaカードの見方"
+    },
+    welcome_step3_desc: {
+      es: "Al navegar en una tienda, Gina despliega una tarjeta discreta con 3 secciones plegables.",
+      en: "When browsing a store, Gina displays a discreet card with 3 collapsible sections.",
+      de: "Beim Einkaufen zeigt Gina eine dezente Karte mit 3 aufklappbaren Abschnitten.",
+      fr: "En naviguant dans un magasin, Gina affiche une carte discrète avec 3 sections repliables.",
+      it: "Navigando in un negozio, Gina mostra una scheda discreta con 3 sezioni comprimibili.",
+      ja: "ショップを閲覧中、Ginaは3つの折りたたみセクションを持つ控えめなカードを表示します。"
+    },
+    welcome_card_sec1_title: {
+      es: "1. Confiabilidad y garantías",
+      en: "1. Reliability and guarantees",
+      de: "1. Zuverlässigkeit und Garantien",
+      fr: "1. Fiabilité et garanties",
+      it: "1. Affidabilità e garanzie",
+      ja: "1. 信頼性と保証"
+    },
+    welcome_card_sec1_desc: {
+      es: "Revisa si el vendedor es directo o tercero, garantías legales, devoluciones y estudios de calidad oficiales.",
+      en: "Check if the seller is direct or third-party, legal warranties, return policies, and official quality reports.",
+      de: "Prüfe, ob der Verkäufer direkt oder Dritter ist, gesetzliche Garantien, Rückgaben und Qualitätsprüfungen.",
+      fr: "Vérifiez si le vendeur est direct ou tiers, les garanties légales, les retours et les études officielles de qualité.",
+      it: "Verifica se il venditore è diretto o terzo, garanzie legali, resi e studi ufficiali di qualità.",
+      ja: "直販か出品者か、法的保証、返品ポリシー、公的品質調査を確認できます。"
+    },
+    welcome_card_sec2_title: {
+      es: "2. Mercado, bolsillo y alternativas",
+      en: "2. Market, wallet and alternatives",
+      de: "2. Markt, Budget und Alternativen",
+      fr: "2. Marché, portefeuille et alternatives",
+      it: "2. Mercato, portafoglio e alternative",
+      ja: "2. 市場、お財布＆代替候補"
+    },
+    welcome_card_sec2_desc: {
+      es: "Precio por unidad de medida (kg, L, 100 g, pza), historial, comparador de precios en otras tiendas y opciones locales.",
+      en: "Price per unit of measure (kg, L, 100 g, piece), history, multi-store comparison, and local independent options.",
+      de: "Grundpreis je Einheit (kg, L, 100 g, Stk.), Preishistorie, Preisvergleich lokaler Händler und Alternativen.",
+      fr: "Prix à l'unité de mesure (kg, L, 100 g, pièce), historique, comparateur multi-boutiques et alternatives locales.",
+      it: "Prezzo per unità di misura (kg, L, 100 g, pz), cronologia, confronto prezzi tra negozi e opzioni locali.",
+      ja: "単位あたりの価格（kg、L、100g、個）、価格推移、他店との価格比較、地元の独立系選択肢。"
+    },
+    welcome_card_sec3_title: {
+      es: "3. ¿A quién le compras y reputación?",
+      en: "3. Who controls it and reputation?",
+      de: "3. Wer kontrolliert es und Ruf?",
+      fr: "3. Qui contrôle l'entreprise et réputation ?",
+      it: "3. Chi la controlla e reputazione?",
+      ja: "3. 実質的支配者と企業評判"
+    },
+    welcome_card_sec3_desc: {
+      es: "Controlador final (familia, fondo, Estado), país del capital, grandes fondos y registro público de sanciones o multas.",
+      en: "Ultimate controller (family, fund, State), country of capital, large funds, and public record of penalties or fines.",
+      de: "Tatsächlicher Eigentümer (Familie, Fonds, Staat), Herkunftsland des Kapitals und öffentliche Sanktionen.",
+      fr: "Contrôleur ultime (famille, fonds, État), pays du capital, grands fonds et registre public des sanctions.",
+      it: "Controllore finale (famiglia, fondo, Stato), paese di origine dei capitali e registro pubblico delle sanzioni.",
+      ja: "実質的支配者（創業家、ファンド、国家）、資本の所在国、大手投資ファンド、公開された制裁・罰金履歴。"
+    },
+    welcome_btn_finish: {
+      es: "¡Comenzar a comprar con Gina!",
+      en: "Start shopping with Gina!",
+      de: "Jetzt mit Gina einkaufen!",
+      fr: "Commencer mes achats avec Gina !",
+      it: "Inizia a fare acquisti con Gina!",
+      ja: "Ginaとお買い物を始める！"
+    },
+    welcome_saved_notice: {
+      es: "Preferencias guardadas localmente en tu navegador. Puedes cambiarlas en cualquier momento en Opciones.",
+      en: "Preferences saved locally in your browser. You can change them anytime in Options.",
+      de: "Einstellungen lokal im Browser gespeichert. Du kannst sie jederzeit in den Optionen ändern.",
+      fr: "Préférences enregistrées localement dans votre navigateur. Vous pouvez les modifier à tout moment dans les Options.",
+      it: "Preferenze salvate localmente nel browser. Puoi modificarle in qualsiasi momento nelle Opzioni.",
+      ja: "設定はブラウザにローカル保存されました。オプションからいつでも変更できます。"
+    },
+
+    // Seguimiento de precio objetivo y unidad
+    lbl_unit_price: {
+      es: "Precio por unidad",
+      en: "Unit price",
+      de: "Grundpreis",
+      fr: "Prix unitaire",
+      it: "Prezzo unitario",
+      ja: "単位価格"
+    },
+    btn_follow_target: {
+      es: "Seguir precio objetivo",
+      en: "Track target price",
+      de: "Zielpreis beobachten",
+      fr: "Suivre prix cible",
+      it: "Segui prezzo obiettivo",
+      ja: "目標価格を追跡"
+    },
+    btn_following_target: {
+      es: "Siguiendo objetivo",
+      en: "Tracking target",
+      de: "Wird beobachtet",
+      fr: "Prix suivi",
+      it: "Seguito",
+      ja: "追跡中"
+    },
+    btn_unfollow_target: {
+      es: "Dejar de seguir",
+      en: "Stop tracking",
+      de: "Nicht mehr beobachten",
+      fr: "Ne plus suivre",
+      it: "Smetti di seguire",
+      ja: "追跡を解除"
+    },
+    target_reached_badge: {
+      es: "¡Alcanzó tu precio objetivo!",
+      en: "Target price reached!",
+      de: "Zielpreis erreicht!",
+      fr: "Prix cible atteint !",
+      it: "Prezzo obiettivo raggiunto!",
+      ja: "目標価格に到達しました！"
+    },
+    tab_followed: {
+      es: "Seguidos",
+      en: "Tracked",
+      de: "Beobachtet",
+      fr: "Suivis",
+      it: "Seguiti",
+      ja: "追跡中"
+    },
+    followed_title: {
+      es: "Productos en seguimiento de precio",
+      en: "Price-tracked products",
+      de: "Beobachtete Produkte",
+      fr: "Produits suivis",
+      it: "Prodotti seguiti",
+      ja: "追跡中の商品"
+    },
+    followed_empty: {
+      es: "No tienes productos en seguimiento. En la tarjeta de cualquier tienda toca «Seguir precio objetivo».",
+      en: "No tracked products yet. Click 'Track target price' on any product card.",
+      de: "Noch keine beobachteten Produkte. Klicke auf einer Produktkarte auf 'Zielpreis beobachten'.",
+      fr: "Aucun produit suivi pour le moment. Cliquez sur 'Suivre prix cible' sur la carte d'un produit.",
+      it: "Nessun prodotto seguito. Clicca su 'Segui prezzo obiettivo' nella scheda di qualsiasi prodotto.",
+      ja: "追跡中の商品はありません。商品カードの「目標価格を追跡」をクリックしてください。"
+    },
+    followed_limit_notice: {
+      es: "Máximo 50 productos guardados localmente en tu navegador.",
+      en: "Up to 50 products stored locally in your browser.",
+      de: "Maximal 50 Produkte lokal in deinem Browser gespeichert.",
+      fr: "Jusqu'à 50 produits enregistrés localement dans votre navigateur.",
+      it: "Fino a 50 prodotti salvati localmente nel tuo browser.",
+      ja: "ブラウザ内に最大50件までローカル保存されます。"
+    },
+    btn_clear_followed: {
+      es: "Borrar productos seguidos",
+      en: "Clear tracked products",
+      de: "Beobachtete Produkte löschen",
+      fr: "Effacer les produits suivis",
+      it: "Cancella prodotti seguiti",
+      ja: "追跡中の商品を消去"
+    },
+    msg_followed_cleared: {
+      es: "Lista de productos seguidos vaciada.",
+      en: "Tracked products list cleared.",
+      de: "Liste beobachteter Produkte geleert.",
+      fr: "Liste des produits suivis effacée.",
+      it: "Elenco dei prodotti seguiti svuotato.",
+      ja: "追跡リストを消去しました。"
+    },
+    opt_sec_followed: {
+      es: "Seguimiento local de precios",
+      en: "Local price tracking",
+      de: "Lokale Preisbeobachtung",
+      fr: "Suivi local des prix",
+      it: "Monitoraggio locale dei prezzi",
+      ja: "ローカル価格追跡"
+    },
+    opt_help_followed: {
+      es: "Productos guardados con precio objetivo. Los datos se guardan únicamente en este navegador (máximo 50) y nunca salen a internet.",
+      en: "Products saved with a target price. Data is stored solely in this browser (max 50) and never sent over the internet.",
+      de: "Gespeicherte Produkte mit Zielpreis. Die Daten verbleiben rein in diesem Browser (max. 50) und verlassen ihn nie.",
+      fr: "Produits enregistrés avec un prix cible. Les données restent uniquement dans ce navigateur (max 50) et ne transitent jamais sur Internet.",
+      it: "Prodotti salvati con prezzo obiettivo. I dati sono memorizzati solo in questo browser (max 50) e non escono mai su internet.",
+      ja: "目標価格を設定して保存した商品。データはこのブラウザ内のみに保存され（最大50件）、外部へ送信されることはありません。"
+    },
+    followed_badge_current: {
+      es: "Actual: {price}",
+      en: "Current: {price}",
+      de: "Aktuell: {price}",
+      fr: "Actuel : {price}",
+      it: "Attuale: {price}",
+      ja: "現在: {price}"
+    },
+    followed_badge_target: {
+      es: "Objetivo: {target}",
+      en: "Target: {target}",
+      de: "Ziel: {target}",
+      fr: "Cible : {target}",
+      it: "Obiettivo: {target}",
+      ja: "目標: {target}"
     }
   };
 

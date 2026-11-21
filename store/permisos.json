@@ -8,8 +8,8 @@
   "permisos_api": [
     {
       "permiso": "storage",
-      "para_que": "Guardar preferencias de usuario, caché local de IA, historial de precios, marcas pendientes y diagnósticos técnicos en el navegador.",
-      "why": "Store user preferences, local AI cache, price history, pending unknown brands, and technical diagnostics inside the browser.",
+      "para_que": "Guardar preferencias de usuario, estado de bienvenida, seguimiento local de precios objetivo, caché local de IA, historial de precios, marcas pendientes y diagnósticos técnicos en el navegador.",
+      "why": "Store user preferences, onboarding status, local target price tracking, local AI cache, price history, pending unknown brands, and technical diagnostics inside the browser.",
       "archivo_que_lo_usa": "src/background.js, src/content.js, src/card.js, options/options.js, popup/popup.js",
       "obligatorio": true
     },

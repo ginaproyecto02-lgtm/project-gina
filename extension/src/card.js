@@ -8,6 +8,7 @@
 (function (root) {
   const QED = (root.QED = root.QED || {});
   const HOST_ID = "gina-tarjeta";
+  const api = typeof browser !== "undefined" ? browser : (typeof chrome !== "undefined" ? chrome : (typeof root !== "undefined" && root.chrome ? root.chrome : null));
 
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const safe = (u) => (/^https?:\/\//i.test(String(u || "")) ? String(u) : "#"); // solo enlaces web
@@ -385,7 +386,20 @@
     return w.status === "expensive" ? "price-up" : w.status === "cheap" ? "price-down" : "price-neutral";
   }
 
-  function renderPricePanel(rel) {
+  function getProductUnitPrice(rel, res) {
+    if (rel && rel.unitPrice) return rel.unitPrice;
+    if (!rel || !rel.price || typeof rel.price.amount !== "number") return null;
+    const calc = (QED && QED.calculateUnitPrice) || (QED && QED.Semejanza && QED.Semejanza.calculateUnitPrice);
+    const extract = (QED && QED.extractAttributes) || (QED && QED.Semejanza && QED.Semejanza.extractAttributes);
+    if (!calc || !extract) return null;
+    const title = (res && (res.title || res.productTitle || res.brandText)) || (rel && rel.title) || "";
+    if (!title) return null;
+    const attr = extract(title);
+    if (!attr) return null;
+    return calc(rel.price.amount, attr.cantidad, attr.paquete);
+  }
+
+  function renderPricePanel(rel, res) {
     if (!rel || !rel.price || !rel.price.amount) return "";
     const priceFmt = esc(QED.formatMoney ? QED.formatMoney(rel.price.amount, rel.price.currency) : rel.price.formatted);
     const comp = rel.priceComparison;
@@ -407,6 +421,24 @@
     const ratBox = rat && rat.score != null
       ? `<div style="text-align:right;"><div class="price-cur-lbl">${t("lbl_rating")}</div><div style="font-weight:700;font-size:12px;color:#1c2233;">${esc(String(rat.score))} / ${esc(String(rat.max || 5))}${rat.count ? ` <span style="font-size:10px;color:#535d70;font-weight:normal;">(${esc(String(rat.count))})</span>` : ""}</div></div>`
       : "";
+
+    // Destacar precio por unidad de medida cuando sea detectable
+    const uPrice = getProductUnitPrice(rel, res);
+    let unitBadgeHtml = "";
+    if (uPrice && uPrice.unitPrice != null) {
+      const uFmt = (rel.price.currency && QED.formatMoney)
+        ? `${QED.formatMoney(uPrice.unitPrice, rel.price.currency)}${uPrice.unitLabel || ""}`
+        : (uPrice.text || `$${uPrice.unitPrice}${uPrice.unitLabel || ""}`);
+      unitBadgeHtml = `<span class="price-unit-badge" style="display:inline-block;padding:2px 7px;font-size:11.5px;font-weight:700;color:#1e3a8a;background:#dbeafe;border:1px solid #bfdbfe;border-radius:5px;vertical-align:middle;" aria-label="${t("lbl_unit_price")}: ${esc(uFmt)}" title="${t("lbl_unit_price")}">${esc(uFmt)}</span>`;
+    }
+
+    // Botón local de seguimiento de precio objetivo
+    const followTargetBtnHtml = `
+      <button type="button" class="btn-follow-target sug-opt-link" id="btnFollowTarget" aria-label="${esc(t("btn_follow_target"))}" style="margin-left:4px;padding:2px 8px;font-size:11px;font-weight:600;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:5px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;">
+        <span>🎯</span> <span class="follow-target-txt">${esc(t("btn_follow_target"))}</span>
+      </button>
+    `;
+
     const primTracker = (rel.trackers && rel.trackers.length)
       ? (rel.trackers.find((t) => t && t.name === "Keepa") || rel.trackers[0])
       : null;
@@ -421,6 +453,8 @@
             <div class="price-cur-lbl">${t("lbl_price")}</div>
             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span class="price-current">${priceFmt}</span>
+              ${unitBadgeHtml}
+              ${followTargetBtnHtml}
               ${followBtnHtml}
             </div>
           </div>
@@ -931,7 +965,7 @@
 
     const rel = res.reliabilityEval || {};
     return `
-      ${renderPricePanel(rel)}
+      ${renderPricePanel(rel, res)}
       ${renderCompareSection(res, opts)}
       ${renderTrackers(rel)}
       ${localAltHtml}
@@ -1427,6 +1461,100 @@
         } catch (_) {}
         const ok = shadow.querySelector("#keepa-copy-ok");
         if (ok) ok.style.display = "block";
+      };
+    });
+
+    // Handler de seguimiento de precio objetivo (local, máx. 50 productos)
+    const rel = res.reliabilityEval || {};
+    const prodPriceAmount = (rel.price && rel.price.amount) || 0;
+    const prodAmount = typeof prodPriceAmount === "number" ? prodPriceAmount : (parseFloat(prodPriceAmount) || 0);
+    const targetPrice = rel.targetPrice != null
+      ? rel.targetPrice
+      : (QED.computeTargetPrice ? QED.computeTargetPrice(rel.priceHistory, prodAmount) : Math.round(prodAmount * 0.9 * 100) / 100);
+
+    let rawId = (rel.productId && (rel.productId.id || (typeof rel.productId === "string" ? rel.productId : ""))) || (res && res.brandText ? "prod_" + (QED.norm ? QED.norm(res.brandText + "_" + ((res.title || "").slice(0, 30))) : "") : "");
+    let prodId = String(rawId || "").replace(/[^a-zA-Z0-9_.-]/g, "").slice(0, 80);
+    if (!prodId) {
+      const hashStr = String((res && (res.title || res.brand)) || (typeof location !== "undefined" ? location.pathname : "unknown"));
+      let hash = 0;
+      for (let i = 0; i < hashStr.length; i++) hash = ((hash << 5) - hash + hashStr.charCodeAt(i)) | 0;
+      prodId = "prod_" + Math.abs(hash);
+    }
+
+    const prodTitle = String((res && (res.title || res.productTitle)) || (rel && rel.title) || (res && res.brand) || "").slice(0, 200);
+    const storeName = String((res && res.store && (res.store.nombre || res.store.dominio)) || (typeof location !== "undefined" ? location.hostname.replace(/^www\./, "") : "")).slice(0, 100);
+    const prodCurrency = (rel.price && rel.price.currency) || "MXN";
+    const prodUrl = typeof location !== "undefined" ? location.href : "";
+    const followKey = storeName + ":" + prodId;
+
+    shadow.querySelectorAll(".btn-follow-target").forEach((btn) => {
+      let isFollowed = false;
+
+      const checkInitialFollowed = async () => {
+        try {
+          if (!api || !api.storage || !api.storage.local) return;
+          const data = await Promise.resolve(api.storage.local.get("followedProducts"));
+          const list = (data && data.followedProducts) || [];
+          const existingItem = list.find((it) => (it.site + ":" + it.id) === followKey || (prodId && it.id === prodId));
+          if (existingItem) {
+            isFollowed = true;
+            const txtSpan = btn.querySelector(".follow-target-txt");
+            if (txtSpan) txtSpan.textContent = "✓ " + t("btn_following_target");
+            btn.setAttribute("data-followed", "true");
+            btn.style.color = "#166534";
+            btn.style.background = "#dcfce7";
+            btn.style.borderColor = "#86efac";
+
+            // Si el precio actual leído (prodAmount > 0) cambió respecto al guardado, actualizar en storage
+            if (prodAmount > 0 && existingItem.currentPrice !== prodAmount) {
+              existingItem.currentPrice = prodAmount;
+              existingItem.date = Date.now();
+              await Promise.resolve(api.storage.local.set({ followedProducts: list }));
+            }
+          }
+        } catch (_) {}
+      };
+
+      checkInitialFollowed();
+
+      btn.onclick = async () => {
+        try {
+          if (!api || !api.storage || !api.storage.local) return;
+          const data = await Promise.resolve(api.storage.local.get("followedProducts"));
+          let list = (data && data.followedProducts) || [];
+          const txtSpan = btn.querySelector(".follow-target-txt");
+
+          if (isFollowed) {
+            list = list.filter((it) => (it.site + ":" + it.id) !== followKey && it.id !== prodId);
+            isFollowed = false;
+            btn.setAttribute("data-followed", "false");
+            if (txtSpan) txtSpan.textContent = t("btn_follow_target");
+            btn.style.color = "#15803d";
+            btn.style.background = "#f0fdf4";
+            btn.style.borderColor = "#bbf7d0";
+          } else {
+            const item = {
+              site: storeName,
+              id: prodId,
+              title: prodTitle,
+              currentPrice: prodAmount,
+              targetPrice: targetPrice,
+              currency: prodCurrency,
+              date: Date.now(),
+              url: prodUrl
+            };
+            list = list.filter((it) => (it.site + ":" + it.id) !== followKey && it.id !== item.id);
+            list.unshift(item);
+            if (list.length > 50) list = list.slice(0, 50);
+            isFollowed = true;
+            btn.setAttribute("data-followed", "true");
+            if (txtSpan) txtSpan.textContent = "✓ " + t("btn_following_target");
+            btn.style.color = "#166534";
+            btn.style.background = "#dcfce7";
+            btn.style.borderColor = "#86efac";
+          }
+          await Promise.resolve(api.storage.local.set({ followedProducts: list }));
+        } catch (_) {}
       };
     });
 

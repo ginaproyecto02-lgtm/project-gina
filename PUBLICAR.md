@@ -37,9 +37,9 @@ Para realizar el proceso de publicación oficial del Producto Mínimo Viable (MV
 |---|---|---|
 | **Revisar la marca «Gina»** | Es un nombre propio común; puede haber otra extensión, app o marca registrada «Gina» en software o comercio. | Busca «Gina» en las tres tiendas y en las bases de marcas: IMPI (México), USPTO (EE.UU.), EUIPO (UE), WIPO Global Brand Database (clases 9 y 35). El nombre completo «Gina: Know Who Your Money Backs» ayuda a distinguirla. |
 | **Correo de contacto público** | Las tiendas lo muestran; sirve también para correcciones de datos. | Crea uno dedicado (por ejemplo, `gina.soporte@…`). No uses tu correo personal: en Chrome **el correo de la cuenta de desarrollador no se puede cambiar después**. |
-| **Publicar la política de privacidad y soporte** | Obligatorio en Chrome, Edge y Firefox porque la extensión lee contenido de páginas. | Usa **GitHub Pages** activando la carpeta `/docs` de la rama `main` (ver paso 0c abajo). Las URLs públicas quedan en `https://<usuario>.github.io/<repo>/`. |
+| **Publicar la política de privacidad y soporte** | Obligatorio en Chrome, Edge y Firefox porque la extensión lee contenido de páginas. | **Completado y verificado (HTTP 200)**: GitHub Pages está activo en la carpeta `/docs` de `main`. URLs públicas operativas: `https://ginaproyecto02-lgtm.github.io/project-gina/` (inicio, privacidad y soporte). |
 | **Decidir: persona o empresa** | En Edge el tipo de cuenta (individual o empresa) **no se puede cambiar**. En Chrome debes declarar si eres «comerciante» (*trader*). | Si la publicas como proyecto personal y gratuito, «individual» y «no comerciante» es lo habitual. Si tienes o tendrás una empresa detrás, regístrala como empresa desde el inicio. |
-| **Rellenar los marcadores** | Tu correo va en `datagen/proyecto.json` (la extensión lo toma de ahí al generar). Además: `CORREO_DE_CONTACTO` en `docs/privacidad.html`, y `CONTACT_EMAIL` y `PRIVACY_URL` en `store/ficha-tienda.md`. | Buscar y reemplazar; luego vuelve a generar el zip. |
+| **Marcadores del repositorio** | Tu correo y URLs públicas van en los archivos de configuración y documentación. | **Completado al 100%**: Configurado con `gina.proyecto02@gmail.com` y URLs públicas en `datagen/proyecto.json`, `docs/`, `store/ficha-tienda.md` y `store/LISTA_PUBLICACION.md`. |
 
 ---
 

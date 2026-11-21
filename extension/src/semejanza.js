@@ -361,7 +361,7 @@
     };
   }
 
-  // 4. Cálculo de Precio por Unidad (kg, L, pieza)
+  // 4. Cálculo de Precio por Unidad (kg, L, 100 g, pieza)
   function calculateUnitPrice(price, cantidad, paquete) {
     if (typeof price !== "number" || price <= 0) return null;
     paquete = paquete || 1;
@@ -370,19 +370,43 @@
       if (cantidad.unidad === "g") {
         const totalGrams = cantidad.valor * paquete;
         const perKg = price / (totalGrams / 1000);
+        const per100g = price / (totalGrams / 100);
+        if (totalGrams < 250) {
+          return {
+            unitPrice: Math.round(per100g * 100) / 100,
+            unitLabel: "/100 g",
+            text: `$${per100g.toFixed(2)}/100 g`,
+            perKg: Math.round(perKg * 100) / 100,
+            per100g: Math.round(per100g * 100) / 100
+          };
+        }
         return {
           unitPrice: Math.round(perKg * 100) / 100,
           unitLabel: "/kg",
-          text: `$${perKg.toFixed(2)}/kg`
+          text: `$${perKg.toFixed(2)}/kg`,
+          perKg: Math.round(perKg * 100) / 100,
+          per100g: Math.round(per100g * 100) / 100
         };
       }
       if (cantidad.unidad === "ml") {
         const totalMl = cantidad.valor * paquete;
         const perL = price / (totalMl / 1000);
+        const per100ml = price / (totalMl / 100);
+        if (totalMl < 250) {
+          return {
+            unitPrice: Math.round(per100ml * 100) / 100,
+            unitLabel: "/100 ml",
+            text: `$${per100ml.toFixed(2)}/100 ml`,
+            perL: Math.round(perL * 100) / 100,
+            per100ml: Math.round(per100ml * 100) / 100
+          };
+        }
         return {
           unitPrice: Math.round(perL * 100) / 100,
           unitLabel: "/L",
-          text: `$${perL.toFixed(2)}/L`
+          text: `$${perL.toFixed(2)}/L`,
+          perL: Math.round(perL * 100) / 100,
+          per100ml: Math.round(per100ml * 100) / 100
         };
       }
     }

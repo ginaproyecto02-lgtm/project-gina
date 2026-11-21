@@ -348,7 +348,18 @@ async function researchReputation(s, cfg, log) {
 }
 
 // ---------- Programación ----------
-api.runtime.onInstalled.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); updateBadge(); flushSuggestionsQueue().catch(() => {}); });
+api.runtime.onInstalled.addListener((details) => {
+  api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 });
+  updateBadge();
+  flushSuggestionsQueue().catch(() => {});
+  if (details && details.reason === "install") {
+    try {
+      if (api.tabs && api.tabs.create) {
+        api.tabs.create({ url: api.runtime.getURL("options/bienvenida.html") });
+      }
+    } catch (_) {}
+  }
+});
 api.runtime.onStartup.addListener(() => { api.alarms.create("qed-tick", { periodInMinutes: 24 * 60, delayInMinutes: 1 }); flushSuggestionsQueue().catch(() => {}); });
 // Revisión diaria: vacía cola de sugerencias y si pasaron 7 días ejecuta job semanal.
 api.alarms.onAlarm.addListener(async (a) => {

@@ -2,7 +2,51 @@
 
 Esta guía paso a paso contiene los requisitos, archivos y formularios necesarios para que el dueño del proyecto publique la extensión Gina en las tres tiendas oficiales: **Chrome Web Store**, **Microsoft Edge Add-ons** y **Mozilla Firefox Add-ons (AMO)**.
 
-Todo el texto para copiar y pegar está en [`store/ficha-tienda.md`](file:///C:/Users/samza/OneDrive/Documentos/proyecto/project-gina/store/ficha-tienda.md).
+Todo el texto para copiar y pegar está en [`store/ficha-tienda.md`](ficha-tienda.md).
+
+---
+
+## 0. Checklist de acciones exclusivas del dueño (en navegador)
+
+Antes de enviar los paquetes a revisión en las tiendas, el dueño del repositorio debe realizar en su navegador los siguientes pasos que requieren sus credenciales personales:
+
+### 0.1 Despliegue del servicio de sugerencias (Google Apps Script)
+1. Iniciar sesión con la cuenta del proyecto (`gina.proyecto02@gmail.com`) en Google Drive.
+2. Crear una Hoja de cálculo de Google llamada `Gina - Sugerencias`, renombrar la pestaña a `sugerencias` y colocar encabezados: `id | fecha | tipo | marca | tienda | producto | pais | ext | veces | estado`.
+3. Ir a **Extensiones → Apps Script**:
+   - Pegar el código de `servicios/sugerencias/Code.gs`.
+   - En Configuración del proyecto, activar «Mostrar appsscript.json» y pegar `servicios/sugerencias/appsscript.json`.
+   - En Propiedades de la secuencia de comandos, definir `ROBOT_TOKEN` (cadena secreta de $\ge 32$ caracteres).
+4. Pulsar **Implementar → Nueva implementación → Aplicación web**:
+   - Ejecutar como: *Yo (`gina.proyecto02@gmail.com`)*.
+   - Quién tiene acceso: *Cualquier usuario* (permite llamadas anónimas de la extensión).
+   - Autorizar permisos y copiar la URL generada (`https://script.google.com/macros/s/.../exec`).
+
+### 0.2 Cargar variables y secretos en GitHub y regenerar paquetes
+En el repositorio de GitHub (`https://github.com/ginaproyecto02-lgtm/project-gina`):
+1. **Settings → Secrets and variables → Actions → pestaña Variables**:
+   - Crear variable `GINA_SUGERENCIAS_URL` con la URL `/exec` de Apps Script.
+2. **Settings → Secrets and variables → Actions → pestaña Secrets**:
+   - Crear secreto `GINA_SUGERENCIAS_TOKEN` con el mismo valor que `ROBOT_TOKEN`.
+   - Verificar que exista `GINA_API_KEY` para el job semanal.
+3. **Regenerar los paquetes ZIP:**
+   - La URL de sugerencias se embebe directamente en `extension/data/proyecto.json` durante el empaquetado.
+   - Tras configurar `GINA_SUGERENCIAS_URL`, ejecuta el flujo de GitHub Actions **«Project Gina — pruebas y paquete»** (vía *Run workflow*) para generar los ZIPs finales actualizados como artefactos de descarga, o ejecuta localmente:
+     `python datagen/empaquetar.py --sugerencias-url "https://script.google.com/macros/s/.../exec"`
+   - Esto asegura que los paquetes `dist/gina-chrome-edge-3.3.0.zip` y `dist/gina-firefox-3.3.0.zip` contengan la URL real antes de subirlos a las tiendas.
+
+### 0.3 Habilitar permisos de PR en GitHub Actions
+1. Ir a **Settings → Actions → General → Workflow permissions**.
+2. Seleccionar **Read and write permissions**.
+3. Marcar la casilla: ☑ **Allow GitHub Actions to create and approve pull requests**.
+4. Guardar cambios.
+
+### 0.4 Verificación de GitHub Pages (Público y Activo)
+- Se ha verificado automáticamente vía HTTP que GitHub Pages ya responde **200 OK** en:
+  - Portada: `https://ginaproyecto02-lgtm.github.io/project-gina/`
+  - Privacidad: `https://ginaproyecto02-lgtm.github.io/project-gina/privacidad.html`
+  - Soporte: `https://ginaproyecto02-lgtm.github.io/project-gina/soporte.html`
+- Si por alguna razón requiriera reactivarse: **Settings → Pages → Source: Deploy from a branch (`main` / `/docs`)**.
 
 ---
 

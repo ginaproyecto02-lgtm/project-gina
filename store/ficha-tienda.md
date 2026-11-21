@@ -11,7 +11,7 @@ The listing is **English first**, with Spanish as a second language. The extensi
 |---|---|
 | Name (from `_locales`) | EN: **Gina: Know Who Your Money Backs** · ES: **Gina: sabe a quién apoya tu dinero** |
 | Short name | Gina |
-| Version | 3.2.0 |
+| Version | 3.3.0 |
 | Category | Chrome: **Shopping** · Edge: **Shopping** · Firefox: **Shopping** |
 | Listing languages | English (default), Spanish (the interface also has German, French, Italian and Japanese) |
 | Price | Free |
@@ -32,6 +32,7 @@ While you shop or book online, Gina adds a small card that tells you:
 
 • Who really owns the brand: the company, family, investment fund or government in control, and the country its capital comes from.
 • Purchase reliability: direct vs. third-party seller, fulfillment origin, and applicable legal warranties, strictly as stated on the page.
+• Unit pricing & price watch: clearly highlights unit price (per kg, L, piece) and allows saving local target price alerts entirely in your browser with no tracking.
 • The big investment funds behind it, such as BlackRock, Vanguard, State Street, Blackstone, KKR, Berkshire Hathaway and Apollo, and their own track record.
 • Its public track record: fines, lawsuits, settlements and court rulings on the environment, labor, corruption, privacy, competition, consumer protection, human rights, taxes and safety. Every item links to its source and says its exact status (allegation, lawsuit, settlement, fine, ruling, dismissed).
 • Its declared lobbying and political donations where official data exists, shown as numbers, never as ideological labels.
@@ -71,6 +72,7 @@ Mientras compras o reservas en línea, Gina agrega una tarjeta discreta que te d
 
 • Quién es dueño de la marca: empresa, familia, fondo de inversión o Estado, y de qué país es su capital.
 • Confiabilidad de compra: vendedor directo o externo, origen del envío y garantías legales aplicables, estrictamente según lo que indica la página.
+• Precio por unidad y seguimiento: destaca el precio por unidad de medida (kg, L, pieza) y permite dar seguimiento local a precios objetivo en tu navegador sin rastreo.
 • Los grandes fondos detrás, como BlackRock, Vanguard, State Street, Blackstone, KKR, Berkshire Hathaway y Apollo, y también su propio historial.
 • Su historial público: multas, juicios, acuerdos y sentencias en medio ambiente, trabajo, corrupción, privacidad, competencia, trato al consumidor, derechos humanos, impuestos y seguridad. Cada hecho enlaza a su fuente e indica su estado exacto (alegación, juicio, acuerdo, multa, sentencia, desestimado).
 • Su lobbying y sus donaciones políticas declaradas, cuando hay dato oficial: cifras, nunca etiquetas ideológicas.
@@ -120,7 +122,7 @@ ES: Ayudar a los compradores a tomar decisiones informadas: confiabilidad del ve
 
 | Permiso / Permission | Justificación (ES) | Justification (EN) | Archivo / File | Obligatorio |
 |---|---|---|---|---|
-| `storage` | Guardar preferencias de usuario, caché local de IA, historial de precios, marcas pendientes y diagnósticos técnicos en el navegador. | Store user preferences, local AI cache, price history, pending unknown brands, and technical diagnostics inside the browser. | `src/background.js`, `src/content.js`, `src/card.js`, `options/options.js`, `popup/popup.js` | Sí / Yes |
+| `storage` | Guardar preferencias de usuario, estado de bienvenida, seguimiento local de precios objetivo, caché local de IA, historial de precios, marcas pendientes y diagnósticos técnicos en el navegador. | Store user preferences, onboarding status, local target price tracking, local AI cache, price history, pending unknown brands, and technical diagnostics inside the browser. | `src/background.js`, `src/content.js`, `src/card.js`, `options/options.js`, `popup/popup.js` | Sí / Yes |
 | `alarms` | Programar la comprobación periódica de la base de datos descargada y la sincronización de sugerencias pendientes. | Schedule periodic checks for database updates and pending suggestion queue synchronizations. | `src/background.js` | Sí / Yes |
 | `offscreen` | Crear un contexto offscreen en Chromium para procesamiento DOM de diagnóstico y análisis en segundo plano sin interrumpir la página. | Create an offscreen document context in Chromium for background DOM parsing and diagnostic tasks without blocking navigation. | `src/background.js` | Sí / Yes |
 | `https://script.google.com/*` | Enviar sugerencias anónimas de marcas y alternativas comunitarias a la aplicación web privada de Google Apps Script del proyecto. | Send voluntary, anonymous brand and alternative suggestions to the project private Google Apps Script Web App. | `src/background.js` | Sí / Yes |

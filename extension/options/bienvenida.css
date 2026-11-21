@@ -1,0 +1,70 @@
+/* Estilos complementarios para la vista de bienvenida (onboarding) */
+.card-preview-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+.card-preview-sec {
+  background: #f8fafd;
+  border: 1px solid #d8e2ee;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.preview-sec-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 650;
+  font-size: 13.5px;
+  color: #1f2a44;
+}
+.preview-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1f2a44;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+.preview-title {
+  color: #1f2a44;
+}
+.preview-desc {
+  margin: 6px 0 0 30px;
+  font-size: 12.5px;
+  color: #3e4a60;
+  line-height: 1.4;
+}
+.welcome-actions {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.welcome-actions button.primary {
+  width: 100%;
+  max-width: 320px;
+  font-size: 15px;
+  padding: 12px 24px;
+  background: #1f2a44;
+  color: #ffffff;
+  border: 2px solid #1f2a44;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.welcome-actions button.primary:hover {
+  background: #2a395c;
+  border-color: #2a395c;
+}
+.welcome-actions button.primary:focus,
+.welcome-actions button.primary:focus-visible {
+  outline: 3px solid #c9a227;
+  outline-offset: 2px;
+}

@@ -77,6 +77,11 @@
     <label class="row"><input type="checkbox" id="priceHistory"> <span data-i18n="pref_price_history">Guardar historial de precios en este navegador</span></label>
     <p class="help" data-i18n="pref_price_history_desc">Guarda el identificador del producto (ASIN, MLM, código de barras) y su precio, máximo 300 productos y 90 días. Nunca sale de tu navegador.</p>
     <div class="actions"><button type="button" id="clearPriceHistory" data-i18n="btn_clear_price_history">Borrar historial de precios</button> <span class="msg" id="msg_values"></span></div>
+    <hr style="margin:16px 0;border:0;border-top:1px solid #e5e9f2;">
+    <h3 data-i18n="opt_sec_followed">Seguimiento local de precios</h3>
+    <p class="help" data-i18n="opt_help_followed">Productos guardados con precio objetivo. Los datos se guardan únicamente en este navegador (máximo 50) y nunca salen a internet.</p>
+    <div id="followedStats" class="status"></div>
+    <div class="actions"><button type="button" id="clearFollowedProducts" data-i18n="btn_clear_followed">Borrar productos seguidos</button> <span class="msg" id="msg_followed"></span></div>
   </section>
 
   <section class="card">

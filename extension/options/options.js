@@ -733,9 +733,27 @@ if (clearBtn) clearBtn.addEventListener("click", async () => {
   msg("msg_values", t("price_history_cleared"), "ok");
 });
 
+// Seguimiento local de precios
+async function updateFollowedStats() {
+  const statEl = document.getElementById("followedStats");
+  if (!statEl) return;
+  try {
+    const { followedProducts = [] } = await api.storage.local.get("followedProducts");
+    statEl.textContent = `${followedProducts.length} / 50 ${t("tab_followed").toLowerCase()}`;
+  } catch (_) {}
+}
+
+const clearFollowedBtn = document.getElementById("clearFollowedProducts");
+if (clearFollowedBtn) clearFollowedBtn.addEventListener("click", async () => {
+  await api.storage.local.set({ followedProducts: [] });
+  await updateFollowedStats();
+  msg("msg_followed", t("msg_followed_cleared"), "ok");
+});
+
 loadSettings().then((s) => {
   writeForm(s);
   applyI18n();
+  updateFollowedStats();
 });
 
 api.storage.onChanged.addListener((ch) => {

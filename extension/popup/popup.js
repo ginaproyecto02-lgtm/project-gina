@@ -132,6 +132,7 @@ async function init() {
   if (baseDateEl) baseDateEl.textContent = baseDateText(db.version);
   $("#enabled").checked = st.enabled !== false;
   renderCustom();
+  renderFollowedProducts();
   renderBatchSection(st.pending || {});
   checkForNewerBase();
   loadPage();
@@ -317,10 +318,65 @@ function renderCustom() {
   });
 }
 
+async function renderFollowedProducts() {
+  const listEl = $("#followedList");
+  if (!listEl) return;
+  let items = [];
+  try {
+    const data = await api.storage.local.get("followedProducts");
+    items = data.followedProducts || [];
+  } catch (_) {}
+
+  if (!items.length) {
+    listEl.innerHTML = `<div class="small" style="color:#64748b;padding:8px 0;">${esc(t("followed_empty"))}</div>`;
+    return;
+  }
+
+  listEl.innerHTML = items.map((it, idx) => {
+    const reached = typeof it.currentPrice === "number" && typeof it.targetPrice === "number" && it.currentPrice <= it.targetPrice;
+    const badgeHtml = reached
+      ? `<span style="background:#dcfce7;color:#166534;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:3px;">${esc(t("target_reached_badge"))}</span>`
+      : "";
+    const priceTxt = it.currency && QED.formatMoney ? QED.formatMoney(it.currentPrice, it.currency) : `$${it.currentPrice}`;
+    const targetTxt = it.currency && QED.formatMoney ? QED.formatMoney(it.targetPrice, it.currency) : `$${it.targetPrice}`;
+    const link = (it.url && /^https?:\/\//i.test(it.url))
+      ? `<a href="${esc(it.url)}" target="_blank" rel="noopener noreferrer" style="font-weight:650;color:#1f6fb2;text-decoration:none;">${esc(it.title || it.site || "Producto")} ↗</a>`
+      : `<b>${esc(it.title || it.site || "Producto")}</b>`;
+    return `
+      <div class="res" style="margin-bottom:8px;padding:8px 10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;position:relative;">
+        <div style="padding-right:24px;">
+          <div>${link}</div>
+          <div class="small" style="color:#64748b;margin-top:2px;">${esc(it.site || "")} · ${esc(t("followed_badge_current", { price: priceTxt }))} · <b>${esc(t("followed_badge_target", { target: targetTxt }))}</b></div>
+          ${badgeHtml}
+        </div>
+        <button type="button" class="btn-del-followed" data-idx="${idx}" aria-label="${esc(t("btn_unfollow_target"))}" style="position:absolute;top:6px;right:6px;background:transparent;border:0;color:#94a3b8;font-size:16px;cursor:pointer;padding:2px 6px;line-height:1;">&times;</button>
+      </div>
+    `;
+  }).join("");
+
+  listEl.querySelectorAll(".btn-del-followed").forEach((btn) => {
+    btn.onclick = async () => {
+      const idx = parseInt(btn.getAttribute("data-idx"), 10);
+      items.splice(idx, 1);
+      await api.storage.local.set({ followedProducts: items });
+      renderFollowedProducts();
+    };
+  });
+}
+
+const clearFollowedPopBtn = $("#btnClearFollowedPopup");
+if (clearFollowedPopBtn) {
+  clearFollowedPopBtn.onclick = async () => {
+    await api.storage.local.set({ followedProducts: [] });
+    renderFollowedProducts();
+  };
+}
+
 document.querySelectorAll("nav button").forEach((b) => b.onclick = () => {
   document.querySelectorAll("nav button, .tab").forEach((x) => x.classList.remove("on"));
   b.classList.add("on"); $("#" + b.dataset.tab).classList.add("on");
   if (b.dataset.tab === "search") $("#q").focus();
+  if (b.dataset.tab === "followed") renderFollowedProducts();
 });
 $("#q").addEventListener("input", (e) => search(e.target.value));
 $("#enabled").addEventListener("change", (e) => api.storage.local.set({ enabled: e.target.checked }));

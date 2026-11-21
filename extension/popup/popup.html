@@ -20,6 +20,7 @@
   <nav>
     <button data-tab="page" class="on" data-i18n="tab_page">Esta página</button>
     <button data-tab="search" data-i18n="tab_search">Buscar</button>
+    <button data-tab="followed" data-i18n="tab_followed">Seguidos</button>
     <button data-tab="add" data-i18n="tab_add">Agregar una marca</button>
   </nav>
 
@@ -44,6 +45,15 @@
   <section id="search" class="tab">
     <input id="q" type="search" data-i18n-ph="search_placeholder" placeholder="Marca, tienda, aerolínea o fondo: Bimbo, Liverpool, BlackRock…" autocomplete="off">
     <div id="searchOut" class="out"></div>
+  </section>
+
+  <section id="followed" class="tab">
+    <div class="k" data-i18n="followed_title">Productos en seguimiento de precio</div>
+    <p class="small" data-i18n="followed_limit_notice">Máximo 50 productos guardados localmente en tu navegador.</p>
+    <div id="followedList" class="out"></div>
+    <div class="actions" style="margin-top:10px;text-align:right;">
+      <button id="btnClearFollowedPopup" class="btn ghost" data-i18n="btn_clear_followed" style="font-size:11px;padding:4px 8px;">Borrar lista</button>
+    </div>
   </section>
 
   <section id="add" class="tab">
