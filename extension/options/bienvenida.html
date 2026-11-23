@@ -12,7 +12,7 @@
   <img class="logo" src="../icons/icon48.png" alt="" width="36" height="36">
   <div style="flex:1">
     <div class="header-top">
-      <h1 data-i18n="welcome_header_title">Te damos la bienvenida a Gina</h1>
+      <h1 id="welcome_h1" data-i18n="welcome_header_title">Te damos la bienvenida a Gina</h1>
       <div class="lang-wrap">
         <label for="lang_select" class="lang-lbl" data-i18n="opt_language">Idioma</label>
         <select id="lang_select" class="lang-select">
@@ -29,7 +29,7 @@
   </div>
 </header>
 
-<main>
+<main aria-labelledby="welcome_h1">
   <!-- Paso 1: País y Moneda -->
   <section class="card" id="step1">
     <h2><span data-i18n="welcome_step1_title">Tu país y moneda de compra</span> <span class="tag" data-i18n="welcome_step1_badge">Paso 1 de 3</span></h2>
@@ -57,10 +57,10 @@
 
   <!-- Paso 2: Valores prioritarios y perfil -->
   <section class="card" id="step2">
-    <h2><span data-i18n="welcome_step2_title">Tus valores y perfil de compra</span> <span class="tag" data-i18n="welcome_step2_badge">Paso 2 de 3</span></h2>
+    <h2 id="welcome_step2_h"><span data-i18n="welcome_step2_title">Tus valores y perfil de compra</span> <span class="tag" data-i18n="welcome_step2_badge">Paso 2 de 3</span></h2>
     <p class="help" data-i18n="welcome_step2_desc">Elige qué te importa más para priorizar la información que ves al comprar.</p>
     
-    <div class="grid" id="onboarding_values">
+    <div class="grid" id="onboarding_values" role="group" aria-labelledby="welcome_step2_h">
       <label>
         <span data-i18n="welcome_val_env">🌱 Medio ambiente</span>
         <select id="val_ambiental">
@@ -87,8 +87,8 @@
       </label>
     </div>
 
-    <h3 data-i18n="welcome_profile_label" style="margin-top:16px;">Perfil de compra preferido</h3>
-    <div class="profile-options">
+    <h3 id="welcome_profile_h" data-i18n="welcome_profile_label" style="margin-top:16px;">Perfil de compra preferido</h3>
+    <div class="profile-options" role="radiogroup" aria-labelledby="welcome_profile_h">
       <label class="profile-opt">
         <input type="radio" name="userProfile" value="consciente" checked>
         <div class="profile-body">

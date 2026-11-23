@@ -9,3 +9,4 @@ __pycache__/
 Thumbs.db
 datagen/indice_fuentes.sqlite
 *.sqlite
+.orquestacion/

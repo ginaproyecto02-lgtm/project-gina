@@ -8,6 +8,7 @@ Empaqueta:
 Genera además sus sumas de verificación SHA-256 (.sha256).
 """
 import argparse
+import json
 import os
 import sys
 
@@ -23,6 +24,25 @@ def main():
 
     # Si la variable de entorno está presente y no se especificó argumento, usarla
     sugerencias_url = args.sugerencias_url or os.environ.get("GINA_SUGERENCIAS_URL")
+
+    # Verificar si sugerencias_url en proyecto.json está vacío
+    url_en_proyecto = ""
+    for cand in [
+        os.path.join(os.path.dirname(__file__), "proyecto.json"),
+        os.path.join(os.path.dirname(__file__), "..", "extension", "data", "proyecto.json")
+    ]:
+        if os.path.exists(cand):
+            try:
+                with open(cand, "r", encoding="utf-8") as pf:
+                    data = json.load(pf)
+                    url_en_proyecto = (data.get("sugerencias_url") or "").strip()
+                if url_en_proyecto:
+                    break
+            except Exception:
+                pass
+
+    if not sugerencias_url and not url_en_proyecto:
+        print("[AVISO] sugerencias_url en proyecto.json está vacío (y no se pasó --sugerencias-url ni GINA_SUGERENCIAS_URL): la extensión usará cola local + enlace de respaldo hasta configurar el endpoint de Apps Script.")
 
     print("Iniciando empaquetado de Gina para tiendas de extensiones...")
     generados = empaquetar(dist_dir=args.dist, sugerencias_url=sugerencias_url)

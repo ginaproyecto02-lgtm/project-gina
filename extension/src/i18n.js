@@ -237,6 +237,14 @@
       it: "Salvata nel browser. Verrà inviata da sola appena il servizio di suggerimenti di Gina risponde.",
       ja: "ブラウザに保存しました。Ginaの提案サービスが応答しだい自動で送信されます。"
     },
+    suggest_queued_local: {
+      es: "✔ Guardada en tu navegador. Aún no hay un servicio de envío automático configurado, así que no se enviará sola. Si quieres que el proyecto la reciba ya, usa el enlace de respaldo.",
+      en: "✔ Saved in your browser. No automatic sending service is set up yet, so it won't be sent on its own. If you want the project to receive it now, use the backup link.",
+      de: "✔ Im Browser gespeichert. Es ist noch kein automatischer Sendedienst eingerichtet, daher wird sie nicht von selbst gesendet. Damit das Projekt sie jetzt erhält, nutze den alternativen Link.",
+      fr: "✔ Enregistrée dans ton navigateur. Aucun service d'envoi automatique n'est encore configuré, elle ne partira donc pas toute seule. Pour que le projet la reçoive maintenant, utilise le lien de secours.",
+      it: "✔ Salvata nel browser. Non è ancora configurato un servizio di invio automatico, quindi non verrà inviata da sola. Per farla ricevere subito al progetto, usa il link alternativo.",
+      ja: "✔ ブラウザに保存しました。自動送信サービスはまだ設定されていないため、自動では送信されません。今すぐプロジェクトに届けたい場合は、代替リンクをご利用ください。"
+    },
     suggest_rejected: {
       es: "No se pudo enviar: el nombre de la marca no es válido.",
       en: "Could not send: the brand name is not valid.",

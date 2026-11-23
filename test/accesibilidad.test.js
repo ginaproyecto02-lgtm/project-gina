@@ -132,7 +132,11 @@ async function runAccessibilityTests() {
     { fg: "#2b3550", bg: "#eef1f7", label: "Chip etiqueta sobre fondo grisáceo" },
     { fg: "#5a6478", bg: "#ffffff", label: "Popup botón de navegación inactivo sobre blanco" },
     { fg: "#1f2a44", bg: "#eef1f7", label: "Popup botón ghost sobre gris suave" },
-    { fg: "#235017", bg: "#e2f0d9", label: "Popup mensaje de éxito sobre verde suave" }
+    { fg: "#235017", bg: "#e2f0d9", label: "Popup mensaje de éxito sobre verde suave" },
+    { fg: "#1f2a44", bg: "#ffffff", label: "Bienvenida título y texto principal sobre blanco" },
+    { fg: "#ffffff", bg: "#1f2a44", label: "Bienvenida botón primario texto blanco sobre azul marino" },
+    { fg: "#3e4a60", bg: "#f8fafd", label: "Bienvenida preview descripción sobre gris suave" },
+    { fg: "#1f2a44", bg: "#f8fafd", label: "Bienvenida preview título sobre gris suave" }
   ];
 
   let allPairsPass = true;
@@ -253,6 +257,20 @@ async function runAccessibilityTests() {
     compViolations.map((v) => `${v.id} (${v.impact}): ${v.description}`).join("; ")
   );
 
+  // 1E. Bienvenida (options/bienvenida.html - Onboarding)
+  const bienDom = loadEnvironment("options/bienvenida.html");
+  const bienCode = fs.readFileSync(path.join(EXT, "options/bienvenida.js"), "utf8");
+  vm.runInContext(bienCode, bienDom.getInternalVMContext());
+  const bienAxe = await bienDom.window.axe.run(bienDom.window.document, axeOpts);
+  const bienViolations = (bienAxe.violations || []).filter(
+    (v) => v.impact === "serious" || v.impact === "critical"
+  );
+  check(
+    "Bienvenida (onboarding): 0 violaciones serias o críticas en axe-core",
+    bienViolations.length === 0,
+    bienViolations.map((v) => `${v.id} (${v.impact}): ${v.description}`).join("; ")
+  );
+
   console.log("\n--- 3. Nombres accesibles en botones y enlaces ---");
   function checkAccessibleNames(root, namePrefix) {
     const interactive = root.querySelectorAll("button, a, input[type='button'], input[type='submit']");
@@ -301,7 +319,14 @@ async function runAccessibilityTests() {
     `Faltan en: ${compMissing.join("; ")}`
   );
 
-  console.log("\n--- 4. Orden de tabulación en la tarjeta ---");
+  const bienMissing = checkAccessibleNames(bienDom.window.document, "Bienvenida");
+  check(
+    "Bienvenida: todos los botones y enlaces tienen nombre accesible",
+    bienMissing.length === 0,
+    `Faltan en: ${bienMissing.join("; ")}`
+  );
+
+  console.log("\n--- 4. Orden de tabulación en la tarjeta y en bienvenida ---");
   // Ningún elemento interactivo debe tener tabindex > 0 (tabindex positivo altera orden DOM)
   if (shadowRoot) {
     const focusable = shadowRoot.querySelectorAll("[tabindex]");
@@ -318,6 +343,52 @@ async function runAccessibilityTests() {
       `Encontrados: ${badTabIndices.join(", ")}`
     );
   }
+
+  // Verificación de landmarks, labels/ARIA y soporte de teclado en Bienvenida
+  const bienDoc = bienDom.window.document;
+  const bienMain = bienDoc.querySelector("main");
+  const bienHeader = bienDoc.querySelector("header");
+  const bienH1 = bienDoc.querySelectorAll("h1");
+  const hasLandmarks = Boolean(bienMain && bienHeader && bienH1.length === 1);
+  check(
+    "Bienvenida: landmarks semánticos (<header>, <main>, único <h1>)",
+    hasLandmarks,
+    `header=${!!bienHeader}, main=${!!bienMain}, h1Count=${bienH1.length}`
+  );
+
+  const bienInputs = bienDoc.querySelectorAll("input, select, textarea");
+  let bienAllLabeled = true;
+  const unlabeledList = [];
+  bienInputs.forEach((inp) => {
+    const parentLabel = inp.closest("label");
+    const ariaLabel = inp.getAttribute("aria-label");
+    const ariaLabelledBy = inp.getAttribute("aria-labelledby");
+    const id = inp.id;
+    const forLabel = id ? bienDoc.querySelector(`label[for="${id}"]`) : null;
+    if (!parentLabel && !ariaLabel && !ariaLabelledBy && !forLabel) {
+      bienAllLabeled = false;
+      unlabeledList.push(inp.outerHTML.slice(0, 60));
+    }
+  });
+  check(
+    "Bienvenida: todos los controles de formulario tienen label o atributo ARIA",
+    bienAllLabeled,
+    `Faltan: ${unlabeledList.join("; ")}`
+  );
+
+  const bienFocusable = bienDoc.querySelectorAll("[tabindex]");
+  const bienBadTabs = [];
+  bienFocusable.forEach((el) => {
+    const ti = parseInt(el.getAttribute("tabindex"), 10);
+    if (!isNaN(ti) && ti > 0) {
+      bienBadTabs.push(`${el.tagName} con tabindex=${ti}`);
+    }
+  });
+  check(
+    "Bienvenida: orden de tabulación respeta el orden del DOM (sin tabindex > 0)",
+    bienBadTabs.length === 0,
+    `Encontrados: ${bienBadTabs.join(", ")}`
+  );
 
   console.log("\n--- 5. Cierre de la tarjeta con Escape ---");
   // Montar tarjeta y disparar tecla Escape

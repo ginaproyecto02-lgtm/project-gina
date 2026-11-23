@@ -209,7 +209,7 @@ CAT['Asepxia'] = 'skincare_cosmetica'
 CAT['Teatrical'] = 'skincare_cosmetica'
 CAT['Goicoechea'] = 'cuidado_personal'
 
-g('loc_farmacias_similares', 'Grupo Por Un País Mejor (Farmacias Similares)', 'Familia González Torres (Víctor González Torres fundador, Víctor González Herrera presidente ejecutivo y CEO); empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Productos farmacéuticos y dermocosméticos (Eternal Secret, SimiCrema, SimiSolar).', 'Alta', 'El CEO: Quién es el dueño de Farmacias Similares / Grupo Por Un País Mejor', 'https://elceo.com/negocios/quien-es-el-dueno-de-farmacias-similares-y-por-que-se-le-llama-dr-simi/', controlador_en='González Torres family (Víctor González Torres founder, Víctor González Herrera executive president and CEO)', nota_en='Pharmaceuticals and skincare (Eternal Secret, SimiCrema, SimiSolar).')
+g('loc_farmacias_similares', 'Grupo Por Un País Mejor (Farmacias Similares)', 'Familia González Torres (Víctor González Torres fundador, Víctor González Herrera presidente ejecutivo y CEO); empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Productos farmacéuticos y dermocosméticos (Eternal Secret, SimiCrema, SimiSolar). Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable.', V, 'El CEO: Quién es el dueño de Farmacias Similares / Grupo Por Un País Mejor', 'https://elceo.com/negocios/quien-es-el-dueno-de-farmacias-similares-y-por-que-se-le-llama-dr-simi/', controlador_en='González Torres family (Víctor González Torres founder, Víctor González Herrera executive president and CEO)', nota_en='Pharmaceuticals and skincare (Eternal Secret, SimiCrema, SimiSolar). Source link unavailable (HTTP 404, checked 2026-11-22); awaiting a verifiable source.')
 b('loc_farmacias_similares', 'Eternal Secret', 'SimiCrema', 'SimiSolar', 'Dr. Simi', 'Simi')
 CAT['Eternal Secret'] = 'skincare_cosmetica'
 CAT['SimiCrema'] = 'skincare_cosmetica'
@@ -217,7 +217,7 @@ CAT['SimiSolar'] = 'skincare_cosmetica'
 CAT['Dr. Simi'] = 'cuidado_personal'
 CAT['Simi'] = 'cuidado_personal'
 
-g('loc_jaloma', 'Laboratorios Jaloma', 'Familia López (fundada por Esteban López Chávez en 1940, Javier López Macías y descendientes); empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Cuidado personal y dermatológico básico (agua de rosas, aceites corporales, vaselina).', 'Alta', 'Revista Abasto: Jaloma celebra 80 años', 'https://abasto.com/noticias/laboratorios-jaloma-celebran-80-anos/', controlador_en='López family (founded in 1940 by Esteban López Chávez, Javier López Macías and descendants)', nota_en='Basic personal care and first aid essentials (rose water, body oils, petroleum jelly).')
+g('loc_jaloma', 'Laboratorios Jaloma', 'Familia López (fundada por Esteban López Chávez en 1940, Javier López Macías y descendientes); empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Cuidado personal y dermatológico básico (agua de rosas, aceites corporales, vaselina). Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable.', V, 'Revista Abasto: Jaloma celebra 80 años', 'https://abasto.com/noticias/laboratorios-jaloma-celebran-80-anos/', controlador_en='López family (founded in 1940 by Esteban López Chávez, Javier López Macías and descendants)', nota_en='Basic personal care and first aid essentials (rose water, body oils, petroleum jelly). Source link unavailable (HTTP 404, checked 2026-11-22); awaiting a verifiable source.')
 b('loc_jaloma', 'Jaloma', 'Aceite Jaloma', 'Agua de Rosas Jaloma')
 CAT['Jaloma'] = 'skincare_cosmetica'
 CAT['Agua de Rosas Jaloma'] = 'skincare_cosmetica'
@@ -247,11 +247,11 @@ CAT['Institut Esthederm'] = 'skincare_cosmetica'
 # NUEVAS ALTERNATIVAS LOCALES (MÉXICO, ESPAÑA, ALEMANIA, FRANCIA, ETC.)
 # ======================================================================
 # ---- Muebles y hogar México
-g('loc_luuna', 'Luuna (Zebrands)', 'Fundadores mexicanos (Guillermo Villegas y socios) y capital privado mexicano.', 'México', 'Fundador', "", "", 'Colchones, almohadas y muebles para el hogar.', 'Alta', 'Sitio oficial Luuna: Quiénes somos', 'https://luuna.mx/nosotros', controlador_en='Mexican founders (Guillermo Villegas & partners)', nota_en='Mexican mattresses, pillows and home furniture.')
+g('loc_luuna', 'Luuna (Zebrands)', 'Fundadores mexicanos (Guillermo Villegas y socios) y capital privado mexicano.', 'México', 'Fundador', "", "", 'Colchones, almohadas y muebles para el hogar. Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable.', V, 'Sitio oficial Luuna: Quiénes somos', 'https://luuna.mx/nosotros', controlador_en='Mexican founders (Guillermo Villegas & partners)', nota_en='Mexican mattresses, pillows and home furniture. Source link unavailable (HTTP 404, checked 2026-11-22); awaiting a verifiable source.')
 b('loc_luuna', 'Luuna')
 CAT['Luuna'] = 'hogar_muebles'
 
-g('loc_dico', 'Muebles Dico', 'Familia fundadora mexicana; empresa privada independiente 100% de capital mexicano.', 'México', 'Familia', "", "", 'Muebles, salas, recámaras y comedores para el hogar.', 'Alta', 'Muebles Dico: Historia', 'https://dico.com.mx/historia', controlador_en='Mexican founding family (100% privately held)', nota_en='Mexican furniture retailer and manufacturer.')
+g('loc_dico', 'Muebles Dico', 'Familia fundadora mexicana; empresa privada independiente 100% de capital mexicano.', 'México', 'Familia', "", "", 'Muebles, salas, recámaras y comedores para el hogar. Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable.', V, 'Muebles Dico: Historia', 'https://dico.com.mx/historia', controlador_en='Mexican founding family (100% privately held)', nota_en='Mexican furniture retailer and manufacturer. Source link unavailable (HTTP 404, checked 2026-11-22); awaiting a verifiable source.')
 b('loc_dico', 'Dico', 'Muebles Dico')
 CAT['Dico'] = 'hogar_muebles'
 CAT['Muebles Dico'] = 'hogar_muebles'
@@ -264,7 +264,7 @@ CAT['IEM'] = 'electrodomesticos_clima'
 CAT['Easy'] = 'electrodomesticos_clima'
 
 # ---- Herramientas México
-g('loc_truper', 'Truper, S.A. de C.V.', 'Familia Gómez; fundada en 1962 como Nacional de Herramientas; empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Mayor fabricante de herramientas manuales de México y América Latina.', 'Alta', 'Expansión: Historia de Truper', 'https://expansion.mx/empresas/truper', controlador_en='Gómez family (100% Mexican family-owned private company)', nota_en='Leading hand tools manufacturer in Mexico and Latin America.')
+g('loc_truper', 'Truper, S.A. de C.V.', 'Familia Gómez; fundada en 1962 como Nacional de Herramientas; empresa 100% mexicana privada.', 'México', 'Familia', "", "", 'Mayor fabricante de herramientas manuales de México y América Latina. Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable.', V, 'Expansión: Historia de Truper', 'https://expansion.mx/empresas/truper', controlador_en='Gómez family (100% Mexican family-owned private company)', nota_en='Leading hand tools manufacturer in Mexico and Latin America. Source link unavailable (HTTP 404, checked 2026-11-22); awaiting a verifiable source.')
 b('loc_truper', 'Pretul', 'Foset', 'Volteck', 'Fiero', 'Hermex', 'Klintek')
 CAT['Pretul'] = 'herramientas'
 CAT['Foset'] = 'herramientas'

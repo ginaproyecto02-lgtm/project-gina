@@ -447,8 +447,24 @@ $("#suggest").onclick = async () => {
       return;
     }
     $("#suggest").hidden = true;
+    const sent = st === "enviada" || st === "github";
+    const projCfg = (typeof PROJ !== "undefined" ? PROJ : QED.PROJECT) || {};
+    const hasSvc = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(projCfg.sugerencias_url || "");
+    let backup = "";
+    if (!sent && !hasSvc) {
+      try {
+        const sd = (QED.ALT && QED.ALT.suggestionMailData)
+          ? QED.ALT.suggestionMailData(projCfg, "marca", [{ marca: brand, tienda: site, producto: title }])
+          : { gh: "" };
+        const href = sd.gh || sd.mailto || "";
+        if (/^https?:\/\/|^mailto:/i.test(href)) {
+          backup = `<a href="${esc(href)}" class="btn ghost" style="text-align:left;margin-top:6px;display:inline-block;" target="_blank" rel="noopener noreferrer">${esc(t(sd.gh ? "sug_opt_github" : "sug_opt_mailto"))}</a>`;
+        }
+      } catch (_) {}
+    }
+    const msgKey = sent ? "suggest_sent_thanks" : (hasSvc ? "suggest_queued" : "suggest_queued_local");
     fb.innerHTML = `
-      <div style="color:#166534;font-size:12px;font-weight:600;margin-top:6px;">${st === "enviada" || st === "github" ? t("suggest_sent_thanks") : t("suggest_queued")}</div>
+      <div role="status" style="color:#166534;font-size:12px;font-weight:600;margin-top:6px;">${esc(t(msgKey))}</div>${backup}
     `;
   } catch (_) {
     $("#suggest").disabled = false;
