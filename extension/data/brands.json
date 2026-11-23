@@ -143,8 +143,8 @@
    "tipo": "Familia",
    "fondos": "GBM Administradora de Activos (6%)",
    "gobierno": "",
-   "nota": "",
-   "confianza": "Verificado",
+   "nota": "Fuente ya no disponible (2026-11-23): la cita ya no aparece en la página",
+   "confianza": "Verificar",
    "fuente": "Prensa (jun-2026) citando registros",
    "url": "https://www.tusbuenasnoticias.com/noticias/economia/2026/06/26/56440-quien-es-el-dueno-de-grupo-herdez-uno-de-los-emporios-de-alimentos-procesados-en-mexico",
    "ahorro": false,
@@ -153,7 +153,9 @@
    "nota_en": "Leading Mexican packaged foods manufacturer.",
    "fondos_en": "GBM Administradora de Activos (6%)",
    "gobierno_en": "",
-   "fuente_en": "Public records and press (June 2026)"
+   "fuente_en": "Public records and press (June 2026)",
+   "revalidacion_fallida": "2026-11-23",
+   "investigado": "2026-11-23T21:30:18.636Z"
   },
   "herdezfuerte": {
    "empresa": "Herdez Del Fuerte (50% Grupo Herdez / 50% Grupo KUO)",
@@ -219,7 +221,7 @@
    "tipo": "Familia",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "Dejó la bolsa en 2022. Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable.",
+   "nota": "Dejó la bolsa en 2022. Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable. Fuente ya no disponible (2026-11-23): HTTP 404",
    "confianza": "Verificar",
    "fuente": "El CEO: ¿Quién es el dueño de Grupo Lala?",
    "url": "https://elceo.com/negocios/quien-es-el-dueno-de-grupo-lala/",
@@ -229,7 +231,9 @@
    "nota_en": "Major Mexican dairy company; delisted from BMV in 2022. Source link unavailable (HTTP 404, checked 2026-11-22); awaiting a verifiable source.",
    "fondos_en": "Not publicly traded",
    "gobierno_en": "",
-   "fuente_en": "El CEO: Who owns Grupo Lala?"
+   "fuente_en": "El CEO: Who owns Grupo Lala?",
+   "revalidacion_fallida": "2026-11-23",
+   "investigado": "2026-11-23T21:30:18.636Z"
   },
   "alpura": {
    "empresa": "Ganaderos Productores de Leche Pura (Alpura)",
@@ -238,7 +242,7 @@
    "tipo": "Privada",
    "fondos": "No cotiza en bolsa",
    "gobierno": "",
-   "nota": "Constituida como Ganaderos Productores de Leche Pura, S.A.P.I. de C.V., propiedad de más de un centenar de socios ganaderos mexicanos (142 ranchos); no es cooperativa formal sino sociedad promotora de inversión. Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable.",
+   "nota": "Constituida como Ganaderos Productores de Leche Pura, S.A.P.I. de C.V., propiedad de más de un centenar de socios ganaderos mexicanos (142 ranchos); no es cooperativa formal sino sociedad promotora de inversión. Enlace de la fuente no disponible (HTTP 404, comprobado 2026-11-22); pendiente de una fuente verificable. Fuente ya no disponible (2026-11-23): HTTP 404",
    "confianza": "Verificar",
    "fuente": "El CEO: ¿Quién es el dueño de Alpura? (2023)",
    "url": "https://elceo.com/negocios/quien-es-el-dueno-de-alpura/",
@@ -248,7 +252,9 @@
    "nota_en": "Owned by over 100 Mexican dairy farmer partners; operates as an investment promotion corporation (SAPI), not a formal cooperative. Source link unavailable (HTTP 404, checked 2026-11-22); awaiting a verifiable source.",
    "fondos_en": "Not publicly traded",
    "gobierno_en": "",
-   "fuente_en": "El CEO: Who owns Alpura? (2023)"
+   "fuente_en": "El CEO: Who owns Alpura? (2023)",
+   "revalidacion_fallida": "2026-11-23",
+   "investigado": "2026-11-23T21:30:18.636Z"
   },
   "costena": {
    "empresa": "Grupo La Costeña",
